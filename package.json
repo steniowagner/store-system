@@ -1,0 +1,22 @@
+{
+  "name": "store-system",
+  "version": "0.1.0",
+  "private": true,
+  "main": "src/scripts/electron-starter.js",
+  "dependencies": {
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1",
+    "react-scripts": "1.1.4"
+  },
+  "scripts": {
+    "start": "BROWSER=none react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "electron-dev": "node src/scripts/electron-wait-react",
+    "electron": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^2.0.5"
+  }
+}
