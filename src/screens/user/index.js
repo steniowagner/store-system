@@ -5,7 +5,6 @@ import PageTitle from '../../components/common/PageTitle';
 import Container from '../../components/common/Container';
 
 class User extends Component {
-
   render() {
     return (
       <Container>

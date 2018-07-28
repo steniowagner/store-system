@@ -15,9 +15,21 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "electron-dev": "node src/scripts/electron-wait-react",
-    "electron": "electron ."
+    "electron": "electron .",
+    "flow": "flow"
   },
   "devDependencies": {
-    "electron": "^2.0.5"
+    "babel-eslint": "^8.2.6",
+    "babel-plugin-module-resolver": "^3.1.1",
+    "electron": "^2.0.5",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb": "^17.0.0",
+    "eslint-import-resolver-babel-module": "^4.0.0",
+    "eslint-plugin-flowtype": "^2.50.0",
+    "eslint-plugin-import": "^2.13.0",
+    "eslint-plugin-jsx-a11y": "^6.1.1",
+    "eslint-plugin-react": "^7.10.0",
+    "flow-bin": "^0.77.0",
+    "prettier-eslint": "^8.8.2"
   }
 }

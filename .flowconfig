@@ -1,0 +1,14 @@
+[ignore]
+.*node_modules/.*
+.*src/scripts/.*
+
+[include]
+
+[libs]
+
+[lints]
+
+[options]
+all=true
+
+[strict]

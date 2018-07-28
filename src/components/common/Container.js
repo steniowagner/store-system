@@ -1,14 +1,18 @@
-import React from 'react';
+import * as React from 'react';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
-  background-color: #00F;  
+  background-color: #00f;
   height: 100%;
-  margin-left: 300px;
+  margin-left: 220px;
   padding: 36px;
 `;
 
-const Container = ({ children }) => (
+type Props = {
+  children: React.Node,
+};
+
+const Container = ({ children }: Props) => (
   <Wrapper>
     {children}
   </Wrapper>
