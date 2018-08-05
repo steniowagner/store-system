@@ -1,0 +1,20 @@
+{
+  "presets": [
+    "react"
+  ],
+  "plugins": [
+    [
+      "module-resolver",
+      {
+        "cwd": "babelrc",
+        "root": [
+          "./src"
+        ],
+        "extensions": [
+          ".js",
+          ".jsx"
+        ]
+      }
+    ]
+  ]
+}

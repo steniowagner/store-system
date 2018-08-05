@@ -10,7 +10,6 @@ injectGlobal`
   body > #root > div {
     -webkit-font-smoothing: antialiased !important;
     text-rendering: optimizeLegibility !important;
-    background-color: #FAFBFF;
     display: block;
     height: 100vh;
   },

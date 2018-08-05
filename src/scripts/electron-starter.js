@@ -1,10 +1,12 @@
 const electron = require('electron');
 const path = require('path');
 const url = require('url');
-console.log(electron)
+
 const config = require('../config');
 
-const { app, BrowserWindow, Menu, ipcMain } = electron;
+const {
+  app, BrowserWindow, ipcMain,
+} = electron;
 
 let mainWindow;
 
@@ -15,7 +17,7 @@ createWindow = () => {
   const startUrl = process.env.ELECTRON_START_URL || url.format({
     pathname: path.join(__dirname, '/../build/index.html'),
     protocol: 'file:',
-    slashes: true
+    slashes: true,
   });
 
   mainWindow.webContents.openDevTools();
@@ -25,14 +27,14 @@ createWindow = () => {
 
   mainWindow.loadURL(startUrl);
   mainWindow.on('closed', () => {
-    mainWindow = null
-  })
-}
+    mainWindow = null;
+  });
+};
 
 connectWithDatabase = () => {
-  //mongoose.Promise = global.Promise;
-  //mongoose.connect(config.mongoConnectionURL, { useMongoClient: true });
-}
+  // mongoose.Promise = global.Promise;
+  // mongoose.connect(config.mongoConnectionURL, { useMongoClient: true });
+};
 
 app.on('ready', () => {
   connectWithDatabase();

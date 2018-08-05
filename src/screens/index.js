@@ -1,19 +1,9 @@
-import React, { Component } from 'react';
-
-import Sidebar from '../components/Sidebar';
-import User from './user';
-
+import React from 'react';
+import AppWrapperContainer from '../components/AppWrapperContainer';
 import './styles/global';
 
-class App extends Component {
-  render() {
-    return (
-      <div>
-        <Sidebar />
-        <User />
-      </div>
-    );
-  }
-}
+const App = () => (
+  <AppWrapperContainer />
+);
 
 export default App;

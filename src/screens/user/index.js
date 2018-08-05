@@ -1,17 +1,19 @@
-import React, { Component } from 'react';
-import styled from 'styled-components';
+import React from 'react';
 
 import PageTitle from '../../components/common/PageTitle';
 import Container from '../../components/common/Container';
+import Button from '../../components/common/Button';
+import ButtonIcon from '../../components/common/ButtonIcon';
+import Input from '../../components/common/Input';
 
-class User extends Component {
-  render() {
-    return (
-      <Container>
-        <PageTitle title="Usuários" />
-      </Container>
-    );
-  }
-}
+const onClick = () => {
+  console.log('click');
+};
+
+const User = () => (
+  <Container>
+    <Button title="Meu Botão" type="danger" onClick={onClick} />
+  </Container>
+);
 
 export default User;
