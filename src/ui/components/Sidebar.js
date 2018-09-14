@@ -2,9 +2,9 @@ import * as React from 'react';
 import styled from 'styled-components';
 
 const Container = styled.section`
+  width: ${({ theme }) => theme.metrics.sideBarWidth}px;
   background-color: #000;
   overflow-x: hidden;
-  width: 220px;
   position: fixed;
   bottom: 0;
   top: 0;
@@ -29,7 +29,7 @@ const Sidebar = () => (
     <Wrapper>
       <ItemWrapper>
         <ItemText>
-Usuários
+          Usuários
         </ItemText>
       </ItemWrapper>
     </Wrapper>

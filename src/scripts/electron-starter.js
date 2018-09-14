@@ -2,11 +2,9 @@ const electron = require('electron');
 const path = require('path');
 const url = require('url');
 
-const config = require('../config');
+// const config = require('../config');
 
-const {
-  app, BrowserWindow, ipcMain,
-} = electron;
+const { app, BrowserWindow, ipcMain } = electron;
 
 let mainWindow;
 

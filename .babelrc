@@ -8,7 +8,7 @@
       {
         "cwd": "babelrc",
         "root": [
-          "./src"
+          "./src/ui/components"
         ],
         "extensions": [
           ".js",
