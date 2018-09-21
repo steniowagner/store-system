@@ -1,22 +1,42 @@
 import React from 'react';
+import { withStyles } from '@material-ui/core/styles';
 import styled from 'styled-components';
 
-const Wrapper = styled.div`
-  margin-left: ${({ theme }) => theme.metrics.sideBarWidth}px;
-  padding-top: ${({ theme }) => theme.metrics.containerVerticalPadding}px;
-  padding-bottom: ${({ theme }) => theme.metrics.containerVerticalPadding}px;
-  padding-left: ${({ theme }) => theme.metrics.containerHorizontalPadding}px;
-  padding-right: ${({ theme }) => theme.metrics.containerHorizontalPadding}px;
+const Container = styled.main`
+  flex-grow: 1;
+  min-width: 0;
+  height: 100%;
 `;
+
+const Wrapper = styled.div`
+  background-color: #f0f;
+  margin-left: 200px;
+  height: 100%;
+`;
+
+const styles = theme => ({
+  content: {
+    backgroundColor: theme.palette.background.default,
+    padding: theme.spacing.unit * 3,
+    paddingTop: theme.spacing.unit,
+  },
+  toolbar: theme.mixins.toolbar,
+});
 
 type Props = {
   children: Object,
+  classes: Object,
 };
 
-const ContainerWrapper = ({ children }: Props): Object => (
-  <Wrapper>
-    {children}
-  </Wrapper>
+const ContainerWrapper = ({ children, classes }: Props): Object => (
+  <Container
+    className={classes.content}
+  >
+    <div className={classes.toolbar} />
+    <Wrapper>
+      {children}
+    </Wrapper>
+  </Container>
 );
 
-export default ContainerWrapper;
+export default withStyles(styles)(ContainerWrapper);

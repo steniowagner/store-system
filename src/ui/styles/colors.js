@@ -1,5 +1,5 @@
 export default {
-  white: '#FAFAFB',
+  white: '#FFF',
   appBackground: '#D5D5DA',
   affirmative: '#5977e2',
   danger: '#fd5c63',

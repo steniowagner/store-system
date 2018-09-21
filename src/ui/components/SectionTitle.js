@@ -10,12 +10,12 @@ const Title = styled.h1`
 `;
 
 type Props = {
-  children: String,
+  title: String,
 };
 
-const SectionTitle = ({ children }: Props): Object => (
+const SectionTitle = ({ title }: Props): Object => (
   <Title>
-    {children}
+    {title}
   </Title>
 );
 
