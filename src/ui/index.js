@@ -2,7 +2,7 @@ import React from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 
 import Sidebar from './components/sidebar/index';
-import HeaderBar from './components/header-bar';
+import HeaderBar from './components/HeaderBar';
 import Router from './Router';
 
 import AppTheme from './styles';

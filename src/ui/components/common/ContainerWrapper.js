@@ -9,8 +9,7 @@ const Container = styled.main`
 `;
 
 const Wrapper = styled.div`
-  background-color: #f0f;
-  margin-left: 200px;
+  margin-left: 220px;
   height: 100%;
 `;
 

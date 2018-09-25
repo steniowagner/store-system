@@ -1,14 +1,18 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import styled from 'styled-components';
+import Table from '../../components/common/table';
 
-import SectionTitle from '../../components/SectionTitle';
+import SectionTitle from '../../components/common/SectionTitle';
 
 class User extends Component {
   render() {
     return (
-      <SectionTitle
-        title="Usuários"
-      />
+      <Fragment>
+        <SectionTitle
+          title="Usuários"
+        />
+        <Table />
+      </Fragment>
     );
   }
 }

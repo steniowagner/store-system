@@ -1,5 +1,5 @@
 import React from 'react';
-import ContainerWrapper from './components/ContainerWrapper';
+import ContainerWrapper from './components/common/ContainerWrapper';
 
 import User from './screens/user';
 

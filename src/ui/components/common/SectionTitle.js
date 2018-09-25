@@ -5,7 +5,7 @@ const Title = styled.h1`
   font-family: 'Roboto';
   font-style: bold;
   font-display: swap;
-  font-weight: 600;
+  font-weight: 500;
   font-size: 3em;
 `;
 
