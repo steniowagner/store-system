@@ -1,24 +1,26 @@
+// @flow
+
 import React, { Component, Fragment } from 'react';
-import Table from '@material-ui/core/Table';
+
+import TablePagination from '@material-ui/core/TablePagination';
+import TableFooter from '@material-ui/core/TableFooter';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import Table from '@material-ui/core/Table';
 import Paper from '@material-ui/core/Paper';
-import TableFooter from '@material-ui/core/TableFooter';
-import TablePagination from '@material-ui/core/TablePagination';
-import IconButton from '@material-ui/core/IconButton';
-import DeleteIcon from '@material-ui/icons/Delete';
-import CreateIcon from '@material-ui/icons/Create';
-import SearchIcon from '@material-ui/icons/Search';
 
+import IconButton from '@material-ui/core/IconButton';
+import CreateIcon from '@material-ui/icons/Create';
+import DeleteIcon from '@material-ui/icons/Delete';
+import SearchIcon from '@material-ui/icons/Search';
 
 import styled from 'styled-components';
 
 const Container = styled(Paper)`
   width: 100%;
   overflow-x: auto;
-  margin-top: 48px;
 `;
 
 const TableHeader = styled(TableHead)`
@@ -52,22 +54,15 @@ const PaginationWraper = styled.div`
   justify-content: center;
 `;
 
-class CustomTable extends Component {
+type Props = {
+  tabConfig: Array<Object>,
+  dataset: Array<any>,
+};
+
+class CustomTable extends Component<Props, {}> {
   state = {
     fieldKeys: [],
   };
-
-  componentDidMount() {
-    const fieldKeys = this.getKeys({
-      name: 'Stenio',
-      age: 21,
-      address: 'Travessa Vitória 1',
-    });
-
-    this.setState({
-      fieldKeys,
-    });
-  }
 
   getKeys = (item: Object): Array<string> => {
     const keys = Object.keys(item);
@@ -106,17 +101,16 @@ class CustomTable extends Component {
     </TableHeader>
   );
 
-  renderRowCell = (row: Object): Object => {
-    const { fieldKeys } = this.state;
-    const rowData = [...fieldKeys, 'actions'];
+  renderRowCell = (row: Object, dataFields: Array<string>): Object => {
+    const rowData = [...dataFields, 'actions'];
 
     return (
       <Fragment>
         {rowData.map(key => (
           <TableCell
-            variant="body"
-            key={row.id + key}
             numeric={key === 'actions'}
+            key={row.id + key}
+            variant="body"
             padding="dense"
           >
             {key === 'actions'
@@ -132,14 +126,14 @@ class CustomTable extends Component {
     );
   }
 
-  renderRows = (rows: Array<string>): Object => (
+  renderRows = (rows: Array<Object>, dataFields: Array<string>): Object => (
     <TableBody>
       {rows.map((row, index) => (
         <BodyRow
           index={index}
           key={row.id}
         >
-          {this.renderRowCell(row)}
+          {this.renderRowCell(row, dataFields)}
         </BodyRow>
       ))}
     </TableBody>
@@ -149,7 +143,7 @@ class CustomTable extends Component {
     <TableFooter>
       <TableRow>
         <TablePagination
-          labelRowsPerPage="Usuários por página"
+          labelRowsPerPage="Itens por página"
           labelDisplayedRows={({ from, to, count }) => `${from}-${to} de ${count}`}
           colSpan={3}
           count={13}
@@ -163,29 +157,16 @@ class CustomTable extends Component {
   );
 
   render() {
-    const columnsTitles = ['Name', 'Age', 'Address', ''];
-    const rows = [{
-      id: '1',
-      name: 'Stenio',
-      age: 23,
-      address: 'Travessa Vitória 1',
-    }, {
-      id: '12',
-      name: 'Ana Eridan',
-      age: 23,
-      address: 'Travessa Vitória 2',
-    }, {
-      id: '13',
-      name: 'Manoel Elisval',
-      age: 24,
-      address: 'Travessa Vitória 3',
-    }];
+    const { tabConfig, dataset } = this.props;
+
+    const columnsTitles = tabConfig.map(item => item.columnTitle);
+    const dataFields = tabConfig.map(item => item.dataField);
 
     return (
       <Container>
         <Table>
-          {this.renderHeader(columnsTitles)}
-          {this.renderRows(rows)}
+          {this.renderHeader([...columnsTitles, ''])}
+          {this.renderRows(dataset, dataFields)}
         </Table>
         <PaginationWraper>
           {this.renderFooter()}

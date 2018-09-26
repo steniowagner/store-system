@@ -1,5 +1,6 @@
 import React from 'react';
 import styled, { ThemeProvider } from 'styled-components';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
 import Sidebar from './components/sidebar/index';
 import HeaderBar from './components/HeaderBar';
@@ -17,16 +18,26 @@ const Wrapper = styled.div`
   background-color: ${({ theme }) => theme.colors.white};
 `;
 
+const theme = createMuiTheme({
+  palette: {
+    primary: { main: AppTheme.colors.affirmative },
+    secondary: { main: AppTheme.colors.white },
+  },
+});
+
 const Root = (): Object => (
-  <ThemeProvider
-    theme={AppTheme}
-  >
-    <Wrapper>
-      <Sidebar />
-      <HeaderBar />
-      <Router />
-    </Wrapper>
-  </ThemeProvider>
+  <MuiThemeProvider theme={theme}>
+    <ThemeProvider
+      theme={AppTheme}
+    >
+      <Wrapper>
+        <Sidebar />
+        <HeaderBar />
+        <Router />
+      </Wrapper>
+    </ThemeProvider>
+  </MuiThemeProvider>
+
 );
 
 export default Root;

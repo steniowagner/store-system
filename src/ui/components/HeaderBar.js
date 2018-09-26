@@ -29,7 +29,7 @@ const Headerbar = ({ classes }: Props): Object => (
         <Store />
       </IconButton>
       <Typography
-        variant="title"
+        variant="headline"
         color="inherit"
         noWrap
       >
