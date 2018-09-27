@@ -76,10 +76,12 @@ const TextBoxWrapper = styled.div`
 
 const ExpandLessIcon = styled(ExpandLess)`
   color: ${({ theme }) => theme.colors.white};
+  margin-right: 12px;
 `;
 
 const ExpandMoreIcon = styled(ExpandMore)`
   color: ${({ theme }) => theme.colors.white};
+  margin-right: 12px;
 `;
 
 type Props = {

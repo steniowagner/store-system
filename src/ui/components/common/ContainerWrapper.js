@@ -1,11 +1,13 @@
+// @flow
+
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import styled from 'styled-components';
 
 const Container = styled.main`
+  height: 100%;
   flex-grow: 1;
   min-width: 0;
-  height: 100%;
 `;
 
 const Wrapper = styled.div`
@@ -16,6 +18,8 @@ const Wrapper = styled.div`
 const styles = theme => ({
   content: {
     backgroundColor: theme.palette.background.default,
+    width: '100%',
+    height: '100%',
     padding: theme.spacing.unit * 3,
     paddingTop: theme.spacing.unit,
   },

@@ -2,8 +2,6 @@
 
 import React, { Component, Fragment } from 'react';
 
-import TablePagination from '@material-ui/core/TablePagination';
-import TableFooter from '@material-ui/core/TableFooter';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
@@ -18,9 +16,14 @@ import SearchIcon from '@material-ui/icons/Search';
 
 import styled from 'styled-components';
 
+import Pagination from './components/Pagination';
+
 const Container = styled(Paper)`
   width: 100%;
+  min-height: 300px;
+  max-height: 600px;
   overflow-x: auto;
+  overflow-y: auto;
 `;
 
 const TableHeader = styled(TableHead)`
@@ -48,26 +51,48 @@ const ActionButtonsWrapper = styled.div`
   align-items: center;
 `;
 
-const PaginationWraper = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-`;
-
 type Props = {
   tabConfig: Array<Object>,
   dataset: Array<any>,
+  currentPage: number,
 };
 
-class CustomTable extends Component<Props, {}> {
+type State = {
+  currentPage: number,
+  rowsPerPage: number,
+};
+
+class CustomTable extends Component<Props, State> {
   state = {
-    fieldKeys: [],
+    currentPage: 0,
+    rowsPerPage: 5,
   };
 
-  getKeys = (item: Object): Array<string> => {
-    const keys = Object.keys(item);
+  componentDidMount() {
+    const { currentPage } = this.props;
 
-    return keys;
+    this.setState({
+      currentPage,
+    });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      currentPage: nextProps.currentPage,
+    });
+  }
+
+  onPageChange = (page: number): void => {
+    this.setState({
+      currentPage: page,
+    });
+  };
+
+  onChangeRowsPerPage = (rowsPerPage: number): void => {
+    this.setState({
+      currentPage: 0,
+      rowsPerPage,
+    });
   };
 
   renderActionsSection = (): Object => (
@@ -127,7 +152,11 @@ class CustomTable extends Component<Props, {}> {
   }
 
   renderRows = (rows: Array<Object>, dataFields: Array<string>): Object => (
-    <TableBody>
+    <TableBody
+      style={{
+        overflowX: 'auto',
+      }}
+    >
       {rows.map((row, index) => (
         <BodyRow
           index={index}
@@ -139,38 +168,31 @@ class CustomTable extends Component<Props, {}> {
     </TableBody>
   );
 
-  renderFooter = (): Object => (
-    <TableFooter>
-      <TableRow>
-        <TablePagination
-          labelRowsPerPage="Itens por página"
-          labelDisplayedRows={({ from, to, count }) => `${from}-${to} de ${count}`}
-          colSpan={3}
-          count={13}
-          rowsPerPage={5}
-          page={1}
-          onChangePage={() => console.log('onChangePage')}
-          onChangeRowsPerPage={() => console.log('onChangeRowsPerPage')}
-        />
-      </TableRow>
-    </TableFooter>
-  );
-
   render() {
+    const { rowsPerPage, currentPage } = this.state;
     const { tabConfig, dataset } = this.props;
 
     const columnsTitles = tabConfig.map(item => item.columnTitle);
     const dataFields = tabConfig.map(item => item.dataField);
 
+    const paginationOffset = (currentPage * rowsPerPage) + rowsPerPage;
+    const paginationStartIndex = currentPage * rowsPerPage;
+
+    const datasetWithPagination = dataset.slice(paginationStartIndex, paginationOffset);
+
     return (
       <Container>
         <Table>
           {this.renderHeader([...columnsTitles, ''])}
-          {this.renderRows(dataset, dataFields)}
+          {this.renderRows(datasetWithPagination, dataFields)}
         </Table>
-        <PaginationWraper>
-          {this.renderFooter()}
-        </PaginationWraper>
+        <Pagination
+          onChangeRowsPerPage={(value: number) => this.onChangeRowsPerPage(value)}
+          datasetLength={dataset.length}
+          onPageChange={this.onPageChange}
+          rowsPerPage={rowsPerPage}
+          currentPage={currentPage}
+        />
       </Container>
     );
   }
