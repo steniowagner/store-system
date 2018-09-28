@@ -17,6 +17,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import styled from 'styled-components';
 
 import Pagination from './components/Pagination';
+import Dialog from '../Dialog';
 
 const Container = styled(Paper)`
   width: 100%;
@@ -54,6 +55,7 @@ const ActionButtonsWrapper = styled.div`
 type Props = {
   tabConfig: Array<Object>,
   dataset: Array<any>,
+  onRemoveItem: Function,
   currentPage: number,
 };
 
@@ -64,6 +66,8 @@ type State = {
 
 class CustomTable extends Component<Props, State> {
   state = {
+    isRemoveDialogOpen: false,
+    contextItem: {},
     currentPage: 0,
     rowsPerPage: 5,
   };
@@ -82,6 +86,14 @@ class CustomTable extends Component<Props, State> {
     });
   }
 
+  onToggleDialogRemove = (): void => {
+    const { isRemoveDialogOpen } = this.state;
+
+    this.setState({
+      isRemoveDialogOpen: !isRemoveDialogOpen,
+    });
+  };
+
   onPageChange = (page: number): void => {
     this.setState({
       currentPage: page,
@@ -95,15 +107,67 @@ class CustomTable extends Component<Props, State> {
     });
   };
 
-  renderActionsSection = (): Object => (
+  onRemoveItemClicked = (item: Object): void => {
+    this.setState({
+      isRemoveDialogOpen: true,
+      contextItem: item,
+    });
+  };
+
+  getCurrentPage = (): number => {
+    const { rowsPerPage, currentPage } = this.state;
+    const { dataset } = this.props;
+
+    const maxPageReacheable = Math.ceil((dataset.length - 1) / rowsPerPage) - 1;
+
+    if ((dataset.length - 1) === 0) {
+      console.log('0')
+      return 0;
+    }
+
+    if (currentPage <= maxPageReacheable) {
+      return currentPage;
+    }
+
+    return currentPage - 1;
+  };
+
+  renderDeleteDialog = (): Object => {
+    const { isRemoveDialogOpen, contextItem } = this.state;
+    const { onRemoveItem } = this.props;
+
+    const newPage = this.getCurrentPage();
+
+    return (
+      <Dialog
+        description="Se executar esta ação, os dados deste Usuário serão perdidos para sempre, e não poderão ser recuperados de forma alguma."
+        title="Tem certeza que quer apagar este Usuário?"
+        positiveAction={() => onRemoveItem(contextItem.id, newPage)}
+        negativeAction={this.onToggleDialogRemove}
+        onCloseDialog={this.onToggleDialogRemove}
+        isOpen={isRemoveDialogOpen}
+        positiveText="SIM"
+        negativeText="NÃO"
+      />
+    );
+  };
+
+  renderActionsSection = (item: Object): Object => (
     <ActionButtonsWrapper>
-      <IconButton aria-label="Create">
+      <IconButton
+        aria-label="Create"
+      >
         <CreateIcon />
       </IconButton>
-      <IconButton aria-label="Search">
+      <IconButton
+        aria-label="Search"
+      >
         <SearchIcon />
       </IconButton>
-      <IconButton aria-label="Delete">
+      <IconButton
+        onClick={() => this.onRemoveItemClicked(item)}
+        aria-label="Delete"
+      >
         <DeleteIcon />
       </IconButton>
     </ActionButtonsWrapper>
@@ -139,7 +203,7 @@ class CustomTable extends Component<Props, State> {
             padding="dense"
           >
             {key === 'actions'
-              ? this.renderActionsSection()
+              ? this.renderActionsSection(row)
               : (
                 <BodyCellText>
                   {row[key]}
@@ -193,6 +257,7 @@ class CustomTable extends Component<Props, State> {
           rowsPerPage={rowsPerPage}
           currentPage={currentPage}
         />
+        {this.renderDeleteDialog()}
       </Container>
     );
   }

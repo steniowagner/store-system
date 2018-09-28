@@ -90,6 +90,7 @@ const usersData = [{
 
 type State = {
   usersFiltered: Array<Object>,
+  isDeleteDialogOpen: boolean,
   users: Array<Object>,
   currentPage: number,
 };
@@ -103,13 +104,23 @@ class User extends Component<{}, State> {
 
   onFilterUsers = (usersFiltered: Array<Object>) => {
     this.setState({
-      usersFiltered,
       currentPage: 0,
+      usersFiltered,
+    });
+  };
+
+  onDeleteUser = (userId: any, currentPage: number): void => {
+    const { users, usersFiltered } = this.state;
+
+    this.setState({
+      usersFiltered: usersFiltered.filter(userFiltered => userFiltered.id !== userId),
+      users: users.filter(user => user.id !== userId),
+      currentPage,
     });
   };
 
   render() {
-    const { users, usersFiltered, currentPage } = this.state;
+    const { usersFiltered, currentPage, users } = this.state;
 
     return (
       <Fragment>
@@ -122,6 +133,7 @@ class User extends Component<{}, State> {
           dataset={users}
         />
         <Table
+          onRemoveItem={this.onDeleteUser}
           currentPage={currentPage}
           dataset={usersFiltered}
           tabConfig={tabConfig}

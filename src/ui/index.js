@@ -15,7 +15,6 @@ const Wrapper = styled.div`
   flex-grow: 1;
   overflow: hidden;
   position: relative;
-  background-color: ${({ theme }) => theme.colors.white};
 `;
 
 const theme = createMuiTheme({
@@ -26,7 +25,9 @@ const theme = createMuiTheme({
 });
 
 const Root = (): Object => (
-  <MuiThemeProvider theme={theme}>
+  <MuiThemeProvider
+    theme={theme}
+  >
     <ThemeProvider
       theme={AppTheme}
     >
@@ -37,7 +38,6 @@ const Root = (): Object => (
       </Wrapper>
     </ThemeProvider>
   </MuiThemeProvider>
-
 );
 
 export default Root;
