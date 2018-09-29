@@ -4,7 +4,9 @@ import SectionTitle from '../../components/common/SectionTitle';
 import Filter from '../../components/common/Filter';
 import Table from '../../components/common/table';
 
-import { filterConfig, tabConfig } from './metaConfig';
+import { filterConfig, tabConfig, snackbarTypes } from './metaConfig';
+
+import Snackbar from '../../components/common/CustomSnackbar';
 
 const usersData = [{
   id: '1',
@@ -98,8 +100,16 @@ type State = {
 class User extends Component<{}, State> {
   state = {
     usersFiltered: usersData,
+    isSnackbarOpen: false,
     users: usersData,
+    snackbarData: {},
     currentPage: 0,
+  };
+
+  onCloseSnackbar = (): void => {
+    this.setState({
+      isSnackbarOpen: false,
+    });
   };
 
   onFilterUsers = (usersFiltered: Array<Object>) => {
@@ -112,15 +122,27 @@ class User extends Component<{}, State> {
   onDeleteUser = (userId: any, currentPage: number): void => {
     const { users, usersFiltered } = this.state;
 
+    const snackbarData = snackbarTypes.removeUserSuccess;
+
     this.setState({
       usersFiltered: usersFiltered.filter(userFiltered => userFiltered.id !== userId),
       users: users.filter(user => user.id !== userId),
+      isSnackbarOpen: true,
+      snackbarData,
       currentPage,
     });
   };
 
   render() {
-    const { usersFiltered, currentPage, users } = this.state;
+    const {
+      isSnackbarOpen,
+      usersFiltered,
+      snackbarData,
+      currentPage,
+      users,
+    } = this.state;
+
+    const { type, message } = snackbarData;
 
     return (
       <Fragment>
@@ -137,6 +159,12 @@ class User extends Component<{}, State> {
           currentPage={currentPage}
           dataset={usersFiltered}
           tabConfig={tabConfig}
+        />
+        <Snackbar
+          onCloseSnackbar={this.onCloseSnackbar}
+          isOpen={isSnackbarOpen && !!type}
+          message={message}
+          type={type}
         />
       </Fragment>
     );

@@ -114,14 +114,13 @@ class CustomTable extends Component<Props, State> {
     });
   };
 
-  getCurrentPage = (): number => {
+  getCurrentPageAfterRemotion = (): number => {
     const { rowsPerPage, currentPage } = this.state;
     const { dataset } = this.props;
 
     const maxPageReacheable = Math.ceil((dataset.length - 1) / rowsPerPage) - 1;
 
     if ((dataset.length - 1) === 0) {
-      console.log('0')
       return 0;
     }
 
@@ -136,12 +135,12 @@ class CustomTable extends Component<Props, State> {
     const { isRemoveDialogOpen, contextItem } = this.state;
     const { onRemoveItem } = this.props;
 
-    const newPage = this.getCurrentPage();
+    const newPage = this.getCurrentPageAfterRemotion();
 
     return (
       <Dialog
         description="Se executar esta ação, os dados deste Usuário serão perdidos para sempre, e não poderão ser recuperados de forma alguma."
-        title="Tem certeza que quer apagar este Usuário?"
+        title="Tem certeza que quer remover este Usuário?"
         positiveAction={() => onRemoveItem(contextItem.id, newPage)}
         negativeAction={this.onToggleDialogRemove}
         onCloseDialog={this.onToggleDialogRemove}
