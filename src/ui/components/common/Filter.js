@@ -6,7 +6,6 @@ import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import ButtonBase from '@material-ui/core/ButtonBase';
-import Typography from '@material-ui/core/Typography';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
 import Popper from '@material-ui/core/Popper';
@@ -28,6 +27,14 @@ const Container = styled.div`
   margin-top: 24px;
   margin-bottom: 24px;
 `;
+
+const Title = styled.h2`
+  margin-right: 18px,
+  font-size: 28px;
+  font-weight: 700;
+  color: #fff;
+`;
+
 
 const FilterSelector = styled(ButtonBase)`
   height: 100%;
@@ -243,12 +250,9 @@ class Filter extends Component<Props, State> {
           variant="contained"
         >
           <FilterSelectTextWrapper>
-            <Typography
-              variant="subheading"
-              color="secondary"
-            >
+            <Title>
               {filterButtonLabel.toUpperCase()}
-            </Typography>
+            </Title>
           </FilterSelectTextWrapper>
           <ExapandIconWrapper>
             {isFilterOpen ? <ExpandLessIcon /> : <ExpandMoreIcon /> }

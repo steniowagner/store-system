@@ -2,98 +2,15 @@ import React, { Component, Fragment } from 'react';
 import Typography from '@material-ui/core/Typography';
 import styled from 'styled-components';
 
+import FullScreenDialog from '../../components/common/FullScreenDialog';
+import ActionButton from '../../components/common/ActionButton';
+import Snackbar from '../../components/common/CustomSnackbar';
+import Form from './components/Form';
+
 import Filter from '../../components/common/Filter';
 import Table from '../../components/common/table';
 
 import { filterConfig, tabConfig, snackbarTypes } from './config';
-
-import ActionButton from '../../components/common/ActionButton';
-import Snackbar from '../../components/common/CustomSnackbar';
-import FullScreenDialog from '../../components/common/FullScreenDialog';
-import Form from './components/Form';
-
-
-const usersData = [{
-  id: '1',
-  name: 'Stenio Wagner',
-  username: 'steniowagner',
-  password: '123',
-}, {
-  id: '2',
-  name: 'Ana Eridan',
-  username: 'anaeridan',
-  password: '123',
-}, {
-  id: '3',
-  name: 'Manoel Elisval',
-  username: 'manoelelisval',
-  password: '123',
-}, {
-  id: '4',
-  name: 'Beatriz Eliana',
-  username: 'beatrizeliana',
-  password: '123',
-}, {
-  id: '13',
-  name: 'Stenio Wag1ner',
-  username: 'sten2iowagner',
-  password: '1233',
-}, {
-  id: '212',
-  name: 'Ana Eri3dan',
-  username: 'ana3eridan',
-  password: '1233',
-}, {
-  id: '43',
-  name: 'Mano4el Elisval',
-  username: 'm4anoelelisval',
-  password: '1423',
-}, {
-  id: '54',
-  name: 'Be5atriz Eliana',
-  username: 'beat5rizeliana',
-  password: '1235',
-}, {
-  id: '12132111',
-  name: 'Stenio 3Wagner',
-  username: 'steni2owagner',
-  password: '1213',
-}, {
-  id: '12312',
-  name: 'Ana Eri23121dan',
-  username: 'ana123eridan',
-  password: '11232323',
-}, {
-  id: '111113',
-  name: 'Manoel Eli132131sval',
-  username: 'manoelelisval',
-  password: '123',
-}, {
-  id: '4444444',
-  name: 'Beatriz 444Eliana',
-  username: 'beatriz4444eliana',
-  password: '123',
-}, {
-  id: '1112313123123432445435',
-  name: 'Stenio Wagn12321321er',
-  username: 'stenio12321wagner',
-  password: '1212313',
-}, {
-  id: '2357898978',
-  name: 'Ana 1232131231231',
-  username: 'ana2222eridan',
-  password: '123222',
-}, {
-  id: '3155550',
-  name: 'Manoel Elisval',
-  username: 'manoelelisval',
-  password: '123',
-}, {
-  id: '4567w2',
-  name: '3432423 Eliana',
-  username: 'beatr2342342izeliana',
-  password: '2342342342',
-}];
 
 const FilterAndCreateButtonWrapper = styled.div`
   width: 100%
@@ -113,9 +30,9 @@ type State = {
 class User extends Component<{}, State> {
   state = {
     isFullScreenDialogOpen: false,
-    usersFiltered: usersData,
     isSnackbarOpen: false,
-    users: usersData,
+    usersFiltered: [],
+    users: [],
     snackbarData: {},
     currentPage: 0,
   };
@@ -141,20 +58,25 @@ class User extends Component<{}, State> {
     });
   };
 
-
-  /**
-   * Cannot update during an existing state transition (such as within `render` or another component's constructor).
-   * Render methods should be a pure function of props and state; constructor side-effects are an anti-pattern, but can be moved to `componentWillMount`.
-   */
-
   onCreateUser = (user: Object) => {
     const { users } = this.state;
 
+    const openSnackBar = () => {
+      const snackbarData = snackbarTypes.createUserSuccess;
+
+      setTimeout(() => {
+        this.setState({
+          snackbarData,
+        });
+      }, 500); // Dialog closes so fast!
+    };
+
     this.setState({
+      usersFiltered: [user, ...users],
+      users: [...users, user],
       isFullScreenDialogOpen: false,
-      userFiltered: [user, ...users],
-      users: [user, ...users],
-    });
+      isSnackbarOpen: true,
+    }, () => openSnackBar());
   };
 
   onClickCreateButton = (): void => {
@@ -195,12 +117,11 @@ class User extends Component<{}, State> {
     );
   };
 
-  renderFullScreenDialog = (): Obejct => {
+  renderForm = (): Obejct => {
     const { isFullScreenDialogOpen } = this.state;
 
     return (
       <FullScreenDialog
-        actionTitle="CRIAR"
         onClose={this.onToggleFullScreenDialog}
         isOpen={isFullScreenDialogOpen}
         title="CRIAR USUÁRIO"
@@ -243,7 +164,7 @@ class User extends Component<{}, State> {
           message={message}
           type={type}
         />
-        {this.renderFullScreenDialog()}
+        {this.renderForm()}
       </Fragment>
     );
   }

@@ -45,117 +45,101 @@ const SectionTitle = styled(Typography).attrs({
   padding-bottom: 32px;
 `;
 
-let alreadySetUser = false;
-
 type Props = {
   touched: Object,
   values: Object,
   errors: Object,
-  status: Object,
   handleChange: Function,
-  onCreateUser: Function,
   handleBlur: Function,
   isSubmitting: boolean,
 };
 
 const UserForm = ({
   handleChange,
-  onCreateUser,
   isSubmitting,
   handleBlur,
   touched,
   values,
   errors,
-  status,
-}: Props): Object => {
-  const successedFormActions = status && status.success;
-
-  if (!alreadySetUser && successedFormActions) {
-    alreadySetUser = true;
-    console.log('aff')
-    // onCreateUser(values);
-  }
-
-  return (
-    <Wrapper>
-      <Form>
-        <Section>
-          <SectionTitle>
-            Informações do Usuário
-          </SectionTitle>
-          <Row>
-            <RowItem>
-              <Input
-                error={touched.name && errors.name}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.name}
-                placeholder="Informe o Nome do Usuário"
-                label="Nome"
-                type="text"
-                id="name"
-              />
-            </RowItem>
-            <RowItem>
-              <Input
-                error={touched.username && errors.username}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.username}
-                placeholder="Informe o Usuário"
-                label="Usuário"
-                type="text"
-                id="username"
-              />
-            </RowItem>
-          </Row>
-        </Section>
-        <Section>
-          <SectionTitle>
-            Senha
-          </SectionTitle>
-          <Row>
-            <RowItem>
-              <Input
-                error={touched.password && errors.password}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.password}
-                placeholder="Informe a senha do Usuário"
-                label="Digite a Senha"
-                type="password"
-                id="password"
-              />
-            </RowItem>
-            <RowItem>
-              <Input
-                error={touched.passwordConfirm && errors.passwordConfirm}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.passwordConfirm}
-                placeholder="Informe a senha novamente"
-                label="Repita a senha"
-                type="password"
-                id="passwordConfirm"
-              />
-            </RowItem>
-          </Row>
-        </Section>
-        <FloatinActionButtonWrapper>
-          <Button
-            disabled={isSubmitting}
-            type="submit"
-            aria-label="Save"
-            color="primary"
-            variant="fab"
-          >
-            <SaveIcon />
-          </Button>
-        </FloatinActionButtonWrapper>
-      </Form>
-    </Wrapper>
-  );
-};
+}: Props): Object => (
+  <Wrapper>
+    <Form>
+      <Section>
+        <SectionTitle>
+          Informações do Usuário
+        </SectionTitle>
+        <Row>
+          <RowItem>
+            <Input
+              error={touched.name && errors.name}
+              value={values.name}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              placeholder="Informe o Nome do Usuário"
+              label="Nome"
+              type="text"
+              id="name"
+            />
+          </RowItem>
+          <RowItem>
+            <Input
+              error={touched.username && errors.username}
+              value={values.username}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              placeholder="Informe o Usuário"
+              label="Usuário"
+              type="text"
+              id="username"
+            />
+          </RowItem>
+        </Row>
+      </Section>
+      <Section>
+        <SectionTitle>
+          Senha
+        </SectionTitle>
+        <Row>
+          <RowItem>
+            <Input
+              error={touched.password && errors.password}
+              value={values.password}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              placeholder="Informe a senha do Usuário"
+              label="Digite a Senha"
+              type="password"
+              id="password"
+            />
+          </RowItem>
+          <RowItem>
+            <Input
+              error={touched.passwordConfirm && errors.passwordConfirm}
+              value={values.passwordConfirm}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              placeholder="Informe a senha novamente"
+              label="Repita a senha"
+              type="password"
+              id="passwordConfirm"
+            />
+          </RowItem>
+        </Row>
+      </Section>
+      <FloatinActionButtonWrapper>
+        <Button
+          disabled={isSubmitting}
+          type="submit"
+          aria-label="Save"
+          color="primary"
+          variant="fab"
+        >
+          <SaveIcon />
+        </Button>
+      </FloatinActionButtonWrapper>
+    </Form>
+  </Wrapper>
+);
 
 const CustomForm = withFormik({
   mapPropsToValues: ({ name, username, password }) => ({
@@ -173,7 +157,7 @@ const CustomForm = withFormik({
       .required('O Nome de Usuário é obrigatório.'),
 
     password: Yup.string()
-      .min(6, 'A senha deve conter no mínimo 6 caracteres.')
+      .min(1, 'A senha deve conter no mínimo 6 caracteres.')
       .required('A senha é obrigatória.'),
 
     passwordConfirm: Yup.string()
@@ -181,10 +165,9 @@ const CustomForm = withFormik({
       .required('As senhas precisam ser iguais.'),
   }),
 
-  handleSubmit(values, { setStatus, resetForm, setSubmitting }) {
-    resetForm();
-    setStatus({ success: true });
-    setSubmitting(false);
+  handleSubmit(values, { props }) {
+    const { onCreateUser } = props;
+    onCreateUser(values);
   },
 })(UserForm);
 

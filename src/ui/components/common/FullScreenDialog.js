@@ -35,18 +35,16 @@ const styles = theme => ({
 });
 
 type Props = {
-  actionTitle: string,
-  title: string,
-  onClose: Function,
   children: Object,
+  classes: Object,
+  onClose: Function,
   isOpen: boolean,
+  title: string,
 };
 
 const TransitionComponent = (props: Object): Object => <Slide direction="up" {...props} />;
 
 const FullScreenDialog = ({
-  onClickMainAction,
-  actionTitle,
   children,
   classes,
   onClose,

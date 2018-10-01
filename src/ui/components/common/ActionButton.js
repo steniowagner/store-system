@@ -12,9 +12,17 @@ const ButtonWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 20px 10px 20px;
+  padding-left: 20px;
+  padding-right: 20px;
   border-radius: 6px;
   background-color: ${({ theme }) => theme.colors.affirmative};
+`;
+
+const Title = styled.h2`
+  margin-right: 18px,
+  font-size: 28px;
+  font-weight: 700;
+  color: #fff;
 `;
 
 type Props = {
@@ -30,16 +38,13 @@ const ActionButton = ({ title, action }: Props): Obejct => (
       <AddCircleOutline
         style={{
           color: '#fff',
-          marginRight: 12,
+          marginRight: 18,
           fontSize: 28,
         }}
       />
-      <Typography
-        variant="subheading"
-        color="secondary"
-      >
-        {title}
-      </Typography>
+      <Title>
+        {title.toUpperCase()}
+      </Title>
     </ButtonWrapper>
   </ButtonContainer>
 );
