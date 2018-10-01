@@ -6,7 +6,7 @@ import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import styled from 'styled-components';
 
-import ItemList from './ItemList';
+import ItemList from './components/ItemList';
 import data from './data';
 
 const DRAWER_WIDTH = 260;

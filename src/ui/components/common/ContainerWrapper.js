@@ -2,7 +2,10 @@
 
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
+
 import styled from 'styled-components';
+import AppTheme from '../../styles';
 
 const Container = styled.main`
   height: 100%;
@@ -10,20 +13,26 @@ const Container = styled.main`
   min-width: 0;
 `;
 
-const Wrapper = styled.div`
+const Wrapper = styled(Paper)`
   margin-left: 220px;
-  height: 100%;
+  height: 80%;
 `;
 
 const styles = theme => ({
-  content: {
-    backgroundColor: theme.palette.background.default,
-    width: '100%',
-    height: '100%',
-    padding: theme.spacing.unit * 3,
-    paddingTop: theme.spacing.unit,
+  container: {
+    ...theme.mixins.gutters(),
+    backgroundColor: AppTheme.colors.lightGray,
+    alignItems: 'center',
+    display: 'flex',
+    flex: 1,
   },
   toolbar: theme.mixins.toolbar,
+  content: {
+    paddingTop: theme.spacing.unit * 1.5,
+    paddingRight: theme.spacing.unit * 3,
+    paddingLeft: theme.spacing.unit * 3,
+    width: '100%',
+  },
 });
 
 type Props = {
@@ -33,10 +42,14 @@ type Props = {
 
 const ContainerWrapper = ({ children, classes }: Props): Object => (
   <Container
-    className={classes.content}
+    className={classes.container}
   >
-    <div className={classes.toolbar} />
-    <Wrapper>
+    <div
+      className={classes.toolbar}
+    />
+    <Wrapper
+      className={classes.content}
+    >
       {children}
     </Wrapper>
   </Container>

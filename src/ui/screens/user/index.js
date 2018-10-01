@@ -1,12 +1,17 @@
 import React, { Component, Fragment } from 'react';
+import Typography from '@material-ui/core/Typography';
+import styled from 'styled-components';
 
-import SectionTitle from '../../components/common/SectionTitle';
 import Filter from '../../components/common/Filter';
 import Table from '../../components/common/table';
 
-import { filterConfig, tabConfig, snackbarTypes } from './metaConfig';
+import { filterConfig, tabConfig, snackbarTypes } from './config';
 
+import ActionButton from '../../components/common/ActionButton';
 import Snackbar from '../../components/common/CustomSnackbar';
+import FullScreenDialog from '../../components/common/FullScreenDialog';
+import Form from './components/Form';
+
 
 const usersData = [{
   id: '1',
@@ -90,6 +95,14 @@ const usersData = [{
   password: '2342342342',
 }];
 
+const FilterAndCreateButtonWrapper = styled.div`
+  width: 100%
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
+  align-items: center;
+`;
+
 type State = {
   usersFiltered: Array<Object>,
   isDeleteDialogOpen: boolean,
@@ -99,11 +112,20 @@ type State = {
 
 class User extends Component<{}, State> {
   state = {
+    isFullScreenDialogOpen: false,
     usersFiltered: usersData,
     isSnackbarOpen: false,
     users: usersData,
     snackbarData: {},
     currentPage: 0,
+  };
+
+  onToggleFullScreenDialog = (): void => {
+    const { isFullScreenDialogOpen } = this.state;
+
+    this.setState({
+      isFullScreenDialogOpen: !isFullScreenDialogOpen,
+    });
   };
 
   onCloseSnackbar = (): void => {
@@ -116,6 +138,28 @@ class User extends Component<{}, State> {
     this.setState({
       currentPage: 0,
       usersFiltered,
+    });
+  };
+
+
+  /**
+   * Cannot update during an existing state transition (such as within `render` or another component's constructor).
+   * Render methods should be a pure function of props and state; constructor side-effects are an anti-pattern, but can be moved to `componentWillMount`.
+   */
+
+  onCreateUser = (user: Object) => {
+    const { users } = this.state;
+
+    this.setState({
+      isFullScreenDialogOpen: false,
+      userFiltered: [user, ...users],
+      users: [user, ...users],
+    });
+  };
+
+  onClickCreateButton = (): void => {
+    this.setState({
+      isFullScreenDialogOpen: true,
     });
   };
 
@@ -133,27 +177,60 @@ class User extends Component<{}, State> {
     });
   };
 
+  renderFilterAndCreatButtonSection = (): Object => {
+    const { users } = this.state;
+
+    return (
+      <FilterAndCreateButtonWrapper>
+        <Filter
+          onFilterData={this.onFilterUsers}
+          filterConfig={filterConfig}
+          dataset={users}
+        />
+        <ActionButton
+          action={this.onClickCreateButton}
+          title="Criar Usuário"
+        />
+      </FilterAndCreateButtonWrapper>
+    );
+  };
+
+  renderFullScreenDialog = (): Obejct => {
+    const { isFullScreenDialogOpen } = this.state;
+
+    return (
+      <FullScreenDialog
+        actionTitle="CRIAR"
+        onClose={this.onToggleFullScreenDialog}
+        isOpen={isFullScreenDialogOpen}
+        title="CRIAR USUÁRIO"
+      >
+        <Form
+          onCreateUser={this.onCreateUser}
+        />
+      </FullScreenDialog>
+    );
+  };
+
   render() {
     const {
       isSnackbarOpen,
       usersFiltered,
       snackbarData,
       currentPage,
-      users,
     } = this.state;
 
     const { type, message } = snackbarData;
 
     return (
       <Fragment>
-        <SectionTitle
-          title="Usuários"
-        />
-        <Filter
-          onFilterData={this.onFilterUsers}
-          filterConfig={filterConfig}
-          dataset={users}
-        />
+        <Typography
+          variant="display3"
+          gutterBottom
+        >
+          Usuários
+        </Typography>
+        {this.renderFilterAndCreatButtonSection()}
         <Table
           onRemoveItem={this.onDeleteUser}
           currentPage={currentPage}
@@ -166,6 +243,7 @@ class User extends Component<{}, State> {
           message={message}
           type={type}
         />
+        {this.renderFullScreenDialog()}
       </Fragment>
     );
   }

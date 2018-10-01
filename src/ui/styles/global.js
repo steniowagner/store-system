@@ -7,6 +7,8 @@ injectGlobal`
     margin:0;
   }
 
+  html { font-family: 'Roboto', sans-serif; }
+
   body > #root > div {
     -webkit-font-smoothing: antialiased !important;
     text-rendering: optimizeLegibility !important;

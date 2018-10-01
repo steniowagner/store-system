@@ -36,8 +36,9 @@ const BodyRow = styled(TableRow)`
   background-color: ${({ theme, index }) => (index % 2 === 0 ? theme.colors.white : theme.colors.tableOddColor)};
 `;
 
-const HeaderCell = styled.h2`
+const HeaderCell = styled.p`
   font-weigth: 500;
+  font-size: 16px;
   color: ${({ theme }) => theme.colors.white};
 `;
 
