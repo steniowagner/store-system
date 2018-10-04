@@ -10,7 +10,7 @@ import Table from '@material-ui/core/Table';
 import Paper from '@material-ui/core/Paper';
 
 import IconButton from '@material-ui/core/IconButton';
-import CreateIcon from '@material-ui/icons/Create';
+import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import SearchIcon from '@material-ui/icons/Search';
 
@@ -54,9 +54,11 @@ const ActionButtonsWrapper = styled.div`
 `;
 
 type Props = {
+  onVisualizeIconClicked: Function,
+  onEditIconClicked: Function,
+  onRemoveItem: Function,
   tabConfig: Array<Object>,
   dataset: Array<any>,
-  onRemoveItem: Function,
   currentPage: number,
 };
 
@@ -96,9 +98,11 @@ class CustomTable extends Component<Props, State> {
   };
 
   onPageChange = (page: number): void => {
+    const { updatePageIndex } = this.props;
+
     this.setState({
       currentPage: page,
-    });
+    }, () => updatePageIndex(page));
   };
 
   onChangeRowsPerPage = (rowsPerPage: number): void => {
@@ -152,26 +156,35 @@ class CustomTable extends Component<Props, State> {
     );
   };
 
-  renderActionsSection = (item: Object): Object => (
-    <ActionButtonsWrapper>
-      <IconButton
-        aria-label="Create"
-      >
-        <CreateIcon />
-      </IconButton>
-      <IconButton
-        aria-label="Search"
-      >
-        <SearchIcon />
-      </IconButton>
-      <IconButton
-        onClick={() => this.onRemoveItemClicked(item)}
-        aria-label="Delete"
-      >
-        <DeleteIcon />
-      </IconButton>
-    </ActionButtonsWrapper>
-  );
+  renderActionsSection = (item: Object): Object => {
+    const { onEditIconClicked, onVisualizeIconClicked } = this.props;
+
+    return (
+      <ActionButtonsWrapper>
+        <IconButton
+          onClick={() => onEditIconClicked(item)}
+          aria-label="Edit"
+          disableRipple
+        >
+          <EditIcon />
+        </IconButton>
+        <IconButton
+          onClick={() => onVisualizeIconClicked(item)}
+          aria-label="Search"
+          disableRipple
+        >
+          <SearchIcon />
+        </IconButton>
+        <IconButton
+          onClick={() => this.onRemoveItemClicked(item)}
+          aria-label="Delete"
+          disableRipple
+        >
+          <DeleteIcon />
+        </IconButton>
+      </ActionButtonsWrapper>
+    );
+  }
 
   renderHeader = (columnsTitles: Array<string>): Object => (
     <TableHeader>

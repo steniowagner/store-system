@@ -33,11 +33,11 @@ export const snackbarTypes = {
     message: 'Houve um erro ao remover este Usuário.',
   },
 
-  updateUserSuccess: {
+  editUserSuccess: {
     type: 'success',
     message: 'Usuário atualizado com sucesso.',
   },
-  updateUserError: {
+  editUserError: {
     type: 'error',
     message: 'Houve um erro ao atualizar este Usuário.',
   },

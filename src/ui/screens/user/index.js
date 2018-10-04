@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import FullScreenDialog from '../../components/common/FullScreenDialog';
 import ActionButton from '../../components/common/ActionButton';
 import Snackbar from '../../components/common/CustomSnackbar';
-import Form from './components/Form';
+import Form from './Form';
 
 import Filter from '../../components/common/Filter';
 import Table from '../../components/common/table';
@@ -27,14 +27,68 @@ type State = {
   currentPage: number,
 };
 
+const test = [{
+  name: 's1',
+  username: 's1',
+  password: '123',
+  id: '1',
+}, {
+  name: 's2',
+  username: 's2',
+  password: '123',
+  id: '2',
+}, {
+  name: 's3',
+  username: 's3',
+  password: '123',
+  id: '31',
+}, {
+  name: 'ste4',
+  username: 's4',
+  password: '123',
+  id: '4',
+}, {
+  name: 's5',
+  username: 's5',
+  password: '123',
+  id: '5',
+}, {
+  name: 's6',
+  username: 's6',
+  password: '123',
+  id: '6',
+}, {
+  name: 's7',
+  username: '7',
+  password: '123',
+  id: '7',
+}, {
+  name: 'ste8',
+  username: '8',
+  password: '123',
+  id: '8',
+}, {
+  name: 's9',
+  username: 's9',
+  password: '123',
+  id: '9',
+}, {
+  name: 's10',
+  username: 's10',
+  password: '123',
+  id: '10',
+}]
+
 class User extends Component<{}, State> {
   state = {
     isFullScreenDialogOpen: false,
     isSnackbarOpen: false,
-    usersFiltered: [],
-    users: [],
+    usersFiltered: test,
+    users: test,
     snackbarData: {},
+    contextUser: {},
     currentPage: 0,
+    formMode: '',
   };
 
   onToggleFullScreenDialog = (): void => {
@@ -59,29 +113,70 @@ class User extends Component<{}, State> {
   };
 
   onCreateUser = (user: Object) => {
-    const { users } = this.state;
-
-    const openSnackBar = () => {
-      const snackbarData = snackbarTypes.createUserSuccess;
-
-      setTimeout(() => {
-        this.setState({
-          snackbarData,
-        });
-      }, 500); // Dialog closes so fast!
-    };
-
+    const { users, usersFiltered } = this.state;
+    users.id = Math.random();
     this.setState({
-      usersFiltered: [user, ...users],
-      users: [...users, user],
+      usersFiltered: [user, ...usersFiltered],
+      users: [user, ...users],
       isFullScreenDialogOpen: false,
       isSnackbarOpen: true,
-    }, () => openSnackBar());
+      snackbarData: {},
+      currentPage: 0,
+    }, () => this.openSnackBar(snackbarTypes.createUserSuccess));
+  };
+
+  onEditUser = (userEdited: Object): Object => {
+    const { contextUser, users, usersFiltered } = this.state;
+
+    const userData = {
+      password: contextUser.password,
+      username: userEdited.username,
+      name: userEdited.name,
+      id: contextUser.id,
+    };
+
+    const userFilteredIndex = usersFiltered.findIndex(userFiltered => userFiltered.id === contextUser.id);
+    const usersIndex = users.findIndex(user => user.id === contextUser.id);
+
+    this.setState({
+      usersFiltered: Object.assign([], usersFiltered, { [userFilteredIndex]: userData }),
+      users: Object.assign([], users, { [usersIndex]: userData }),
+      isFullScreenDialogOpen: false,
+      isSnackbarOpen: true,
+      snackbarData: {},
+    }, () => this.openSnackBar(snackbarTypes.editUserSuccess));
+  };
+
+  onEditUserPassword = (userPassword: string): Object => {
+    const { contextUser } = this.state;
+
+    contextUser.password = userPassword;
+
+    this.setState({
+      contextUser,
+    });
   };
 
   onClickCreateButton = (): void => {
     this.setState({
       isFullScreenDialogOpen: true,
+      formMode: 'create',
+    });
+  };
+
+  onTableEditIconClicked = (user: Object): void => {
+    this.setState({
+      isFullScreenDialogOpen: true,
+      contextUser: user,
+      formMode: 'edit',
+    });
+  };
+
+  onTableVisualizeIconClicked = (user: Object): void => {
+    this.setState({
+      isFullScreenDialogOpen: true,
+      contextUser: user,
+      formMode: 'visualize',
     });
   };
 
@@ -97,6 +192,20 @@ class User extends Component<{}, State> {
       snackbarData,
       currentPage,
     });
+  };
+
+  onTablePageChange = (newPage: number): void => {
+    this.setState({
+      currentPage: newPage,
+    });
+  };
+
+  openSnackBar = (snackbarData: Object): void => {
+    setTimeout(() => {
+      this.setState({
+        snackbarData,
+      });
+    }, 700); // Dialog closes so fast!
   };
 
   renderFilterAndCreatButtonSection = (): Object => {
@@ -118,16 +227,28 @@ class User extends Component<{}, State> {
   };
 
   renderForm = (): Obejct => {
-    const { isFullScreenDialogOpen } = this.state;
+    const { isFullScreenDialogOpen, formMode, contextUser } = this.state;
+
+    const mode = {
+      visualize: 'VISUALIZAR',
+      create: 'CRIAR',
+      edit: 'EDITAR',
+    };
+
+    const user = ((formMode === 'edit' || formMode === 'visualize') ? contextUser : {});
 
     return (
       <FullScreenDialog
         onClose={this.onToggleFullScreenDialog}
+        title={`${mode[formMode]} USUÁRIO`}
         isOpen={isFullScreenDialogOpen}
-        title="CRIAR USUÁRIO"
       >
         <Form
+          onEditUserPassword={this.onEditUserPassword}
           onCreateUser={this.onCreateUser}
+          onEditUser={this.onEditUser}
+          mode={formMode}
+          user={user}
         />
       </FullScreenDialog>
     );
@@ -153,6 +274,9 @@ class User extends Component<{}, State> {
         </Typography>
         {this.renderFilterAndCreatButtonSection()}
         <Table
+          onVisualizeIconClicked={this.onTableVisualizeIconClicked}
+          onEditIconClicked={this.onTableEditIconClicked}
+          updatePageIndex={this.onTablePageChange}
           onRemoveItem={this.onDeleteUser}
           currentPage={currentPage}
           dataset={usersFiltered}
