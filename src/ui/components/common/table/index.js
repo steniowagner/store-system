@@ -10,14 +10,13 @@ import Table from '@material-ui/core/Table';
 import Paper from '@material-ui/core/Paper';
 
 import IconButton from '@material-ui/core/IconButton';
-import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import SearchIcon from '@material-ui/icons/Search';
+import EditIcon from '@material-ui/icons/Edit';
 
 import styled from 'styled-components';
 
 import Pagination from './components/Pagination';
-import Dialog from '../Dialog';
 
 const Container = styled(Paper)`
   width: 100%;
@@ -55,109 +54,32 @@ const ActionButtonsWrapper = styled.div`
 
 type Props = {
   onVisualizeIconClicked: Function,
+  onRemoveIconClicked: Function,
   onEditIconClicked: Function,
-  onRemoveItem: Function,
+  updatePageIndex: Function,
   tabConfig: Array<Object>,
   dataset: Array<any>,
   currentPage: number,
 };
 
 type State = {
-  currentPage: number,
   rowsPerPage: number,
 };
 
 class CustomTable extends Component<Props, State> {
   state = {
-    isRemoveDialogOpen: false,
-    contextItem: {},
-    currentPage: 0,
     rowsPerPage: 5,
-  };
-
-  componentDidMount() {
-    const { currentPage } = this.props;
-
-    this.setState({
-      currentPage,
-    });
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      currentPage: nextProps.currentPage,
-    });
-  }
-
-  onToggleDialogRemove = (): void => {
-    const { isRemoveDialogOpen } = this.state;
-
-    this.setState({
-      isRemoveDialogOpen: !isRemoveDialogOpen,
-    });
-  };
-
-  onPageChange = (page: number): void => {
-    const { updatePageIndex } = this.props;
-
-    this.setState({
-      currentPage: page,
-    }, () => updatePageIndex(page));
   };
 
   onChangeRowsPerPage = (rowsPerPage: number): void => {
     this.setState({
-      currentPage: 0,
       rowsPerPage,
     });
   };
 
-  onRemoveItemClicked = (item: Object): void => {
-    this.setState({
-      isRemoveDialogOpen: true,
-      contextItem: item,
-    });
-  };
-
-  getCurrentPageAfterRemotion = (): number => {
-    const { rowsPerPage, currentPage } = this.state;
-    const { dataset } = this.props;
-
-    const maxPageReacheable = Math.ceil((dataset.length - 1) / rowsPerPage) - 1;
-
-    if ((dataset.length - 1) === 0) {
-      return 0;
-    }
-
-    if (currentPage <= maxPageReacheable) {
-      return currentPage;
-    }
-
-    return currentPage - 1;
-  };
-
-  renderDeleteDialog = (): Object => {
-    const { isRemoveDialogOpen, contextItem } = this.state;
-    const { onRemoveItem } = this.props;
-
-    const newPage = this.getCurrentPageAfterRemotion();
-
-    return (
-      <Dialog
-        description="Se executar esta ação, os dados deste Usuário serão perdidos para sempre, e não poderão ser recuperados de forma alguma."
-        title="Tem certeza que quer remover este Usuário?"
-        positiveAction={() => onRemoveItem(contextItem.id, newPage)}
-        negativeAction={this.onToggleDialogRemove}
-        onCloseDialog={this.onToggleDialogRemove}
-        isOpen={isRemoveDialogOpen}
-        positiveText="SIM"
-        negativeText="NÃO"
-      />
-    );
-  };
-
   renderActionsSection = (item: Object): Object => {
-    const { onEditIconClicked, onVisualizeIconClicked } = this.props;
+    const { onEditIconClicked, onVisualizeIconClicked, onRemoveIconClicked } = this.props;
+    const { rowsPerPage } = this.state;
 
     return (
       <ActionButtonsWrapper>
@@ -176,7 +98,7 @@ class CustomTable extends Component<Props, State> {
           <SearchIcon />
         </IconButton>
         <IconButton
-          onClick={() => this.onRemoveItemClicked(item)}
+          onClick={() => onRemoveIconClicked(item, rowsPerPage)}
           aria-label="Delete"
           disableRipple
         >
@@ -246,8 +168,14 @@ class CustomTable extends Component<Props, State> {
   );
 
   render() {
-    const { rowsPerPage, currentPage } = this.state;
-    const { tabConfig, dataset } = this.props;
+    const {
+      updatePageIndex,
+      currentPage,
+      tabConfig,
+      dataset,
+    } = this.props;
+
+    const { rowsPerPage } = this.state;
 
     const columnsTitles = tabConfig.map(item => item.columnTitle);
     const dataFields = tabConfig.map(item => item.dataField);
@@ -264,13 +192,12 @@ class CustomTable extends Component<Props, State> {
           {this.renderRows(datasetWithPagination, dataFields)}
         </Table>
         <Pagination
-          onChangeRowsPerPage={(value: number) => this.onChangeRowsPerPage(value)}
+          onChangeRowsPerPage={this.onChangeRowsPerPage}
           datasetLength={dataset.length}
-          onPageChange={this.onPageChange}
+          onPageChange={updatePageIndex}
           rowsPerPage={rowsPerPage}
           currentPage={currentPage}
         />
-        {this.renderDeleteDialog()}
       </Container>
     );
   }

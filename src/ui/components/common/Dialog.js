@@ -63,16 +63,16 @@ const CustomDialog = ({
     </DialogContent>
     <DialogActions>
       <Button
-        onClick={() => onActionButtonClicked(positiveAction, onCloseDialog)}
-        color="primary"
-      >
-        {positiveText}
-      </Button>
-      <Button
         onClick={() => onActionButtonClicked(negativeAction, onCloseDialog)}
         color="primary"
       >
         {negativeText}
+      </Button>
+      <Button
+        onClick={() => onActionButtonClicked(positiveAction, onCloseDialog)}
+        color="primary"
+      >
+        {positiveText}
       </Button>
     </DialogActions>
   </Dialog>

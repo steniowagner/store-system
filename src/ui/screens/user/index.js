@@ -8,6 +8,7 @@ import Snackbar from '../../components/common/CustomSnackbar';
 import Form from './Form';
 
 import Filter from '../../components/common/Filter';
+import Dialog from '../../components/common/Dialog';
 import Table from '../../components/common/table';
 
 import { filterConfig, tabConfig, snackbarTypes } from './config';
@@ -22,7 +23,7 @@ const FilterAndCreateButtonWrapper = styled.div`
 
 type State = {
   usersFiltered: Array<Object>,
-  isDeleteDialogOpen: boolean,
+  isRemoveDialogOpen: boolean,
   users: Array<Object>,
   currentPage: number,
 };
@@ -82,13 +83,23 @@ const test = [{
 class User extends Component<{}, State> {
   state = {
     isFullScreenDialogOpen: false,
+    isRemoveDialogOpen: false,
     isSnackbarOpen: false,
     usersFiltered: test,
     users: test,
     snackbarData: {},
     contextUser: {},
     currentPage: 0,
+    rowsPerPage: 0,
     formMode: '',
+  };
+
+  onToggleDialogRemove = (): void => {
+    const { isRemoveDialogOpen } = this.state;
+
+    this.setState({
+      isRemoveDialogOpen: !isRemoveDialogOpen,
+    });
   };
 
   onToggleFullScreenDialog = (): void => {
@@ -105,6 +116,12 @@ class User extends Component<{}, State> {
     });
   };
 
+  onTablePageChange = (newPage: number): void => {
+    this.setState({
+      currentPage: newPage,
+    });
+  };
+
   onFilterUsers = (usersFiltered: Array<Object>) => {
     this.setState({
       currentPage: 0,
@@ -114,7 +131,7 @@ class User extends Component<{}, State> {
 
   onCreateUser = (user: Object) => {
     const { users, usersFiltered } = this.state;
-    users.id = Math.random();
+
     this.setState({
       usersFiltered: [user, ...usersFiltered],
       users: [user, ...users],
@@ -150,10 +167,8 @@ class User extends Component<{}, State> {
   onEditUserPassword = (userPassword: string): Object => {
     const { contextUser } = this.state;
 
-    contextUser.password = userPassword;
-
     this.setState({
-      contextUser,
+      contextUser: Object.assign({}, contextUser, { password: userPassword }),
     });
   };
 
@@ -180,24 +195,43 @@ class User extends Component<{}, State> {
     });
   };
 
-  onDeleteUser = (userId: any, currentPage: number): void => {
-    const { users, usersFiltered } = this.state;
+  onTableRemoveIconClicked = (user: Object, rowsPerPage: number): void => {
+    this.setState({
+      isRemoveDialogOpen: true,
+      contextUser: user,
+      rowsPerPage,
+    });
+  };
 
+  onRemoveUser = (): void => {
+    const { users, usersFiltered, contextUser } = this.state;
     const snackbarData = snackbarTypes.removeUserSuccess;
 
+    const currentPage = this.getCurrentPageAfterRemotion();
+
     this.setState({
-      usersFiltered: usersFiltered.filter(userFiltered => userFiltered.id !== userId),
-      users: users.filter(user => user.id !== userId),
+      usersFiltered: usersFiltered.filter(userFiltered => userFiltered.id !== contextUser.id),
+      users: users.filter(user => user.id !== contextUser.id),
       isSnackbarOpen: true,
       snackbarData,
       currentPage,
     });
   };
 
-  onTablePageChange = (newPage: number): void => {
-    this.setState({
-      currentPage: newPage,
-    });
+  getCurrentPageAfterRemotion = (): number => {
+    const { rowsPerPage, currentPage, usersFiltered } = this.state;
+
+    const maxPageReacheable = Math.ceil((usersFiltered.length - 1) / rowsPerPage) - 1;
+
+    if ((usersFiltered.length - 1) === 0) {
+      return 0;
+    }
+
+    if (currentPage <= maxPageReacheable) {
+      return currentPage;
+    }
+
+    return currentPage - 1;
   };
 
   openSnackBar = (snackbarData: Object): void => {
@@ -254,6 +288,23 @@ class User extends Component<{}, State> {
     );
   };
 
+  renderRemoveDialog = (): Object => {
+    const { isRemoveDialogOpen } = this.state;
+
+    return (
+      <Dialog
+        description="Se executar esta ação, os dados deste Usuário serão perdidos para sempre, e não poderão ser recuperados de forma alguma."
+        title="Tem certeza que quer remover este Usuário?"
+        positiveAction={() => this.onRemoveUser()}
+        negativeAction={this.onToggleDialogRemove}
+        onCloseDialog={this.onToggleDialogRemove}
+        isOpen={isRemoveDialogOpen}
+        positiveText="SIM"
+        negativeText="NÃO"
+      />
+    );
+  };
+
   render() {
     const {
       isSnackbarOpen,
@@ -267,7 +318,7 @@ class User extends Component<{}, State> {
     return (
       <Fragment>
         <Typography
-          variant="display3"
+          variant="display2"
           gutterBottom
         >
           Usuários
@@ -276,8 +327,9 @@ class User extends Component<{}, State> {
         <Table
           onVisualizeIconClicked={this.onTableVisualizeIconClicked}
           onEditIconClicked={this.onTableEditIconClicked}
+          onRemoveIconClicked={this.onTableRemoveIconClicked}
           updatePageIndex={this.onTablePageChange}
-          onRemoveItem={this.onDeleteUser}
+          onRemoveItem={this.onRemoveUser}
           currentPage={currentPage}
           dataset={usersFiltered}
           tabConfig={tabConfig}
@@ -289,6 +341,7 @@ class User extends Component<{}, State> {
           type={type}
         />
         {this.renderForm()}
+        {this.renderRemoveDialog()}
       </Fragment>
     );
   }
