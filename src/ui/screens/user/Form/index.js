@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import styled from 'styled-components';
 import Button from '@material-ui/core/Button';
+import styled from 'styled-components';
 
 import { withFormik, Form } from 'formik';
 import * as Yup from 'yup';
@@ -49,16 +49,16 @@ const EditPasswordButtonWrapper = styled.div`
 `;
 
 type Props = {
+  onChageFormToEditMode: Function,
   onEditUserPassword: Function,
-  onRemoveUser: Function,
-  onCreateUser: Function,
-  onEditUser: Function,
   handleChange: Function,
   handleSubmit: Function,
+  onRemoveUser: Function,
   handleBlur: Function,
   touched: Object,
   values: Object,
   errors: Object,
+  user: Object,
   isSubmitting: boolean,
   mode: string,
 };
@@ -72,7 +72,7 @@ class UserForm extends Component<Props, State> {
     isPasswordDialogOpen: false,
   };
 
-  onTogglePassowrdDialog = (): void => {
+  onTogglePassowordDialog = (): void => {
     const { isPasswordDialogOpen } = this.state;
 
     this.setState({
@@ -140,7 +140,7 @@ class UserForm extends Component<Props, State> {
   renderEditPasswordButton = (): Object => (
     <EditPasswordButtonWrapper>
       <Button
-        onClick={() => this.onTogglePassowrdDialog()}
+        onClick={() => this.onTogglePassowordDialog()}
         disableRipple
         color="primary"
         variant="contained"
@@ -153,7 +153,9 @@ class UserForm extends Component<Props, State> {
 
   render() {
     const {
+      onChageFormToEditMode,
       handleChange,
+      onRemoveUser,
       handleSubmit,
       isSubmitting,
       handleBlur,
@@ -208,6 +210,8 @@ class UserForm extends Component<Props, State> {
           <Row>
             {mode === 'edit' && this.renderEditPasswordButton()}
             <ActionButton
+              onChageFormToEditMode={onChageFormToEditMode}
+              onRemoveUser={onRemoveUser}
               disabled={isSubmitting}
               onClick={handleSubmit}
               mode={mode}
@@ -215,7 +219,7 @@ class UserForm extends Component<Props, State> {
           </Row>
           <ChangePassword
             onChangePassword={this.onChangePassword}
-            onClose={this.onTogglePassowrdDialog}
+            onClose={this.onTogglePassowordDialog}
             isOpen={isPasswordDialogOpen}
             realPassword={user.password}
           />

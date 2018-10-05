@@ -22,10 +22,16 @@ const FilterAndCreateButtonWrapper = styled.div`
 `;
 
 type State = {
-  usersFiltered: Array<Object>,
+  isFullScreenDialogOpen: boolean,
   isRemoveDialogOpen: boolean,
+  isSnackbarOpen: boolean,
+  usersFiltered: Array<Object>,
   users: Array<Object>,
+  snackbarData: Object,
+  contextUser: Object,
   currentPage: number,
+  rowsPerPage: number,
+  formMode: string,
 };
 
 const test = [{
@@ -78,7 +84,7 @@ const test = [{
   username: 's10',
   password: '123',
   id: '10',
-}]
+}];
 
 class User extends Component<{}, State> {
   state = {
@@ -107,6 +113,12 @@ class User extends Component<{}, State> {
 
     this.setState({
       isFullScreenDialogOpen: !isFullScreenDialogOpen,
+    });
+  };
+
+  onChageFormToEditMode = (): void => {
+    this.setState({
+      formMode: 'edit',
     });
   };
 
@@ -212,6 +224,7 @@ class User extends Component<{}, State> {
     this.setState({
       usersFiltered: usersFiltered.filter(userFiltered => userFiltered.id !== contextUser.id),
       users: users.filter(user => user.id !== contextUser.id),
+      isFullScreenDialogOpen: false,
       isSnackbarOpen: true,
       snackbarData,
       currentPage,
@@ -239,7 +252,7 @@ class User extends Component<{}, State> {
       this.setState({
         snackbarData,
       });
-    }, 700); // Dialog closes so fast!
+    }, 700);
   };
 
   renderFilterAndCreatButtonSection = (): Object => {
@@ -278,7 +291,9 @@ class User extends Component<{}, State> {
         isOpen={isFullScreenDialogOpen}
       >
         <Form
+          onChageFormToEditMode={this.onChageFormToEditMode}
           onEditUserPassword={this.onEditUserPassword}
+          onRemoveUser={this.onRemoveUser}
           onCreateUser={this.onCreateUser}
           onEditUser={this.onEditUser}
           mode={formMode}
