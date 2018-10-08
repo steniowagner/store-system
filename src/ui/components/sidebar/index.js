@@ -4,12 +4,14 @@ import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
+
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import ItemList from './components/ItemList';
-import data from './data';
+import config from './config';
 
-const DRAWER_WIDTH = 260;
+const DRAWER_WIDTH = 300;
 
 const styles = theme => ({
   toolbar: theme.mixins.toolbar,
@@ -22,6 +24,14 @@ const CustomSidebar = styled(Drawer).attrs({
   width: ${DRAWER_WIDTH};
   position: relative;
   z-index: 2;
+`;
+
+const CustomLink = styled(Link)`
+  color: inherit;
+  text-decoration: none;
+  &:focus, &:hover, &:visited, &:link, &:active {
+      text-decoration: none;
+  };
 `;
 
 type Props = {
@@ -53,15 +63,19 @@ class Sidebar extends Component<Props, State> {
           className={classes.toolbar}
         />
         <List>
-          {data.map((item, index) => (
-            <ItemList
-              key={item.route}
-              onClickItem={this.onSelectIndex}
-              active={indexSelected === index}
-              title={item.title}
-              icon={item.icon}
-              index={index}
-            />
+          {config.map((item, index) => (
+            <CustomLink
+              to={item.route}
+            >
+              <ItemList
+                key={item.route}
+                onClickItem={this.onSelectIndex}
+                active={indexSelected === index}
+                title={item.title}
+                icon={item.icon}
+                index={index}
+              />
+            </CustomLink>
           ))}
         </List>
       </CustomSidebar>

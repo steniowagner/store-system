@@ -1,6 +1,9 @@
-import React from 'react';
-import styled, { ThemeProvider } from 'styled-components';
+// @flow
+
+import React, { Fragment } from 'react';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { BrowserRouter as AppliationRouter } from 'react-router-dom';
+import styled, { ThemeProvider } from 'styled-components';
 
 import Sidebar from './components/sidebar/index';
 import HeaderBar from './components/HeaderBar';
@@ -32,9 +35,13 @@ const Root = (): Object => (
       theme={AppTheme}
     >
       <Wrapper>
-        <Sidebar />
-        <HeaderBar />
-        <Router />
+        <AppliationRouter>
+          <Fragment>
+            <Sidebar />
+            <HeaderBar />
+            <Router />
+          </Fragment>
+        </AppliationRouter>
       </Wrapper>
     </ThemeProvider>
   </MuiThemeProvider>

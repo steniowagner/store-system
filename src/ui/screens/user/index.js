@@ -341,8 +341,8 @@ class User extends Component<{}, State> {
         {this.renderFilterAndCreatButtonSection()}
         <Table
           onVisualizeIconClicked={this.onTableVisualizeIconClicked}
-          onEditIconClicked={this.onTableEditIconClicked}
           onRemoveIconClicked={this.onTableRemoveIconClicked}
+          onEditIconClicked={this.onTableEditIconClicked}
           updatePageIndex={this.onTablePageChange}
           onRemoveItem={this.onRemoveUser}
           currentPage={currentPage}

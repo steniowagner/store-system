@@ -1,13 +1,13 @@
 import AccountCircle from '@material-ui/icons/AccountCircle';
 
-const data = [{
-  title: 'USUÁRIOS',
+const config = [{
   icon: AccountCircle,
+  title: 'USUÁRIOS',
   route: '/user',
 }, {
-  title: 'PRODUTOS',
   icon: AccountCircle,
+  title: 'PRODUTOS',
   route: '/product',
 }];
 
-export default data;
+export default config;
