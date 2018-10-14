@@ -7,7 +7,7 @@ import * as Yup from 'yup';
 
 import Input from '../../../components/common/CustomInput';
 
-import ActionButton from './components/ActionFormButton';
+import ActionButton from '../../../components/common/ActionFormButton';
 import ChangePassword from './components/ChangePassword';
 
 const Wrapper = styled.div`

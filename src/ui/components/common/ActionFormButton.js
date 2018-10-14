@@ -10,7 +10,7 @@ import SaveIcon from '@material-ui/icons/Save';
 
 import styled from 'styled-components';
 
-import Dialog from '../../../../components/common/Dialog';
+import Dialog from './Dialog';
 
 const Container = styled.div`
   display: flex;
