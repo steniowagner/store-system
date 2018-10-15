@@ -20,7 +20,7 @@ const Container = styled.div`
 
 type Props = {
   onChageFormToEditMode: Function,
-  onRemoveUser: Function,
+  onRemoveItem: Function,
   onClick: Function,
   disabled: boolean,
   mode: string,
@@ -125,13 +125,13 @@ class ActionFormButton extends Component<Props, State> {
   // Can't overlap the Form Dialog from User component
   renderRemoveDialog = (): Object => {
     const { isRemoveDialogOpen } = this.state;
-    const { onRemoveUser } = this.props;
+    const { onRemoveItem } = this.props;
 
     return (
       <Dialog
         description="Se executar esta ação, os dados deste Usuário serão perdidos para sempre, e não poderão ser recuperados de forma alguma."
         title="Tem certeza que quer remover este Usuário?"
-        positiveAction={() => onRemoveUser()}
+        positiveAction={() => onRemoveItem()}
         negativeAction={this.onToggleRemoveDialog}
         onCloseDialog={this.onToggleRemoveDialog}
         isOpen={isRemoveDialogOpen}

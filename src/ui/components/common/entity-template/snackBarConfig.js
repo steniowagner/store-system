@@ -9,7 +9,7 @@ export const TYPES = {
   EDIT_ERROR: 'editError',
 };
 
-const getConfig = (type: string, entity: string): Object => {
+export const getConfig = (type: string, entity: string): Object => {
   const configs = {
     [TYPES.CREATE_SUCCESS]: {
       type: 'success',
@@ -44,5 +44,3 @@ const getConfig = (type: string, entity: string): Object => {
 
   return configs[type];
 };
-
-export default getConfig;

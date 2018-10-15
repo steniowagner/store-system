@@ -91,7 +91,7 @@ class CustomTable extends Component<Props, State> {
           <EditIcon />
         </IconButton>
         <IconButton
-          onClick={() => onVisualizeIconClicked(item)}
+          onClick={() => onVisualizeIconClicked(item, rowsPerPage)}
           aria-label="Search"
           disableRipple
         >

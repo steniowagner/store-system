@@ -1,15 +1,17 @@
 import React, { Component, Fragment } from 'react';
 
+import EntityTemplate from '../../components/common/entity-template';
+
 import Form from './form';
 import { filterConfig, tabConfig } from './config';
-import AppTemplate from '../../components/common/entity-template';
 
 const getData = (): Array<Object> => {
   const items = [];
 
-  for (let i = 0; i < 40; i += 1) {
+  for (let i = 0; i < 16; i += 1) {
     items.push({
-      barCode: i,
+      id: Math.random(),
+      barCode: i.toString(),
       name: `Produto ${i}`,
       brand: `Marca ${i}`,
     });
@@ -19,26 +21,46 @@ const getData = (): Array<Object> => {
 };
 
 class Product extends Component {
-  componentDidMount() {
-    console.log('Product - componentDidMount');
-  }
+  state = {
+    products: getData(),
+  };
 
   onCreateProduct = (product: Object): void => {
-    console.log('onCreateProduct', product);
+    const { products } = this.state;
+
+    this.setState({
+      products: [{
+        ...product,
+        brand: 'maRCA01',
+        id: Math.random(),
+      }, ...products],
+    });
   };
 
   onEditProduct = (productEdited: Object): void => {
-    console.log('onEditProduct', productEdited);
+    const { products } = this.state;
+
+    const productIndex = products.findIndex(product => product.id === productEdited.id);
+
+    this.setState({
+      products: Object.assign([], products, { [productIndex]: productEdited }),
+    });
   };
 
-  onRemoverProduct = (productToRemove: Object): void => {
-    console.log('onRemoverProduct', productToRemove);
+  onRemoverProduct = (productToRemove: string): void => {
+    const { products } = this.state;
+
+    this.setState({
+      products: products.filter(product => product.id !== productToRemove),
+    });
   };
 
   render() {
+    const { products } = this.state;
+
     return (
       <Fragment>
-        {/*<AppTemplate
+        <EntityTemplate
           onRemoveItem={this.onRemoverProduct}
           onCreateItem={this.onCreateProduct}
           onEditItem={this.onEditProduct}
@@ -46,9 +68,13 @@ class Product extends Component {
           pluralEntityName="Produtos"
           filterConfig={filterConfig}
           tabConfig={tabConfig}
-          dataset={getData()}
-        />*/}
-        <Form />
+          dataset={products}
+          Form={props => (
+            <Form
+              {...props}
+            />
+          )}
+        />
       </Fragment>
     );
   }
