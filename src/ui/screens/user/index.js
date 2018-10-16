@@ -1,38 +1,9 @@
-import React, { Component, Fragment } from 'react';
-import Typography from '@material-ui/core/Typography';
-import styled from 'styled-components';
+import React, { Component } from 'react';
 
-import FullScreenDialog from '../../components/common/FullScreenDialog';
-import ActionButton from '../../components/common/ActionButton';
-import Snackbar from '../../components/common/CustomSnackbar';
-import Form from './Form';
+import EntityTemplate from '../../components/common/entity-template';
 
-import Filter from '../../components/common/Filter';
-import Dialog from '../../components/common/Dialog';
-import Table from '../../components/common/table';
-
-import { filterConfig, tabConfig, snackbarTypes } from './config';
-
-const FilterAndCreateButtonWrapper = styled.div`
-  width: 100%
-  display: flex;
-  flex: 1;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-type State = {
-  isFullScreenDialogOpen: boolean,
-  isRemoveDialogOpen: boolean,
-  isSnackbarOpen: boolean,
-  usersFiltered: Array<Object>,
-  users: Array<Object>,
-  snackbarData: Object,
-  contextUser: Object,
-  currentPage: number,
-  rowsPerPage: number,
-  formMode: string,
-};
+import { filterConfig, tabConfig } from './config';
+import UserForm from './form';
 
 const test = [{
   name: 's1',
@@ -86,278 +57,74 @@ const test = [{
   id: '10',
 }];
 
-class User extends Component<{}, State> {
+/*
+  TODO
+
+  - VISUALIZE => SET SOME FIELDS => EDITAR SENHA => EDIT & CONFIRM => FIELDS ARE NOT SET
+*/
+
+class User extends Component {
   state = {
-    isFullScreenDialogOpen: false,
-    isRemoveDialogOpen: false,
-    isSnackbarOpen: false,
-    usersFiltered: test,
     users: test,
-    snackbarData: {},
-    contextUser: {},
-    currentPage: 0,
-    rowsPerPage: 0,
-    formMode: '',
   };
 
-  onToggleDialogRemove = (): void => {
-    const { isRemoveDialogOpen } = this.state;
-
-    this.setState({
-      isRemoveDialogOpen: !isRemoveDialogOpen,
-    });
-  };
-
-  onToggleFullScreenDialog = (): void => {
-    const { isFullScreenDialogOpen } = this.state;
-
-    this.setState({
-      isFullScreenDialogOpen: !isFullScreenDialogOpen,
-    });
-  };
-
-  onChageFormToEditMode = (): void => {
-    this.setState({
-      formMode: 'edit',
-    });
-  };
-
-  onCloseSnackbar = (): void => {
-    this.setState({
-      isSnackbarOpen: false,
-    });
-  };
-
-  onTablePageChange = (newPage: number): void => {
-    this.setState({
-      currentPage: newPage,
-    });
-  };
-
-  onFilterUsers = (usersFiltered: Array<Object>) => {
-    this.setState({
-      currentPage: 0,
-      usersFiltered,
-    });
-  };
-
-  onCreateUser = (user: Object) => {
-    const { users, usersFiltered } = this.state;
-
-    this.setState({
-      usersFiltered: [user, ...usersFiltered],
-      users: [user, ...users],
-      isFullScreenDialogOpen: false,
-      isSnackbarOpen: true,
-      snackbarData: {},
-      currentPage: 0,
-    }, () => this.openSnackBar(snackbarTypes.createUserSuccess));
-  };
-
-  onEditUser = (userEdited: Object): Object => {
-    const { contextUser, users, usersFiltered } = this.state;
-
-    const userData = {
-      password: contextUser.password,
-      username: userEdited.username,
-      name: userEdited.name,
-      id: contextUser.id,
-    };
-
-    const userFilteredIndex = usersFiltered.findIndex(userFiltered => userFiltered.id === contextUser.id);
-    const usersIndex = users.findIndex(user => user.id === contextUser.id);
-
-    this.setState({
-      usersFiltered: Object.assign([], usersFiltered, { [userFilteredIndex]: userData }),
-      users: Object.assign([], users, { [usersIndex]: userData }),
-      isFullScreenDialogOpen: false,
-      isSnackbarOpen: true,
-      snackbarData: {},
-    }, () => this.openSnackBar(snackbarTypes.editUserSuccess));
-  };
-
-  onEditUserPassword = (userPassword: string): Object => {
-    const { contextUser } = this.state;
-
-    this.setState({
-      contextUser: Object.assign({}, contextUser, { password: userPassword }),
-    });
-  };
-
-  onClickCreateButton = (): void => {
-    this.setState({
-      isFullScreenDialogOpen: true,
-      formMode: 'create',
-    });
-  };
-
-  onTableEditIconClicked = (user: Object): void => {
-    this.setState({
-      isFullScreenDialogOpen: true,
-      contextUser: user,
-      formMode: 'edit',
-    });
-  };
-
-  onTableVisualizeIconClicked = (user: Object): void => {
-    this.setState({
-      isFullScreenDialogOpen: true,
-      contextUser: user,
-      formMode: 'visualize',
-    });
-  };
-
-  onTableRemoveIconClicked = (user: Object, rowsPerPage: number): void => {
-    this.setState({
-      isRemoveDialogOpen: true,
-      contextUser: user,
-      rowsPerPage,
-    });
-  };
-
-  onRemoveUser = (): void => {
-    const { users, usersFiltered, contextUser } = this.state;
-    const snackbarData = snackbarTypes.removeUserSuccess;
-
-    const currentPage = this.getCurrentPageAfterRemotion();
-
-    this.setState({
-      usersFiltered: usersFiltered.filter(userFiltered => userFiltered.id !== contextUser.id),
-      users: users.filter(user => user.id !== contextUser.id),
-      isFullScreenDialogOpen: false,
-      isSnackbarOpen: true,
-      snackbarData,
-      currentPage,
-    });
-  };
-
-  getCurrentPageAfterRemotion = (): number => {
-    const { rowsPerPage, currentPage, usersFiltered } = this.state;
-
-    const maxPageReacheable = Math.ceil((usersFiltered.length - 1) / rowsPerPage) - 1;
-
-    if ((usersFiltered.length - 1) === 0) {
-      return 0;
-    }
-
-    if (currentPage <= maxPageReacheable) {
-      return currentPage;
-    }
-
-    return currentPage - 1;
-  };
-
-  openSnackBar = (snackbarData: Object): void => {
-    setTimeout(() => {
-      this.setState({
-        snackbarData,
-      });
-    }, 700);
-  };
-
-  renderFilterAndCreatButtonSection = (): Object => {
+  onCreateUser = (user: Object): void => {
     const { users } = this.state;
 
-    return (
-      <FilterAndCreateButtonWrapper>
-        <Filter
-          onFilterData={this.onFilterUsers}
-          filterConfig={filterConfig}
-          dataset={users}
-        />
-        <ActionButton
-          action={this.onClickCreateButton}
-          title="Criar Usuário"
-        />
-      </FilterAndCreateButtonWrapper>
-    );
+    this.setState({
+      users: [{ ...user, id: Math.random() }, ...users],
+    });
   };
 
-  renderForm = (): Obejct => {
-    const { isFullScreenDialogOpen, formMode, contextUser } = this.state;
+  onEditUser = (userEdited: Object): void => {
+    const { users } = this.state;
 
-    const mode = {
-      visualize: 'VISUALIZAR',
-      create: 'CRIAR',
-      edit: 'EDITAR',
-    };
+    const userEditedIndex = users.findIndex(user => user.id === userEdited.id);
+    const userPassword = users[userEditedIndex].password;
 
-    const user = ((formMode === 'edit' || formMode === 'visualize') ? contextUser : {});
-
-    return (
-      <FullScreenDialog
-        onClose={this.onToggleFullScreenDialog}
-        title={`${mode[formMode]} USUÁRIO`}
-        isOpen={isFullScreenDialogOpen}
-      >
-        <Form
-          onChageFormToEditMode={this.onChageFormToEditMode}
-          onEditUserPassword={this.onEditUserPassword}
-          onRemoveUser={this.onRemoveUser}
-          onCreateUser={this.onCreateUser}
-          onEditUser={this.onEditUser}
-          mode={formMode}
-          user={user}
-        />
-      </FullScreenDialog>
-    );
+    this.setState({
+      users: Object.assign([], users, { [userEditedIndex]: { ...userEdited, password: userPassword } }),
+    }, () => console.log(this.state.users[userEditedIndex]));
   };
 
-  renderRemoveDialog = (): Object => {
-    const { isRemoveDialogOpen } = this.state;
+  onEditPassword = (userToEdit: Object, newPassword: string): void => {
+    const { users } = this.state;
 
-    return (
-      <Dialog
-        description="Se executar esta ação, os dados deste Usuário serão perdidos para sempre, e não poderão ser recuperados de forma alguma."
-        title="Tem certeza que quer remover este Usuário?"
-        positiveAction={() => this.onRemoveUser()}
-        negativeAction={this.onToggleDialogRemove}
-        onCloseDialog={this.onToggleDialogRemove}
-        isOpen={isRemoveDialogOpen}
-        positiveText="SIM"
-        negativeText="NÃO"
-      />
-    );
+    const userEditedIndex = users.findIndex(user => user.id === userToEdit.id);
+
+    this.setState({
+      users: Object.assign([], users, { [userEditedIndex]: { ...userToEdit, password: newPassword } }),
+    });
+  };
+
+  onRemoveUser = (userId: string): void => {
+    const { users } = this.state;
+
+    this.setState({
+      users: users.filter(user => user.id !== userId),
+    });
   };
 
   render() {
-    const {
-      isSnackbarOpen,
-      usersFiltered,
-      snackbarData,
-      currentPage,
-    } = this.state;
-
-    const { type, message } = snackbarData;
+    const { users } = this.state;
 
     return (
-      <Fragment>
-        <Typography
-          variant="display2"
-          gutterBottom
-        >
-          Usuários
-        </Typography>
-        {this.renderFilterAndCreatButtonSection()}
-        <Table
-          onVisualizeIconClicked={this.onTableVisualizeIconClicked}
-          onRemoveIconClicked={this.onTableRemoveIconClicked}
-          onEditIconClicked={this.onTableEditIconClicked}
-          updatePageIndex={this.onTablePageChange}
-          onRemoveItem={this.onRemoveUser}
-          currentPage={currentPage}
-          dataset={usersFiltered}
-          tabConfig={tabConfig}
-        />
-        <Snackbar
-          onCloseSnackbar={this.onCloseSnackbar}
-          isOpen={isSnackbarOpen && !!type}
-          message={message}
-          type={type}
-        />
-        {this.renderForm()}
-        {this.renderRemoveDialog()}
-      </Fragment>
+      <EntityTemplate
+        onEditPassword={this.onEditPassword}
+        onRemoveItem={this.onRemoveUser}
+        onCreateItem={this.onCreateUser}
+        onEditItem={this.onEditUser}
+        singularEntityName="Usuário"
+        pluralEntityName="Users"
+        filterConfig={filterConfig}
+        tabConfig={tabConfig}
+        dataset={users}
+        Form={props => (
+          <UserForm
+            {...props}
+          />
+        )}
+      />
     );
   }
 }

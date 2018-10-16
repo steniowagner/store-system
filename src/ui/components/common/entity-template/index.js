@@ -277,6 +277,7 @@ class ApplicationEntityTemplate extends Component<Props, State> {
         <Form
           onChageFormToEditMode={this.onChageFormToEditMode}
           onRemoveItem={this.removeItem}
+          otherProps={{ ...this.props }}
           onCreateItem={this.createItem}
           onEditItem={this.editItem}
           mode={formMode}

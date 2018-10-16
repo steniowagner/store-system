@@ -7,7 +7,7 @@ import * as Yup from 'yup';
 
 import Input from '../../../components/common/CustomInput';
 
-import ActionButton from '../../../components/common/ActionFormButton';
+import ActionFormButton from '../../../components/common/ActionFormButton';
 import ChangePassword from './components/ChangePassword';
 
 const Wrapper = styled.div`
@@ -50,15 +50,15 @@ const EditPasswordButtonWrapper = styled.div`
 
 type Props = {
   onChageFormToEditMode: Function,
-  onEditUserPassword: Function,
   handleChange: Function,
   handleSubmit: Function,
-  onRemoveUser: Function,
+  onRemoveItem: Function,
   handleBlur: Function,
+  otherProps: Object,
   touched: Object,
   values: Object,
   errors: Object,
-  user: Object,
+  item: Object,
   isSubmitting: boolean,
   mode: string,
 };
@@ -81,11 +81,12 @@ class UserForm extends Component<Props, State> {
   };
 
   onChangePassword = (newPassword: string): void => {
-    const { onEditUserPassword } = this.props;
+    const { otherProps, item } = this.props;
+    const { onEditPassword } = otherProps;
 
     this.setState({
       isPasswordDialogOpen: false,
-    }, () => onEditUserPassword(newPassword));
+    }, () => onEditPassword(item, newPassword));
   };
 
   renderPasswordSection = (): Object => {
@@ -155,14 +156,14 @@ class UserForm extends Component<Props, State> {
     const {
       onChageFormToEditMode,
       handleChange,
-      onRemoveUser,
+      onRemoveItem,
       handleSubmit,
       isSubmitting,
       handleBlur,
       touched,
       values,
       errors,
-      user,
+      item,
       mode,
     } = this.props;
 
@@ -209,9 +210,9 @@ class UserForm extends Component<Props, State> {
           {mode === 'create' && this.renderPasswordSection()}
           <Row>
             {mode === 'edit' && this.renderEditPasswordButton()}
-            <ActionButton
+            <ActionFormButton
               onChageFormToEditMode={onChageFormToEditMode}
-              onRemoveUser={onRemoveUser}
+              onRemoveItem={onRemoveItem}
               disabled={isSubmitting}
               onClick={handleSubmit}
               mode={mode}
@@ -221,7 +222,7 @@ class UserForm extends Component<Props, State> {
             onChangePassword={this.onChangePassword}
             onClose={this.onTogglePassowordDialog}
             isOpen={isPasswordDialogOpen}
-            realPassword={user.password}
+            realPassword={item.password}
           />
         </Form>
       </Wrapper>
@@ -246,9 +247,9 @@ const getPasswordValidation = (mode: string): Object => {
 };
 
 const CustomForm = withFormik({
-  mapPropsToValues: ({ user }) => ({
-    name: user.name || '',
-    username: user.username || '',
+  mapPropsToValues: ({ item }) => ({
+    name: item.name || '',
+    username: item.username || '',
     password: '',
     passwordConfirm: '',
   }),
@@ -264,10 +265,15 @@ const CustomForm = withFormik({
   })),
 
   handleSubmit(values, { setSubmitting, props }) {
-    const { onCreateUser, onEditUser, mode } = props;
+    const { onCreateItem, onEditItem, mode } = props;
 
-    const properCallback = (mode === 'edit' ? onEditUser : onCreateUser);
-    properCallback({ name: values.name, username: values.username, password: values.password });
+    const properCallback = (mode === 'edit' ? onEditItem : onCreateItem);
+
+    properCallback({
+      username: values.username,
+      password: values.password,
+      name: values.name,
+    });
 
     setSubmitting(false);
   },

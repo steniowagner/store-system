@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 
 import EntityTemplate from '../../components/common/entity-template';
 
@@ -40,18 +40,18 @@ class Product extends Component {
   onEditProduct = (productEdited: Object): void => {
     const { products } = this.state;
 
-    const productIndex = products.findIndex(product => product.id === productEdited.id);
+    const productEditedIndex = products.findIndex(product => product.id === productEdited.id);
 
     this.setState({
-      products: Object.assign([], products, { [productIndex]: productEdited }),
+      products: Object.assign([], products, { [productEditedIndex]: productEdited }),
     });
   };
 
-  onRemoverProduct = (productToRemove: string): void => {
+  onRemoverProduct = (productId: string): void => {
     const { products } = this.state;
 
     this.setState({
-      products: products.filter(product => product.id !== productToRemove),
+      products: products.filter(product => product.id !== productId),
     });
   };
 
@@ -59,23 +59,21 @@ class Product extends Component {
     const { products } = this.state;
 
     return (
-      <Fragment>
-        <EntityTemplate
-          onRemoveItem={this.onRemoverProduct}
-          onCreateItem={this.onCreateProduct}
-          onEditItem={this.onEditProduct}
-          singularEntityName="Produto"
-          pluralEntityName="Produtos"
-          filterConfig={filterConfig}
-          tabConfig={tabConfig}
-          dataset={products}
-          Form={props => (
-            <Form
-              {...props}
-            />
-          )}
-        />
-      </Fragment>
+      <EntityTemplate
+        onRemoveItem={this.onRemoverProduct}
+        onCreateItem={this.onCreateProduct}
+        onEditItem={this.onEditProduct}
+        singularEntityName="Produto"
+        pluralEntityName="Produtos"
+        filterConfig={filterConfig}
+        tabConfig={tabConfig}
+        dataset={products}
+        Form={props => (
+          <Form
+            {...props}
+          />
+        )}
+      />
     );
   }
 }
