@@ -57,13 +57,9 @@ const test = [{
   id: '10',
 }];
 
-/*
-  TODO
-
-  - VISUALIZE => SET SOME FIELDS => EDITAR SENHA => EDIT & CONFIRM => FIELDS ARE NOT SET
-*/
-
 class User extends Component {
+  _passwordEdited = '';
+
   state = {
     users: test,
   };
@@ -80,21 +76,15 @@ class User extends Component {
     const { users } = this.state;
 
     const userEditedIndex = users.findIndex(user => user.id === userEdited.id);
-    const userPassword = users[userEditedIndex].password;
+    const userPassword = (this._passwordEdited || users[userEditedIndex].password);
 
     this.setState({
       users: Object.assign([], users, { [userEditedIndex]: { ...userEdited, password: userPassword } }),
-    }, () => console.log(this.state.users[userEditedIndex]));
+    });
   };
 
-  onEditPassword = (userToEdit: Object, newPassword: string): void => {
-    const { users } = this.state;
-
-    const userEditedIndex = users.findIndex(user => user.id === userToEdit.id);
-
-    this.setState({
-      users: Object.assign([], users, { [userEditedIndex]: { ...userToEdit, password: newPassword } }),
-    });
+  onEditPassword = (newPassword: string): void => {
+    this._passwordEdited = newPassword;
   };
 
   onRemoveUser = (userId: string): void => {

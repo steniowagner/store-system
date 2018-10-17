@@ -81,13 +81,21 @@ class UserForm extends Component<Props, State> {
   };
 
   onChangePassword = (newPassword: string): void => {
-    const { otherProps, item } = this.props;
+    const { otherProps } = this.props;
     const { onEditPassword } = otherProps;
 
     this.setState({
       isPasswordDialogOpen: false,
-    }, () => onEditPassword(item, newPassword));
+    }, () => onEditPassword(newPassword));
   };
+
+  renderSectionTitleWrapper = (title: string): Object => (
+    <SectionTitleWrapper>
+      <SectionTitle>
+        {title}
+      </SectionTitle>
+    </SectionTitleWrapper>
+  );
 
   renderPasswordSection = (): Object => {
     const {
@@ -101,11 +109,7 @@ class UserForm extends Component<Props, State> {
 
     return (
       <Section>
-        <SectionTitleWrapper>
-          <SectionTitle>
-            Senha
-          </SectionTitle>
-        </SectionTitleWrapper>
+        {this.renderSectionTitleWrapper('Senha')}
         <Row>
           <RowItem>
             <Input
@@ -152,17 +156,57 @@ class UserForm extends Component<Props, State> {
     </EditPasswordButtonWrapper>
   );
 
+  renderUserInfoSection = (): Object => {
+    const {
+      handleChange,
+      handleBlur,
+      touched,
+      errors,
+      values,
+      mode,
+    } = this.props;
+
+    return (
+      <Section>
+        {this.renderSectionTitleWrapper('Informações do Usuário')}
+        <Row>
+          <RowItem>
+            <Input
+              error={touched.name && errors.name}
+              disabled={mode === 'visualize'}
+              value={values.name}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              placeholder="Informe o Nome do Usuário"
+              label="Nome"
+              type="text"
+              id="name"
+            />
+          </RowItem>
+          <RowItem>
+            <Input
+              error={touched.username && errors.username}
+              disabled={mode === 'visualize'}
+              value={values.username}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              placeholder="Informe o Usuário"
+              label="Usuário"
+              type="text"
+              id="username"
+            />
+          </RowItem>
+        </Row>
+      </Section>
+    );
+  };
+
   render() {
     const {
       onChageFormToEditMode,
-      handleChange,
       onRemoveItem,
       handleSubmit,
       isSubmitting,
-      handleBlur,
-      touched,
-      values,
-      errors,
       item,
       mode,
     } = this.props;
@@ -172,41 +216,7 @@ class UserForm extends Component<Props, State> {
     return (
       <Wrapper>
         <Form>
-          <Section>
-            <SectionTitleWrapper>
-              <SectionTitle>
-                Informações do Usuário
-              </SectionTitle>
-            </SectionTitleWrapper>
-            <Row>
-              <RowItem>
-                <Input
-                  error={touched.name && errors.name}
-                  disabled={mode === 'visualize'}
-                  value={values.name}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  placeholder="Informe o Nome do Usuário"
-                  label="Nome"
-                  type="text"
-                  id="name"
-                />
-              </RowItem>
-              <RowItem>
-                <Input
-                  error={touched.username && errors.username}
-                  disabled={mode === 'visualize'}
-                  value={values.username}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  placeholder="Informe o Usuário"
-                  label="Usuário"
-                  type="text"
-                  id="username"
-                />
-              </RowItem>
-            </Row>
-          </Section>
+          {this.renderUserInfoSection()}
           {mode === 'create' && this.renderPasswordSection()}
           <Row>
             {mode === 'edit' && this.renderEditPasswordButton()}
