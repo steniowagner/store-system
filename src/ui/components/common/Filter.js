@@ -35,7 +35,6 @@ const Title = styled.h2`
   color: #fff;
 `;
 
-
 const FilterSelector = styled(ButtonBase)`
   height: 100%;
   width: 100%;

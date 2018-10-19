@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 
 import EntityTemplate from '../../components/common/entity-template';
 
-import Form from './form';
 import { filterConfig, tabConfig } from './config';
+import Form from './form';
 
 const getData = (): Array<Object> => {
   const items = [];
@@ -22,12 +22,14 @@ const getData = (): Array<Object> => {
 
 class Product extends Component {
   state = {
-    products: getData(),
+    manufacturers: ['Manufacturer 01', 'Manufacturer 02', 'Manufacturer 03', 'Manufacturer 04', 'Manufacturer 05'],
+    brands: ['Nike', 'Adidas', 'Pena', 'Smolder', 'QuickSilver'],
+    products: [],
   };
 
   onCreateProduct = (product: Object): void => {
     const { products } = this.state;
-
+    console.log(product)
     this.setState({
       products: [{
         ...product,
@@ -56,7 +58,7 @@ class Product extends Component {
   };
 
   render() {
-    const { products } = this.state;
+    const { products, brands, manufacturers } = this.state;
 
     return (
       <EntityTemplate
@@ -70,6 +72,8 @@ class Product extends Component {
         dataset={products}
         Form={props => (
           <Form
+            manufacturers={manufacturers}
+            brands={brands}
             {...props}
           />
         )}

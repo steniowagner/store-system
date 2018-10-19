@@ -11,12 +11,13 @@ const ButtonContainer = styled(ButtonBase)``;
 const ButtonWrapper = styled.div`
   height: 50px;
   display: flex;
+  flex: 1;
   justify-content: space-between;
   align-items: center;
   padding-left: 20px;
   padding-right: 20px;
   border-radius: 6px;
-  background-color: ${({ theme }) => theme.colors.affirmative};
+  background-color: ${({ isDisabled, theme }) => (isDisabled ? theme.colors.lightGray : theme.colors.affirmative)};
 `;
 
 const Title = styled.h2`
@@ -27,15 +28,19 @@ const Title = styled.h2`
 `;
 
 type Props = {
+  disabled: boolean,
   action: Function,
   title: string,
 };
 
-const ActionButton = ({ title, action }: Props): Obejct => (
+const ActionButton = ({ title, action, disabled }: Props): Obejct => (
   <ButtonContainer
     onClick={() => action()}
+    disabled={disabled}
   >
-    <ButtonWrapper>
+    <ButtonWrapper
+      isDisabled={disabled}
+    >
       <AddCircleOutline
         style={{
           color: '#fff',

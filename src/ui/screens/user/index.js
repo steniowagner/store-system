@@ -80,7 +80,7 @@ class User extends Component {
 
     this.setState({
       users: Object.assign([], users, { [userEditedIndex]: { ...userEdited, password: userPassword } }),
-    });
+    }, () => console.log(this.state.users[userEditedIndex]));
   };
 
   onEditPassword = (newPassword: string): void => {

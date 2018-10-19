@@ -280,9 +280,7 @@ const CustomForm = withFormik({
     const properCallback = (mode === 'edit' ? onEditItem : onCreateItem);
 
     properCallback({
-      username: values.username,
-      password: values.password,
-      name: values.name,
+      ...values,
     });
 
     setSubmitting(false);

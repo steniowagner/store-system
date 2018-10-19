@@ -76,6 +76,7 @@ const renderTextInput = ({
       onBlur={onBlur}
       value={value}
       type={type}
+      min="0"
       id={id}
     />
   </InputBoxWrapper>
