@@ -146,7 +146,7 @@ class ActionFormButton extends Component<Props, State> {
 
     return (
       <Container>
-        {(mode === 'visualize') ? this.renderMultipleChoiceButton() : this.renderDefaultButton(mode)}
+        {(mode === 'detail') ? this.renderMultipleChoiceButton() : this.renderDefaultButton(mode)}
         {this.renderRemoveDialog()}
       </Container>
     );

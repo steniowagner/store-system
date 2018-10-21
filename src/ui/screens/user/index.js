@@ -100,7 +100,6 @@ class User extends Component {
 
     return (
       <EntityTemplate
-        onEditPassword={this.onEditPassword}
         onRemoveItem={this.onRemoveUser}
         onCreateItem={this.onCreateUser}
         onEditItem={this.onEditUser}
@@ -111,6 +110,7 @@ class User extends Component {
         dataset={users}
         Form={props => (
           <UserForm
+            onEditPassword={this.onEditPassword}
             {...props}
           />
         )}

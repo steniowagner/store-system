@@ -50,11 +50,11 @@ const EditPasswordButtonWrapper = styled.div`
 
 type Props = {
   onChageFormToEditMode: Function,
+  onEditPassword: Function,
   handleChange: Function,
   handleSubmit: Function,
   onRemoveItem: Function,
   handleBlur: Function,
-  otherProps: Object,
   touched: Object,
   values: Object,
   errors: Object,
@@ -81,8 +81,7 @@ class UserForm extends Component<Props, State> {
   };
 
   onChangePassword = (newPassword: string): void => {
-    const { otherProps } = this.props;
-    const { onEditPassword } = otherProps;
+    const { onEditPassword } = this.props;
 
     this.setState({
       isPasswordDialogOpen: false,
@@ -114,7 +113,7 @@ class UserForm extends Component<Props, State> {
           <RowItem>
             <Input
               error={touched.password && errors.password}
-              disabled={mode === 'visualize'}
+              disabled={mode === 'detail'}
               value={values.password}
               onChange={handleChange}
               onBlur={handleBlur}
@@ -127,7 +126,7 @@ class UserForm extends Component<Props, State> {
           <RowItem>
             <Input
               error={touched.passwordConfirm && errors.passwordConfirm}
-              disabled={mode === 'visualize'}
+              disabled={mode === 'detail'}
               value={values.passwordConfirm}
               onChange={handleChange}
               onBlur={handleBlur}
@@ -173,7 +172,7 @@ class UserForm extends Component<Props, State> {
           <RowItem>
             <Input
               error={touched.name && errors.name}
-              disabled={mode === 'visualize'}
+              disabled={mode === 'detail'}
               value={values.name}
               onChange={handleChange}
               onBlur={handleBlur}
@@ -186,7 +185,7 @@ class UserForm extends Component<Props, State> {
           <RowItem>
             <Input
               error={touched.username && errors.username}
-              disabled={mode === 'visualize'}
+              disabled={mode === 'detail'}
               value={values.username}
               onChange={handleChange}
               onBlur={handleBlur}

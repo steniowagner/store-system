@@ -21,4 +21,7 @@ export const filterConfig = [{
 }, {
   filterTitle: 'Fabricante',
   dataField: 'manufacturer',
+}, {
+  filterTitle: 'Categoria',
+  dataField: 'category',
 }];

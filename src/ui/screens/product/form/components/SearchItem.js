@@ -69,7 +69,13 @@ class SearchInput extends Component<Props, State> {
   renderChooseFileInput = (): Object => {
     const { itemSelected, entity } = this.props;
 
-    const entityTitle = (entity === 'brand' ? 'a Marca' : 'o Fabricante');
+    const entities = {
+      manufacturer: 'o Fabricante',
+      category: 'a Categoria',
+      brand: 'a Marca',
+    };
+
+    const entityTitle = entities[entity];
 
     const placeholder = `Selecione ${entityTitle}`;
 
@@ -99,7 +105,13 @@ class SearchInput extends Component<Props, State> {
       </MenuItem>
     ));
 
-    const emptyOptionEntity = (entity === 'brand' ? 'Marcas' : 'Fabricantes');
+    const entities = {
+      manufacturer: 'Fabricantes',
+      category: 'Categorias',
+      brand: 'Marcas',
+    };
+
+    const emptyOptionEntity = entities[entity];
 
     const renderEmptyOption = (): Object => (
       <MenuItem

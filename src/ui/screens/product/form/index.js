@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { withFormik, Form } from 'formik';
 import * as Yup from 'yup';
 
-import ManufacturerAndBrandRow from './components/ManufacturerAndBrandRow';
+import InputWithCreation from './components/InputWithCreation';
 
 import {
   SectionTitleWrapper,
@@ -24,9 +24,10 @@ type Props = {
   handleSubmit: Function,
   onRemoveItem: Function,
   handleBlur: Function,
-  manufacturers: Object,
+  manufacturers: Array<any>,
+  categories: Array<any>,
+  brands: Array<any>,
   touched: Object,
-  brands: Object,
   values: Object,
   errors: Object,
   item: Object,
@@ -36,23 +37,26 @@ type Props = {
 
 class ProductForm extends Component<Props, {}> {
   state = {
+    categoriesCreated: [],
     brandsCreated: [],
   };
 
   onSubmitForm = (): void => {
+    const { categoriesCreated, brandsCreated } = this.state;
     const { setFieldValue, handleSubmit } = this.props;
-    const { brandsCreated } = this.state;
 
+    setFieldValue('categoriesCreated', categoriesCreated);
     setFieldValue('brandsCreated', brandsCreated);
 
     handleSubmit();
   };
 
-  onCreateBrand = (brand: string): void => {
-    const { brandsCreated } = this.state;
+  onCreateItem = (item: string, id: string): void => {
+    const { state } = this;
+    const dataset = state[id];
 
     this.setState({
-      brandsCreated: [brand, ...brandsCreated],
+      [id]: [item, ...dataset],
     });
   };
 
@@ -87,7 +91,7 @@ class ProductForm extends Component<Props, {}> {
           <Input
             error={touched[firstItem.id] && errors[firstItem.id]}
             placeholder={firstItem.placeholder}
-            disabled={mode === 'visualize'}
+            disabled={mode === 'detail'}
             value={values[firstItem.id]}
             onChange={handleChange}
             label={firstItem.label}
@@ -100,7 +104,7 @@ class ProductForm extends Component<Props, {}> {
           <Input
             error={touched[secondItem.id] && errors[secondItem.id]}
             placeholder={secondItem.placeholder}
-            disabled={mode === 'visualize'}
+            disabled={mode === 'detail'}
             value={values[secondItem.id]}
             label={secondItem.label}
             onChange={handleChange}
@@ -127,12 +131,38 @@ class ProductForm extends Component<Props, {}> {
     return this.renderRowWithTwoItems(salePriceInputFieldData, costPriceInputFieldData);
   };
 
-  renderProductInfoSection = (): Object => {
+  renderManufacturerInputItem = () => {
     const {
       setFieldValue,
       manufacturers,
-      handleChange,
-      handleBlur,
+      errors,
+      values,
+      item,
+      mode,
+    } = this.props;
+
+    const manufacturerInputFieldData = this.getRowItemObject('Fabricante', 'Informe o Fabricante do Produto', 'text', 'manufacturer');
+
+    return (
+      <Row>
+        <InputWithCreation
+          fieldData={manufacturerInputFieldData}
+          setFieldValue={setFieldValue}
+          dataset={manufacturers}
+          errors={errors}
+          values={values}
+          item={item}
+          mode={mode}
+          id="manufacturer"
+        />
+      </Row>
+    );
+  };
+
+  renderCategoryAndBrandRow = (): Object => {
+    const {
+      setFieldValue,
+      categories,
       brands,
       errors,
       values,
@@ -140,29 +170,48 @@ class ProductForm extends Component<Props, {}> {
       mode,
     } = this.props;
 
-    const { brandsCreated } = this.state;
+    const categorieInputFieldData = this.getRowItemObject('Categoria', 'Informe a Categoria do Produto', 'text', 'category');
+    const brandInputFieldData = this.getRowItemObject('Marca', 'Informe a Marca do Produto', 'text', 'brand');
+
+    const { brandsCreated, categoriesCreated } = this.state;
 
     return (
-      <Section>
-        {this.renderSectionTitle('Informações do Produto')}
-        {this.renderBarcodeAndDescription()}
-        {this.renderPrices()}
-        <ManufacturerAndBrandRow
-          getRowItemObject={this.getRowItemObject}
-          brands={[...brandsCreated, ...brands]}
-          onCreateBrand={this.onCreateBrand}
-          manufacturers={manufacturers}
+      <Row>
+        <InputWithCreation
+          onCreateItem={(newItem: string): void => this.onCreateItem(newItem, 'categoriesCreated')}
+          dataset={[...categoriesCreated, ...categories]}
+          fieldData={categorieInputFieldData}
           setFieldValue={setFieldValue}
-          handleChange={handleChange}
-          handleBlur={handleBlur}
           errors={errors}
           values={values}
           item={item}
           mode={mode}
+          id="category"
         />
-      </Section>
+        <InputWithCreation
+          onCreateItem={(newItem: string): void => this.onCreateItem(newItem, 'brandsCreated')}
+          dataset={[...brandsCreated, ...brands]}
+          fieldData={brandInputFieldData}
+          setFieldValue={setFieldValue}
+          errors={errors}
+          values={values}
+          item={item}
+          mode={mode}
+          id="brand"
+        />
+      </Row>
     );
   };
+
+  renderProductInfoSection = (): Object => (
+    <Section>
+      {this.renderSectionTitle('Informações do Produto')}
+      {this.renderBarcodeAndDescription()}
+      {this.renderPrices()}
+      {this.renderCategoryAndBrandRow()}
+      {this.renderManufacturerInputItem()}
+    </Section>
+  );
 
   renderStockFields = () => {
     const stockQuantityInputFieldData = this.getRowItemObject('Quantidade em Estoque', 'Informe a Quantidade em Estoque', 'number', 'stockQuantity');
@@ -212,6 +261,7 @@ const CustomForm = withFormik({
     description: item.description || '',
     costPrice: item.costPrice || '',
     salePrice: item.salePrice || '',
+    category: item.category || '',
     barCode: item.barCode || '',
     brand: item.brand || '',
   }),
@@ -234,6 +284,9 @@ const CustomForm = withFormik({
 
     manufacturer: Yup.string()
       .required('O Fabricante é obrigatório.'),
+
+    category: Yup.string()
+      .required('A Categoria é obrigatória.'),
 
     description: Yup.string()
       .required('A Descrição é obrigatório.'),

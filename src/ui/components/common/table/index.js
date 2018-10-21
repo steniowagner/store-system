@@ -53,7 +53,7 @@ const ActionButtonsWrapper = styled.div`
 `;
 
 type Props = {
-  onVisualizeIconClicked: Function,
+  onDetailIconClicked: Function,
   onRemoveIconClicked: Function,
   onEditIconClicked: Function,
   updatePageIndex: Function,
@@ -78,7 +78,7 @@ class CustomTable extends Component<Props, State> {
   };
 
   renderActionsSection = (item: Object): Object => {
-    const { onEditIconClicked, onVisualizeIconClicked, onRemoveIconClicked } = this.props;
+    const { onEditIconClicked, onDetailIconClicked, onRemoveIconClicked } = this.props;
     const { rowsPerPage } = this.state;
 
     return (
@@ -91,7 +91,7 @@ class CustomTable extends Component<Props, State> {
           <EditIcon />
         </IconButton>
         <IconButton
-          onClick={() => onVisualizeIconClicked(item, rowsPerPage)}
+          onClick={() => onDetailIconClicked(item, rowsPerPage)}
           aria-label="Search"
           disableRipple
         >

@@ -8,11 +8,12 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import Slide from '@material-ui/core/Slide';
 
-import CreateNewBrand from './CreateNewBrand';
+import CreateNewItem from './CreateNewItem';
 import SearchItem from './SearchItem';
 
 type Props = {
   onToggleDialog: Function,
+  onCreateItem: Function,
   onSetItem: Function,
   itemSelected: string,
   entity: string,
@@ -42,19 +43,20 @@ class DialogChooseItem extends Component<Props, State> {
 
   onSelectItem = (indexItemSelected: number): void => {
     const { dataset } = this.state;
+
     this.setState({
       itemSelected: dataset[indexItemSelected],
     });
   };
 
-  onCreateBrand = (brand: string): void => {
-    const { onCreateBrand } = this.props;
+  onCreateItem = (item: string): void => {
+    const { onCreateItem } = this.props;
     const { dataset } = this.state;
 
     this.setState({
-      dataset: [brand, ...dataset],
-      itemSelected: brand,
-    }, () => onCreateBrand(brand));
+      dataset: [item, ...dataset],
+      itemSelected: item,
+    }, () => onCreateItem(item));
   };
 
   renderSlide = (props: Object): Object => (
@@ -64,13 +66,15 @@ class DialogChooseItem extends Component<Props, State> {
     />
   );
 
-  renderCreateBrandContent = (): Object => {
+  renderCreateNewItem = (): Object => {
     const { dataset } = this.state;
+    const { entity } = this.props;
 
     return (
-      <CreateNewBrand
-        onCreateBrand={this.onCreateBrand}
-        brands={dataset}
+      <CreateNewItem
+        onCreateItem={this.onCreateItem}
+        dataset={dataset}
+        entity={entity}
       />
     );
   };
@@ -120,9 +124,15 @@ class DialogChooseItem extends Component<Props, State> {
       mode,
     } = this.props;
 
-    const entityTitle = (entity === 'brand' ? 'Marca' : 'Fabricante');
+    const titles = {
+      manufacturer: 'Fabricante',
+      category: 'Categoria',
+      brand: 'Marca',
+    };
+
+    const shouldShowCreateNewItemContent = (entity === 'brand' || entity === 'category');
     const actionTitle = (mode === 'edit' ? 'Editar' : 'Selecionar');
-    const isBrandItem = (entity === 'brand');
+    const entityTitle = titles[entity];
 
     return (
       <Dialog
@@ -145,7 +155,7 @@ class DialogChooseItem extends Component<Props, State> {
             id="alert-dialog-slide-description"
           >
             {this.renderSearchInputItem()}
-            {isBrandItem && this.renderCreateBrandContent()}
+            {shouldShowCreateNewItemContent && this.renderCreateNewItem()}
           </DialogContentText>
         </DialogContent>
         {this.renderDialogActionButtons()}

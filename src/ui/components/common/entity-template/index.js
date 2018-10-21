@@ -159,10 +159,10 @@ class ApplicationEntityTemplate extends Component<Props, State> {
     });
   };
 
-  onTableVisualizeIconClicked = (item: Object, rowsPerPage: number): void => {
+  onTableDetailIconClicked = (item: Object, rowsPerPage: number): void => {
     this.setState({
       isFullScreenDialogOpen: true,
-      formMode: 'visualize',
+      formMode: 'detail',
       contextItem: item,
       rowsPerPage,
     });
@@ -261,12 +261,12 @@ class ApplicationEntityTemplate extends Component<Props, State> {
     const { singularEntityName, Form } = this.props;
 
     const mode = {
-      visualize: 'VISUALIZAR',
+      detail: 'VISUALIZAR',
       create: 'CRIAR',
       edit: 'EDITAR',
     };
 
-    const item = ((formMode === 'edit' || formMode === 'visualize') ? contextItem : {});
+    const item = ((formMode === 'edit' || formMode === 'detail') ? contextItem : {});
 
     return (
       <FullScreenDialog
@@ -277,7 +277,6 @@ class ApplicationEntityTemplate extends Component<Props, State> {
         <Form
           onChageFormToEditMode={this.onChageFormToEditMode}
           onRemoveItem={this.removeItem}
-          otherProps={{ ...this.props }}
           onCreateItem={this.createItem}
           onEditItem={this.editItem}
           mode={formMode}
@@ -330,7 +329,7 @@ class ApplicationEntityTemplate extends Component<Props, State> {
 
     return (
       <Table
-        onVisualizeIconClicked={this.onTableVisualizeIconClicked}
+        onDetailIconClicked={this.onTableDetailIconClicked}
         onRemoveIconClicked={this.onTableRemoveIconClicked}
         onEditIconClicked={this.onTableEditIconClicked}
         updatePageIndex={this.onTablePageChange}

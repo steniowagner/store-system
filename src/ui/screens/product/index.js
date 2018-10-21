@@ -8,14 +8,16 @@ import Form from './form';
 class Product extends Component {
   state = {
     manufacturers: ['Manufacturer 01', 'Manufacturer 02', 'Manufacturer 03', 'Manufacturer 04', 'Manufacturer 05'],
-    brands: [],
+    categories: ['cat01', 'cat02', 'cat03'],
+    brands: ['brand01', 'brand02', 'brand03'],
     products: [{
       id: Math.random(),
       barCode: '3',
-      brand: 'brand',
+      brand: 'brand01',
+      category: 'cat01',
       costPrice: 3,
       description: 'description',
-      manufacturer: 'manufacturer',
+      manufacturer: 'Manufacturer 02',
       minStockQuantity: 4,
       salePrice: 3,
       stockQuantity: 1,
@@ -23,15 +25,14 @@ class Product extends Component {
   };
 
   onCreateProduct = (product: Object): void => {
-    const { brandsCreated } = product;
+    const { categoriesCreated, brandsCreated } = product;
     const { products } = this.state;
 
-    const hasNewBrands = (brandsCreated.length > 0);
-    if (hasNewBrands) {
-      this.handleCreateBrands(brandsCreated);
-    }
+    this.checkHasNewCategories(categoriesCreated);
+    this.checkHasNewBrands(brandsCreated);
 
     const productCreated = product;
+    delete productCreated.categoriesCreated;
     delete productCreated.brandsCreated;
 
     this.setState({
@@ -39,7 +40,7 @@ class Product extends Component {
         ...productCreated,
         id: Math.random(),
       }, ...products],
-    });
+    }, () => console.log(this.state.products[0]));
   };
 
   onEditProduct = (productEdited: Object): void => {
@@ -49,7 +50,7 @@ class Product extends Component {
 
     this.setState({
       products: Object.assign([], products, { [productEditedIndex]: productEdited }),
-    });
+    }, () => console.log(this.state.products[productEditedIndex]));
   };
 
   onRemoverProduct = (productId: string): void => {
@@ -60,6 +61,20 @@ class Product extends Component {
     });
   };
 
+  checkHasNewCategories = (categoriesCreated: Array<any>): void => {
+    const hasNewCategories = (categoriesCreated.length > 0);
+    if (hasNewCategories) {
+      this.handleCreateCategories(categoriesCreated);
+    }
+  };
+
+  checkHasNewBrands = (brandsCreated: Array<any>): void => {
+    const hasNewBrands = (brandsCreated.length > 0);
+    if (hasNewBrands) {
+      this.handleCreateBrands(brandsCreated);
+    }
+  };
+
   handleCreateBrands = (newBrands: Array<string>): void => {
     const { brands } = this.state;
 
@@ -68,8 +83,21 @@ class Product extends Component {
     });
   };
 
+  handleCreateCategories = (newCategories: Array<string>): void => {
+    const { categories } = this.state;
+
+    this.setState({
+      categories: [...newCategories, ...categories],
+    });
+  };
+
   render() {
-    const { products, brands, manufacturers } = this.state;
+    const {
+      manufacturers,
+      categories,
+      products,
+      brands,
+    } = this.state;
 
     return (
       <EntityTemplate
@@ -84,6 +112,7 @@ class Product extends Component {
         Form={props => (
           <Form
             manufacturers={manufacturers}
+            categories={categories}
             brands={brands}
             {...props}
           />

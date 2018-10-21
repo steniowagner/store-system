@@ -34,21 +34,28 @@ const Row = styled.div`
 `;
 
 type Props = {
-  onCreateBrand: Function,
-  brands: Array<string>,
+  onCreateItem: Function,
+  dataset: Array<string>,
+  entity: string,
 };
 
 type State = {
   shouldExpandMenu: boolean,
-  newBrand: string,
+  newItem: string,
   error: string
 };
 
-class CreateNewBrand extends Component<Props, State> {
+class CreateNewItem extends Component<Props, State> {
   state = {
     shouldExpandMenu: false,
-    newBrand: '',
+    newItem: '',
     error: '',
+  };
+
+  onTypeInputField = (event: Object) => {
+    this.setState({
+      newItem: event.target.value,
+    });
   };
 
   onToggleExpandedMenu = (): void => {
@@ -60,64 +67,69 @@ class CreateNewBrand extends Component<Props, State> {
   };
 
   onClickAddButton = (): void => {
-    const isBrandAlreadyExists = this.checkBrandExists();
-    const properCallback = (isBrandAlreadyExists ? this.onCreateError : this.onAddNewBrand);
+    const isItemAlreadyExists = this.checkItemAlreadyExists();
+    const properCallback = (isItemAlreadyExists ? this.onCreateError : this.onAddNewItem);
 
     properCallback();
   };
 
-  onAddNewBrand = (): void => {
-    const { onCreateBrand } = this.props;
-    const { newBrand } = this.state;
+  onAddNewItem = (): void => {
+    const { onCreateItem } = this.props;
+    const { newItem } = this.state;
 
     this.setState({
       shouldExpandMenu: false,
-      newBrand: '',
-    }, () => onCreateBrand(newBrand));
+      newItem: '',
+    }, () => onCreateItem(newItem));
   };
 
   onCreateError = (): void => {
-    const { newBrand } = this.state;
+    const { newItem } = this.state;
+    const { entity } = this.props;
+
+    const errors = {
+      category: `A Categoria '${newItem}' já foi Cadastrada`,
+      brand: `A Marca '${newItem}' já foi Cadastrada`,
+    };
 
     this.setState({
-      error: `A Marca '${newBrand}' já foi Cadastrada`,
+      error: errors[entity],
     });
   };
 
-  onTypeNewBrand = (event: Object): void => {
-    this.setState({
-      newBrand: event.target.value,
-      error: '',
-    });
+  checkItemAlreadyExists = (): boolean => {
+    const { newItem } = this.state;
+    const { dataset } = this.props;
+
+    const itemIndex = dataset.findIndex(item => item.toUpperCase() === newItem.toUpperCase());
+
+    return itemIndex >= 0;
   };
 
-  checkBrandExists = (): boolean => {
-    const { newBrand } = this.state;
-    const { brands } = this.props;
+  renderNewItemInputField = (): Object => {
+    const { newItem, error } = this.state;
+    const { entity } = this.props;
 
-    const brandIndex = brands.findIndex(brand => brand.toUpperCase() === newBrand.toUpperCase());
-
-    return brandIndex >= 0;
-  };
-
-  renderNewItemField = (): Object => {
-    const { newBrand, error } = this.state;
+    const titles = {
+      category: 'da Nova Categoria',
+      brand: 'da Nova Marca',
+    };
 
     return (
       <Input
-        placeholder="Informe o Título da Nova Marca"
-        onChange={this.onTypeNewBrand}
-        value={newBrand}
+        placeholder={`Informe o Título ${titles[entity]}`}
+        onChange={this.onTypeInputField}
+        value={newItem}
         error={error}
         label="Título"
-        id="newBrand"
+        id="newItem"
         type="text"
       />
     );
   };
 
   renderAddButton = (): Object => {
-    const { newBrand, error } = this.state;
+    const { newItem, error } = this.state;
 
     return (
       <NewItemButtonWrapper
@@ -125,7 +137,7 @@ class CreateNewBrand extends Component<Props, State> {
       >
         <ActionButton
           action={this.onClickAddButton}
-          disabled={!newBrand}
+          disabled={!newItem}
           title="ADICIONAR"
           withIcon
         />
@@ -135,6 +147,12 @@ class CreateNewBrand extends Component<Props, State> {
 
   render() {
     const { shouldExpandMenu } = this.state;
+    const { entity } = this.props;
+
+    const titles = {
+      category: 'Categoria',
+      brand: 'Marca',
+    };
 
     return (
       <Wrapper>
@@ -145,12 +163,12 @@ class CreateNewBrand extends Component<Props, State> {
           <ExpansionPanelSummary
             expandIcon={<ExpandMoreIcon />}
           >
-            Cadastrar uma nova Marca
+            {`Cadastrar uma nova ${titles[entity]}`}
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
             <Row>
               <InputWrapper>
-                {this.renderNewItemField()}
+                {this.renderNewItemInputField()}
               </InputWrapper>
               {this.renderAddButton()}
             </Row>
@@ -161,4 +179,4 @@ class CreateNewBrand extends Component<Props, State> {
   }
 }
 
-export default CreateNewBrand;
+export default CreateNewItem;
