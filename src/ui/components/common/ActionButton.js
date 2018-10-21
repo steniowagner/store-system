@@ -29,11 +29,17 @@ const Title = styled.h2`
 
 type Props = {
   disabled: boolean,
+  withIcon: boolean,
   action: Function,
   title: string,
 };
 
-const ActionButton = ({ title, action, disabled }: Props): Obejct => (
+const ActionButton = ({
+  withIcon,
+  disabled,
+  action,
+  title,
+}: Props): Obejct => (
   <ButtonContainer
     onClick={() => action()}
     disabled={disabled}
@@ -41,13 +47,15 @@ const ActionButton = ({ title, action, disabled }: Props): Obejct => (
     <ButtonWrapper
       isDisabled={disabled}
     >
-      <AddCircleOutline
-        style={{
-          color: '#fff',
-          marginRight: 18,
-          fontSize: 28,
-        }}
-      />
+      {withIcon && (
+        <AddCircleOutline
+          style={{
+            color: '#fff',
+            marginRight: 18,
+            fontSize: 28,
+          }}
+        />
+      )}
       <Title>
         {title.toUpperCase()}
       </Title>

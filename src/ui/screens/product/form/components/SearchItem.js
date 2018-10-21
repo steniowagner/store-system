@@ -1,25 +1,27 @@
+// @flow
+
 import React, { Component } from 'react';
 
-import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';
 import SearchIcon from '@material-ui/icons/Search';
+import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
+import Menu from '@material-ui/core/Menu';
 
 import styled from 'styled-components';
+
 import Input from '../../../../components/common/CustomInput';
 
 const ChooseItemWrapper = styled.div`
   width: 100%;
   display: flex;
   margin-top: 8px;
-  margin-bottom: 32px;
 `;
 
 const SearchbButtonWrapper = styled.div`
-  margin-left: 16px;
   display: flex;
-  padding-bottom: 6px;
   align-items: flex-end;
+  margin-left: 16px;
+  padding-bottom: 6px;
 `;
 
 const InputWrapper = styled.div`
@@ -28,13 +30,16 @@ const InputWrapper = styled.div`
 
 type Props = {
   onSelectItem: Function,
-  itemSelected: any,
   options: Array<string>,
+  itemSelected: any,
+  entity: string,
 };
 
 type State = {
   anchorElement: any,
 };
+
+const ITEM_LIST_HEIGHT = 48;
 
 class SearchInput extends Component<Props, State> {
   state = {
@@ -61,24 +66,28 @@ class SearchInput extends Component<Props, State> {
     });
   };
 
-  renderChooseFiledInput = (): Object => {
-    const { itemSelected } = this.props;
+  renderChooseFileInput = (): Object => {
+    const { itemSelected, entity } = this.props;
+
+    const entityTitle = (entity === 'brand' ? 'a Marca' : 'o Fabricante');
+
+    const placeholder = `Selecione ${entityTitle}`;
 
     return (
       <Input
-        placeholder="Informe o Título da Nova Marca"
+        placeholder={placeholder}
         value={itemSelected}
-        label="Título"
-        type="text"
+        onChange={() => {}}
         id="newItem"
+        type="text"
+        label=""
         disabled
-        onChange={this.onTypeNewItemField}
       />
     );
   };
 
   renderMenuList = (dataset: Array<any>, itemSelected: string): Object => {
-    const { options } = this.props;
+    const { options, entity } = this.props;
 
     const renderDefaultOptions = options.map((option, index) => (
       <MenuItem
@@ -90,13 +99,15 @@ class SearchInput extends Component<Props, State> {
       </MenuItem>
     ));
 
+    const emptyOptionEntity = (entity === 'brand' ? 'Marcas' : 'Fabricantes');
+
     const renderEmptyOption = (): Object => (
       <MenuItem
         onClick={() => this.handleCloseMenu()}
         key="empty"
         disabled
       >
-        Não existem Marcas cadastradas
+        {`Não existem ${emptyOptionEntity} cadastradas`}
       </MenuItem>
     );
 
@@ -106,25 +117,23 @@ class SearchInput extends Component<Props, State> {
   };
 
   renderMenu = (): Object => {
-    const { anchorElement } = this.state;
     const { itemSelected, options } = this.props;
+    const { anchorElement } = this.state;
 
     const isMenuOpen = Boolean(anchorElement);
 
-    const ITEM_LIST_HEIGHT = 48;
-
     return (
       <Menu
-        onClose={this.handleCloseMenu}
-        anchorEl={anchorElement}
-        open={isMenuOpen}
-        id="menu"
         PaperProps={{
           style: {
             maxHeight: ITEM_LIST_HEIGHT * 4.5,
             maxWidth: 500,
           },
         }}
+        onClose={this.handleCloseMenu}
+        anchorEl={anchorElement}
+        open={isMenuOpen}
+        id="menu"
       >
         {this.renderMenuList(options, itemSelected)}
       </Menu>
@@ -135,7 +144,7 @@ class SearchInput extends Component<Props, State> {
     return (
       <ChooseItemWrapper>
         <InputWrapper>
-          {this.renderChooseFiledInput()}
+          {this.renderChooseFileInput()}
         </InputWrapper>
         <SearchbButtonWrapper>
           <Button

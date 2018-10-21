@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { withFormik, Form } from 'formik';
 import * as Yup from 'yup';
 
-import DialogChooseItem from './components/DialogChooseItem';
+import ManufacturerAndBrandRow from './components/ManufacturerAndBrandRow';
 
 import {
   SectionTitleWrapper,
@@ -19,6 +19,7 @@ import Input from '../../../components/common/CustomInput';
 
 type Props = {
   onChageFormToEditMode: Function,
+  setFieldValue: Function,
   handleChange: Function,
   handleSubmit: Function,
   onRemoveItem: Function,
@@ -28,34 +29,30 @@ type Props = {
   brands: Object,
   values: Object,
   errors: Object,
+  item: Object,
   isSubmitting: boolean,
   mode: string,
 };
 
 class ProductForm extends Component<Props, {}> {
   state = {
-    isDialogChooseItemOpen: true,
-    manufacturerSelected: '',
-    brandSelected: '',
+    brandsCreated: [],
   };
 
-  onToggleDialogChooseItem = (): void => {
-    const { isDialogChooseItemOpen } = this.state;
+  onSubmitForm = (): void => {
+    const { setFieldValue, handleSubmit } = this.props;
+    const { brandsCreated } = this.state;
 
-    this.setState({
-      isDialogChooseItemOpen: !isDialogChooseItemOpen,
-    });
+    setFieldValue('brandsCreated', brandsCreated);
+
+    handleSubmit();
   };
 
-  onSelectManufacturer = (manufacturerSelected: Object): void => {
-    this.setState({
-      manufacturerSelected,
-    });
-  };
+  onCreateBrand = (brand: string): void => {
+    const { brandsCreated } = this.state;
 
-  onSelectBrand = (brandSelected: string): void => {
     this.setState({
-      brandSelected,
+      brandsCreated: [brand, ...brandsCreated],
     });
   };
 
@@ -74,7 +71,7 @@ class ProductForm extends Component<Props, {}> {
     </SectionTitleWrapper>
   );
 
-  renderRowWithTwoItems = (firstItem: Object, secondItem: Object) => {
+  renderRowWithTwoItems = (firstItem: Object, secondItem: Object): Object => {
     const {
       handleChange,
       handleBlur,
@@ -92,11 +89,11 @@ class ProductForm extends Component<Props, {}> {
             placeholder={firstItem.placeholder}
             disabled={mode === 'visualize'}
             value={values[firstItem.id]}
+            onChange={handleChange}
             label={firstItem.label}
             type={firstItem.type}
-            id={firstItem.id}
-            onChange={handleChange}
             onBlur={handleBlur}
+            id={firstItem.id}
           />
         </RowItem>
         <RowItem>
@@ -106,54 +103,72 @@ class ProductForm extends Component<Props, {}> {
             disabled={mode === 'visualize'}
             value={values[secondItem.id]}
             label={secondItem.label}
-            type={secondItem.type}
-            id={secondItem.id}
             onChange={handleChange}
+            type={secondItem.type}
             onBlur={handleBlur}
+            id={secondItem.id}
           />
         </RowItem>
       </Row>
     );
   };
 
-  renderBarcodeAndDescription = () => {
-    const barCode = this.getRowItemObject('Código de Barras', 'Informe o Código de Barras do Produto', 'text', 'barCode');
-    const description = this.getRowItemObject('Descrição', 'Informe a Descrição do Produto', 'text', 'description');
+  renderBarcodeAndDescription = (): void => {
+    const barCodeInputFieldData = this.getRowItemObject('Código de Barras', 'Informe o Código de Barras do Produto', 'text', 'barCode');
+    const descriptionInputFieldData = this.getRowItemObject('Descrição', 'Informe a Descrição do Produto', 'text', 'description');
 
-    return this.renderRowWithTwoItems(barCode, description);
+    return this.renderRowWithTwoItems(barCodeInputFieldData, descriptionInputFieldData);
   };
 
   renderPrices = () => {
-    const salePrice = this.getRowItemObject('Preço de Venda', 'Informe o Preço de Venda do Produto', 'number', 'salePrice');
-    const costPrice = this.getRowItemObject('Preço de Custo', 'Informe o Preço de Custo do Produto', 'number', 'costPrice');
+    const salePriceInputFieldData = this.getRowItemObject('Preço de Venda', 'Informe o Preço de Venda do Produto', 'number', 'salePrice');
+    const costPriceInputFieldData = this.getRowItemObject('Preço de Custo', 'Informe o Preço de Custo do Produto', 'number', 'costPrice');
 
-    return this.renderRowWithTwoItems(salePrice, costPrice);
+    return this.renderRowWithTwoItems(salePriceInputFieldData, costPriceInputFieldData);
   };
 
   renderProductInfoSection = (): Object => {
-    const { isDialogChooseItemOpen } = this.state;
-    const { brands, manufacturers } = this.props;
+    const {
+      setFieldValue,
+      manufacturers,
+      handleChange,
+      handleBlur,
+      brands,
+      errors,
+      values,
+      item,
+      mode,
+    } = this.props;
+
+    const { brandsCreated } = this.state;
 
     return (
       <Section>
         {this.renderSectionTitle('Informações do Produto')}
         {this.renderBarcodeAndDescription()}
         {this.renderPrices()}
-        <DialogChooseItem
-          onToggleDialog={this.onToggleDialogChooseItem}
-          isOpen={isDialogChooseItemOpen}
+        <ManufacturerAndBrandRow
+          getRowItemObject={this.getRowItemObject}
+          brands={[...brandsCreated, ...brands]}
+          onCreateBrand={this.onCreateBrand}
           manufacturers={manufacturers}
-          brands={brands}
+          setFieldValue={setFieldValue}
+          handleChange={handleChange}
+          handleBlur={handleBlur}
+          errors={errors}
+          values={values}
+          item={item}
+          mode={mode}
         />
       </Section>
     );
-  }
+  };
 
   renderStockFields = () => {
-    const stockQuantity = this.getRowItemObject('Quantidade em Estoque', 'Informe a Quantidade em Estoque', 'number', 'stockQuantity');
-    const minQuantityStock = this.getRowItemObject('Quantidade Mínima em Estoque', 'Informe a Quantidade Mínima do Produto no Estoque', 'number', 'minStockQuantity');
+    const stockQuantityInputFieldData = this.getRowItemObject('Quantidade em Estoque', 'Informe a Quantidade em Estoque', 'number', 'stockQuantity');
+    const minQuantityStockInputFieldData = this.getRowItemObject('Quantidade Mínima em Estoque', 'Informe a Quantidade Mínima do Produto no Estoque', 'number', 'minStockQuantity');
 
-    return this.renderRowWithTwoItems(stockQuantity, minQuantityStock);
+    return this.renderRowWithTwoItems(stockQuantityInputFieldData, minQuantityStockInputFieldData);
   };
 
   renderStockSection = (): Object => (
@@ -167,7 +182,6 @@ class ProductForm extends Component<Props, {}> {
     const {
       onChageFormToEditMode,
       isSubmitting,
-      handleSubmit,
       onRemoveItem,
       mode,
     } = this.props;
@@ -179,9 +193,9 @@ class ProductForm extends Component<Props, {}> {
           {this.renderStockSection()}
           <ActionFormButton
             onChageFormToEditMode={onChageFormToEditMode}
+            onClick={this.onSubmitForm}
             onRemoveItem={onRemoveItem}
             disabled={isSubmitting}
-            onClick={handleSubmit}
             mode={mode}
           />
         </Form>
@@ -194,10 +208,12 @@ const CustomForm = withFormik({
   mapPropsToValues: ({ item }) => ({
     minStockQuantity: item.minStockQuantity || '',
     stockQuantity: item.stockQuantity || '',
+    manufacturer: item.manufacturer || '',
     description: item.description || '',
     costPrice: item.costPrice || '',
     salePrice: item.salePrice || '',
     barCode: item.barCode || '',
+    brand: item.brand || '',
   }),
 
   validationSchema: _props => Yup.lazy(() => Yup.object().shape({
@@ -207,17 +223,23 @@ const CustomForm = withFormik({
     stockQuantity: Yup.string()
       .required('A Quantidade em Estoque é obrigatória.'),
 
+    barCode: Yup.string()
+      .required('O Código de Barras é obrigatório.'),
+
     costPrice: Yup.string()
       .required('O Preço de Custo é obrigatório.'),
 
     salePrice: Yup.string()
       .required('O Preço de Venda é obrigatório.'),
 
+    manufacturer: Yup.string()
+      .required('O Fabricante é obrigatório.'),
+
     description: Yup.string()
       .required('A Descrição é obrigatório.'),
 
-    barCode: Yup.string()
-      .required('O Código de Barras é obrigatório.'),
+    brand: Yup.string()
+      .required('A Marca é obrigatória.'),
   })),
 
   handleSubmit(values, { setSubmitting, props }) {

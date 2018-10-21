@@ -300,6 +300,7 @@ class ApplicationEntityTemplate extends Component<Props, State> {
         <ActionButton
           title={`Criar ${singularEntityName}`}
           action={this.onClickCreateButton}
+          withIcon
         />
       </FilterAndCreateButtonWrapper>
     );

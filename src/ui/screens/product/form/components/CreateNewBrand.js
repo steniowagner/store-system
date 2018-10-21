@@ -10,6 +10,10 @@ import styled from 'styled-components';
 import ActionButton from '../../../../components/common/ActionButton';
 import Input from '../../../../components/common/CustomInput';
 
+const Wrapper = styled.div`
+  margin-top: 32px;
+`;
+
 const InputWrapper = styled.div`
   width: 60%;
 `;
@@ -103,8 +107,8 @@ class CreateNewBrand extends Component<Props, State> {
       <Input
         placeholder="Informe o Título da Nova Marca"
         onChange={this.onTypeNewBrand}
-        error={error}
         value={newBrand}
+        error={error}
         label="Título"
         id="newBrand"
         type="text"
@@ -123,6 +127,7 @@ class CreateNewBrand extends Component<Props, State> {
           action={this.onClickAddButton}
           disabled={!newBrand}
           title="ADICIONAR"
+          withIcon
         />
       </NewItemButtonWrapper>
     );
@@ -132,24 +137,26 @@ class CreateNewBrand extends Component<Props, State> {
     const { shouldExpandMenu } = this.state;
 
     return (
-      <ExpansionPanel
-        onChange={this.onToggleExpandedMenu}
-        expanded={shouldExpandMenu}
-      >
-        <ExpansionPanelSummary
-          expandIcon={<ExpandMoreIcon />}
+      <Wrapper>
+        <ExpansionPanel
+          onChange={this.onToggleExpandedMenu}
+          expanded={shouldExpandMenu}
         >
-          Cadastrar uma nova Marca
-        </ExpansionPanelSummary>
-        <ExpansionPanelDetails>
-          <Row>
-            <InputWrapper>
-              {this.renderNewItemField()}
-            </InputWrapper>
-            {this.renderAddButton()}
-          </Row>
-        </ExpansionPanelDetails>
-      </ExpansionPanel>
+          <ExpansionPanelSummary
+            expandIcon={<ExpandMoreIcon />}
+          >
+            Cadastrar uma nova Marca
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails>
+            <Row>
+              <InputWrapper>
+                {this.renderNewItemField()}
+              </InputWrapper>
+              {this.renderAddButton()}
+            </Row>
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
+      </Wrapper>
     );
   }
 }

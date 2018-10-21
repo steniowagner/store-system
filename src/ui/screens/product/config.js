@@ -1,12 +1,12 @@
 export const tabConfig = [{
-  columnTitle: 'Código de Barras',
-  dataField: 'barCode',
-}, {
   columnTitle: 'Descrição',
   dataField: 'description',
 }, {
   columnTitle: 'Marca',
   dataField: 'brand',
+}, {
+  columnTitle: 'Fabricante',
+  dataField: 'manufacturer',
 }];
 
 export const filterConfig = [{
@@ -18,4 +18,7 @@ export const filterConfig = [{
 }, {
   filterTitle: 'Marca',
   dataField: 'brand',
+}, {
+  filterTitle: 'Fabricante',
+  dataField: 'manufacturer',
 }];

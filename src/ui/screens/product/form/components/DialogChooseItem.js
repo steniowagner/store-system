@@ -12,7 +12,13 @@ import CreateNewBrand from './CreateNewBrand';
 import SearchItem from './SearchItem';
 
 type Props = {
-
+  onToggleDialog: Function,
+  onSetItem: Function,
+  itemSelected: string,
+  entity: string,
+  mode: string,
+  dataset: Array<any>,
+  isOpen: boolean,
 };
 
 type State = {
@@ -21,34 +27,34 @@ type State = {
 
 class DialogChooseItem extends Component<Props, State> {
   state = {
-    manufacturers: [],
-    brands: [],
     itemSelected: '',
+    dataset: [],
   };
 
   componentDidMount() {
-    const { manufacturers, brands } = this.props;
+    const { itemSelected, dataset } = this.props;
 
     this.setState({
-      manufacturers,
-      brands,
+      itemSelected,
+      dataset,
     });
   }
 
   onSelectItem = (indexItemSelected: number): void => {
-    const { brands } = this.state;
-    console.log(brands)
+    const { dataset } = this.state;
     this.setState({
-      itemSelected: brands[indexItemSelected],
+      itemSelected: dataset[indexItemSelected],
     });
   };
 
   onCreateBrand = (brand: string): void => {
-    const { brands } = this.state;
+    const { onCreateBrand } = this.props;
+    const { dataset } = this.state;
 
     this.setState({
-      brands: [brand, ...brands],
-    }, () => this.onSelectItem(0));
+      dataset: [brand, ...dataset],
+      itemSelected: brand,
+    }, () => onCreateBrand(brand));
   };
 
   renderSlide = (props: Object): Object => (
@@ -59,31 +65,33 @@ class DialogChooseItem extends Component<Props, State> {
   );
 
   renderCreateBrandContent = (): Object => {
-    const { brands } = this.state;
+    const { dataset } = this.state;
 
     return (
       <CreateNewBrand
         onCreateBrand={this.onCreateBrand}
-        brands={brands}
+        brands={dataset}
       />
     );
   };
 
   renderSearchInputItem = (): Object => {
-    const { itemSelected } = this.state;
-    const { brands } = this.state;
+    const { itemSelected, dataset } = this.state;
+    const { entity } = this.props;
 
     return (
       <SearchItem
         onSelectItem={this.onSelectItem}
         itemSelected={itemSelected}
-        options={brands}
+        options={dataset}
+        entity={entity}
       />
     );
   };
 
   renderDialogActionButtons = (): Object => {
-    const { onToggleDialog } = this.props;
+    const { onToggleDialog, onSetItem } = this.props;
+    const { itemSelected } = this.state;
 
     return (
       <DialogActions>
@@ -94,7 +102,8 @@ class DialogChooseItem extends Component<Props, State> {
           Cancelar
         </Button>
         <Button
-          onClick={onToggleDialog}
+          onClick={() => onSetItem(itemSelected)}
+          disabled={!itemSelected}
           color="primary"
         >
           Ok
@@ -104,7 +113,16 @@ class DialogChooseItem extends Component<Props, State> {
   };
 
   render() {
-    const { onToggleDialog, isOpen } = this.props;
+    const {
+      onToggleDialog,
+      entity,
+      isOpen,
+      mode,
+    } = this.props;
+
+    const entityTitle = (entity === 'brand' ? 'Marca' : 'Fabricante');
+    const actionTitle = (mode === 'edit' ? 'Editar' : 'Selecionar');
+    const isBrandItem = (entity === 'brand');
 
     return (
       <Dialog
@@ -120,14 +138,14 @@ class DialogChooseItem extends Component<Props, State> {
         <DialogTitle
           id="alert-dialog-slide-title"
         >
-          Adicionar Marca
+          {`${actionTitle} ${entityTitle}`}
         </DialogTitle>
         <DialogContent>
           <DialogContentText
             id="alert-dialog-slide-description"
           >
             {this.renderSearchInputItem()}
-            {this.renderCreateBrandContent()}
+            {isBrandItem && this.renderCreateBrandContent()}
           </DialogContentText>
         </DialogContent>
         {this.renderDialogActionButtons()}

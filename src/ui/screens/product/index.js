@@ -5,35 +5,38 @@ import EntityTemplate from '../../components/common/entity-template';
 import { filterConfig, tabConfig } from './config';
 import Form from './form';
 
-const getData = (): Array<Object> => {
-  const items = [];
-
-  for (let i = 0; i < 16; i += 1) {
-    items.push({
-      id: Math.random(),
-      barCode: i.toString(),
-      name: `Produto ${i}`,
-      brand: `Marca ${i}`,
-    });
-  }
-
-  return items;
-};
-
 class Product extends Component {
   state = {
     manufacturers: ['Manufacturer 01', 'Manufacturer 02', 'Manufacturer 03', 'Manufacturer 04', 'Manufacturer 05'],
-    brands: ['Nike', 'Adidas', 'Pena', 'Smolder', 'QuickSilver'],
-    products: [],
+    brands: [],
+    products: [{
+      id: Math.random(),
+      barCode: '3',
+      brand: 'brand',
+      costPrice: 3,
+      description: 'description',
+      manufacturer: 'manufacturer',
+      minStockQuantity: 4,
+      salePrice: 3,
+      stockQuantity: 1,
+    }],
   };
 
   onCreateProduct = (product: Object): void => {
+    const { brandsCreated } = product;
     const { products } = this.state;
-    console.log(product)
+
+    const hasNewBrands = (brandsCreated.length > 0);
+    if (hasNewBrands) {
+      this.handleCreateBrands(brandsCreated);
+    }
+
+    const productCreated = product;
+    delete productCreated.brandsCreated;
+
     this.setState({
       products: [{
-        ...product,
-        brand: 'maRCA01',
+        ...productCreated,
         id: Math.random(),
       }, ...products],
     });
@@ -54,6 +57,14 @@ class Product extends Component {
 
     this.setState({
       products: products.filter(product => product.id !== productId),
+    });
+  };
+
+  handleCreateBrands = (newBrands: Array<string>): void => {
+    const { brands } = this.state;
+
+    this.setState({
+      brands: [...newBrands, ...brands],
     });
   };
 
