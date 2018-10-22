@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 
-import EntityTemplate from '../../components/common/entity-template';
+import EntityComponent from '../../components/common/entity-component';
 
 import { filterConfig, tabConfig } from './config';
 import Form from './form';
@@ -45,7 +45,7 @@ class Customer extends Component {
     const { customers } = this.state;
 
     return (
-      <EntityTemplate
+      <EntityComponent
         onRemoveItem={this.onRemoveCustomer}
         onCreateItem={this.onCreateCustomer}
         onEditItem={this.onEditCustomer}

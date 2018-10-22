@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import EntityTemplate from '../../components/common/entity-template';
+import EntityComponent from '../../components/common/entity-component';
 
 import { filterConfig, tabConfig } from './config';
 import UserForm from './form';
@@ -80,7 +80,7 @@ class User extends Component {
 
     this.setState({
       users: Object.assign([], users, { [userEditedIndex]: { ...userEdited, password: userPassword } }),
-    }, () => console.log(this.state.users[userEditedIndex]));
+    });
   };
 
   onEditPassword = (newPassword: string): void => {
@@ -99,12 +99,12 @@ class User extends Component {
     const { users } = this.state;
 
     return (
-      <EntityTemplate
+      <EntityComponent
         onRemoveItem={this.onRemoveUser}
         onCreateItem={this.onCreateUser}
         onEditItem={this.onEditUser}
         singularEntityName="Usuário"
-        pluralEntityName="Users"
+        pluralEntityName="Usuários"
         filterConfig={filterConfig}
         tabConfig={tabConfig}
         dataset={users}

@@ -51,7 +51,7 @@ type State = {
   formMode: string,
 };
 
-class ApplicationEntityTemplate extends Component<Props, State> {
+class EntityComponent extends Component<Props, State> {
   state = {
     isFullScreenDialogOpen: false,
     isRemoveDialogOpen: false,
@@ -372,4 +372,4 @@ class ApplicationEntityTemplate extends Component<Props, State> {
   }
 }
 
-export default ApplicationEntityTemplate;
+export default EntityComponent;

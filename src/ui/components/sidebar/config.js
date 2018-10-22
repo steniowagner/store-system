@@ -10,6 +10,10 @@ const config = [{
   route: '/customer',
 }, {
   icon: AccountCircle,
+  title: 'FORNECEDORES',
+  route: '/provider',
+}, {
+  icon: AccountCircle,
   title: 'USUÁRIOS',
   route: '/user',
 }];

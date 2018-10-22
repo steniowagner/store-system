@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 
-import EntityTemplate from '../../components/common/entity-template';
+import EntityComponent from '../../components/common/entity-component';
 
 import { filterConfig, tabConfig } from './config';
 import Form from './form';
@@ -135,7 +135,7 @@ class Product extends Component {
     } = this.state;
 
     return (
-      <EntityTemplate
+      <EntityComponent
         onRemoveItem={this.onRemoverProduct}
         onCreateItem={this.onCreateProduct}
         onEditItem={this.onEditProduct}
