@@ -8,6 +8,10 @@ const config = [{
   icon: AccountCircle,
   title: 'PRODUTOS',
   route: '/product',
+}, {
+  icon: AccountCircle,
+  title: 'CLIENTES',
+  route: '/customer',
 }];
 
 export default config;

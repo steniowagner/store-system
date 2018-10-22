@@ -1,3 +1,5 @@
+// @flow
+
 import React, { Component } from 'react';
 
 import EntityTemplate from '../../components/common/entity-template';
@@ -40,7 +42,7 @@ class Product extends Component {
         ...productCreated,
         id: Math.random(),
       }, ...products],
-    }, () => console.log(this.state.products[0]));
+    });
   };
 
   onEditProduct = (productEdited: Object): void => {
@@ -50,7 +52,7 @@ class Product extends Component {
 
     this.setState({
       products: Object.assign([], products, { [productEditedIndex]: productEdited }),
-    }, () => console.log(this.state.products[productEditedIndex]));
+    });
   };
 
   onRemoverProduct = (productId: string): void => {
