@@ -36,6 +36,8 @@ const Row = styled.div`
 type Props = {
   onCreateItem: Function,
   dataset: Array<string>,
+  placeholder: string,
+  panelTitle: string,
   entity: string,
 };
 
@@ -88,6 +90,7 @@ class CreateNewItem extends Component<Props, State> {
     const { entity } = this.props;
 
     const errors = {
+      manufacturer: `O Fabricante '${newItem}' já foi Cadastrado`,
       category: `A Categoria '${newItem}' já foi Cadastrada`,
       brand: `A Marca '${newItem}' já foi Cadastrada`,
     };
@@ -108,16 +111,11 @@ class CreateNewItem extends Component<Props, State> {
 
   renderNewItemInputField = (): Object => {
     const { newItem, error } = this.state;
-    const { entity } = this.props;
-
-    const titles = {
-      category: 'da Nova Categoria',
-      brand: 'da Nova Marca',
-    };
+    const { placeholder } = this.props;
 
     return (
       <Input
-        placeholder={`Informe o Título ${titles[entity]}`}
+        placeholder={placeholder}
         onChange={this.onTypeInputField}
         value={newItem}
         error={error}
@@ -147,12 +145,7 @@ class CreateNewItem extends Component<Props, State> {
 
   render() {
     const { shouldExpandMenu } = this.state;
-    const { entity } = this.props;
-
-    const titles = {
-      category: 'Categoria',
-      brand: 'Marca',
-    };
+    const { panelTitle } = this.props;
 
     return (
       <Wrapper>
@@ -163,7 +156,7 @@ class CreateNewItem extends Component<Props, State> {
           <ExpansionPanelSummary
             expandIcon={<ExpandMoreIcon />}
           >
-            {`Cadastrar uma nova ${titles[entity]}`}
+            {panelTitle}
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
             <Row>

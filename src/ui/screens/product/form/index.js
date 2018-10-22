@@ -8,28 +8,24 @@ import * as Yup from 'yup';
 import InputWithCreation from './components/InputWithCreation';
 
 import {
-  SectionTitleWrapper,
-  SectionTitle,
+  renderRowWithTwoItems,
+  renderSectionTitle,
+  getRowItemObject,
   Section,
   Wrapper,
-  RowItem,
   Row,
 } from '../../../components/common/FormUtils';
 
 import ActionFormButton from '../../../components/common/ActionFormButton';
-import Input from '../../../components/common/CustomInput';
 
 type Props = {
   onChageFormToEditMode: Function,
   setFieldValue: Function,
-  handleChange: Function,
   handleSubmit: Function,
   onRemoveItem: Function,
-  handleBlur: Function,
   manufacturers: Array<any>,
   categories: Array<any>,
   brands: Array<any>,
-  touched: Object,
   values: Object,
   errors: Object,
   item: Object,
@@ -39,14 +35,16 @@ type Props = {
 
 class ProductForm extends Component<Props, {}> {
   state = {
+    manufacturersCreated: [],
     categoriesCreated: [],
     brandsCreated: [],
   };
 
   onSubmitForm = (): void => {
-    const { categoriesCreated, brandsCreated } = this.state;
+    const { manufacturersCreated, categoriesCreated, brandsCreated } = this.state;
     const { setFieldValue, handleSubmit } = this.props;
 
+    setFieldValue('manufacturersCreated', manufacturersCreated);
     setFieldValue('categoriesCreated', categoriesCreated);
     setFieldValue('brandsCreated', brandsCreated);
 
@@ -62,152 +60,103 @@ class ProductForm extends Component<Props, {}> {
     });
   };
 
-  getRowItemObject = (label: string, placeholder: string, type: string, id: string): Object => ({
-    placeholder,
-    label,
-    type,
-    id,
-  });
-
-  renderSectionTitle = (title: string): Object => (
-    <SectionTitleWrapper>
-      <SectionTitle>
-        {title}
-      </SectionTitle>
-    </SectionTitleWrapper>
-  );
-
-  renderRowWithTwoItems = (firstItem: Object, secondItem: Object): Object => {
-    const {
-      handleChange,
-      handleBlur,
-      touched,
-      errors,
-      values,
-      mode,
-    } = this.props;
-
-    return (
-      <Row>
-        <RowItem>
-          <Input
-            error={touched[firstItem.id] && errors[firstItem.id]}
-            placeholder={firstItem.placeholder}
-            disabled={mode === 'detail'}
-            value={values[firstItem.id]}
-            onChange={handleChange}
-            label={firstItem.label}
-            type={firstItem.type}
-            onBlur={handleBlur}
-            id={firstItem.id}
-          />
-        </RowItem>
-        <RowItem>
-          <Input
-            error={touched[secondItem.id] && errors[secondItem.id]}
-            placeholder={secondItem.placeholder}
-            disabled={mode === 'detail'}
-            value={values[secondItem.id]}
-            label={secondItem.label}
-            onChange={handleChange}
-            type={secondItem.type}
-            onBlur={handleBlur}
-            id={secondItem.id}
-          />
-        </RowItem>
-      </Row>
-    );
-  };
-
   renderBarcodeAndDescription = (): void => {
-    const barCodeInputFieldData = this.getRowItemObject('Código de Barras', 'Informe o Código de Barras do Produto', 'text', 'barCode');
-    const descriptionInputFieldData = this.getRowItemObject('Descrição', 'Informe a Descrição do Produto', 'text', 'description');
+    const barCodeInputFieldData = getRowItemObject('Código de Barras', 'Informe o Código de Barras do Produto', 'text', 'barCode');
+    const descriptionInputFieldData = getRowItemObject('Descrição', 'Informe a Descrição do Produto', 'text', 'description');
 
-    return this.renderRowWithTwoItems(barCodeInputFieldData, descriptionInputFieldData);
+    return renderRowWithTwoItems(barCodeInputFieldData, descriptionInputFieldData, this.props);
   };
 
   renderPrices = () => {
-    const salePriceInputFieldData = this.getRowItemObject('Preço de Venda', 'Informe o Preço de Venda do Produto', 'number', 'salePrice');
-    const costPriceInputFieldData = this.getRowItemObject('Preço de Custo', 'Informe o Preço de Custo do Produto', 'number', 'costPrice');
+    const salePriceInputFieldData = getRowItemObject('Preço de Venda', 'Informe o Preço de Venda do Produto', 'number', 'salePrice');
+    const costPriceInputFieldData = getRowItemObject('Preço de Custo', 'Informe o Preço de Custo do Produto', 'number', 'costPrice');
 
-    return this.renderRowWithTwoItems(salePriceInputFieldData, costPriceInputFieldData);
+    return renderRowWithTwoItems(salePriceInputFieldData, costPriceInputFieldData, this.props);
   };
 
-  renderManufacturerInputItem = () => {
+  renderInputWithCreation = (data: Object): Object => {
     const {
       setFieldValue,
-      manufacturers,
       errors,
       values,
       item,
       mode,
     } = this.props;
 
-    const manufacturerInputFieldData = this.getRowItemObject('Fabricante', 'Informe o Fabricante do Produto', 'text', 'manufacturer');
+    const {
+      datasetCreatedId,
+      datasetCreated,
+      fieldData,
+      dataset,
+    } = data;
+
+    return (
+      <InputWithCreation
+        onCreateItem={(newItem: string): void => this.onCreateItem(newItem, datasetCreatedId)}
+        dataset={[...datasetCreated, ...dataset]}
+        setFieldValue={setFieldValue}
+        fieldData={fieldData}
+        errors={errors}
+        values={values}
+        item={item}
+        mode={mode}
+        id={fieldData.id}
+      />
+    );
+  };
+
+  renderManufacturerInputItem = () => {
+    const { manufacturersCreated } = this.state;
+    const { manufacturers } = this.props;
+
+    const manufacturerInputFieldData = getRowItemObject('Fabricante', 'Informe o Fabricante do Produto', 'text', 'manufacturer');
+
+    const manufacturerData = {
+      datasetCreatedId: 'manufacturersCreated',
+      fieldData: manufacturerInputFieldData,
+      datasetCreated: manufacturersCreated,
+      dataset: manufacturers,
+    };
 
     return (
       <Row>
-        <InputWithCreation
-          fieldData={manufacturerInputFieldData}
-          setFieldValue={setFieldValue}
-          dataset={manufacturers}
-          errors={errors}
-          values={values}
-          item={item}
-          mode={mode}
-          id="manufacturer"
-        />
+        {this.renderInputWithCreation(manufacturerData)}
       </Row>
     );
   };
 
   renderCategoryAndBrandRow = (): Object => {
-    const {
-      setFieldValue,
-      categories,
-      brands,
-      errors,
-      values,
-      item,
-      mode,
-    } = this.props;
-
-    const categorieInputFieldData = this.getRowItemObject('Categoria', 'Informe a Categoria do Produto', 'text', 'category');
-    const brandInputFieldData = this.getRowItemObject('Marca', 'Informe a Marca do Produto', 'text', 'brand');
-
     const { brandsCreated, categoriesCreated } = this.state;
+    const { categories, brands } = this.props;
+
+    const categorieInputFieldData = getRowItemObject('Categoria', 'Informe a Categoria do Produto', 'text', 'category');
+    const brandInputFieldData = getRowItemObject('Marca', 'Informe a Marca do Produto', 'text', 'brand');
+
+    const categoryData = {
+      datasetCreatedId: 'categoriesCreated',
+      fieldData: categorieInputFieldData,
+      datasetCreated: categoriesCreated,
+      dataset: categories,
+    };
+
+    const brandData = {
+      datasetCreatedId: 'brandsCreated',
+      fieldData: brandInputFieldData,
+      datasetCreated: brandsCreated,
+      dataset: brands,
+    };
 
     return (
       <Row>
-        <InputWithCreation
-          onCreateItem={(newItem: string): void => this.onCreateItem(newItem, 'categoriesCreated')}
-          dataset={[...categoriesCreated, ...categories]}
-          fieldData={categorieInputFieldData}
-          setFieldValue={setFieldValue}
-          errors={errors}
-          values={values}
-          item={item}
-          mode={mode}
-          id="category"
-        />
-        <InputWithCreation
-          onCreateItem={(newItem: string): void => this.onCreateItem(newItem, 'brandsCreated')}
-          dataset={[...brandsCreated, ...brands]}
-          fieldData={brandInputFieldData}
-          setFieldValue={setFieldValue}
-          errors={errors}
-          values={values}
-          item={item}
-          mode={mode}
-          id="brand"
-        />
+        {this.renderInputWithCreation(categoryData)}
+        {this.renderInputWithCreation(brandData)}
       </Row>
     );
   };
 
   renderProductInfoSection = (): Object => (
     <Section>
-      {this.renderSectionTitle('Informações do Produto')}
+      {renderSectionTitle('Informações do Produto')}
       {this.renderBarcodeAndDescription()}
       {this.renderPrices()}
       {this.renderCategoryAndBrandRow()}
@@ -216,15 +165,15 @@ class ProductForm extends Component<Props, {}> {
   );
 
   renderStockFields = () => {
-    const stockQuantityInputFieldData = this.getRowItemObject('Quantidade em Estoque', 'Informe a Quantidade em Estoque', 'number', 'stockQuantity');
-    const minQuantityStockInputFieldData = this.getRowItemObject('Quantidade Mínima em Estoque', 'Informe a Quantidade Mínima do Produto no Estoque', 'number', 'minStockQuantity');
+    const stockQuantityInputFieldData = getRowItemObject('Quantidade em Estoque', 'Informe a Quantidade em Estoque', 'number', 'stockQuantity');
+    const minQuantityStockInputFieldData = getRowItemObject('Quantidade Mínima em Estoque', 'Informe a Quantidade Mínima do Produto no Estoque', 'number', 'minStockQuantity');
 
-    return this.renderRowWithTwoItems(stockQuantityInputFieldData, minQuantityStockInputFieldData);
+    return renderRowWithTwoItems(stockQuantityInputFieldData, minQuantityStockInputFieldData, this.props);
   };
 
   renderStockSection = (): Object => (
     <Section>
-      {this.renderSectionTitle('Estoque')}
+      {renderSectionTitle('Estoque')}
       {this.renderStockFields()}
     </Section>
   );

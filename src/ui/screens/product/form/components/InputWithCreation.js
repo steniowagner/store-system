@@ -27,8 +27,8 @@ const InputWrapper = styled.div`
 `;
 
 type Props = {
-  onCreateItem: Function,
   setFieldValue: Function,
+  onCreateItem: Function,
   dataset: Array<any>,
   fieldData: Object,
   errors: Object,
@@ -109,6 +109,7 @@ class InputWithCreation extends Component<Props, State> {
 
   renderDialog = (): Object => {
     const { isDialogChooseItemOpen } = this.state;
+
     const {
       onCreateItem,
       dataset,

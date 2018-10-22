@@ -70,8 +70,27 @@ class DialogChooseItem extends Component<Props, State> {
     const { dataset } = this.state;
     const { entity } = this.props;
 
+    const titles = {
+      manufacturer: {
+        placeholder: 'Informe o Nome do novo Fabricante',
+        panelTitle: 'Cadastrar um novo Fabricante',
+      },
+
+      brand: {
+        placeholder: 'Informe o Nome da nova Marca',
+        panelTitle: 'Cadastrar uma nova Marca',
+      },
+
+      category: {
+        placeholder: 'Informe o Título da nova Categoria',
+        panelTitle: 'Cadastrar uma nova Categoria',
+      },
+    };
+
     return (
       <CreateNewItem
+        placeholder={titles[entity].placeholder}
+        panelTitle={titles[entity].panelTitle}
         onCreateItem={this.onCreateItem}
         dataset={dataset}
         entity={entity}
@@ -130,7 +149,6 @@ class DialogChooseItem extends Component<Props, State> {
       brand: 'Marca',
     };
 
-    const shouldShowCreateNewItemContent = (entity === 'brand' || entity === 'category');
     const actionTitle = (mode === 'edit' ? 'Editar' : 'Selecionar');
     const entityTitle = titles[entity];
 
@@ -155,7 +173,7 @@ class DialogChooseItem extends Component<Props, State> {
             id="alert-dialog-slide-description"
           >
             {this.renderSearchInputItem()}
-            {shouldShowCreateNewItemContent && this.renderCreateNewItem()}
+            {this.renderCreateNewItem()}
           </DialogContentText>
         </DialogContent>
         {this.renderDialogActionButtons()}

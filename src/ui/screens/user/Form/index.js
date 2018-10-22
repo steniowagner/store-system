@@ -5,44 +5,17 @@ import styled from 'styled-components';
 import { withFormik, Form } from 'formik';
 import * as Yup from 'yup';
 
-import Input from '../../../components/common/CustomInput';
-
 import ActionFormButton from '../../../components/common/ActionFormButton';
 import ChangePassword from './components/ChangePassword';
 
-const Wrapper = styled.div`
-  width: 100%;
-`;
-
-const Row = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
-`;
-
-const RowItem = styled.div`
-  width: 48%;
-  margin-left: 12px,
-  margin-right: 18px,
-`;
-
-const Section = styled.div`
-  width: 100%
-  margin-top: 32px;
-  margin-bottom: 24px;
-`;
-
-const SectionTitle = styled.span`
-  margin-bottom: 24px;
-  color: ${({ theme }) => theme.colors.darkText};
-  font-size: 24px;
-  font-weight: 500;
-`;
-
-const SectionTitleWrapper = styled.div`
-  margin-bottom: 24px;
-`;
+import {
+  renderRowWithTwoItems,
+  renderSectionTitle,
+  getRowItemObject,
+  Section,
+  Wrapper,
+  Row,
+} from '../../../components/common/FormUtils';
 
 const EditPasswordButtonWrapper = styled.div`
   display: block;
@@ -51,13 +24,8 @@ const EditPasswordButtonWrapper = styled.div`
 type Props = {
   onChageFormToEditMode: Function,
   onEditPassword: Function,
-  handleChange: Function,
   handleSubmit: Function,
   onRemoveItem: Function,
-  handleBlur: Function,
-  touched: Object,
-  values: Object,
-  errors: Object,
   item: Object,
   isSubmitting: boolean,
   mode: string,
@@ -88,55 +56,14 @@ class UserForm extends Component<Props, State> {
     }, () => onEditPassword(newPassword));
   };
 
-  renderSectionTitleWrapper = (title: string): Object => (
-    <SectionTitleWrapper>
-      <SectionTitle>
-        {title}
-      </SectionTitle>
-    </SectionTitleWrapper>
-  );
-
   renderPasswordSection = (): Object => {
-    const {
-      handleChange,
-      handleBlur,
-      touched,
-      errors,
-      values,
-      mode,
-    } = this.props;
+    const passwordConfirmInputFieldData = getRowItemObject('Digite a Senha Novamente', 'Informe a Senha do Usuário Novamente', 'password', 'passwordConfirm');
+    const passwordInputFieldData = getRowItemObject('Digite a Senha', 'Informe a Senha do Usuário', 'password', 'password');
 
     return (
       <Section>
-        {this.renderSectionTitleWrapper('Senha')}
-        <Row>
-          <RowItem>
-            <Input
-              error={touched.password && errors.password}
-              disabled={mode === 'detail'}
-              value={values.password}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              placeholder="Informe a senha do Usuário"
-              label="Digite a Senha"
-              type="password"
-              id="password"
-            />
-          </RowItem>
-          <RowItem>
-            <Input
-              error={touched.passwordConfirm && errors.passwordConfirm}
-              disabled={mode === 'detail'}
-              value={values.passwordConfirm}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              placeholder="Informe a senha novamente"
-              label="Digite a senha novamente"
-              type="password"
-              id="passwordConfirm"
-            />
-          </RowItem>
-        </Row>
+        {renderSectionTitle('Senha')}
+        {renderRowWithTwoItems(passwordInputFieldData, passwordConfirmInputFieldData, this.props)}
       </Section>
     );
   };
@@ -156,46 +83,13 @@ class UserForm extends Component<Props, State> {
   );
 
   renderUserInfoSection = (): Object => {
-    const {
-      handleChange,
-      handleBlur,
-      touched,
-      errors,
-      values,
-      mode,
-    } = this.props;
+    const nameInputFieldData = getRowItemObject('Nome', 'Informe o Nome do Usuário', 'text', 'name');
+    const usernameInputFieldData = getRowItemObject('Usuário', 'Informe o Nome de Usuário', 'text', 'username');
 
     return (
       <Section>
-        {this.renderSectionTitleWrapper('Informações do Usuário')}
-        <Row>
-          <RowItem>
-            <Input
-              error={touched.name && errors.name}
-              disabled={mode === 'detail'}
-              value={values.name}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              placeholder="Informe o Nome do Usuário"
-              label="Nome"
-              type="text"
-              id="name"
-            />
-          </RowItem>
-          <RowItem>
-            <Input
-              error={touched.username && errors.username}
-              disabled={mode === 'detail'}
-              value={values.username}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              placeholder="Informe o Usuário"
-              label="Usuário"
-              type="text"
-              id="username"
-            />
-          </RowItem>
-        </Row>
+        {renderSectionTitle('Informações do Usuário')}
+        {renderRowWithTwoItems(nameInputFieldData, usernameInputFieldData, this.props)}
       </Section>
     );
   };

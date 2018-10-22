@@ -83,11 +83,10 @@ class SearchInput extends Component<Props, State> {
       <Input
         placeholder={placeholder}
         value={itemSelected}
-        onChange={() => {}}
         id="newItem"
         type="text"
-        label=""
         disabled
+        label=""
       />
     );
   };

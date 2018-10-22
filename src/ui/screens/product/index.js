@@ -26,20 +26,16 @@ class Product extends Component {
     }],
   };
 
-  onCreateProduct = (product: Object): void => {
-    const { categoriesCreated, brandsCreated } = product;
+  onCreateProduct = (productCreated: Object): void => {
     const { products } = this.state;
 
-    this.checkHasNewCategories(categoriesCreated);
-    this.checkHasNewBrands(brandsCreated);
+    this.handleNewItemsCreated(productCreated);
 
-    const productCreated = product;
-    delete productCreated.categoriesCreated;
-    delete productCreated.brandsCreated;
+    const product = this.removeCreatedFields(productCreated);
 
     this.setState({
       products: [{
-        ...productCreated,
+        ...product,
         id: Math.random(),
       }, ...products],
     });
@@ -48,10 +44,14 @@ class Product extends Component {
   onEditProduct = (productEdited: Object): void => {
     const { products } = this.state;
 
+    this.handleNewItemsCreated(productEdited);
+
     const productEditedIndex = products.findIndex(product => product.id === productEdited.id);
 
+    const product = this.removeCreatedFields(productEdited);
+
     this.setState({
-      products: Object.assign([], products, { [productEditedIndex]: productEdited }),
+      products: Object.assign([], products, { [productEditedIndex]: product }),
     });
   };
 
@@ -60,6 +60,48 @@ class Product extends Component {
 
     this.setState({
       products: products.filter(product => product.id !== productId),
+    });
+  };
+
+  removeCreatedFields = (product: Object): Object => {
+    const cleanProduct = product;
+
+    delete cleanProduct.manufacturersCreated;
+    delete cleanProduct.categoriesCreated;
+    delete cleanProduct.brandsCreated;
+
+    return cleanProduct;
+  };
+
+  handleNewItemsCreated = (product: Object): void => {
+    const { manufacturersCreated, categoriesCreated, brandsCreated } = product;
+
+    this.checkHasNewManufactures(manufacturersCreated);
+    this.checkHasNewCategories(categoriesCreated);
+    this.checkHasNewBrands(brandsCreated);
+  };
+
+  handleCreateBrands = (newBrands: Array<string>): void => {
+    const { brands } = this.state;
+
+    this.setState({
+      brands: [...newBrands, ...brands],
+    });
+  };
+
+  handleCreateCategories = (newCategories: Array<string>): void => {
+    const { categories } = this.state;
+
+    this.setState({
+      categories: [...newCategories, ...categories],
+    });
+  };
+
+  handleCreateManufacturers = (newManufacturers: Array<string>): void => {
+    const { manufacturers } = this.state;
+
+    this.setState({
+      manufacturers: [...newManufacturers, ...manufacturers],
     });
   };
 
@@ -77,20 +119,11 @@ class Product extends Component {
     }
   };
 
-  handleCreateBrands = (newBrands: Array<string>): void => {
-    const { brands } = this.state;
-
-    this.setState({
-      brands: [...newBrands, ...brands],
-    });
-  };
-
-  handleCreateCategories = (newCategories: Array<string>): void => {
-    const { categories } = this.state;
-
-    this.setState({
-      categories: [...newCategories, ...categories],
-    });
+  checkHasNewManufactures = (manufacturersCreated: Array<any>): void => {
+    const hasNewManufacturers = (manufacturersCreated.length > 0);
+    if (hasNewManufacturers) {
+      this.handleCreateManufacturers(manufacturersCreated);
+    }
   };
 
   render() {
