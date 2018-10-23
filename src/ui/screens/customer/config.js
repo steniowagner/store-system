@@ -1,3 +1,5 @@
+import { FILTER_TYPES } from '../../components/common/Filter';
+
 export const tabConfig = [{
   columnTitle: 'Nome',
   dataField: 'name',
@@ -12,10 +14,13 @@ export const tabConfig = [{
 export const filterConfig = [{
   filterTitle: 'Nome',
   dataField: 'name',
+  type: FILTER_TYPES.TEXT,
 }, {
   filterTitle: 'CPF',
   dataField: 'cpf',
+  type: FILTER_TYPES.TEXT,
 }, {
   filterTitle: 'RG',
   dataField: 'rg',
+  type: FILTER_TYPES.TEXT,
 }];

@@ -1,3 +1,5 @@
+import { FILTER_TYPES } from '../../components/common/Filter';
+
 export const tabConfig = [{
   columnTitle: 'Descrição',
   dataField: 'description',
@@ -12,16 +14,21 @@ export const tabConfig = [{
 export const filterConfig = [{
   filterTitle: 'Código de Barras',
   dataField: 'barCode',
+  type: FILTER_TYPES.TEXT,
 }, {
   filterTitle: 'Descrição',
   dataField: 'description',
+  type: FILTER_TYPES.TEXT,
 }, {
   filterTitle: 'Marca',
   dataField: 'brand',
+  type: FILTER_TYPES.TEXT,
 }, {
   filterTitle: 'Fabricante',
   dataField: 'manufacturer',
+  type: FILTER_TYPES.TEXT,
 }, {
   filterTitle: 'Categoria',
   dataField: 'category',
+  type: FILTER_TYPES.TEXT,
 }];
