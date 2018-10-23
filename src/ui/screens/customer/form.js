@@ -110,6 +110,8 @@ const CustomerForm = (props: Object): Object => {
           onClick={handleSubmit}
           onRemoveItem={onRemoveItem}
           disabled={isSubmitting}
+          entity="Cliente"
+          canBeRemoved
           mode={mode}
         />
       </Form>

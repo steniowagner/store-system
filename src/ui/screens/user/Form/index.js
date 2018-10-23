@@ -118,6 +118,7 @@ class UserForm extends Component<Props, State> {
               onRemoveItem={onRemoveItem}
               disabled={isSubmitting}
               onClick={handleSubmit}
+              entity="Usuário"
               mode={mode}
             />
           </Row>

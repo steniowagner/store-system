@@ -5,7 +5,6 @@ import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 
 import styled from 'styled-components';
-import AppTheme from '../../styles';
 
 const Container = styled.main`
   height: 100%;
@@ -14,17 +13,17 @@ const Container = styled.main`
 `;
 
 const Wrapper = styled(Paper)`
-  margin-left: 220px;
+  margin-left: 250px;
   height: 80%;
 `;
 
 const styles = theme => ({
   container: {
     ...theme.mixins.gutters(),
-    backgroundColor: AppTheme.colors.lightGray,
-    alignItems: 'center',
     display: 'flex',
     flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   toolbar: theme.mixins.toolbar,
   content: {

@@ -196,6 +196,8 @@ class ProductForm extends Component<Props, {}> {
             onClick={this.onSubmitForm}
             onRemoveItem={onRemoveItem}
             disabled={isSubmitting}
+            entity="Produto"
+            canBeRemoved
             mode={mode}
           />
         </Form>

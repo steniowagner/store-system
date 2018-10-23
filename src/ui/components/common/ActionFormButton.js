@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+
 import SpeedDialAction from '@material-ui/lab/SpeedDialAction';
 import SpeedDialIcon from '@material-ui/lab/SpeedDialIcon';
 import SpeedDial from '@material-ui/lab/SpeedDial';
@@ -22,7 +23,9 @@ type Props = {
   onChageFormToEditMode: Function,
   onRemoveItem: Function,
   onClick: Function,
+  canBeRemoved: boolean,
   disabled: boolean,
+  entity: string,
   mode: string,
 };
 
@@ -84,22 +87,26 @@ class ActionFormButton extends Component<Props, State> {
   };
 
   renderMultipleChoiceButton = (): Object => {
-    const { onChageFormToEditMode } = this.props;
+    const { onChageFormToEditMode, canBeRemoved } = this.props;
     const { isDialOpen } = this.state;
 
-    const actionButtons = [{
-      icon: <DeleteIcon />,
-      name: 'Remover Usuário',
+    const DeleteOption = {
       action: () => this.onToggleRemoveDialog(),
-    }, {
-      icon: <EditIcon />,
-      name: 'Editar Usuário',
+      name: 'Remover',
+      icon: <DeleteIcon />,
+    };
+
+    const EditOption = {
       action: () => onChageFormToEditMode(),
-    }];
+      name: 'Editar',
+      icon: <EditIcon />,
+    };
+
+    const actionButtons = (canBeRemoved ? [DeleteOption, EditOption] : [EditOption]);
 
     return (
       <SpeedDial
-        ariaLabel="Edit or Remove User"
+        ariaLabel="Edit or Remove"
         onClick={this.onToggleDial}
         onClose={this.onToggleDial}
         icon={<SpeedDialIcon />}
@@ -125,12 +132,12 @@ class ActionFormButton extends Component<Props, State> {
   // Can't overlap the Form Dialog from User component
   renderRemoveDialog = (): Object => {
     const { isRemoveDialogOpen } = this.state;
-    const { onRemoveItem } = this.props;
+    const { onRemoveItem, entity } = this.props;
 
     return (
       <Dialog
-        description="Se executar esta ação, os dados deste Usuário serão perdidos para sempre, e não poderão ser recuperados de forma alguma."
-        title="Tem certeza que quer remover este Usuário?"
+        description={`Se executar esta ação, os dados deste ${entity} serão perdidos para sempre, e não poderão ser recuperados de forma alguma.`}
+        title={`Tem certeza que quer remover este ${entity}?`}
         positiveAction={() => onRemoveItem()}
         negativeAction={this.onToggleRemoveDialog}
         onCloseDialog={this.onToggleRemoveDialog}

@@ -144,6 +144,8 @@ class Product extends Component {
         filterConfig={filterConfig}
         tabConfig={tabConfig}
         dataset={products}
+        canBeCreated
+        canBeRemoved
         Form={props => (
           <Form
             manufacturers={manufacturers}

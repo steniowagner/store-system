@@ -6,6 +6,7 @@ import ContainerWrapper from './components/common/ContainerWrapper';
 import Customer from './screens/customer';
 import Provider from './screens/provider';
 import Product from './screens/product';
+import Stock from './screens/stock';
 import User from './screens/user';
 
 const ApplicationRouter = (): Object => (
@@ -25,6 +26,10 @@ const ApplicationRouter = (): Object => (
     <Route
       component={Provider}
       path="/provider"
+    />
+    <Route
+      component={Stock}
+      path="/stock"
     />
   </ContainerWrapper>
 );

@@ -48,6 +48,8 @@ class Provider extends Component {
         filterConfig={filterConfig}
         tabConfig={tabConfig}
         dataset={providers}
+        canBeCreated
+        canBeRemoved
         Form={props => (
           <Form
             {...props}

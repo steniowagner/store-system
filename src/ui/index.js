@@ -2,7 +2,7 @@
 
 import React, { Fragment } from 'react';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import { BrowserRouter as AppliationRouter } from 'react-router-dom';
+import { BrowserRouter as ApplicationRouter } from 'react-router-dom';
 import styled, { ThemeProvider } from 'styled-components';
 
 import Sidebar from './components/sidebar/index';
@@ -35,13 +35,13 @@ const Root = (): Object => (
       theme={AppTheme}
     >
       <Wrapper>
-        <AppliationRouter>
+        <ApplicationRouter>
           <Fragment>
             <Sidebar />
             <HeaderBar />
             <Router />
           </Fragment>
-        </AppliationRouter>
+        </ApplicationRouter>
       </Wrapper>
     </ThemeProvider>
   </MuiThemeProvider>

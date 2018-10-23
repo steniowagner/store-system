@@ -12,11 +12,11 @@ const filterWithTextField = (dataset: Array<Object>, filter: string, value: any)
 
 const filterWithNumericField = (dataset: Array<Object>, filter: string, operator: string, value: any): Array<Object> => {
   const verifyOperatorValue = {
-    '<': (value, currentValue) => value > currentValue,
-    '>=': (value, currentValue) => value >= currentValue,
-    '=': (value, currentValue) => value === currentValue,
-    '>': (value, currentValue) => value < currentValue,
-    '<=': (value, currentValue) => value <= currentValue,
+    '<': (val, currentValue) => value > currentValue,
+    '>=': (val, currentValue) => value >= currentValue,
+    '=': (val, currentValue) => value === currentValue,
+    '>': (val, currentValue) => value < currentValue,
+    '<=': (val, currentValue) => value <= currentValue,
   };
 
   const datasetFiltered = dataset.filter(product => verifyOperatorValue[operator](value, product[filter]));

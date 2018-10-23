@@ -6,6 +6,10 @@ const config = [{
   route: '/product',
 }, {
   icon: AccountCircle,
+  title: 'ESTOQUE',
+  route: '/stock',
+}, {
+  icon: AccountCircle,
   title: 'CLIENTES',
   route: '/customer',
 }, {

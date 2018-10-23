@@ -59,6 +59,7 @@ type Props = {
   updatePageIndex: Function,
   tabConfig: Array<Object>,
   dataset: Array<any>,
+  canBeRemoved: boolean,
   currentPage: number,
 };
 
@@ -78,7 +79,13 @@ class CustomTable extends Component<Props, State> {
   };
 
   renderActionsSection = (item: Object): Object => {
-    const { onEditIconClicked, onDetailIconClicked, onRemoveIconClicked } = this.props;
+    const {
+      onEditIconClicked,
+      onDetailIconClicked,
+      onRemoveIconClicked,
+      canBeRemoved,
+    } = this.props;
+
     const { rowsPerPage } = this.state;
 
     return (
@@ -97,13 +104,15 @@ class CustomTable extends Component<Props, State> {
         >
           <SearchIcon />
         </IconButton>
-        <IconButton
-          onClick={() => onRemoveIconClicked(item, rowsPerPage)}
-          aria-label="Delete"
-          disableRipple
-        >
-          <DeleteIcon />
-        </IconButton>
+        {canBeRemoved && (
+          <IconButton
+            onClick={() => onRemoveIconClicked(item, rowsPerPage)}
+            aria-label="Delete"
+            disableRipple
+          >
+            <DeleteIcon />
+          </IconButton>
+        )}
       </ActionButtonsWrapper>
     );
   }

@@ -36,6 +36,8 @@ type Props = {
   singularEntityName: string,
   pluralEntityName: string,
   dataset: Array<Object>,
+  canBeRemoved: boolean,
+  canBeCreated: boolean,
 };
 
 type State = {
@@ -287,7 +289,12 @@ class EntityComponent extends Component<Props, State> {
   };
 
   renderFilterAndCreatButtonSection = (): Object => {
-    const { dataset, filterConfig, singularEntityName } = this.props;
+    const {
+      singularEntityName,
+      canBeCreated,
+      filterConfig,
+      dataset,
+    } = this.props;
 
     return (
       <FilterAndCreateButtonWrapper>
@@ -296,11 +303,13 @@ class EntityComponent extends Component<Props, State> {
           filterConfig={filterConfig}
           dataset={dataset}
         />
-        <ActionButton
-          title={`Criar ${singularEntityName}`}
-          action={this.onClickCreateButton}
-          withIcon
-        />
+        {canBeCreated && (
+          <ActionButton
+            title={`Criar ${singularEntityName}`}
+            action={this.onClickCreateButton}
+            withIcon
+          />
+        )}
       </FilterAndCreateButtonWrapper>
     );
   };
@@ -325,7 +334,7 @@ class EntityComponent extends Component<Props, State> {
 
   renderTable = (): Object => {
     const { itemsFiltered, currentPage } = this.state;
-    const { tabConfig } = this.props;
+    const { tabConfig, canBeRemoved } = this.props;
 
     return (
       <Table
@@ -333,6 +342,7 @@ class EntityComponent extends Component<Props, State> {
         onRemoveIconClicked={this.onTableRemoveIconClicked}
         onEditIconClicked={this.onTableEditIconClicked}
         updatePageIndex={this.onTablePageChange}
+        canBeRemoved={canBeRemoved}
         currentPage={currentPage}
         dataset={itemsFiltered}
         tabConfig={tabConfig}

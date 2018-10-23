@@ -74,6 +74,8 @@ const ProviderForm = (props: Object): Object => {
           onClick={handleSubmit}
           onRemoveItem={onRemoveItem}
           disabled={isSubmitting}
+          entity="Fornecedor"
+          canBeRemoved
           mode={mode}
         />
       </Form>
