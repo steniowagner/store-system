@@ -20,6 +20,10 @@ const FilterAndCreateButtonWrapper = styled.div`
   align-items: center;
 `;
 
+const FilterWrapper = styled.div`
+  width: 80%;
+`;
+
 const Title = styled.p`
   color: ${({ theme }) => theme.colors.darkText};
   font-size: 42px;
@@ -35,6 +39,7 @@ type Props = {
   tabConfig: Object,
   singularEntityName: string,
   pluralEntityName: string,
+  ownTitle: string,
   dataset: Array<Object>,
   canBeRemoved: boolean,
   canBeCreated: boolean,
@@ -260,21 +265,22 @@ class EntityComponent extends Component<Props, State> {
 
   renderForm = (): Obejct => {
     const { isFullScreenDialogOpen, formMode, contextItem } = this.state;
-    const { singularEntityName, Form } = this.props;
+    const { singularEntityName, Form, ownTitle } = this.props;
 
     const mode = {
       detail: 'VISUALIZAR',
-      create: 'CRIAR',
+      create: 'CADASTRAR',
       edit: 'EDITAR',
     };
 
     const item = ((formMode === 'edit' || formMode === 'detail') ? contextItem : {});
+    const title = (ownTitle.toUpperCase() || `${mode[formMode]} ${singularEntityName.toUpperCase()}`);
 
     return (
       <FullScreenDialog
-        title={`${mode[formMode]} ${singularEntityName.toUpperCase()}`}
         onClose={this.onToggleFullScreenDialog}
         isOpen={isFullScreenDialogOpen}
+        title={title}
       >
         <Form
           onChageFormToEditMode={this.onChageFormToEditMode}
@@ -293,20 +299,26 @@ class EntityComponent extends Component<Props, State> {
       singularEntityName,
       canBeCreated,
       filterConfig,
+      ownTitle,
       dataset,
     } = this.props;
 
+    const actionButtonTitle = (ownTitle || `Cadastrar ${singularEntityName}`);
+
     return (
       <FilterAndCreateButtonWrapper>
-        <Filter
-          onFilterData={this.onFilterItems}
-          filterConfig={filterConfig}
-          dataset={dataset}
-        />
+        <FilterWrapper>
+          <Filter
+            onFilterData={this.onFilterItems}
+            shouldFilterAfterSelectFilter
+            filterConfig={filterConfig}
+            dataset={dataset}
+          />
+        </FilterWrapper>
         {canBeCreated && (
           <ActionButton
-            title={`Criar ${singularEntityName}`}
             action={this.onClickCreateButton}
+            title={actionButtonTitle}
             withIcon
           />
         )}
@@ -326,6 +338,7 @@ class EntityComponent extends Component<Props, State> {
         negativeAction={this.onToggleDialogRemove}
         onCloseDialog={this.onToggleDialogRemove}
         isOpen={isRemoveDialogOpen}
+        disableBackdropClick
         positiveText="SIM"
         negativeText="NÃO"
       />

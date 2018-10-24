@@ -2,6 +2,10 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 
 const config = [{
   icon: AccountCircle,
+  title: 'VENDAS',
+  route: '/sale',
+}, {
+  icon: AccountCircle,
   title: 'PRODUTOS',
   route: '/product',
 }, {

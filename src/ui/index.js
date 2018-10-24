@@ -18,6 +18,7 @@ const Wrapper = styled.div`
   flex-grow: 1;
   overflow: hidden;
   position: relative;
+  background-color: ${({ theme }) => theme.colors.lightGray};
 `;
 
 const theme = createMuiTheme({

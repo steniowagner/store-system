@@ -105,6 +105,7 @@ const ChangePassword = ({
   <Dialog
     aria-labelledby="form-dialog-title"
     onClose={() => onClose}
+    disableBackdropClick
     keepMounted={false}
     open={isOpen}
   >

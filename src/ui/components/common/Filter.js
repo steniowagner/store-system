@@ -22,7 +22,6 @@ import styled from 'styled-components';
 import filterUtils from '../../utils/filter';
 
 const Container = styled.div`
-  width: 65%;
   display: flex;
   flex-direction: row;
   margin-top: 24px;
@@ -33,7 +32,7 @@ const Title = styled.h2`
   margin-right: 18px,
   font-size: 28px;
   font-weight: 700;
-  color: #fff;
+  color: ${({ theme }) => theme.colors.white};
 `;
 
 const FilterSelector = styled(ButtonBase)`
@@ -42,7 +41,7 @@ const FilterSelector = styled(ButtonBase)`
 `;
 
 const FilterSelectorWrapper = styled.div`
-  width: 25%;
+  width: 250px;
   height: 50px;
   border-top-left-radius: 6px;
   border-bottom-left-radius: 6px;
@@ -92,6 +91,7 @@ const ExpandMoreIcon = styled(ExpandMore)`
 `;
 
 type Props = {
+  shouldFilterAfterSelectFilter: boolean,
   filterConfig: Array<Object>,
   onFilterData: Function,
   dataset: Array<any>,
@@ -133,6 +133,12 @@ class Filter extends Component<Props, State> {
     onFilterData(dataset);
   };
 
+  onResetFilter = (): void => {
+    const { onFilterData } = this.props;
+
+    onFilterData([]);
+  }
+
   onFilter = (filterValue: string): Array<Object> => {
     const dataFiltered = this.handleFilterByType(filterValue);
 
@@ -140,6 +146,7 @@ class Filter extends Component<Props, State> {
   };
 
   onSelectFilter = (filterItem: Object): void => {
+    const { shouldFilterAfterSelectFilter } = this.props;
     const { filterSelected, filterValue } = this.state;
     const { filterTitle, dataField } = filterItem;
 
@@ -148,10 +155,16 @@ class Filter extends Component<Props, State> {
       return;
     }
 
+    const isDifferentFilter = (filterSelected !== dataField);
+    const shouldResetItemsFiltered = (!shouldFilterAfterSelectFilter && isDifferentFilter && (dataField !== 'all'));
     const filterButtonLabel = (dataField === 'all' ? 'Mostrar todos' : `${filterTitle}`);
 
-    if (filterSelected !== dataField) {
+    if (isDifferentFilter) {
       this.onFilterAll();
+    }
+
+    if (shouldResetItemsFiltered) {
+      this.onResetFilter();
     }
 
     this.setState({
@@ -164,15 +177,16 @@ class Filter extends Component<Props, State> {
   };
 
   onChangeFilterValue = (filterValue: string): void => {
-    const { onFilterData } = this.props;
+    const { shouldFilterAfterSelectFilter, onFilterData } = this.props;
 
     const filterResult = this.onFilter(filterValue);
+    const shouldResetItemsFiltered = (!shouldFilterAfterSelectFilter && !filterValue);
+    const properCallback = (shouldResetItemsFiltered ? this.onResetFilter : onFilterData);
 
     this.setState({
       filterValue,
-    }, () => onFilterData(filterResult));
+    }, () => properCallback(filterResult));
   };
-
 
   getTextInputPlaceholder = (): string => {
     const { filterSelected, filterButtonLabel } = this.state;
@@ -184,7 +198,7 @@ class Filter extends Component<Props, State> {
 
     const isInitialPlaceholder = (filterSelected === 'ADD_FILTER');
     if (isInitialPlaceholder) {
-      return 'ESCOLHA UM FILTRO PARA FILTRAR OS DADOS';
+      return 'ESCOLHA UM FILTRO PARA BUSCAR AS INFORMAÇÕES DESEJADAS';
     }
 
     return `DIGITE O/A ${filterButtonLabel.toUpperCase()} QUE DESEJA BUSCAR`;

@@ -158,6 +158,7 @@ class DialogChooseItem extends Component<Props, State> {
         aria-labelledby="alert-dialog-slide-title"
         TransitionComponent={this.renderSlide}
         onClose={onToggleDialog}
+        disableBackdropClick
         open={isOpen}
         maxWidth="sm"
         keepMounted

@@ -46,6 +46,7 @@ const CustomDialog = ({
     aria-labelledby="alert-dialog-slide-title"
     TransitionComponent={renderSlide}
     onClose={onCloseDialog}
+    disableBackdropClick
     open={isOpen}
     keepMounted
   >

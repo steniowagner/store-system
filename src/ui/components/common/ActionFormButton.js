@@ -142,6 +142,7 @@ class ActionFormButton extends Component<Props, State> {
         negativeAction={this.onToggleRemoveDialog}
         onCloseDialog={this.onToggleRemoveDialog}
         isOpen={isRemoveDialogOpen}
+        disableBackdropClick
         positiveText="SIM"
         negativeText="NÃO"
       />

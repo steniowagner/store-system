@@ -53,6 +53,7 @@ const FullScreenDialog = ({
 }: Props): Object => (
   <Dialog
     TransitionComponent={TransitionComponent}
+    disableBackdropClick
     onClose={onClose}
     open={isOpen}
     fullScreen
