@@ -6,8 +6,6 @@ import styled from 'styled-components';
 
 import SelectUserDialog from './components/SelectUserDialog';
 
-import { renderSectionTitle } from '../../../FormUtils';
-
 import ActionButton from '../../../ActionButton';
 import Input from '../../../CustomInput';
 
@@ -27,7 +25,7 @@ const InputWrapper = styled.div`
 const InputButtonWrapper = styled.div`
   display: flex;
   margin-left: 8px;
-  margin-bottom: ${({ hasError }) => (hasError ? 22 : 0)}px;
+  margin-top: ${({ hasError }) => (hasError ? 0 : 20)}px;
 `;
 
 type Props = {
@@ -75,7 +73,7 @@ class SelectCustomer extends Component<Props, State> {
           value={value}
           id="customer"
           type="text"
-          label=""
+          label="Cliente"
           disabled
         />
       </InputWrapper>
@@ -92,7 +90,6 @@ class SelectCustomer extends Component<Props, State> {
 
     return (
       <Wrapper>
-        {renderSectionTitle('Cliente')}
         <InputContainer>
           {this.renderInputField()}
           <InputButtonWrapper
