@@ -1,3 +1,5 @@
+// @flow
+
 import React, { Component } from 'react';
 
 import DialogContentText from '@material-ui/core/DialogContentText';
@@ -69,7 +71,10 @@ class NewItemDialog extends Component {
           >
             <ChildrenComponent
               onTypeValue={this.onTypeValue}
-              onRemove={onRemoveItem}
+              onRemove={() => {
+                onRemoveItem();
+                this.onRestartState();
+              }}
               entity={entity}
               value={value}
               item={item}

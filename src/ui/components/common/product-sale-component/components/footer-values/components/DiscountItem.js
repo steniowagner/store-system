@@ -1,12 +1,14 @@
+// @flow
+
 import React, { Component } from 'react';
 
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Button from '@material-ui/core/Button';
 import Radio from '@material-ui/core/Radio';
 
 import styled from 'styled-components';
 
 import Input from '../../../../CustomInput';
+import RemoveButton from './RemoveButton';
 
 const Container = styled.div`
   display: flex;
@@ -17,13 +19,6 @@ const Container = styled.div`
 const InputWrapper = styled.div`
   display: flex;
   justify-content: space-between;
-`;
-
-const RemoveButtonWrapper = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: flex-end;
-  padding-top: 24px;
 `;
 
 type Props = {
@@ -151,22 +146,13 @@ class DiscountItem extends Component<Props, State> {
       mode,
     } = this.props;
 
-    const hasItemSelected = (typeof item === 'object' ? !!item.type : !!item);
-    const isOnEditionMode = (mode === 'edit');
-
-    const shouldShowRemoveButton = (isOnEditionMode || hasItemSelected);
-
-    return shouldShowRemoveButton && (
-      <RemoveButtonWrapper>
-        <Button
-          onClick={() => onRemove()}
-          variant="outlined"
-          color="primary"
-          size="large"
-        >
-          {`REMOVER ${entity}`}
-        </Button>
-      </RemoveButtonWrapper>
+    return (
+      <RemoveButton
+        onRemove={onRemove}
+        entity={entity}
+        item={item}
+        mode={mode}
+      />
     );
   };
 

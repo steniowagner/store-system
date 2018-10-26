@@ -1,3 +1,5 @@
+// @flow
+
 import React, { Component } from 'react';
 
 import styled from 'styled-components';
@@ -92,7 +94,7 @@ class FooterValues extends Component<Props, State> {
     this.setState({
       isDialogOpen: false,
       observation: '',
-    }, () => console.log(this.state.observation));
+    });
   };
 
   onToggleDialog = (): void => {

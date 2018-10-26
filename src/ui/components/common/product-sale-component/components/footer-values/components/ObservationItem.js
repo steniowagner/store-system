@@ -1,3 +1,5 @@
+// @flow
+
 import React, { Fragment } from 'react';
 
 import Input from '../../../../CustomInput';
@@ -9,6 +11,7 @@ type Props = {
   entity: string,
   value: string,
   mode: string,
+  item: string,
 };
 
 const ObservationItem = ({
@@ -16,6 +19,7 @@ const ObservationItem = ({
   onRemove,
   entity,
   value,
+  item,
   mode,
 }: Props) => (
   <Fragment>
@@ -31,8 +35,7 @@ const ObservationItem = ({
     <RemoveButton
       onRemove={onRemove}
       entity={entity}
-      canShowButton
-      item={value}
+      item={item}
       mode={mode}
     />
   </Fragment>

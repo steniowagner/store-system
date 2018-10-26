@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react';
 
 import Button from '@material-ui/core/Button';
@@ -10,13 +12,19 @@ const RemoveButtonWrapper = styled.div`
   padding-top: 24px;
 `;
 
+type Props = {
+  onRemove: Function,
+  entity: Object,
+  item: any,
+  mode: string,
+};
+
 const RemoveButton = ({
-  canShowButton,
   onRemove,
   entity,
   item,
   mode,
-}): Object => {
+}: Props): Object => {
   const hasItemSelected = (typeof item === 'object' ? !!item.type : !!item);
   const isOnEditionMode = (mode === 'edit');
 
