@@ -12,18 +12,37 @@ import Slide from '@material-ui/core/Slide';
 
 import styled from 'styled-components';
 
+import RemoveButton from './RemoveButton';
+
 const DialogWrapper = styled.div`
   width: 100%;
   height: 100%;
 `;
 
-class NewItemDialog extends Component {
+type Props = {
+  onCloseDialog: Function,
+  onCreateItem: Function,
+  onRemoveItem: Function,
+  ChildrenComponent: Object,
+  item: Object,
+  entity: string,
+  mode: string,
+  isOpen: boolean,
+  total: ?number,
+};
+
+type State = {
+  value: string,
+  type: string,
+};
+
+class NewItemDialog extends Component<Props, State> {
   state = {
     value: '',
     type: '',
   };
 
-  onTypeValue = (type: string, value: string): void => {
+  onSetValues = (type: string, value: string): void => {
     this.setState({
       value,
       type,
@@ -52,39 +71,32 @@ class NewItemDialog extends Component {
     </DialogTitle>
   );
 
-  renderContent = (): Object => {
-    const {
-      ChildrenComponent,
-      onRemoveItem,
-      entity,
-      item,
-      mode,
-    } = this.props;
-
+  renderChildrenComponent = (): Object => {
+    const { ChildrenComponent, item, total } = this.props;
     const { value } = this.state;
 
     return (
-      <DialogWrapper>
-        <DialogContent>
-          <DialogContentText
-            id="alert-dialog-slide-description"
-          >
-            <ChildrenComponent
-              onTypeValue={this.onTypeValue}
-              onRemove={() => {
-                onRemoveItem();
-                this.onRestartState();
-              }}
-              entity={entity}
-              value={value}
-              item={item}
-              mode={mode}
-            />
-          </DialogContentText>
-        </DialogContent>
-      </DialogWrapper>
+      <ChildrenComponent
+        onSetValues={this.onSetValues}
+        value={value}
+        total={total}
+        item={item}
+      />
     );
-  }
+  };
+
+  renderContent = (): Object => (
+    <DialogWrapper>
+      <DialogContent>
+        <DialogContentText
+          id="alert-dialog-slide-description"
+        >
+          {this.renderChildrenComponent()}
+          {this.renderRemoveButton()}
+        </DialogContentText>
+      </DialogContent>
+    </DialogWrapper>
+  );
 
   renderActionButtons = (): Object => {
     const { onCloseDialog, onCreateItem, mode } = this.props;
@@ -104,6 +116,7 @@ class NewItemDialog extends Component {
         <Button
           disabled={(mode === 'edit' || !value)}
           onClick={() => {
+            this.onRestartState();
             onCreateItem(value, type);
             onCloseDialog();
           }}
@@ -112,6 +125,27 @@ class NewItemDialog extends Component {
           OK
         </Button>
       </DialogActions>
+    );
+  };
+
+  renderRemoveButton = (): Object => {
+    const {
+      onRemoveItem,
+      entity,
+      item,
+      mode,
+    } = this.props;
+
+    return (
+      <RemoveButton
+        onRemove={() => {
+          onRemoveItem();
+          this.onRestartState();
+        }}
+        entity={entity}
+        item={item}
+        mode={mode}
+      />
     );
   };
 
@@ -134,10 +168,11 @@ class NewItemDialog extends Component {
         aria-describedby="alert-dialog-slide-description"
         aria-labelledby="alert-dialog-slide-title"
         TransitionComponent={this.renderSlide}
+        fullWidth={entity === 'Observação'}
         onClose={onCloseDialog}
+        keepMounted={false}
         open={isOpen}
         maxWidth="sm"
-        fullWidth={entity === 'Observação'}
       >
         {this.renderTitle(title)}
         {this.renderContent()}

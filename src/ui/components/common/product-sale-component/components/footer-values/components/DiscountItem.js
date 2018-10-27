@@ -8,7 +8,6 @@ import Radio from '@material-ui/core/Radio';
 import styled from 'styled-components';
 
 import Input from '../../../../CustomInput';
-import RemoveButton from './RemoveButton';
 
 const Container = styled.div`
   display: flex;
@@ -21,11 +20,14 @@ const InputWrapper = styled.div`
   justify-content: space-between;
 `;
 
+const Error = styled.span`
+  margin-bottom: 8px;
+  color: ${({ theme }) => theme.colors.danger}
+`;
+
 type Props = {
-  onTypeValue: Function,
-  onRemove: Function,
-  entity: string,
-  mode: string,
+  onSetValues: Function,
+  total: number,
   item: Object,
 };
 
@@ -35,11 +37,17 @@ type State = {
   moneyValue: string,
 };
 
+const ERRORS = {
+  MAX_PERCENTAGE: 'O Desconto Máximo é de 100%',
+  MAX_MONEY: 'O Desconto Máximo é o valor Total',
+};
+
 class DiscountItem extends Component<Props, State> {
   state = {
     percentageValue: '',
     optionSelected: '',
     moneyValue: '',
+    error: '',
   };
 
   componentDidMount() {
@@ -56,28 +64,51 @@ class DiscountItem extends Component<Props, State> {
     });
   }
 
-  onTypeMoneyValue = (event: Object): void => {
-    const { onTypeValue } = this.props;
-    const { value } = event.target;
+  onTypeMoneyValue = (moneyValue: string): void => {
+    const { onSetValues } = this.props;
+
+    const isAboveMax = this.checkMoneyDiscountAboveTotal(moneyValue);
+
+    if (isAboveMax) {
+      this.handleMoneyDiscountAboveTotal();
+      return;
+    }
 
     this.setState({
-      moneyValue: event.target.value,
-    }, () => onTypeValue('money', value));
+      moneyValue,
+      error: '',
+    }, () => onSetValues('money', Math.abs(moneyValue)));
   };
 
-  onTypePercentageValue = (event: Object): void => {
-    const { onTypeValue } = this.props;
-    const { value } = event.target;
+  onTypePercentageValue = (percentageValue: string): void => {
+    const { onSetValues } = this.props;
+
+    const isAboveMax = this.checkPercentageAboveMax(percentageValue);
+
+    if (isAboveMax) {
+      this.handlePercentageAboveMax();
+      return;
+    }
 
     this.setState({
-      percentageValue: value,
-    }, () => onTypeValue('percentage', value));
+      percentageValue,
+      error: '',
+    }, () => onSetValues('percentage', Math.abs(percentageValue)));
   };
 
   onSelectOption = (optionSelected: string): void => {
     this.setState({
       optionSelected,
-    });
+    }, () => this.setValuesOnParent(optionSelected));
+  };
+
+  setValuesOnParent = (optionSelected: string): void => {
+    const { percentageValue, moneyValue } = this.state;
+    const { onSetValues } = this.props;
+
+    const selectedFieldValue = (optionSelected === 'percentage' ? percentageValue : moneyValue);
+
+    onSetValues(optionSelected, selectedFieldValue);
   };
 
   getRowConfig = (onChange: Function, stateRef: string, label: string, id: string): Object => ({
@@ -86,6 +117,32 @@ class DiscountItem extends Component<Props, State> {
     label,
     id,
   });
+
+  checkPercentageAboveMax = (percentageValue: string): boolean => (Math.abs(percentageValue) > 100);
+
+  checkMoneyDiscountAboveTotal = (moneyValue: string): boolean => {
+    const { total } = this.props;
+
+    return Number(moneyValue) > total;
+  };
+
+  handlePercentageAboveMax = (): void => {
+    const { onSetValues } = this.props;
+
+    this.setState({
+      error: ERRORS.MAX_PERCENTAGE,
+      percentageValue: undefined,
+    }, () => onSetValues('percentage', ''));
+  };
+
+  handleMoneyDiscountAboveTotal = (): void => {
+    const { onSetValues } = this.props;
+
+    this.setState({
+      error: ERRORS.MAX_MONEY,
+      moneyValue: undefined,
+    }, () => onSetValues('money', ''));
+  };
 
   renderRow = (config: Object): Object => {
     const {
@@ -114,7 +171,7 @@ class DiscountItem extends Component<Props, State> {
         />
         <Input
           disabled={optionSelected !== id}
-          onChange={onChange}
+          onChange={event => onChange(event.target.value)}
           value={inputValue}
           onBlur={() => {}}
           placeholder=""
@@ -138,30 +195,16 @@ class DiscountItem extends Component<Props, State> {
     return this.renderRow(config);
   };
 
-  renderRemoveButton = (): void => {
-    const {
-      onRemove,
-      entity,
-      item,
-      mode,
-    } = this.props;
-
-    return (
-      <RemoveButton
-        onRemove={onRemove}
-        entity={entity}
-        item={item}
-        mode={mode}
-      />
-    );
-  };
-
   render() {
+    const { error } = this.state;
+
     return (
       <Container>
+        <Error>
+          {error}
+        </Error>
         {this.renderPercentageRow()}
         {this.renderMoneyRow()}
-        {this.renderRemoveButton()}
       </Container>
     );
   }

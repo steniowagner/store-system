@@ -1,44 +1,56 @@
 // @flow
 
-import React, { Fragment } from 'react';
+import React, { Component, Fragment } from 'react';
 
 import Input from '../../../../CustomInput';
-import RemoveButton from './RemoveButton';
 
 type Props = {
-  onTypeValue: Function,
-  onRemove: Function,
-  entity: string,
-  value: string,
-  mode: string,
+  onSetValues: Function,
   item: string,
 };
 
-const ObservationItem = ({
-  onTypeValue,
-  onRemove,
-  entity,
-  value,
-  item,
-  mode,
-}: Props) => (
-  <Fragment>
-    <Input
-      onChange={event => onTypeValue('observation', event.target.value)}
-      onBlur={() => {}}
-      type="textarea"
-      value={value}
-      autoFocus
-      error=""
-      label=""
-    />
-    <RemoveButton
-      onRemove={onRemove}
-      entity={entity}
-      item={item}
-      mode={mode}
-    />
-  </Fragment>
-);
+type State = {
+  observation: string,
+};
+
+class ObservationItem extends Component<Props, State> {
+  state = {
+    observation: '',
+  };
+
+  componentDidMount() {
+    const { item } = this.props;
+
+    this.setState({
+      observation: item,
+    });
+  }
+
+  onTypeObservation = (observation: string): void => {
+    const { onSetValues } = this.props;
+
+    this.setState({
+      observation,
+    }, () => onSetValues('observation', observation));
+  };
+
+  render() {
+    const { observation } = this.state;
+
+    return (
+      <Fragment>
+        <Input
+          onChange={event => this.onTypeObservation(event.target.value)}
+          value={observation}
+          onBlur={() => {}}
+          type="textarea"
+          autoFocus
+          error=""
+          label=""
+        />
+      </Fragment>
+    );
+  }
+}
 
 export default ObservationItem;

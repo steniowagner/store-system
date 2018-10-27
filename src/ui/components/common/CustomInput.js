@@ -8,7 +8,7 @@ import styled from 'styled-components';
 const Wrapper = styled.div``;
 
 const TextAreaContainer = styled.div`
-  background-color: ${({ theme, hasError }) => (hasError ? theme.colors.danger : theme.colors.lightGray)};
+  background-color: ${({ theme, error }) => (error ? theme.colors.danger : theme.colors.lightGray)};
   border-color: ${({ theme }) => theme.colors.inputBorder};
   border-bottom-right-radius: 4px;
   border-bottom-left-radius: 4px;
@@ -31,18 +31,23 @@ const TextAreaWrapper = styled.div`
 `;
 
 const MultiLineInput = (props: Object) => {
-  const { hasError } = props;
+  const { error } = props;
+
+  const inputProps = {
+    ...props,
+  };
+
+  delete inputProps.error;
 
   return (
     <TextAreaContainer
-      hasError={hasError}
+      error={error}
     >
       <TextAreaWrapper>
         <Input
-          inputType="textarea"
           disableUnderline
+          {...inputProps}
           rowsMax={10}
-          {...props}
           fullWidth
           multiline
           rows={5}
@@ -52,12 +57,20 @@ const MultiLineInput = (props: Object) => {
   );
 };
 
-const SingleLineInput = styled(({ ...props }) => (
-  <Input
-    disableUnderline
-    {...props}
-  />
-))`
+const SingleLineInput = styled(({ ...props }) => {
+  const inputProps = {
+    ...props,
+  };
+
+  delete inputProps.error;
+
+  return (
+    <Input
+      disableUnderline
+      {...inputProps}
+    />
+  );
+})`
   width: 100%;
   height: 48px;
   display: flex;
@@ -66,14 +79,14 @@ const SingleLineInput = styled(({ ...props }) => (
   align-items: center;
   padding: 0 16px;
   margin: 8px 0;
-  border: 1.5px solid ${({ theme, hasError }) => (hasError ? theme.colors.danger : theme.colors.inputBorder)};
+  border: 1.5px solid ${({ theme, error }) => (error ? theme.colors.danger : theme.colors.inputBorder)};
   border-radius: 4px;
   background-color: ${({ theme, disabled }) => (disabled ? theme.colors.lightGray : theme.colors.white)};
 `;
 
 const Label = styled.span`
   margin-bottom: 4px;
-  color: ${({ theme, hasError }) => hasError && theme.colors.danger}
+  color: ${({ theme, error }) => error && theme.colors.danger}
 `;
 
 const renderSingleLineInput = (props: Object): Object => (
@@ -95,13 +108,13 @@ const renderMultiLineInput = (props: Object): Object => {
   } = props;
 
   const multiLineProps = {
-    hasError: error,
     placeholder,
     autoFocus,
     disabled,
     onChange,
     onBlur,
     value,
+    error,
     id,
   };
 
@@ -115,7 +128,7 @@ const renderMultiLineInput = (props: Object): Object => {
 const renderError = (error: string): Object => (
   error ? (
     <Label
-      hasError={error}
+      error={error}
     >
       {error}
     </Label>
@@ -129,13 +142,13 @@ const CustomInput = (props: Object): Object => {
   return (
     <Wrapper>
       <Label
-        hasError={error}
+        error={error}
       >
         {label}
       </Label>
       {isTextareaInput
-        ? renderMultiLineInput({ ...props, hasError: error })
-        : renderSingleLineInput({ ...props, hasError: error })}
+        ? renderMultiLineInput({ ...props })
+        : renderSingleLineInput({ ...props })}
       {renderError(error)}
     </Wrapper>
   );

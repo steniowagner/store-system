@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 
 import ObservationItem from './components/ObservationItem';
-import NewItemDialog from './components/NewItemDialog';
+import CreateItemDialog from './components/CreateItemDialog';
 import DiscountItem from './components/DiscountItem';
 
 import ActionButton from '../../../ActionButton';
@@ -50,12 +50,16 @@ const ButtonWrapper = styled.div`
 `;
 
 type Props = {
+  products: Array<Object>,
   mode: string
 };
 
 type State = {
-  isDialogOpen: boolean,
   dialogConfig: Object,
+  discount: Object,
+  isDialogOpen: boolean,
+  observation: string,
+  total: number,
 };
 
 class FooterValues extends Component<Props, State> {
@@ -64,6 +68,7 @@ class FooterValues extends Component<Props, State> {
     dialogConfig: {},
     observation: '',
     discount: {},
+    total: '',
   };
 
   onSetDiscount = (value: string, type: string): void => {
@@ -105,8 +110,10 @@ class FooterValues extends Component<Props, State> {
     });
   };
 
-  onDiscoutButtonClicked = (): void => {
+  onDiscoutButtonClicked = (subTotal: number): void => {
     const { discount } = this.state;
+
+    const total = this.getTotalValue(subTotal);
 
     const dialogConfig = {
       ChildrenComponent: DiscountItem,
@@ -114,6 +121,7 @@ class FooterValues extends Component<Props, State> {
       onRemoveItem: () => this.onRemoveDiscount(),
       entity: 'Desconto',
       item: discount,
+      total,
     };
 
     this.setState({
@@ -139,35 +147,89 @@ class FooterValues extends Component<Props, State> {
     });
   };
 
-  renderDiscount = (): Object => {
+  getSubtotalValue = (): number => {
+    const { products } = this.props;
+
+    const subTotal = products.reduce((current, product) => current + (product.salePrice * product.quantity), 0);
+
+    return subTotal;
+  };
+
+  getDiscountByMoney = (value: number): number => value;
+
+  getDiscountByPercentage = (subTotal: number, value: number): number => {
+    const percentage = (value / 100);
+    const discountValue = (subTotal * percentage);
+
+    return discountValue;
+  };
+
+  getTotalValue = (subTotal: number): number => {
     const { discount } = this.state;
     const { value, type } = discount;
 
-    const discountText = (type === 'percentage' ? `(${value}%)` : `(R$ ${Number(value).toFixed(2)})`);
-    const shouldShowDiscount = !!type;
+    const discountValue = (type === 'percentage'
+      ? this.getDiscountByPercentage(subTotal, value)
+      : this.getDiscountByMoney(value));
+
+    const discountEqualsSubtotal = ((subTotal - discountValue) === 0);
+
+    if (discountEqualsSubtotal) {
+      return 0;
+    }
+
+    const total = (subTotal - discountValue);
+
+    return (total || subTotal);
+  };
+
+  getDiscountMoneyText = (value: number): string => `Desconto: R$ ${value.toFixed(2)}`;
+
+  getDiscountPercentageText = (subTotal: number, value: number): string => {
+    const subTotalInPercentage = this.getDiscountByPercentage(subTotal, value);
+
+    return `Desconto (${value}%): R$ ${subTotalInPercentage.toFixed(2)}`;
+  };
+
+  renderDiscount = (subTotal: number): Object => {
+    const { discount } = this.state;
+    const { value, type } = discount;
+    const shouldShowDiscount = (!!type && !!value);
+
+    let discountText = '';
+
+    if (shouldShowDiscount) {
+      discountText = (type === 'percentage'
+        ? this.getDiscountPercentageText(subTotal, Number(value))
+        : this.getDiscountMoneyText(Number(value)));
+    }
 
     return shouldShowDiscount && (
       <DefaultText
         color="danger"
       >
-        {`Desconto ${discountText}: R$ 21.90`}
+        {discountText}
       </DefaultText>
     );
   }
 
-  renderSubtotal = (): Object => (
+  renderSubtotal = (subTotal: number): Object => (
     <DefaultText
       color="mediumGray"
     >
-      Sub-total: R$ 21.90
+      {`Sub-total: R$ ${subTotal.toFixed(2)}`}
     </DefaultText>
   );
 
-  renderTotal = (): Object => (
-    <TotalText>
-      Total: R$ 21.90
-    </TotalText>
-  );
+  renderTotal = (subTotal: number): Object => {
+    const total = this.getTotalValue(subTotal);
+
+    return (
+      <TotalText>
+        {`Total: R$ ${total.toFixed(2)}`}
+      </TotalText>
+    );
+  };
 
   renderActionButton = (id: string, action: Function): Object => {
     const { mode } = this.props;
@@ -190,13 +252,13 @@ class FooterValues extends Component<Props, State> {
     );
   }
 
-  renderButtons = (): Object => (
+  renderButtons = (subTotal: number): Object => (
     <BottomRowWrapper>
       <ButtonsWrapper>
         {this.renderActionButton('observation', this.onObservationButtonClicked)}
-        {this.renderActionButton('discount', this.onDiscoutButtonClicked)}
+        {this.renderActionButton('discount', () => this.onDiscoutButtonClicked(subTotal))}
       </ButtonsWrapper>
-      {this.renderTotal()}
+      {this.renderTotal(subTotal)}
     </BottomRowWrapper>
   );
 
@@ -207,7 +269,7 @@ class FooterValues extends Component<Props, State> {
     const { mode } = this.props;
 
     return ChildrenComponent && (
-      <NewItemDialog
+      <CreateItemDialog
         onCloseDialog={this.onToggleDialog}
         isOpen={isDialogOpen}
         {...dialogConfig}
@@ -217,12 +279,14 @@ class FooterValues extends Component<Props, State> {
   };
 
   render() {
+    const subTotal = this.getSubtotalValue();
+
     return (
       <Container>
-        {this.renderSubtotal()}
-        {this.renderDiscount()}
-        {this.renderButtons()}
-        {this.renderDialog()}
+        {this.renderSubtotal(subTotal)}
+        {this.renderDiscount(subTotal)}
+        {this.renderButtons(subTotal)}
+        {this.renderDialog(subTotal)}
       </Container>
     );
   }

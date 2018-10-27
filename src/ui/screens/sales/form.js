@@ -3,16 +3,8 @@ import React from 'react';
 import { withFormik, Form } from 'formik';
 import * as Yup from 'yup';
 
-import {
-  rendeRowWithSingleItem,
-  renderRowWithTwoItems,
-  renderSectionTitle,
-  getRowItemObject,
-  Section,
-  Wrapper,
-} from '../../components/common/FormUtils';
-
 import ProductSale from '../../components/common/product-sale-component';
+import { Section, Wrapper } from '../../components/common/FormUtils';
 import ActionFormButton from '../../components/common/ActionFormButton';
 
 const renderSelectCustomer = (props: Object) => {

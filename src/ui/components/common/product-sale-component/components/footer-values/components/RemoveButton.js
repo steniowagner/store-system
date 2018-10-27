@@ -5,7 +5,7 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import styled from 'styled-components';
 
-const RemoveButtonWrapper = styled.div`
+const ButtonWrapper = styled.div`
   width: 100%;
   display: flex;
   justify-content: flex-end;
@@ -13,9 +13,9 @@ const RemoveButtonWrapper = styled.div`
 `;
 
 type Props = {
+  item: string | Object,
   onRemove: Function,
-  entity: Object,
-  item: any,
+  entity: string,
   mode: string,
 };
 
@@ -31,7 +31,7 @@ const RemoveButton = ({
   const shouldShowRemoveButton = (isOnEditionMode || hasItemSelected);
 
   return shouldShowRemoveButton && (
-    <RemoveButtonWrapper>
+    <ButtonWrapper>
       <Button
         onClick={() => onRemove()}
         variant="outlined"
@@ -40,7 +40,7 @@ const RemoveButton = ({
       >
         {`REMOVER ${entity}`}
       </Button>
-    </RemoveButtonWrapper>
+    </ButtonWrapper>
   );
 };
 

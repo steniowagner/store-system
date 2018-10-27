@@ -17,6 +17,17 @@ type Props = {
   mode: string,
 };
 
+const products = [{
+  quantity: 1,
+  salePrice: 2,
+}, {
+  quantity: 1,
+  salePrice: 3,
+}, {
+  quantity: 3,
+  salePrice: 4,
+}];
+
 const ProductSale = ({
   setFieldValue,
   values,
@@ -31,6 +42,7 @@ const ProductSale = ({
       mode={mode}
     />
     <FooterValues
+      products={products}
       mode={mode}
     />
   </Container>
