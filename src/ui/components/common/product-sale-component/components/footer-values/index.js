@@ -68,8 +68,18 @@ class FooterValues extends Component<Props, State> {
     dialogConfig: {},
     observation: '',
     discount: {},
-    total: '',
   };
+
+  componentWillReceiveProps(nextProps) {
+    const { products } = nextProps;
+    const isProductListEmpty = !(products.length);
+
+    if (isProductListEmpty) {
+      this.setState({
+        discount: {},
+      });
+    }
+  }
 
   onSetDiscount = (value: string, type: string): void => {
     const discount = {
