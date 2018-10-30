@@ -3,9 +3,10 @@ import React, { Component } from 'react';
 import Paper from '@material-ui/core/Paper';
 import styled from 'styled-components';
 
-import SelectCustomer from './components/select-customer';
-import FooterValues from './components/footer-values';
 import ProductsSelectedList from './components/products-selected-list';
+import SelectCustomer from './components/select-customer';
+import SelectProduct from './components/select-product';
+import FooterValues from './components/footer-values';
 
 const Container = styled.div`
   width: 100%;
@@ -78,6 +79,16 @@ class ProductSale extends Component<Props, State> {
     );
   };
 
+  renderSelectProduct = (): Object => {
+    const { products } = this.state;
+
+    return (
+      <SelectProduct
+        products={products}
+      />
+    );
+  };
+
   renderProductsList = (): Object => {
     const { products } = this.state;
 
@@ -107,6 +118,7 @@ class ProductSale extends Component<Props, State> {
       <Container>
         {this.renderSelectCustomer()}
         <Paper>
+          {this.renderSelectProduct()}
           {this.renderProductsList()}
           {this.renderFooterValues()}
         </Paper>

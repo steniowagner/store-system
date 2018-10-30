@@ -19,6 +19,7 @@ const Container = styled.div`
   align-items: flex-end;
   padding: 32px;
   background-color: ${({ theme }) => theme.colors.lightGray};
+  border-top: 2px solid ${({ theme }) => theme.colors.white};
 `;
 
 const TotalText = styled.h1`

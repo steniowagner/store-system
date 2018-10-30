@@ -9,7 +9,7 @@ import ProductListItem from './components/ProductListItem';
 
 const Container = styled.div`
   width: 100%;
-  max-height: 350px;
+  height: 350px;
   overflow-y: scroll;
   background-color: ${({ theme }) => theme.colors.white};
 `;

@@ -15,6 +15,9 @@ const Container = styled.div`
   &:hover {
     background-color: ${({ theme }) => theme.colors.lightGray};
   }
+  &:last-child {
+    border-bottom: 0px;
+  }
 `;
 
 const ProductDescriptionWrapper = styled.div`

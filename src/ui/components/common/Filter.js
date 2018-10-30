@@ -23,9 +23,6 @@ import filterUtils from '../../utils/filter';
 
 const Container = styled.div`
   display: flex;
-  flex-direction: row;
-  margin-top: 24px;
-  margin-bottom: 24px;
 `;
 
 const Title = styled.h2`
@@ -198,7 +195,7 @@ class Filter extends Component<Props, State> {
 
     const isInitialPlaceholder = (filterSelected === 'ADD_FILTER');
     if (isInitialPlaceholder) {
-      return 'ESCOLHA UM FILTRO PARA BUSCAR AS INFORMAÇÕES DESEJADAS';
+      return 'ESCOLHA UM FILTRO PARA BUSCAR A INFORMAÇÃO DESEJADA';
     }
 
     return `DIGITE O/A ${filterButtonLabel.toUpperCase()} QUE DESEJA BUSCAR`;

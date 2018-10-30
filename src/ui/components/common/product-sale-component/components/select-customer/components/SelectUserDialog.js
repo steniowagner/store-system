@@ -1,5 +1,5 @@
 
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 
 import { withStyles } from '@material-ui/core/styles';
 
@@ -138,11 +138,7 @@ class SelectCustomerDialog extends Component<Props, State> {
   }
 
   render() {
-    return (
-      <Fragment>
-        {this.renderDialog()}
-      </Fragment>
-    );
+    return this.renderDialog();
   }
 }
 

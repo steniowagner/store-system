@@ -9,7 +9,9 @@ import SelectUserDialog from './components/SelectUserDialog';
 import ActionButton from '../../../ActionButton';
 import Input from '../../../CustomInput';
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  margin-bottom: 16px;
+`;
 
 const InputContainer = styled.div`
   width: 80%;
