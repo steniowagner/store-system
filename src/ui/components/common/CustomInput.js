@@ -73,8 +73,6 @@ const SingleLineInput = styled(({ ...props }) => {
 })`
   width: 100%;
   height: 48px;
-  display: flex;
-  flex: 1;
   justify-content: center;
   align-items: center;
   padding: 0 16px;

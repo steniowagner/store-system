@@ -2,51 +2,40 @@ import React, { Component } from 'react';
 
 import styled from 'styled-components';
 
-import ActionButtom from '../../../../ActionButton';
 import Input from '../../../../CustomInput';
 
 const Container = styled.div`
-  width: 50%;
+  width: 30%;
   display: flex;
   align-items: flex-end;
   justify-content: flex-end;
 `;
 
 const InputWrapper = styled.div`
-  width: 15%;
+  width: 28%;
   margin: 0 8px;
 `;
 
-const ButtonWrapper = styled.div`
-  display: flex;
-  align-self: flex-end;
-  margin-bottom: 8px;
-  margin-left: 8px;
-`;
-
 type Props = {
+  onTypeQuantity: Function,
   salePrice: number,
-};
-
-type State = {
   quantity: string,
 };
 
-class SelectProductValues extends Component<Props, State> {
-  state = {
-    quantity: '',
-  };
+class SelectProductValues extends Component <Props, {}> {
+  componentWillReceiveProps(nextProps) {
+    const { salePrice } = nextProps;
 
-  onTypeQuantity = (event: Object): void => {
-    this.setState({
-      quantity: event.target.value,
-    });
-  };
+    if (salePrice) {
+      this._inputRef.focus();
+    }
+  }
 
-  getInputConfig = (handleChange: Function, value: string, label: string, id: string): Object => ({
+  getInputConfig = (handleChange: Function, value: string, label: string, id: string, type: string): Object => ({
     handleChange,
     value,
     label,
+    type,
     id,
   });
 
@@ -55,6 +44,7 @@ class SelectProductValues extends Component<Props, State> {
       handleChange,
       value,
       label,
+      type,
       id,
     } = config;
 
@@ -63,13 +53,18 @@ class SelectProductValues extends Component<Props, State> {
     return (
       <InputWrapper>
         <Input
-          disabled={isDisabled}
+          inputRef={(input) => {
+            if (!isDisabled) {
+              this._inputRef = input;
+            }
+          }}
           onChange={handleChange}
+          disabled={isDisabled}
           onBlur={() => {}}
           placeholder=""
-          type="number"
-          value={value}
           label={label}
+          value={value}
+          type={type}
           error=""
           id={id}
         />
@@ -77,44 +72,34 @@ class SelectProductValues extends Component<Props, State> {
     );
   };
 
-  renderQuantityInput = (): Object => {
-    const { quantity } = this.state;
-
-    const inputConfig = this.getInputConfig(this.onTypeQuantity, quantity, 'Quantidade', 'quantity');
+  renderQuantityInput = (onTypeQuantity: Function, quantity: string): Object => {
+    const inputConfig = this.getInputConfig(onTypeQuantity, quantity, 'Quantidade', 'quantity', 'number');
 
     return this.renderInput(inputConfig);
   };
 
-  renderPriceInput = (): Object => {
-    const { salePrice } = this.props;
-
-    const inputConfig = this.getInputConfig(() => {}, salePrice, 'Preço', 'price');
+  renderPriceInput = (salePrice: number): Object => {
+    const inputConfig = this.getInputConfig(() => {}, salePrice, 'Preço', 'price', 'text');
 
     return this.renderInput(inputConfig);
   };
 
-  renderTotalInput = (): Object => {
-    const { salePrice } = this.props;
-    const { quantity } = this.state;
-
+  renderTotalInput = (salePrice: number, quantity: string): Object => {
     const total = Math.abs(quantity) * salePrice;
 
-    const inputConfig = this.getInputConfig(() => {}, total, 'Total', 'total');
+    const inputConfig = this.getInputConfig(() => {}, total.toFixed(2), 'Total', 'total', 'text');
 
     return this.renderInput(inputConfig);
   };
 
   render() {
+    const { onTypeQuantity, salePrice, quantity } = this.props;
+
     return (
       <Container>
-        {this.renderQuantityInput()}
-        {this.renderPriceInput()}
-        {this.renderTotalInput()}
-        <ButtonWrapper>
-          <ActionButtom
-            title="Adicionar"
-          />
-        </ButtonWrapper>
+        {this.renderQuantityInput(onTypeQuantity, quantity)}
+        {this.renderPriceInput(salePrice)}
+        {this.renderTotalInput(salePrice, quantity)}
       </Container>
     );
   }

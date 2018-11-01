@@ -13,21 +13,6 @@ const Container = styled.div`
   height: 100%;
 `;
 
-const generateData = () => {
-  const list = [];
-
-  for (let i = 0; i < 10; i += 1) {
-    list.push({
-      quantity: Math.floor(Math.random() * (50 - 1 + 1)) + 1,
-      salePrice: (Math.random() * (100 - 1) + 1).toFixed(2),
-      description: `PRODUTO ${i}`,
-      id: i,
-    });
-  }
-
-  return list;
-};
-
 type Props = {
   setFieldValue: Function,
   values: Object,
@@ -41,7 +26,28 @@ type State = {
 
 class ProductSale extends Component<Props, State> {
   state = {
-    products: generateData(),
+    products: [],
+  };
+
+  onAddProduct = (product: Object, quantity: string): void => {
+    const { products } = this.state;
+
+    const newProduct = {
+      quantity: Math.abs(quantity),
+      ...product,
+    };
+
+    const indexProduct = this.getIndexProductOnList(product);
+    const isProductAlreadyOnList = (indexProduct >= 0);
+
+    if (isProductAlreadyOnList) {
+      this.handleProductRepeated(indexProduct, quantity);
+      return;
+    }
+
+    this.setState({
+      products: [newProduct, ...products],
+    });
   };
 
   onRemoveProduct = (productSelectedIndex: number) => {
@@ -52,13 +58,30 @@ class ProductSale extends Component<Props, State> {
     });
   };
 
-  onEditProductQuantity = (indexProductEdited: number, quantity: number): void => {
+  onEditProductQuantity = (indexProductEdited: number, quantity: string): void => {
     const { products } = this.state;
     const productSelected = products[indexProductEdited];
 
     this.setState({
       products: Object.assign([], products, { [indexProductEdited]: { ...productSelected, quantity } }),
     });
+  };
+
+  getIndexProductOnList = (productSearched: Object): boolean => {
+    const { products } = this.state;
+
+    const indexProduct = (products.findIndex(product => product.id === productSearched.id));
+
+    return indexProduct;
+  };
+
+  handleProductRepeated = (index: number, quantity: string): void => {
+    const { products } = this.state;
+
+    const currentQuantity = Number(products[index].quantity);
+    const newQuantity = currentQuantity + Math.abs(quantity);
+
+    this.onEditProductQuantity(index, newQuantity);
   };
 
   renderSelectCustomer = (): Object => {
@@ -79,15 +102,11 @@ class ProductSale extends Component<Props, State> {
     );
   };
 
-  renderSelectProduct = (): Object => {
-    const { products } = this.state;
-
-    return (
-      <SelectProduct
-        products={products}
-      />
-    );
-  };
+  renderSelectProduct = (): Object => (
+    <SelectProduct
+      onAddProduct={this.onAddProduct}
+    />
+  );
 
   renderProductsList = (): Object => {
     const { products } = this.state;

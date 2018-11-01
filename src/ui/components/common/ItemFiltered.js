@@ -71,7 +71,9 @@ const renderPrimaryItem = (primaryItem: string): Object => (
 const renderSecondariesItems = (secondariesItems: Array<Object>): Object => (
   <SecondaryWrapper>
     {secondariesItems.map(secondaryItem => (
-      <SecondaryItemWrapper>
+      <SecondaryItemWrapper
+        key={secondaryItem.title}
+      >
         <SecondaryItemTitle>
           {`${secondaryItem.title}: `}
         </SecondaryItemTitle>

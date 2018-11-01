@@ -1,8 +1,9 @@
 // @flow
 
 import React from 'react';
-import ButtonBase from '@material-ui/core/ButtonBase';
+
 import AddCircleOutline from '@material-ui/icons/AddCircleOutline';
+import ButtonBase from '@material-ui/core/ButtonBase';
 
 import styled from 'styled-components';
 
@@ -17,17 +18,23 @@ const ButtonWrapper = styled.div`
   padding-left: 20px;
   padding-right: 20px;
   border-radius: 6px;
-  background-color: ${({ isDisabled, theme }) => (isDisabled ? theme.colors.lightGray : theme.colors.affirmative)};
+  background-color: ${({ withCustomInactiveColor, isDisabled, theme }) => {
+    const disabledColor = (withCustomInactiveColor ? theme.colors.customInactiveButton : theme.colors.lightGray);
+    const color = (isDisabled ? disabledColor : theme.colors.affirmative);
+
+    return color;
+  }};
 `;
 
 const Title = styled.h2`
   margin-right: 18px,
   font-size: 28px;
   font-weight: 700;
-  color: #fff;
+  color: ${({ theme }) => theme.colors.white};
 `;
 
 type Props = {
+  withCustomInactiveColor: ?boolean,
   disabled: boolean,
   withIcon: boolean,
   action: Function,
@@ -35,6 +42,7 @@ type Props = {
 };
 
 const ActionButton = ({
+  withCustomInactiveColor,
   withIcon,
   disabled,
   action,
@@ -45,6 +53,7 @@ const ActionButton = ({
     disabled={disabled}
   >
     <ButtonWrapper
+      withCustomInactiveColor={withCustomInactiveColor}
       isDisabled={disabled}
     >
       {withIcon && (

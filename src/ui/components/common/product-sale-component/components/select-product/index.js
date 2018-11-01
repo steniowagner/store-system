@@ -5,7 +5,8 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 
 import SelectProductsValues from './components/SelectProductsValues';
-import ProductFilter from './components/ProductFilter';
+import ProductFilter from './components/filter';
+import ActionButtom from '../../../ActionButton';
 
 const Container = styled.div`
   width: 100%;
@@ -16,10 +17,26 @@ const Container = styled.div`
   border-bottom: 2px solid ${({ theme }) => theme.colors.white};
 `;
 
-class SelectProduct extends Component {
+const ButtonWrapper = styled.div`
+  display: flex;
+  align-self: flex-end;
+  margin-bottom: 8px;
+  margin-left: 8px;
+`;
+
+type Props = {
+  onAddProduct: Function
+};
+
+type State = {
+  productSelected: Object,
+  quantity: string,
+};
+
+class SelectProduct extends Component<Props, State> {
   state = {
-    productsSelected: [],
     productSelected: {},
+    quantity: '',
   };
 
   onSelectProduct = (productSelected: Object): void => {
@@ -28,25 +45,49 @@ class SelectProduct extends Component {
     });
   };
 
-  onAddProduct = (product: Object): void => {
-    const { productsSelected } = this.state;
-
+  onTypeQuantity = (event: Object): void => {
     this.setState({
-      productsSelected: [product, ...productsSelected],
+      quantity: event.target.value,
     });
   };
 
+  onAddButtonClicked = (): void => {
+    const { productSelected, quantity } = this.state;
+    const { onAddProduct } = this.props;
+
+    this.setState({
+      productSelected: {},
+      quantity: '',
+    }, () => onAddProduct(productSelected, quantity));
+  };
+
   render() {
-    const { productSelected } = this.state;
+    const { productSelected, quantity } = this.state;
+
+    const isSomeProductSelected = !!(Object.entries(productSelected)).length;
+    const isSomeQuantitySelected = !!(quantity);
+
+    const shouldDisableButton = (!isSomeProductSelected || !isSomeQuantitySelected);
 
     return (
       <Container>
         <ProductFilter
           onSelectProduct={this.onSelectProduct}
+          productSelected={productSelected}
         />
         <SelectProductsValues
           salePrice={productSelected.salePrice || ''}
+          onTypeQuantity={this.onTypeQuantity}
+          quantity={quantity}
         />
+        <ButtonWrapper>
+          <ActionButtom
+            action={this.onAddButtonClicked}
+            disabled={shouldDisableButton}
+            withCustomInactiveColor
+            title="Adicionar"
+          />
+        </ButtonWrapper>
       </Container>
     );
   }
