@@ -12,7 +12,6 @@ import filterList from '../../../../../../../utils/filter';
 import ItemFiltered from '../../../../../ItemFiltered';
 import SelectFilter from './components/select-filter';
 
-
 const FilterContainer = styled.div`
   width: 100%;
   margin-top: 6px;
@@ -36,7 +35,7 @@ const ListContainer = styled(({ ...props }) => (
 
 const products = [{
   barCode: '123',
-  description: 'Computador',
+  description: 'Mouse',
   salePrice: 21.91,
   brand: 'Samsung',
   id: Math.random(),
@@ -75,7 +74,6 @@ class ProductFilter extends Component<Props, {}> {
     }
   }
 
-  // autofocus
   onSelectOption = (optionSelected: Object) => {
     this.setState({
       filterValue: '',
@@ -87,18 +85,11 @@ class ProductFilter extends Component<Props, {}> {
     const { optionSelected, filterValue } = this.state;
     const { field } = optionSelected;
 
-    const filterConfig = (field === 'barCode'
-      ? this.getBarcodeFilterConfig(filterValue)
-      : this.getDescriptionFilterConfig(filterValue));
-
-    const productsFiltered = filterList(filterConfig);
-
-    const isListOpen = (!!productsFiltered.length && !!filterValue);
-
-    this.setState({
-      productsFiltered,
-      isListOpen,
-    });
+    if (field === 'barCode') {
+      this.handleFilterByBarcode(filterValue);
+    } else {
+      this.handleFilterByDescprition(filterValue);
+    }
   };
 
   onTypeFilterValue = (event: Object) => {
@@ -129,6 +120,36 @@ class ProductFilter extends Component<Props, {}> {
     value: filterValue,
     dataset: products,
   });
+
+  handleFilterByBarcode = (filterValue: string): void => {
+    const filterConfig = this.getBarcodeFilterConfig(filterValue);
+    const productsFilteredByBarcode = filterList(filterConfig);
+
+    const foundProductMatchesBarcode = (!!productsFilteredByBarcode.length);
+
+    if (foundProductMatchesBarcode) {
+      const productSelected = productsFilteredByBarcode[0];
+      const { description } = productSelected;
+      const { onSelectProduct } = this.props;
+
+      this.setState({
+        filterValue: description,
+        isListOpen: false,
+      }, () => onSelectProduct(productSelected));
+    }
+  };
+
+  handleFilterByDescprition = (filterValue: string): void => {
+    const filterConfig = this.getDescriptionFilterConfig(filterValue);
+
+    const productsFiltered = filterList(filterConfig);
+    const isListOpen = (!!productsFiltered.length && !!filterValue);
+
+    this.setState({
+      productsFiltered,
+      isListOpen,
+    });
+  };
 
   renderProductsFilteredList = (): Object => {
     const { productsFiltered } = this.state;

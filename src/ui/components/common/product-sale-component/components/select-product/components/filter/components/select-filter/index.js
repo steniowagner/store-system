@@ -24,6 +24,7 @@ const FilteWrapper = styled.div`
 
 const CustomInput = styled(({ ...props }) => (
   <Input
+    placeholder="Selecione um Filtro"
     disableUnderline
     {...props}
     autoFocus
@@ -41,7 +42,7 @@ const InputWrapper = styled.div`
   border-bottom: 1.5px solid ${({ theme }) => theme.colors.affirmative};
   border-top-right-radius: 4px;
   border-bottom-right-radius: 4px;
-  background-color: ${({ theme }) => theme.colors.white};
+  background-color: ${({ disabled, theme }) => (disabled ? theme.colors.lightGray : theme.colors.white)};
 `;
 
 const FilterSelector = styled(({ ...props }) => (
@@ -157,14 +158,17 @@ class CustomFilter extends Component<Props, State> {
   }
 
   render() {
-    const { onTypeFilterValue, filterValue } = this.props;
+    const { onTypeFilterValue, optionSelected, filterValue } = this.props;
 
     return (
       <Wrapper>
         {this.renderMenuOptionsButton()}
-        <InputWrapper>
+        <InputWrapper
+          disabled={!optionSelected.field}
+        >
           <CustomInput
             inputRef={(input) => { this._inputRef = input; }}
+            disabled={!optionSelected.field}
             onChange={onTypeFilterValue}
             value={filterValue}
           />

@@ -19,8 +19,8 @@ const customers = [{
   id: '11',
 }, {
   name: 'Ana Eridan Pereira de Freitas',
-  cpf: '123',
-  rg: '000',
+  cpf: '',
+  rg: '',
   id: '13',
 }, {
   name: 'Manoel Elisval Pereira de Freitas',

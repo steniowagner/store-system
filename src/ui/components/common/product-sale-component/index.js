@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 import Paper from '@material-ui/core/Paper';
 import styled from 'styled-components';
@@ -20,130 +20,132 @@ type Props = {
   mode: string,
 };
 
-type State = {
-  products: Array<Object>,
+const onAddProduct = (product: Object, quantity: string): void => {
+  const newProduct = {
+    quantity: Math.abs(quantity),
+    ...product,
+  };
+
+  const indexProduct = this.getIndexProductOnList(product);
+  const isProductAlreadyOnList = (indexProduct >= 0);
+
+  if (isProductAlreadyOnList) {
+    this.handleSaveProductRepeated(indexProduct, quantity);
+    return;
+  }
+
+  this.setState({
+    products: [newProduct, ...products],
+  }, () => this.setProductsOnForm());
 };
 
-class ProductSale extends Component<Props, State> {
-  state = {
-    products: [],
-  };
+const onRemoveProduct = (productSelectedIndex: number) => {
+  const { products } = this.state;
 
-  onAddProduct = (product: Object, quantity: string): void => {
-    const { products } = this.state;
+  this.setState({
+    products: products.filter((productSelected, index) => productSelectedIndex !== index),
+  });
+};
 
-    const newProduct = {
-      quantity: Math.abs(quantity),
-      ...product,
-    };
+const onEditProductQuantity = (indexProductEdited: number, quantity: string): void => {
+  const { products } = this.state;
+  const productSelected = products[indexProductEdited];
 
-    const indexProduct = this.getIndexProductOnList(product);
-    const isProductAlreadyOnList = (indexProduct >= 0);
+  this.setState({
+    products: Object.assign([], products, {
+      [indexProductEdited]: {
+        ...productSelected,
+        quantity,
+      },
+    }),
+  }, () => this.setProductsOnForm());
+};
 
-    if (isProductAlreadyOnList) {
-      this.handleProductRepeated(indexProduct, quantity);
-      return;
-    }
+const getIndexProductOnList = (productSearched: Object): number => {
+  const { products } = this.state;
 
-    this.setState({
-      products: [newProduct, ...products],
-    });
-  };
+  const indexProduct = (products.findIndex(product => product.id === productSearched.id));
 
-  onRemoveProduct = (productSelectedIndex: number) => {
-    const { products } = this.state;
+  return indexProduct;
+};
 
-    this.setState({
-      products: products.filter((productSelected, index) => productSelectedIndex !== index),
-    });
-  };
+const setProductsOnForm = (): void => {
+  const { setFieldValue } = this.props;
+  const { products } = this.state;
 
-  onEditProductQuantity = (indexProductEdited: number, quantity: string): void => {
-    const { products } = this.state;
-    const productSelected = products[indexProductEdited];
+  setFieldValue('products', products);
+};
 
-    this.setState({
-      products: Object.assign([], products, { [indexProductEdited]: { ...productSelected, quantity } }),
-    });
-  };
+const handleSaveProductRepeated = (index: number, quantity: string): void => {
+  const { products } = this.state;
 
-  getIndexProductOnList = (productSearched: Object): boolean => {
-    const { products } = this.state;
+  const currentQuantity = Number(products[index].quantity);
+  const newQuantity = currentQuantity + Math.abs(quantity);
 
-    const indexProduct = (products.findIndex(product => product.id === productSearched.id));
+  this.onEditProductQuantity(index, newQuantity);
+};
 
-    return indexProduct;
-  };
+const renderSelectCustomer = (setFieldValue: Function, values: Object, errors: Object, mode: string): Object => {
+  const {
+    setFieldValue,
+    values,
+    errors,
+    mode,
+  } = this.props;
 
-  handleProductRepeated = (index: number, quantity: string): void => {
-    const { products } = this.state;
-
-    const currentQuantity = Number(products[index].quantity);
-    const newQuantity = currentQuantity + Math.abs(quantity);
-
-    this.onEditProductQuantity(index, newQuantity);
-  };
-
-  renderSelectCustomer = (): Object => {
-    const {
-      setFieldValue,
-      values,
-      errors,
-      mode,
-    } = this.props;
-
-    return (
-      <SelectCustomer
-        customerSelected={values.customer}
-        setFieldValue={setFieldValue}
-        error={errors.customer}
-        mode={mode}
-      />
-    );
-  };
-
-  renderSelectProduct = (): Object => (
-    <SelectProduct
-      onAddProduct={this.onAddProduct}
+  return (
+    <SelectCustomer
+      customerSelected={values.customer}
+      setFieldValue={setFieldValue}
+      error={errors.customer}
+      mode={mode}
     />
   );
+};
 
-  renderProductsList = (): Object => {
-    const { products } = this.state;
+const renderSelectProduct = (): Object => (
+  <SelectProduct
+    onAddProduct={this.onAddProduct}
+  />
+);
 
-    return (
-      <ProductsSelectedList
-        onEditProductQuantity={this.onEditProductQuantity}
-        onRemoveProduct={this.onRemoveProduct}
-        products={products}
-      />
-    );
-  };
+const renderProductsList = (): Object => {
+  const { products } = this.state;
 
-  renderFooterValues = (): Object => {
-    const { products } = this.state;
-    const { mode } = this.props;
+  return (
+    <ProductsSelectedList
+      onEditProductQuantity={this.onEditProductQuantity}
+      onRemoveProduct={this.onRemoveProduct}
+      products={products}
+    />
+  );
+};
 
-    return (
-      <FooterValues
-        products={products}
-        mode={mode}
-      />
-    );
-  };
+const renderFooterValues = (setFieldValue: Function, values: Object, mode: string): Object => (
+  <FooterValues
+    setFieldValue={setFieldValue}
+    products={values.products}
+    mode={mode}
+  />
+);
 
-  render() {
-    return (
-      <Container>
-        {this.renderSelectCustomer()}
-        <Paper>
-          {this.renderSelectProduct()}
-          {this.renderProductsList()}
-          {this.renderFooterValues()}
-        </Paper>
-      </Container>
-    );
-  }
-}
+const ProductSale = ({
+  setFieldValue,
+  values,
+  errors,
+  mode,
+}: Props): Object => {
+
+  return (
+    <Container>
+      {renderSelectCustomer()}
+      <Paper>
+        {renderSelectProduct()}
+        {renderProductsList()}
+        {renderFooterValues()}
+      </Paper>
+    </Container>
+  );
+};
 
 export default ProductSale;

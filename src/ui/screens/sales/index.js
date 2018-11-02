@@ -20,7 +20,7 @@ class Sales extends Component {
     return (
       <EntityComponent
         onRemoveItem={() => {}}
-        onCreateItem={() => {}}
+        onCreateItem={(sale) => console.log(sale)}
         onEditItem={() => {}}
         singularEntityName="Venda"
         pluralEntityName="Vendas"

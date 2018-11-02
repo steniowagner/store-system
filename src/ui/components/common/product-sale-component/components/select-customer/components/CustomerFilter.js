@@ -1,33 +1,18 @@
 import React, { Component, Fragment } from 'react';
 
 import { withStyles } from '@material-ui/core/styles';
-
-import ListItem from '@material-ui/core/ListItem';
-import Divider from '@material-ui/core/Divider';
 import Paper from '@material-ui/core/Paper';
 import List from '@material-ui/core/List';
 
 import styled from 'styled-components';
 
-import { RowItem, Row } from '../../../../FormUtils';
-import Input from '../../../../CustomInput';
-
 import Filter, { FILTER_TYPES } from '../../../../Filter';
+import { RowItem, Row } from '../../../../FormUtils';
+import ItemFiltered from '../../../../ItemFiltered';
+import Input from '../../../../CustomInput';
 
 const Wrapper = styled.div`
   width: 100%:
-`;
-
-const Name = styled.p`
-  font-size: 18px;
-  font-weight: 700;
-  color: rgba(0, 0, 0, 0.8);
-`;
-
-const IdentificationWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-top: 8px;
 `;
 
 const IdentificationName = styled.p`
@@ -113,30 +98,40 @@ class CustomerFilter extends Component<Props, State> {
     </IdentificationItemWrapper>
   );
 
-  renderListItem = (customer: Object): Object => {
-    const { name, cpf, rg } = customer;
+  renderCustomerListItem = (customersFilteredLength: number, customer: Object, index: number): Object => {
+    const {
+      name,
+      cpf,
+      rg,
+      id,
+    } = customer;
+
+    const cpfItem = {
+      title: 'Cpf',
+      value: cpf || '-',
+    };
+
+    const rgItem = {
+      title: 'RG',
+      value: rg || '-',
+    };
 
     return (
-      <ListItem
-        button
-        onClick={() => this.onChooseCustomer(customer)}
-      >
-        <div>
-          <Name>
-            {name}
-          </Name>
-          <IdentificationWrapper>
-            {this.renderIdentificationItem('CPF', cpf)}
-            {this.renderIdentificationItem('RG', rg)}
-          </IdentificationWrapper>
-        </div>
-      </ListItem>
+      <ItemFiltered
+        onSelectItem={() => this.onChooseCustomer(customer)}
+        isLast={(index === customersFilteredLength - 1)}
+        secondariesItems={[cpfItem, rgItem]}
+        primaryItem={name}
+        key={id}
+      />
     );
   };
 
   renderCustomerList = (): Object => {
     const { customersFiltered } = this.state;
     const { classes } = this.props;
+
+    const customersFilteredLength = customersFiltered.length;
 
     return (
       <Paper
@@ -145,22 +140,11 @@ class CustomerFilter extends Component<Props, State> {
         <List
           component="nav"
         >
-          {customersFiltered.map((customer, index) => (
-            <Fragment
-              key={customer.id}
-            >
-              {this.renderListItem(customer)}
-              {index < (customersFiltered.length - 1) && (
-                <Divider
-                  light
-                />
-              )}
-            </Fragment>
-          ))}
+          {customersFiltered.map((customer, index) => this.renderCustomerListItem(customersFilteredLength, customer, index))}
         </List>
       </Paper>
     );
-  }
+  };
 
   renderCustomerSelectedInput = (): Object => {
     const { customerSelected } = this.state;

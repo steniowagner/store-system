@@ -7,7 +7,7 @@ import ProductSale from '../../components/common/product-sale-component';
 import { Section, Wrapper } from '../../components/common/FormUtils';
 import ActionFormButton from '../../components/common/ActionFormButton';
 
-const renderSelectCustomer = (props: Object) => {
+const renderProductSale = (props: Object): Object => {
   const {
     setFieldValue,
     values,
@@ -30,21 +30,21 @@ const renderSelectCustomer = (props: Object) => {
 const SalesForm = (props: Object): Object => {
   const {
     onChageFormToEditMode,
+    handleSubmit,
     isSubmitting,
     onRemoveItem,
-    handleSubmit,
     mode,
   } = props;
 
   return (
     <Wrapper>
       <Form>
-        {renderSelectCustomer(props)}
+        {renderProductSale(props)}
         <ActionFormButton
           onChageFormToEditMode={onChageFormToEditMode}
-          onClick={handleSubmit}
           onRemoveItem={onRemoveItem}
           disabled={isSubmitting}
+          onClick={handleSubmit}
           mode={mode}
         />
       </Form>
@@ -58,8 +58,7 @@ const CustomForm = withFormik({
   }),
 
   validationSchema: _props => Yup.lazy(() => Yup.object().shape({
-    customer: Yup.string()
-      .required('O Cliente é obrigatório.'),
+
   })),
 
   handleSubmit(values, { setSubmitting, props }) {
