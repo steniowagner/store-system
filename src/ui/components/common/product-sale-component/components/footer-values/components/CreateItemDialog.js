@@ -2,7 +2,6 @@
 
 import React, { Component } from 'react';
 
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
@@ -20,15 +19,16 @@ const DialogWrapper = styled.div`
 `;
 
 type Props = {
-  onCloseDialog: Function,
-  onCreateItem: Function,
-  onRemoveItem: Function,
   ChildrenComponent: Object,
-  item: Object,
-  entity: string,
-  mode: string,
+  isOnEditionMode: boolean,
+  onCloseDialog: Function,
+  onRemoveItem: Function,
+  onCreateItem: Function,
   isOpen: boolean,
+  entity: string,
   total: ?number,
+  mode: string,
+  item: Object,
 };
 
 type State = {
@@ -85,21 +85,17 @@ class NewItemDialog extends Component<Props, State> {
     );
   };
 
-  renderContent = (): Object => (
+  renderContent = (shouldShowRemoveButton: boolean): Object => (
     <DialogWrapper>
       <DialogContent>
-        <DialogContentText
-          id="alert-dialog-slide-description"
-        >
-          {this.renderChildrenComponent()}
-          {this.renderRemoveButton()}
-        </DialogContentText>
+        {this.renderChildrenComponent()}
+        {shouldShowRemoveButton && this.renderRemoveButton()}
       </DialogContent>
     </DialogWrapper>
   );
 
   renderActionButtons = (): Object => {
-    const { onCloseDialog, onCreateItem, mode } = this.props;
+    const { onCloseDialog, onCreateItem } = this.props;
     const { value, type } = this.state;
 
     return (
@@ -114,7 +110,7 @@ class NewItemDialog extends Component<Props, State> {
           CANCELAR
         </Button>
         <Button
-          disabled={(mode === 'edit' || !value)}
+          disabled={!value}
           onClick={() => {
             this.onRestartState();
             onCreateItem(value, type);
@@ -151,17 +147,13 @@ class NewItemDialog extends Component<Props, State> {
 
   render() {
     const {
+      isOnEditionMode,
       onCloseDialog,
       entity,
       isOpen,
-      mode,
-      item,
     } = this.props;
 
-    const hasItemSelected = (typeof item === 'object' ? !!item.type : !!item);
-    const isOnEditionMode = (mode === 'edit');
-
-    const title = ((hasItemSelected || isOnEditionMode) ? `Editar ${entity}` : `Adicionar ${entity}`);
+    const title = (isOnEditionMode ? `Editar ${entity}` : `Adicionar ${entity}`);
 
     return (
       <Dialog
@@ -175,7 +167,7 @@ class NewItemDialog extends Component<Props, State> {
         maxWidth="sm"
       >
         {this.renderTitle(title)}
-        {this.renderContent()}
+        {this.renderContent(isOnEditionMode)}
         {this.renderActionButtons()}
       </Dialog>
     );

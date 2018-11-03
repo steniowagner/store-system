@@ -19,7 +19,7 @@ import ExpandLess from '@material-ui/icons/ExpandLess';
 
 import styled from 'styled-components';
 
-import filterUtils from '../../utils/filter';
+import { filterList, FILTER_TYPES } from '../../utils/filter';
 
 const Container = styled.div`
   display: flex;
@@ -101,12 +101,6 @@ type State = {
   isFilterOpen: boolean,
 };
 
-export const FILTER_TYPES = {
-  NUMERIC: 'NUMERIC',
-  TEXT: 'TEXT',
-  FUNCTIONAL: 'FUNCTIONAL',
-};
-
 class Filter extends Component<Props, State> {
   state = {
     filterButtonLabel: 'Adicionar Filtro',
@@ -146,6 +140,11 @@ class Filter extends Component<Props, State> {
     const { shouldFilterAfterSelectFilter } = this.props;
     const { filterSelected, filterValue } = this.state;
     const { filterTitle, dataField } = filterItem;
+
+    if (filterItem.type === FILTER_TYPES.FUNCTIONAL) {
+      this.handleFunctionalFilter(filterItem);
+      return;
+    }
 
     if (filterItem.type === FILTER_TYPES.FUNCTIONAL) {
       this.handleFunctionalFilter(filterItem);
@@ -241,24 +240,26 @@ class Filter extends Component<Props, State> {
 
     const filterParams = {
       operator: filterConfig.operator,
+      type: FILTER_TYPES.NUMERIC,
       filter: filterSelected,
       value: filterValue,
       dataset,
     };
 
-    return filterUtils(filterParams);
+    return filterList(filterParams);
   };
 
   handleTextFilter = (filterSelected: string, filterValue: string) => {
     const { dataset } = this.props;
 
     const filterParams = {
+      type: FILTER_TYPES.TEXT,
       filter: filterSelected,
       value: filterValue,
       dataset,
     };
 
-    return filterUtils(filterParams);
+    return filterList(filterParams);
   };
 
   renderMenuItems = (): Object => {

@@ -8,7 +8,7 @@ import List from '@material-ui/core/List';
 
 import styled from 'styled-components';
 
-import filterList from '../../../../../../../utils/filter';
+import { filterList, FILTER_TYPES } from '../../../../../../../utils/filter';
 import ItemFiltered from '../../../../../ItemFiltered';
 import SelectFilter from './components/select-filter';
 
@@ -109,6 +109,7 @@ class ProductFilter extends Component<Props, {}> {
   };
 
   getBarcodeFilterConfig = (filterValue: string): Object => ({
+    type: FILTER_TYPES.NUMERIC,
     value: filterValue,
     dataset: products,
     filter: 'barCode',
@@ -116,6 +117,7 @@ class ProductFilter extends Component<Props, {}> {
   });
 
   getDescriptionFilterConfig = (filterValue: string): Object => ({
+    type: FILTER_TYPES.TEXT,
     filter: 'description',
     value: filterValue,
     dataset: products,

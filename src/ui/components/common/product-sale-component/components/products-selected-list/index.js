@@ -14,10 +14,25 @@ const Container = styled.div`
   background-color: ${({ theme }) => theme.colors.white};
 `;
 
+const ErrorContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const ErrorMessage = styled.div`
+  font-size: 32px;
+  font-weight: 700;
+  color: ${({ theme }) => theme.colors.danger};
+`;
+
 type Props = {
   onEditProductQuantity: Function,
   onRemoveProduct: Function,
   products: Array<Object>,
+  error: string,
 };
 
 type State = {
@@ -102,10 +117,20 @@ class ProductsSelectedList extends Component<Props, State> {
     );
   };
 
+  renderErrorMessage = (): Object => (
+    <ErrorContainer>
+      <ErrorMessage>
+        Ao Menos um Produto deve ser Cadastrado
+      </ErrorMessage>
+    </ErrorContainer>
+  );
+
   render() {
+    const { error } = this.props;
+
     return (
       <Container>
-        {this.renderList()}
+        {error ? this.renderErrorMessage() : this.renderList()}
         {this.renderEditQuantityDialog()}
       </Container>
     );

@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 
 import { withStyles } from '@material-ui/core/styles';
 
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import Button from '@material-ui/core/Button';
@@ -109,15 +108,11 @@ class SelectCustomerDialog extends Component<Props, State> {
         fullWidth
       >
         <DialogContent>
-          <DialogContentText
-            id="alert-dialog-slide-description"
-          >
-            <CustomerFilter
-              onChooseCustomer={this.onChooseCustomer}
-              customerSelected={customerSelected}
-              customers={customers}
-            />
-          </DialogContentText>
+          <CustomerFilter
+            onChooseCustomer={this.onChooseCustomer}
+            customerSelected={customerSelected}
+            customers={customers}
+          />
         </DialogContent>
         <DialogActions>
           <Button

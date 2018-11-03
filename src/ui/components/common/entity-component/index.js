@@ -39,7 +39,7 @@ type Props = {
   tabConfig: Object,
   singularEntityName: string,
   pluralEntityName: string,
-  ownTitle: string,
+  withOwnTitle: string,
   dataset: Array<Object>,
   canBeRemoved: boolean,
   canBeCreated: boolean,
@@ -265,7 +265,7 @@ class EntityComponent extends Component<Props, State> {
 
   renderForm = (): Obejct => {
     const { isFullScreenDialogOpen, formMode, contextItem } = this.state;
-    const { singularEntityName, Form, ownTitle } = this.props;
+    const { singularEntityName, Form, withOwnTitle } = this.props;
 
     const mode = {
       detail: 'VISUALIZAR',
@@ -274,7 +274,7 @@ class EntityComponent extends Component<Props, State> {
     };
 
     const item = ((formMode === 'edit' || formMode === 'detail') ? contextItem : {});
-    const title = (ownTitle.toUpperCase() || `${mode[formMode]} ${singularEntityName.toUpperCase()}`);
+    const title = (withOwnTitle.toUpperCase() || `${mode[formMode]} ${singularEntityName.toUpperCase()}`);
 
     return (
       <FullScreenDialog
@@ -299,11 +299,11 @@ class EntityComponent extends Component<Props, State> {
       singularEntityName,
       canBeCreated,
       filterConfig,
-      ownTitle,
+      withOwnTitle,
       dataset,
     } = this.props;
 
-    const actionButtonTitle = (ownTitle || `Cadastrar ${singularEntityName}`);
+    const actionButtonTitle = (withOwnTitle || `Cadastrar ${singularEntityName}`);
 
     return (
       <FilterAndCreateButtonWrapper>

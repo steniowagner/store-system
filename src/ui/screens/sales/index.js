@@ -1,17 +1,37 @@
+// @flow
+
 import React, { Component } from 'react';
 
-import EntityComponent from '../../components/common/entity-component';
+import moment from 'moment';
+import 'moment/locale/pt-br';
 
+import EntityComponent from '../../components/common/entity-component';
 import { filterConfig, tabConfig } from './config';
 import Form from './form';
 
 class Sales extends Component {
   state = {
-    sales: [{
-      customer: 'Stenio Wagner Pereira de Freitas',
-      customerId: '1',
-      products: [],
-    }],
+    sales: [],
+  };
+
+  componentDidMount() {
+    moment.locale('pt-br');
+  }
+
+  onCreateSale = (sale: Object): void => {
+    const { sales } = this.state;
+
+    const newSale = {
+      customerName: sale.customer.name || '-',
+      dateToShow: moment().format('lll'),
+      date: moment().format('L'),
+      username: 'steniowagner',
+      ...sale,
+    };
+
+    this.setState({
+      sales: [newSale, ...sales],
+    });
   };
 
   render() {
@@ -20,12 +40,12 @@ class Sales extends Component {
     return (
       <EntityComponent
         onRemoveItem={() => {}}
-        onCreateItem={(sale) => console.log(sale)}
+        onCreateItem={this.onCreateSale}
         onEditItem={() => {}}
+        filterConfig={filterConfig}
         singularEntityName="Venda"
         pluralEntityName="Vendas"
-        ownTitle="NOVA VENDA"
-        filterConfig={filterConfig}
+        withOwnTitle="NOVA VENDA"
         tabConfig={tabConfig}
         dataset={sales}
         canBeCreated

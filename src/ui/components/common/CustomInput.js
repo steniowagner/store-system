@@ -135,8 +135,6 @@ const renderError = (error: string): Object => (
 const CustomInput = (props: Object): Object => {
   const { error, label, type } = props;
 
-  const isTextareaInput = (type === 'textarea');
-
   return (
     <Wrapper>
       <Label
@@ -144,9 +142,7 @@ const CustomInput = (props: Object): Object => {
       >
         {label}
       </Label>
-      {isTextareaInput
-        ? renderMultiLineInput({ ...props })
-        : renderSingleLineInput({ ...props })}
+      {(type === 'textarea') ? renderMultiLineInput({ ...props }) : renderSingleLineInput({ ...props })}
       {renderError(error)}
     </Wrapper>
   );

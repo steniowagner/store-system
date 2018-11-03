@@ -67,9 +67,9 @@ class DiscountItem extends Component<Props, State> {
   onTypeMoneyValue = (moneyValue: string): void => {
     const { onSetValues } = this.props;
 
-    const isAboveMax = this.checkMoneyDiscountAboveTotal(moneyValue);
+    const isAboveTotal = this.checkMoneyDiscountAboveTotal(moneyValue);
 
-    if (isAboveMax) {
+    if (isAboveTotal) {
       this.handleMoneyDiscountAboveTotal();
       return;
     }
@@ -131,7 +131,7 @@ class DiscountItem extends Component<Props, State> {
 
     this.setState({
       error: ERRORS.MAX_PERCENTAGE,
-      percentageValue: undefined,
+      percentageValue: '',
     }, () => onSetValues('percentage', ''));
   };
 
@@ -140,7 +140,7 @@ class DiscountItem extends Component<Props, State> {
 
     this.setState({
       error: ERRORS.MAX_MONEY,
-      moneyValue: undefined,
+      moneyValue: '',
     }, () => onSetValues('money', ''));
   };
 

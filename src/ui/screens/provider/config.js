@@ -1,4 +1,4 @@
-import { FILTER_TYPES } from '../../components/common/Filter';
+import { FILTER_TYPES } from '../../utils/filter';
 
 export const tabConfig = [{
   columnTitle: 'Nome',

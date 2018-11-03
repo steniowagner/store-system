@@ -3,6 +3,8 @@ import React from 'react';
 import Paper from '@material-ui/core/Paper';
 import styled from 'styled-components';
 
+import { calculateSubtotalValue, calculateTotalValue } from './calculateValues';
+
 import ProductsSelectedList from './components/products-selected-list';
 import SelectCustomer from './components/select-customer';
 import SelectProduct from './components/select-product';
@@ -20,132 +22,151 @@ type Props = {
   mode: string,
 };
 
-const onAddProduct = (product: Object, quantity: string): void => {
-  const newProduct = {
-    quantity: Math.abs(quantity),
-    ...product,
-  };
-
-  const indexProduct = this.getIndexProductOnList(product);
-  const isProductAlreadyOnList = (indexProduct >= 0);
-
-  if (isProductAlreadyOnList) {
-    this.handleSaveProductRepeated(indexProduct, quantity);
-    return;
-  }
-
-  this.setState({
-    products: [newProduct, ...products],
-  }, () => this.setProductsOnForm());
-};
-
-const onRemoveProduct = (productSelectedIndex: number) => {
-  const { products } = this.state;
-
-  this.setState({
-    products: products.filter((productSelected, index) => productSelectedIndex !== index),
-  });
-};
-
-const onEditProductQuantity = (indexProductEdited: number, quantity: string): void => {
-  const { products } = this.state;
-  const productSelected = products[indexProductEdited];
-
-  this.setState({
-    products: Object.assign([], products, {
-      [indexProductEdited]: {
-        ...productSelected,
-        quantity,
-      },
-    }),
-  }, () => this.setProductsOnForm());
-};
-
-const getIndexProductOnList = (productSearched: Object): number => {
-  const { products } = this.state;
-
+const getIndexProductOnList = (products: Array<Object>, productSearched: Object): number => {
   const indexProduct = (products.findIndex(product => product.id === productSearched.id));
 
   return indexProduct;
 };
 
-const setProductsOnForm = (): void => {
-  const { setFieldValue } = this.props;
-  const { products } = this.state;
-
-  setFieldValue('products', products);
+const clearNumericalFields = (setFieldValue: Function): void => {
+  setFieldValue('discount', {});
+  setFieldValue('subtotal', 0);
+  setFieldValue('total', 0);
 };
 
-const handleSaveProductRepeated = (index: number, quantity: string): void => {
-  const { products } = this.state;
+const setProductsOnForm = (products: Array<Object>, setFieldValue: Function): void => setFieldValue('products', products);
 
+const setTotalValueOnForm = (total: number, setFieldValue: Function): void => setFieldValue('total', total.toFixed(2));
+
+const setSubtotalValueOnForm = (subtotal: number, setFieldValue: Function): void => setFieldValue('subtotal', subtotal.toFixed(2));
+
+const setSaleValues = (products: Array<Object>, setFieldValue: Function, discount: Object): void => {
+  const subtotal = calculateSubtotalValue(products);
+  const total = calculateTotalValue(discount, subtotal);
+
+  setTotalValueOnForm(total, setFieldValue);
+  setSubtotalValueOnForm(subtotal, setFieldValue);
+};
+
+const onRemoveProduct = (productSelectedIndex: number, values: Object, setFieldValue: Function) => {
+  const { products, discount } = values;
+  const productsUpdated = products.filter((productSelected, index) => productSelectedIndex !== index);
+
+  setProductsOnForm(productsUpdated, setFieldValue);
+  setSaleValues(productsUpdated, setFieldValue, discount);
+
+  const hasProductsOnList = !!(productsUpdated.length);
+
+  if (!hasProductsOnList) {
+    clearNumericalFields(setFieldValue);
+  }
+};
+
+const onEditProductQuantity = (values: Object, indexProductEdited: number, quantity: string, setFieldValue: Function): void => {
+  const { products, discount } = values;
+  const productSelected = products[indexProductEdited];
+
+  const productsUpdated = Object.assign([], products, {
+    [indexProductEdited]: {
+      ...productSelected,
+      quantity,
+    },
+  });
+
+  setProductsOnForm(productsUpdated, setFieldValue);
+  setSaleValues(productsUpdated, setFieldValue, discount);
+};
+
+const handleSaveProductRepeated = (products: Array<Object>, index: number, quantity: string, setFieldValue: Function): void => {
   const currentQuantity = Number(products[index].quantity);
   const newQuantity = currentQuantity + Math.abs(quantity);
 
-  this.onEditProductQuantity(index, newQuantity);
+  onEditProductQuantity(products, index, newQuantity, setFieldValue);
 };
 
-const renderSelectCustomer = (setFieldValue: Function, values: Object, errors: Object, mode: string): Object => {
+const onAddProduct = (product: Object, quantity: string, setFieldValue: Function, values: Object): void => {
+  const { products, discount } = values;
+
+  const newProduct = {
+    quantity: Math.abs(quantity),
+    ...product,
+  };
+
+  const indexProduct = getIndexProductOnList(products, product);
+  const isProductAlreadyOnList = (indexProduct >= 0);
+
+  if (isProductAlreadyOnList) {
+    handleSaveProductRepeated(products, indexProduct, quantity, setFieldValue);
+    return;
+  }
+
+  const productsUpdated = [newProduct, ...products];
+
+  setProductsOnForm(productsUpdated, setFieldValue);
+  setSaleValues(productsUpdated, setFieldValue, discount);
+};
+
+const renderSelectCustomer = (setFieldValue: Function, values: Object, errors: Object, mode: string): Object => (
+  <SelectCustomer
+    customerSelected={values.customer}
+    setFieldValue={setFieldValue}
+    error={errors.customer}
+    mode={mode}
+  />
+);
+
+const renderSelectProduct = (setFieldValue: Function, values: Object): Object => (
+  <SelectProduct
+    onAddProduct={(product, quantity) => onAddProduct(product, quantity, setFieldValue, values)}
+  />
+);
+
+const renderProductsList = (setFieldValue: Function, values: Object, errors: Object): Object => (
+  <ProductsSelectedList
+    onEditProductQuantity={(indexProductEdited, quantity) => onEditProductQuantity(values, indexProductEdited, quantity, setFieldValue)}
+    onRemoveProduct={productSelectedIndex => onRemoveProduct(productSelectedIndex, values, setFieldValue)}
+    products={values.products}
+    error={errors.products}
+  />
+);
+
+const renderFooterValues = (setFieldValue: Function, values: Object, mode: string): Object => {
   const {
-    setFieldValue,
-    values,
-    errors,
-    mode,
-  } = this.props;
+    observation,
+    products,
+    subtotal,
+    discount,
+    total,
+  } = values;
 
   return (
-    <SelectCustomer
-      customerSelected={values.customer}
+    <FooterValues
       setFieldValue={setFieldValue}
-      error={errors.customer}
+      setSaleValues={setSaleValues}
+      subtotal={Number(subtotal)}
+      observation={observation}
+      total={Number(total)}
+      discount={discount}
+      products={products}
       mode={mode}
     />
   );
 };
-
-const renderSelectProduct = (): Object => (
-  <SelectProduct
-    onAddProduct={this.onAddProduct}
-  />
-);
-
-const renderProductsList = (): Object => {
-  const { products } = this.state;
-
-  return (
-    <ProductsSelectedList
-      onEditProductQuantity={this.onEditProductQuantity}
-      onRemoveProduct={this.onRemoveProduct}
-      products={products}
-    />
-  );
-};
-
-const renderFooterValues = (setFieldValue: Function, values: Object, mode: string): Object => (
-  <FooterValues
-    setFieldValue={setFieldValue}
-    products={values.products}
-    mode={mode}
-  />
-);
 
 const ProductSale = ({
   setFieldValue,
   values,
   errors,
   mode,
-}: Props): Object => {
-
-  return (
-    <Container>
-      {renderSelectCustomer()}
-      <Paper>
-        {renderSelectProduct()}
-        {renderProductsList()}
-        {renderFooterValues()}
-      </Paper>
-    </Container>
-  );
-};
+}: Props): Object => (
+  <Container>
+    {renderSelectCustomer(setFieldValue, values, errors, mode)}
+    <Paper>
+      {renderSelectProduct(setFieldValue, values)}
+      {renderProductsList(setFieldValue, values, errors)}
+      {renderFooterValues(setFieldValue, values, mode)}
+    </Paper>
+  </Container>
+);
 
 export default ProductSale;

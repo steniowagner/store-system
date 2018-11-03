@@ -62,7 +62,6 @@ class SelectCustomer extends Component<Props, State> {
 
   renderInputField = (): Object => {
     const { customerSelected, error } = this.props;
-
     const value = (typeof customerSelected === 'object' ? customerSelected.name : customerSelected);
 
     return (
@@ -82,35 +81,49 @@ class SelectCustomer extends Component<Props, State> {
     );
   };
 
-  render() {
+  renderInput = (): Object => {
     const { customerSelected, error, mode } = this.props;
-    const { isDialogOpen } = this.state;
 
     const isCustomerValidString = (typeof customerSelected === 'string' && !!customerSelected);
     const hasCustomerSelected = (isCustomerValidString || !!customerSelected.name);
     const actionButtonTitle = (hasCustomerSelected ? 'EDITAR' : 'SELECIONAR');
 
     return (
+      <InputButtonWrapper
+        hasError={error}
+      >
+        <ActionButton
+          action={() => this.onToggleDialogChooseCustomer()}
+          disabled={mode === 'detail'}
+          title={actionButtonTitle}
+          withIcon={false}
+        />
+      </InputButtonWrapper>
+    );
+  };
+
+  renderDialog = (): Object => {
+    const { customerSelected } = this.props;
+    const { isDialogOpen } = this.state;
+
+    return (
+      <SelectUserDialog
+        onToggle={() => this.onToggleDialogChooseCustomer()}
+        onSelectCustomer={this.onSelectCustomer}
+        customerSelected={customerSelected}
+        isOpen={isDialogOpen}
+      />
+    );
+  };
+
+  render() {
+    return (
       <Wrapper>
         <InputContainer>
           {this.renderInputField()}
-          <InputButtonWrapper
-            hasError={error}
-          >
-            <ActionButton
-              action={() => this.onToggleDialogChooseCustomer()}
-              disabled={mode === 'detail'}
-              title={actionButtonTitle}
-              withIcon={false}
-            />
-          </InputButtonWrapper>
+          {this.renderInput()}
         </InputContainer>
-        <SelectUserDialog
-          onToggle={() => this.onToggleDialogChooseCustomer()}
-          onSelectCustomer={this.onSelectCustomer}
-          customerSelected={customerSelected}
-          isOpen={isDialogOpen}
-        />
+        {this.renderDialog()}
       </Wrapper>
     );
   }

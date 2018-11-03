@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
@@ -170,12 +169,8 @@ class DialogChooseItem extends Component<Props, State> {
           {`${actionTitle} ${entityTitle}`}
         </DialogTitle>
         <DialogContent>
-          <DialogContentText
-            id="alert-dialog-slide-description"
-          >
-            {this.renderSearchInputItem()}
-            {this.renderCreateNewItem()}
-          </DialogContentText>
+          {this.renderSearchInputItem()}
+          {this.renderCreateNewItem()}
         </DialogContent>
         {this.renderDialogActionButtons()}
       </Dialog>

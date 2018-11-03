@@ -4,8 +4,8 @@ import { withFormik, Form } from 'formik';
 import * as Yup from 'yup';
 
 import ProductSale from '../../components/common/product-sale-component';
-import { Section, Wrapper } from '../../components/common/FormUtils';
 import ActionFormButton from '../../components/common/ActionFormButton';
+import { Section, Wrapper } from '../../components/common/FormUtils';
 
 const renderProductSale = (props: Object): Object => {
   const {
@@ -54,11 +54,17 @@ const SalesForm = (props: Object): Object => {
 
 const CustomForm = withFormik({
   mapPropsToValues: ({ item }) => ({
+    observation: item.observation || '',
     customer: item.customer || '',
+    discount: item.discount || {},
+    products: item.products || [],
+    subtotal: item.subtotal || 0,
+    total: item.total || 0,
   }),
 
   validationSchema: _props => Yup.lazy(() => Yup.object().shape({
-
+    products: Yup.array()
+      .required('Ao menos um Produto deve ser Adicionado'),
   })),
 
   handleSubmit(values, { setSubmitting, props }) {

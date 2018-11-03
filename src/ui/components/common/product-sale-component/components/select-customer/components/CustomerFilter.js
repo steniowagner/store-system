@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
@@ -6,7 +6,8 @@ import List from '@material-ui/core/List';
 
 import styled from 'styled-components';
 
-import Filter, { FILTER_TYPES } from '../../../../Filter';
+import Filter from '../../../../Filter';
+import { FILTER_TYPES } from '../../../../../../utils/filter';
 import { RowItem, Row } from '../../../../FormUtils';
 import ItemFiltered from '../../../../ItemFiltered';
 import Input from '../../../../CustomInput';
@@ -150,23 +151,21 @@ class CustomerFilter extends Component<Props, State> {
     const { customerSelected } = this.state;
 
     return (
-      <Fragment>
-        <Row>
-          <RowItem>
-            <Input
-              placeholder="Selecione um Cliente"
-              value={customerSelected.name}
-              label="Cliente Selecionado"
-              id="customerSelected"
-              onChange={() => {}}
-              onBlur={() => {}}
-              type="text"
-              disabled
-              error=""
-            />
-          </RowItem>
-        </Row>
-      </Fragment>
+      <Row>
+        <RowItem>
+          <Input
+            value={customerSelected.name || ''}
+            placeholder="Selecione um Cliente"
+            label="Cliente Selecionado"
+            id="customerSelected"
+            onChange={() => {}}
+            onBlur={() => {}}
+            type="text"
+            disabled
+            error=""
+          />
+        </RowItem>
+      </Row>
     );
   };
 
