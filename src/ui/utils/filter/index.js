@@ -1,12 +1,21 @@
 // @flow
 
-import filterWithNumbers from './numeric';
-import filterWithText from './text';
+import functionalFilter from './functionalFilter';
+import numericFilter from './numericFilter';
+import textFilter from './textFilter';
+import dateFilter from './dateFilter';
 
 export const FILTER_TYPES = {
   FUNCTIONAL: 'FUNCTIONAL',
   NUMERIC: 'NUMERIC',
-  DATE: 'DATE',
+  DATE: {
+    ID: 'DATE',
+    WHEN: {
+      BEFORE: 'BEFORE',
+      SAME: 'SAME',
+      AFTER: 'AFTER',
+    },
+  },
   TEXT: 'TEXT',
 };
 
@@ -15,15 +24,21 @@ export const filterList = (filterConfig: Object): Array<Object> => {
 
   let datasetFiltered = [];
 
+  if (type === FILTER_TYPES.FUNCTIONAL) {
+    datasetFiltered = functionalFilter(filterConfig);
+  }
+
   if (type === FILTER_TYPES.NUMERIC) {
-    datasetFiltered = filterWithNumbers(filterConfig);
+    datasetFiltered = numericFilter(filterConfig);
   }
 
   if (type === FILTER_TYPES.TEXT) {
-    datasetFiltered = filterWithText(filterConfig);
+    datasetFiltered = textFilter(filterConfig);
   }
 
-  console.log(datasetFiltered)
+  if (type === FILTER_TYPES.DATE.ID) {
+    datasetFiltered = dateFilter(filterConfig, FILTER_TYPES.DATE.WHEN);
+  }
 
   return datasetFiltered;
 };

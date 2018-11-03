@@ -6,7 +6,7 @@ type Config = {
   value: string,
 };
 
-const filterWithText = (filterConfig: Config): Array<Object> => {
+const textFilter = (filterConfig: Config): Array<Object> => {
   const {
     dataset,
     filter,
@@ -22,4 +22,4 @@ const filterWithText = (filterConfig: Config): Array<Object> => {
   return datasetFiltered;
 };
 
-export default filterWithText;
+export default textFilter;

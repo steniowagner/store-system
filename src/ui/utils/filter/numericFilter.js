@@ -7,7 +7,7 @@ type Config = {
   value: string,
 };
 
-const filterWithNumbers = (filterConfig: Config): Array<Object> => {
+const numericFilter = (filterConfig: Config): Array<Object> => {
   const {
     operator,
     dataset,
@@ -28,4 +28,4 @@ const filterWithNumbers = (filterConfig: Config): Array<Object> => {
   return datasetFiltered;
 };
 
-export default filterWithNumbers;
+export default numericFilter;

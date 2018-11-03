@@ -146,11 +146,6 @@ class Filter extends Component<Props, State> {
       return;
     }
 
-    if (filterItem.type === FILTER_TYPES.FUNCTIONAL) {
-      this.handleFunctionalFilter(filterItem);
-      return;
-    }
-
     const isDifferentFilter = (filterSelected !== dataField);
     const shouldResetItemsFiltered = (!shouldFilterAfterSelectFilter && isDifferentFilter && (dataField !== 'all'));
     const filterButtonLabel = (dataField === 'all' ? 'Mostrar todos' : `${filterTitle}`);
@@ -217,14 +212,24 @@ class Filter extends Component<Props, State> {
       dataFiltered = this.handleTextFilter(filterSelected, filterValue);
     }
 
+    if (type === FILTER_TYPES.DATE.ID && (filterValue.length >= 10)) {
+      dataFiltered = this.handleDateFilter(filterSelected, filterValue);
+    }
+
     return dataFiltered;
   };
 
-  handleFunctionalFilter = (filterConfig: Object) => {
+  handleFunctionalFilter = (filterConfig: Object): void => {
     const { filterTitle, filterLabel, behavior } = filterConfig;
     const { onFilterData, dataset } = this.props;
 
-    const data = behavior(dataset);
+    const filterParams = {
+      type: FILTER_TYPES.FUNCTIONAL,
+      behavior,
+      dataset,
+    };
+
+    const data = filterList(filterParams);
 
     this.setState({
       filterButtonLabel: filterTitle,
@@ -235,7 +240,7 @@ class Filter extends Component<Props, State> {
     }, () => onFilterData(data));
   };
 
-  handleNumericFilter = (filterSelected: string, filterConfig: Object, filterValue: string) => {
+  handleNumericFilter = (filterSelected: string, filterConfig: Object, filterValue: string): Array<Object> => {
     const { dataset } = this.props;
 
     const filterParams = {
@@ -249,7 +254,20 @@ class Filter extends Component<Props, State> {
     return filterList(filterParams);
   };
 
-  handleTextFilter = (filterSelected: string, filterValue: string) => {
+  handleDateFilter = (filterSelected: Object, filterValue: string): Array<Object> => {
+    const { dataset } = this.props;
+
+    const filterParams = {
+      type: FILTER_TYPES.DATE.ID,
+      value: filterValue,
+      filterSelected,
+      dataset,
+    };
+
+    return filterList(filterParams);
+  };
+
+  handleTextFilter = (filterSelected: string, filterValue: string): Array<Object> => {
     const { dataset } = this.props;
 
     const filterParams = {

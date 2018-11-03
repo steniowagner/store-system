@@ -11,7 +11,22 @@ import Form from './form';
 
 class Sales extends Component {
   state = {
-    sales: [],
+    sales: [{
+      customerName: '21/02/1994',
+      dateToShow: moment().format('lll'),
+      date: '21/02/1994',
+      username: 'steniowagner',
+    }, {
+      customerName: '25/12/2000',
+      dateToShow: moment().format('lll'),
+      date: '25/12/2000',
+      username: 'steniowagner',
+    }, {
+      customerName: '25/12/2000',
+      dateToShow: moment().format('lll'),
+      date: '25/12/2000',
+      username: 'steniowagner',
+    }],
   };
 
   componentDidMount() {
