@@ -1,4 +1,6 @@
-import React from 'react';
+// @flow
+
+import React, { Component } from 'react';
 
 import { withFormik, Form } from 'formik';
 import * as Yup from 'yup';
@@ -6,57 +8,139 @@ import * as Yup from 'yup';
 import ProductSale from '../../components/common/product-sale-component';
 import ActionFormButton from '../../components/common/ActionFormButton';
 import { Section, Wrapper } from '../../components/common/FormUtils';
+import SaleConfirmation from './components/sale-confirmation';
 
-const renderProductSale = (props: Object): Object => {
-  const {
-    setFieldValue,
-    values,
-    errors,
-    mode,
-  } = props;
-
-  return (
-    <Section>
-      <ProductSale
-        setFieldValue={setFieldValue}
-        values={values}
-        errors={errors}
-        mode={mode}
-      />
-    </Section>
-  );
+type Props = {
+  onChageFormToEditMode: Function,
+  setFieldValue: Function,
+  handleSubmit: Function,
+  onRemoveItem: Function,
+  isSubmitting: boolean,
+  values: Object,
+  errors: Object,
+  mode: string,
 };
 
-const SalesForm = (props: Object): Object => {
-  const {
-    onChageFormToEditMode,
-    handleSubmit,
-    isSubmitting,
-    onRemoveItem,
-    mode,
-  } = props;
+type State = {
+  isSaleConfirmationDialogOpen: boolean,
+};
 
-  return (
-    <Wrapper>
-      <Form>
-        {renderProductSale(props)}
-        <ActionFormButton
-          onChageFormToEditMode={onChageFormToEditMode}
-          onRemoveItem={onRemoveItem}
-          disabled={isSubmitting}
-          onClick={handleSubmit}
+class SalesForm extends Component<Props, State> {
+  state = {
+    isSaleConfirmationDialogOpen: false,
+  };
+
+  onToggleSaleConfirmationDialog = (): void => {
+    const { isSaleConfirmationDialogOpen } = this.state;
+
+    this.setState({
+      isSaleConfirmationDialogOpen: !isSaleConfirmationDialogOpen,
+    });
+  };
+
+  renderProductSale = (): Object => {
+    const {
+      setFieldValue,
+      values,
+      errors,
+      mode,
+    } = this.props;
+
+    return (
+      <Section>
+        <ProductSale
+          setFieldValue={setFieldValue}
+          values={values}
+          errors={errors}
           mode={mode}
         />
-      </Form>
-    </Wrapper>
-  );
-};
+      </Section>
+    );
+  };
+
+  renderSaleConfirmation = (): Object => {
+    const { isSaleConfirmationDialogOpen } = this.state;
+    const {
+      setFieldValue,
+      handleSubmit,
+      isSubmitting,
+      values,
+      mode,
+    } = this.props;
+
+    const {
+      paymentInfo,
+      isInDebit,
+      discount,
+      subtotal,
+      total,
+    } = values;
+
+    return (
+      <SaleConfirmation
+        onCloseDialog={this.onToggleSaleConfirmationDialog}
+        isOpen={isSaleConfirmationDialogOpen}
+        setFieldValue={setFieldValue}
+        handleSubmit={handleSubmit}
+        isSubmitting={isSubmitting}
+        paymentInfo={paymentInfo}
+        isInDebit={isInDebit}
+        discount={discount}
+        subtotal={subtotal}
+        total={total}
+        mode={mode}
+      />
+    );
+  };
+
+  renderActionFormButton = (): Object => {
+    const {
+      onChageFormToEditMode,
+      onRemoveItem,
+      values,
+      mode,
+    } = this.props;
+
+    const { products } = values;
+    const hasProducts = !!(products.length);
+
+    return (
+      <ActionFormButton
+        onClick={this.onToggleSaleConfirmationDialog}
+        onChageFormToEditMode={onChageFormToEditMode}
+        onRemoveItem={onRemoveItem}
+        disabled={!hasProducts}
+        mode={mode}
+      />
+    );
+  };
+
+  render() {
+    return (
+      <Wrapper>
+        <Form>
+          {this.renderProductSale()}
+          {this.renderSaleConfirmation()}
+          {this.renderActionFormButton()}
+        </Form>
+      </Wrapper>
+    );
+  }
+}
 
 const CustomForm = withFormik({
   mapPropsToValues: ({ item }) => ({
+    paymentInfo: item.paymentInfo || {
+      lastInputFocused: '',
+      creditCardValue: '',
+      debitCardValue: '',
+      checkValue: '',
+      moneyValue: '',
+    },
     observation: item.observation || '',
-    customer: item.customer || '',
+    isInDebit: item.isInDebit || false,
     discount: item.discount || {},
+    customer: item.customer || '',
     products: item.products || [],
     subtotal: item.subtotal || 0,
     total: item.total || 0,

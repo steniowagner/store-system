@@ -10,24 +10,19 @@ import ActionButton from '../../../ActionButton';
 import Input from '../../../CustomInput';
 
 const Wrapper = styled.div`
-  margin-bottom: 16px;
-`;
-
-const InputContainer = styled.div`
-  width: 80%;
   display: flex;
-  align-items: center;
+  flex: 1;
 `;
 
 const InputWrapper = styled.div`
-  width: 50%;
+  width: 40%;
   margin-right: 16px;
 `;
 
 const InputButtonWrapper = styled.div`
   display: flex;
-  margin-left: 8px;
-  margin-top: ${({ hasError }) => (hasError ? 0 : 20)}px;
+  align-self: center;
+  margin-bottom: ${({ hasError }) => (hasError ? 20 : 0)}px;
 `;
 
 type Props = {
@@ -65,24 +60,22 @@ class SelectCustomer extends Component<Props, State> {
     const value = (typeof customerSelected === 'object' ? customerSelected.name : customerSelected);
 
     return (
-      <InputWrapper>
-        <Input
-          placeholder="Selecione o Cliente"
-          onChange={() => {}}
-          onBlur={() => {}}
-          error={error}
-          value={value}
-          id="customer"
-          type="text"
-          label="Cliente"
-          disabled
-        />
-      </InputWrapper>
+      <Input
+        placeholder="Selecione o Cliente"
+        onChange={() => {}}
+        onBlur={() => {}}
+        error={error}
+        value={value}
+        id="customer"
+        type="text"
+        label=""
+        disabled
+      />
     );
   };
 
-  renderInput = (): Object => {
-    const { customerSelected, error, mode } = this.props;
+  renderSelectCustomerButton = (): Object => {
+    const { customerSelected, mode, error } = this.props;
 
     const isCustomerValidString = (typeof customerSelected === 'string' && !!customerSelected);
     const hasCustomerSelected = (isCustomerValidString || !!customerSelected.name);
@@ -90,7 +83,7 @@ class SelectCustomer extends Component<Props, State> {
 
     return (
       <InputButtonWrapper
-        hasError={error}
+        hasError={!!error}
       >
         <ActionButton
           action={() => this.onToggleDialogChooseCustomer()}
@@ -119,10 +112,10 @@ class SelectCustomer extends Component<Props, State> {
   render() {
     return (
       <Wrapper>
-        <InputContainer>
+        <InputWrapper>
           {this.renderInputField()}
-          {this.renderInput()}
-        </InputContainer>
+        </InputWrapper>
+        {this.renderSelectCustomerButton()}
         {this.renderDialog()}
       </Wrapper>
     );

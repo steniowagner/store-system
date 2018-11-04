@@ -33,6 +33,7 @@ type Props = {
   onRemoveProduct: Function,
   products: Array<Object>,
   error: string,
+  mode: string,
 };
 
 type State = {
@@ -71,7 +72,7 @@ class ProductsSelectedList extends Component<Props, State> {
   };
 
   renderList = (): Object => {
-    const { onRemoveProduct, products } = this.props;
+    const { onRemoveProduct, products, mode } = this.props;
 
     return (
       <Fragment>
@@ -86,6 +87,7 @@ class ProductsSelectedList extends Component<Props, State> {
               key={product.id}
               index={index}
               {...product}
+              mode={mode}
             />
           );
         })}

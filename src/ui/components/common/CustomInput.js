@@ -5,7 +5,9 @@ import React from 'react';
 import Input from '@material-ui/core/Input';
 import styled from 'styled-components';
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  width: 100%;
+`;
 
 const TextAreaContainer = styled.div`
   background-color: ${({ theme, error }) => (error ? theme.colors.danger : theme.colors.lightGray)};

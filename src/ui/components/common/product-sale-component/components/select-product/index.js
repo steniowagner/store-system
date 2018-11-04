@@ -25,7 +25,8 @@ const ButtonWrapper = styled.div`
 `;
 
 type Props = {
-  onAddProduct: Function
+  onAddProduct: Function,
+  mode: string,
 };
 
 type State = {
@@ -63,6 +64,7 @@ class SelectProduct extends Component<Props, State> {
 
   render() {
     const { productSelected, quantity } = this.state;
+    const { mode } = this.props;
 
     const isSomeProductSelected = !!(Object.entries(productSelected)).length;
     const isSomeQuantitySelected = !!(quantity);
@@ -79,6 +81,7 @@ class SelectProduct extends Component<Props, State> {
           salePrice={productSelected.salePrice || ''}
           onTypeQuantity={this.onTypeQuantity}
           quantity={quantity}
+          mode={mode}
         />
         <ButtonWrapper>
           <ActionButtom

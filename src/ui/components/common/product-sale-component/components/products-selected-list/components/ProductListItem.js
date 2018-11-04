@@ -108,6 +108,7 @@ type Props = {
   quantity: number,
   index: number,
   total: number,
+  mode: string,
 };
 
 const ProductListItem = ({
@@ -118,12 +119,17 @@ const ProductListItem = ({
   onEdit,
   index,
   total,
-}: Props): Object => (
-  <Container>
-    {renderProductDescriptionWithIndex(description, index)}
-    {renderValues(quantity, salePrice, total)}
-    {renderActionButtons(onRemove, onEdit, index)}
-  </Container>
-);
+  mode,
+}: Props): Object => {
+  const shouldShowActionButtons = (mode !== 'detail');
+
+  return (
+    <Container>
+      {renderProductDescriptionWithIndex(description, index)}
+      {renderValues(quantity, salePrice, total)}
+      {shouldShowActionButtons && renderActionButtons(onRemove, onEdit, index)}
+    </Container>
+  );
+};
 
 export default ProductListItem;

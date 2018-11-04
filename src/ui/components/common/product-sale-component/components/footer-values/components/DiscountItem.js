@@ -15,9 +15,13 @@ const Container = styled.div`
   width: 100%;
 `;
 
-const InputWrapper = styled.div`
+const RowWrapper = styled.div`
   display: flex;
   justify-content: space-between;
+`;
+
+const InputWrapper = styled.div`
+  width: 50%;
 `;
 
 const Error = styled.span`
@@ -62,6 +66,10 @@ class DiscountItem extends Component<Props, State> {
       percentageValue,
       moneyValue,
     });
+  }
+
+  componentDidUpdate() {
+    this.handleInputFocus();
   }
 
   onTypeMoneyValue = (moneyValue: string): void => {
@@ -144,6 +152,28 @@ class DiscountItem extends Component<Props, State> {
     }, () => onSetValues('money', ''));
   };
 
+  handleSetInputRef = (input: Object, id: string): void => {
+    if (id === 'percentage') {
+      this._inputPercentageRef = input;
+    }
+
+    if (id === 'money') {
+      this._inputMoneyRef = input;
+    }
+  };
+
+  handleInputFocus = (): void => {
+    const { optionSelected } = this.state;
+
+    if (optionSelected === 'percentage') {
+      this._inputPercentageRef.focus();
+    }
+
+    if (optionSelected === 'money') {
+      this._inputMoneyRef.focus();
+    }
+  };
+
   renderRow = (config: Object): Object => {
     const {
       onChange,
@@ -157,7 +187,7 @@ class DiscountItem extends Component<Props, State> {
     const { optionSelected } = state;
 
     return (
-      <InputWrapper>
+      <RowWrapper>
         <FormControlLabel
           label={label}
           control={(
@@ -169,17 +199,20 @@ class DiscountItem extends Component<Props, State> {
           )}
           value={id}
         />
-        <Input
-          disabled={optionSelected !== id}
-          onChange={event => onChange(event.target.value)}
-          value={inputValue}
-          onBlur={() => {}}
-          placeholder=""
-          type="number"
-          error=""
-          id={id}
-        />
-      </InputWrapper>
+        <InputWrapper>
+          <Input
+            inputRef={(input) => { this.handleSetInputRef(input, id); }}
+            disabled={optionSelected !== id}
+            onChange={event => onChange(event.target.value)}
+            value={inputValue}
+            onBlur={() => {}}
+            placeholder=""
+            type="number"
+            error=""
+            id={id}
+          />
+        </InputWrapper>
+      </RowWrapper>
     );
   };
 

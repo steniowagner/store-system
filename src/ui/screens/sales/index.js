@@ -6,27 +6,13 @@ import moment from 'moment';
 import 'moment/locale/pt-br';
 
 import EntityComponent from '../../components/common/entity-component';
+
 import { filterConfig, tabConfig } from './config';
 import Form from './form';
 
 class Sales extends Component {
   state = {
-    sales: [{
-      customerName: '21/02/1994',
-      dateToShow: moment().format('lll'),
-      date: '21/02/1994',
-      username: 'steniowagner',
-    }, {
-      customerName: '25/12/2000',
-      dateToShow: moment().format('lll'),
-      date: '25/12/2000',
-      username: 'steniowagner',
-    }, {
-      customerName: '25/12/2000',
-      dateToShow: moment().format('lll'),
-      date: '25/12/2000',
-      username: 'steniowagner',
-    }],
+    sales: [],
   };
 
   componentDidMount() {
@@ -36,16 +22,34 @@ class Sales extends Component {
   onCreateSale = (sale: Object): void => {
     const { sales } = this.state;
 
+    console.log(sale);
+
     const newSale = {
       customerName: sale.customer.name || '-',
       dateToShow: moment().format('lll'),
       date: moment().format('L'),
       username: 'steniowagner',
+      id: Math.random(),
       ...sale,
     };
 
     this.setState({
       sales: [newSale, ...sales],
+    });
+  };
+
+  onEditSale = (sale: Object): void => {
+    const { sales } = this.state;
+
+    const saleEdited = {
+      ...sale,
+      customerName: sale.customer.name || '-',
+    };
+
+    const saleEditedIndex = sales.findIndex(saleItem => saleItem.id === saleEdited.id);
+
+    this.setState({
+      sales: Object.assign([], sales, { [saleEditedIndex]: saleEdited }),
     });
   };
 
@@ -56,7 +60,7 @@ class Sales extends Component {
       <EntityComponent
         onRemoveItem={() => {}}
         onCreateItem={this.onCreateSale}
-        onEditItem={() => {}}
+        onEditItem={this.onEditSale}
         filterConfig={filterConfig}
         singularEntityName="Venda"
         pluralEntityName="Vendas"

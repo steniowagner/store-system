@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react';
 
 import Paper from '@material-ui/core/Paper';
@@ -6,9 +8,9 @@ import styled from 'styled-components';
 import { calculateSubtotalValue, calculateTotalValue } from './calculateValues';
 
 import ProductsSelectedList from './components/products-selected-list';
-import SelectCustomer from './components/select-customer';
 import SelectProduct from './components/select-product';
 import FooterValues from './components/footer-values';
+import TopRow from './components/TopRow';
 
 const Container = styled.div`
   width: 100%;
@@ -48,7 +50,7 @@ const setSaleValues = (products: Array<Object>, setFieldValue: Function, discoun
   setSubtotalValueOnForm(subtotal, setFieldValue);
 };
 
-const onRemoveProduct = (productSelectedIndex: number, values: Object, setFieldValue: Function) => {
+const onRemoveProduct = (productSelectedIndex: number, values: Object, setFieldValue: Function): void => {
   const { products, discount } = values;
   const productsUpdated = products.filter((productSelected, index) => productSelectedIndex !== index);
 
@@ -77,11 +79,11 @@ const onEditProductQuantity = (values: Object, indexProductEdited: number, quant
   setSaleValues(productsUpdated, setFieldValue, discount);
 };
 
-const handleSaveProductRepeated = (products: Array<Object>, index: number, quantity: string, setFieldValue: Function): void => {
+const handleSaveProductRepeated = (values: Object, products: Array<Object>, index: number, quantity: string, setFieldValue: Function): void => {
   const currentQuantity = Number(products[index].quantity);
   const newQuantity = currentQuantity + Math.abs(quantity);
 
-  onEditProductQuantity(products, index, newQuantity, setFieldValue);
+  onEditProductQuantity(values, index, newQuantity, setFieldValue);
 };
 
 const onAddProduct = (product: Object, quantity: string, setFieldValue: Function, values: Object): void => {
@@ -96,7 +98,7 @@ const onAddProduct = (product: Object, quantity: string, setFieldValue: Function
   const isProductAlreadyOnList = (indexProduct >= 0);
 
   if (isProductAlreadyOnList) {
-    handleSaveProductRepeated(products, indexProduct, quantity, setFieldValue);
+    handleSaveProductRepeated(values, products, indexProduct, quantity, setFieldValue);
     return;
   }
 
@@ -106,27 +108,34 @@ const onAddProduct = (product: Object, quantity: string, setFieldValue: Function
   setSaleValues(productsUpdated, setFieldValue, discount);
 };
 
-const renderSelectCustomer = (setFieldValue: Function, values: Object, errors: Object, mode: string): Object => (
-  <SelectCustomer
-    customerSelected={values.customer}
-    setFieldValue={setFieldValue}
-    error={errors.customer}
+const renderTopRow = (setFieldValue: Function, values: Object, errors: Object, mode: string): Object => {
+  const shouldRenderPrintReceiptButton = (mode !== 'create');
+
+  return (
+    <TopRow
+      shouldRenderPrintReceiptButton={shouldRenderPrintReceiptButton}
+      customerSelected={values.customer}
+      setFieldValue={setFieldValue}
+      error={errors.customer}
+      mode={mode}
+    />
+  );
+};
+
+const renderSelectProduct = (setFieldValue: Function, values: Object, mode: string): Object => (
+  <SelectProduct
+    onAddProduct={(product, quantity) => onAddProduct(product, quantity, setFieldValue, values)}
     mode={mode}
   />
 );
 
-const renderSelectProduct = (setFieldValue: Function, values: Object): Object => (
-  <SelectProduct
-    onAddProduct={(product, quantity) => onAddProduct(product, quantity, setFieldValue, values)}
-  />
-);
-
-const renderProductsList = (setFieldValue: Function, values: Object, errors: Object): Object => (
+const renderProductsList = (setFieldValue: Function, values: Object, errors: Object, mode: string): Object => (
   <ProductsSelectedList
     onEditProductQuantity={(indexProductEdited, quantity) => onEditProductQuantity(values, indexProductEdited, quantity, setFieldValue)}
     onRemoveProduct={productSelectedIndex => onRemoveProduct(productSelectedIndex, values, setFieldValue)}
     products={values.products}
     error={errors.products}
+    mode={mode}
   />
 );
 
@@ -160,10 +169,10 @@ const ProductSale = ({
   mode,
 }: Props): Object => (
   <Container>
-    {renderSelectCustomer(setFieldValue, values, errors, mode)}
+    {renderTopRow(setFieldValue, values, errors, mode)}
     <Paper>
-      {renderSelectProduct(setFieldValue, values)}
-      {renderProductsList(setFieldValue, values, errors)}
+      {renderSelectProduct(setFieldValue, values, mode)}
+      {renderProductsList(setFieldValue, values, errors, mode)}
       {renderFooterValues(setFieldValue, values, mode)}
     </Paper>
   </Container>

@@ -1,9 +1,9 @@
 // @flow
 
-import functionalFilter from './functionalFilter';
-import numericFilter from './numericFilter';
-import textFilter from './textFilter';
-import dateFilter from './dateFilter';
+import handleFunctionalFilter from './functionalFilter';
+import handleNumericFilter from './numericFilter';
+import handleTextFilter from './textFilter';
+import handleDateFilter from './dateFilter';
 
 export const FILTER_TYPES = {
   FUNCTIONAL: 'FUNCTIONAL',
@@ -25,19 +25,19 @@ export const filterList = (filterConfig: Object): Array<Object> => {
   let datasetFiltered = [];
 
   if (type === FILTER_TYPES.FUNCTIONAL) {
-    datasetFiltered = functionalFilter(filterConfig);
+    datasetFiltered = handleFunctionalFilter(filterConfig);
   }
 
   if (type === FILTER_TYPES.NUMERIC) {
-    datasetFiltered = numericFilter(filterConfig);
+    datasetFiltered = handleNumericFilter(filterConfig);
   }
 
   if (type === FILTER_TYPES.TEXT) {
-    datasetFiltered = textFilter(filterConfig);
+    datasetFiltered = handleTextFilter(filterConfig);
   }
 
   if (type === FILTER_TYPES.DATE.ID) {
-    datasetFiltered = dateFilter(filterConfig, FILTER_TYPES.DATE.WHEN);
+    datasetFiltered = handleDateFilter(filterConfig, FILTER_TYPES.DATE.WHEN);
   }
 
   return datasetFiltered;

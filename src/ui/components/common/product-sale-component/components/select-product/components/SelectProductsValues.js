@@ -20,6 +20,7 @@ type Props = {
   onTypeQuantity: Function,
   salePrice: number,
   quantity: string,
+  mode: string,
 };
 
 class SelectProductValues extends Component <Props, {}> {
@@ -27,7 +28,7 @@ class SelectProductValues extends Component <Props, {}> {
     const { salePrice } = nextProps;
 
     if (salePrice) {
-      this._inputRef.focus();
+      this._inputQuantityRef.focus();
     }
   }
 
@@ -40,6 +41,8 @@ class SelectProductValues extends Component <Props, {}> {
   });
 
   renderInput = (config: Object): Object => {
+    const { mode } = this.props;
+
     const {
       handleChange,
       value,
@@ -48,18 +51,19 @@ class SelectProductValues extends Component <Props, {}> {
       id,
     } = config;
 
-    const isDisabled = (id === 'price' || id === 'total');
+    const isQuantityField = (id === 'quantity');
+    const shouldDisabledField = (!isQuantityField || mode === 'detail');
 
     return (
       <InputWrapper>
         <Input
           inputRef={(input) => {
-            if (!isDisabled) {
-              this._inputRef = input;
+            if (isQuantityField) {
+              this._inputQuantityRef = input;
             }
           }}
+          disabled={shouldDisabledField}
           onChange={handleChange}
-          disabled={isDisabled}
           onBlur={() => {}}
           placeholder=""
           label={label}

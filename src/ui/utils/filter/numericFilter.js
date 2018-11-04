@@ -16,11 +16,11 @@ const numericFilter = (filterConfig: Config): Array<Object> => {
   } = filterConfig;
 
   const verifyOperatorValue = {
-    '<': (val, currentValue) => value > currentValue,
-    '>=': (val, currentValue) => value >= currentValue,
-    '=': (val, currentValue) => value === currentValue,
-    '>': (val, currentValue) => value < currentValue,
-    '<=': (val, currentValue) => value <= currentValue,
+    '<': (_, currentValue) => value > currentValue,
+    '>=': (_, currentValue) => value >= currentValue,
+    '=': (_, currentValue) => value === currentValue,
+    '>': (_, currentValue) => value < currentValue,
+    '<=': (_, currentValue) => value <= currentValue,
   };
 
   const datasetFiltered = dataset.filter(product => verifyOperatorValue[operator](value, product[filter]));

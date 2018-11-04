@@ -19,11 +19,24 @@ export const tabConfig = [{
   dataField: 'total',
 }];
 
+const filterSalesWithDebit = (sales: Array<Object>): Array<Object> => sales.filter(sale => sale.isInDebit);
+
 export const filterConfig = [{
   placeholder: 'Informe o Nome de Usuáro do Usuário Buscado',
   type: FILTER_TYPES.TEXT,
   filterTitle: 'Usuário',
   dataField: 'username',
+}, {
+  placeholder: 'Informe o Nome do Cliente Buscado',
+  type: FILTER_TYPES.TEXT,
+  filterTitle: 'Cliente',
+  dataField: 'customerName',
+}, {
+  filterLabel: 'Vendas que estão em Débito',
+  behavior: filterSalesWithDebit,
+  type: FILTER_TYPES.FUNCTIONAL,
+  dataField: 'isInDebit',
+  filterTitle: 'Em Débito',
 }, {
   placeholder: 'Informe a Data em questão',
   dataField: FILTER_TYPES.DATE.WHEN.BEFORE,
