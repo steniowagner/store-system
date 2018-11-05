@@ -18,6 +18,7 @@ const FilterAndCreateButtonWrapper = styled.div`
   flex: 1;
   justify-content: space-between;
   align-items: center;
+  margin: 16px 0;
 `;
 
 const FilterWrapper = styled.div`
@@ -273,8 +274,12 @@ class EntityComponent extends Component<Props, State> {
       edit: 'EDITAR',
     };
 
-    const item = ((formMode === 'edit' || formMode === 'detail') ? contextItem : {});
-    const title = (withOwnTitle.toUpperCase() || `${mode[formMode]} ${singularEntityName.toUpperCase()}`);
+    const isFormCreateMode = (formMode === 'create');
+    const item = (!isFormCreateMode ? contextItem : {});
+
+    const ownTitle = (!!withOwnTitle && withOwnTitle.toUpperCase());
+    const defaultTitle = `${mode[formMode]} ${singularEntityName.toUpperCase()}`;
+    const title = (ownTitle || defaultTitle);
 
     return (
       <FullScreenDialog

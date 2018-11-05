@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import EntityComponent from '../../components/common/entity-component';
 
-import { filterConfig, tabConfig } from './config';
+import config from './config';
 import UserForm from './form';
 
 const test = [{
@@ -105,8 +105,8 @@ class User extends Component {
         onEditItem={this.onEditUser}
         singularEntityName="Usuário"
         pluralEntityName="Usuários"
-        filterConfig={filterConfig}
-        tabConfig={tabConfig}
+        filterConfig={config.filterConfig}
+        tabConfig={config.tabConfig}
         dataset={users}
         canBeCreated
         Form={props => (

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { filterConfig, tabConfig } from './config';
+import config from './config';
 import Form from './form';
 
 import EntityComponent from '../../components/common/entity-component';
@@ -95,8 +95,8 @@ class Stock extends Component {
         onCreateItem={() => {}}
         singularEntityName="Estoque"
         pluralEntityName="Estoque"
-        filterConfig={filterConfig}
-        tabConfig={tabConfig}
+        filterConfig={config.filterConfig}
+        tabConfig={config.tabConfig}
         dataset={stock}
         Form={props => (
           <Form

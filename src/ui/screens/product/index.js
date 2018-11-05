@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 
 import EntityComponent from '../../components/common/entity-component';
 
-import { filterConfig, tabConfig } from './config';
+import config from './config';
 import Form from './form';
 
 class Product extends Component {
@@ -141,8 +141,8 @@ class Product extends Component {
         onEditItem={this.onEditProduct}
         singularEntityName="Produto"
         pluralEntityName="Produtos"
-        filterConfig={filterConfig}
-        tabConfig={tabConfig}
+        filterConfig={config.filterConfig}
+        tabConfig={config.tabConfig}
         dataset={products}
         canBeCreated
         canBeRemoved

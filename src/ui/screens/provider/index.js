@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { filterConfig, tabConfig } from './config';
+
+import config from './config';
 import Form from './form';
 
 import EntityComponent from '../../components/common/entity-component';
@@ -45,8 +46,8 @@ class Provider extends Component {
         onEditItem={this.onEditProvider}
         singularEntityName="Fornecedor"
         pluralEntityName="Fornecedores"
-        filterConfig={filterConfig}
-        tabConfig={tabConfig}
+        filterConfig={config.filterConfig}
+        tabConfig={config.tabConfig}
         dataset={providers}
         canBeCreated
         canBeRemoved

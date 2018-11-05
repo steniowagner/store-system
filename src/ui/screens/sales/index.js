@@ -7,7 +7,7 @@ import 'moment/locale/pt-br';
 
 import EntityComponent from '../../components/common/entity-component';
 
-import { filterConfig, tabConfig } from './config';
+import config from './config';
 import Form from './form';
 
 class Sales extends Component {
@@ -58,14 +58,14 @@ class Sales extends Component {
 
     return (
       <EntityComponent
-        onRemoveItem={() => {}}
+        filterConfig={config.filterConfig}
+        tabConfig={config.tabConfig}
         onCreateItem={this.onCreateSale}
         onEditItem={this.onEditSale}
-        filterConfig={filterConfig}
+        onRemoveItem={() => {}}
         singularEntityName="Venda"
         pluralEntityName="Vendas"
         withOwnTitle="NOVA VENDA"
-        tabConfig={tabConfig}
         dataset={sales}
         canBeCreated
         Form={props => (

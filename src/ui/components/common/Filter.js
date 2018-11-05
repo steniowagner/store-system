@@ -180,7 +180,7 @@ class Filter extends Component<Props, State> {
   };
 
   getTextInputPlaceholder = (): string => {
-    const { filterSelected, filterButtonLabel } = this.state;
+    const { filterSelected } = this.state;
 
     const isAllFilterSelected = (filterSelected === 'all');
     if (isAllFilterSelected) {
@@ -192,20 +192,31 @@ class Filter extends Component<Props, State> {
       return 'ESCOLHA UM FILTRO PARA BUSCAR A INFORMAÇÃO DESEJADA';
     }
 
-    return `DIGITE O/A ${filterButtonLabel.toUpperCase()} QUE DESEJA BUSCAR`;
+    const filterSelectedConfig = this.getFilterSelectedConfig();
+    const { placeholder } = filterSelectedConfig;
+
+    return placeholder.toUpperCase();
   };
 
-  handleFilterByType = (filterValue: string) => {
+  getFilterSelectedConfig = (): Object => {
     const { filterSelected } = this.state;
     const { filterConfig } = this.props;
 
     const filterSelectedIndex = filterConfig.findIndex(filter => filter.dataField === filterSelected);
-    const { type } = filterConfig[filterSelectedIndex];
+
+    return filterConfig[filterSelectedIndex];
+  }
+
+  handleFilterByType = (filterValue: string) => {
+    const { filterSelected } = this.state;
+
+    const filterSelectedConfig = this.getFilterSelectedConfig();
+    const { type } = filterSelectedConfig;
 
     let dataFiltered = [];
 
     if (type === FILTER_TYPES.NUMERIC) {
-      dataFiltered = this.handleNumericFilter(filterSelected, filterConfig[filterSelectedIndex], filterValue);
+      dataFiltered = this.handleNumericFilter(filterSelected, filterSelectedConfig, filterValue);
     }
 
     if (type === FILTER_TYPES.TEXT) {
@@ -220,7 +231,13 @@ class Filter extends Component<Props, State> {
   };
 
   handleFunctionalFilter = (filterConfig: Object): void => {
-    const { filterTitle, filterLabel, behavior } = filterConfig;
+    const {
+      filterTitle,
+      filterLabel,
+      dataField,
+      behavior,
+    } = filterConfig;
+
     const { onFilterData, dataset } = this.props;
 
     const filterParams = {
@@ -233,7 +250,7 @@ class Filter extends Component<Props, State> {
 
     this.setState({
       filterButtonLabel: filterTitle,
-      filterSelected: filterTitle,
+      filterSelected: dataField,
       filterValue: filterLabel,
       isFunctionalFilter: true,
       isFilterOpen: false,
@@ -281,7 +298,7 @@ class Filter extends Component<Props, State> {
   };
 
   renderMenuItems = (): Object => {
-    const { isFunctionalFilter, filterSelected } = this.state;
+    const { filterSelected } = this.state;
     const { filterConfig } = this.props;
 
     const extraFilter = [{
@@ -309,9 +326,6 @@ class Filter extends Component<Props, State> {
       </MenuItem>
     );
 
-    const selectFunctionMenuItem = (selected: string, filterTitle: string): boolean => (filterSelected === filterTitle);
-    const selectDefaultMenuItem = (selected: string, dataField: string): boolean => (filterSelected === dataField);
-
     return (
       <MenuList>
         {data.map(item => (
@@ -319,9 +333,7 @@ class Filter extends Component<Props, State> {
             ? FilterItem
             : (
               <MenuItem
-                selected={isFunctionalFilter
-                  ? selectFunctionMenuItem(filterSelected, item.filterTitle)
-                  : selectDefaultMenuItem(filterSelected, item.dataField)}
+                selected={filterSelected === item.dataField}
                 onClick={() => this.onSelectFilter(item)}
                 key={item.filterTitle}
               >
@@ -405,7 +417,7 @@ class Filter extends Component<Props, State> {
             onChange={event => this.onChangeFilterValue(event.target.value)}
             placeholder={this.getTextInputPlaceholder()}
             disabled={isInputDisabled}
-            value={filterValue}
+            value={filterValue || ''}
           />
         </TextBoxWrapper>
       </Container>

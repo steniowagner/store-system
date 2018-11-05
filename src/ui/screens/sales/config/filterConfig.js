@@ -1,28 +1,11 @@
 // @flow
 
-import { FILTER_TYPES } from '../../utils/filter';
-
-export const tabConfig = [{
-  columnTitle: 'Cliente',
-  dataField: 'customerName',
-}, {
-  columnTitle: 'Data',
-  dataField: 'dateToShow',
-}, {
-  columnTitle: 'Usuário',
-  dataField: 'username',
-}, {
-  columnTitle: 'Sub-total',
-  dataField: 'subtotal',
-}, {
-  columnTitle: 'Total',
-  dataField: 'total',
-}];
+import { FILTER_TYPES } from '../../../utils/filter';
 
 const filterSalesWithDebit = (sales: Array<Object>): Array<Object> => sales.filter(sale => sale.isInDebit);
 
-export const filterConfig = [{
-  placeholder: 'Informe o Nome de Usuáro do Usuário Buscado',
+const filterConfig = [{
+  placeholder: 'Informe o Nome de Usuáro Buscado',
   type: FILTER_TYPES.TEXT,
   filterTitle: 'Usuário',
   dataField: 'username',
@@ -32,27 +15,29 @@ export const filterConfig = [{
   filterTitle: 'Cliente',
   dataField: 'customerName',
 }, {
-  filterLabel: 'Vendas que estão em Débito',
-  behavior: filterSalesWithDebit,
+  placeholder: 'Vendas que estão em Débito',
   type: FILTER_TYPES.FUNCTIONAL,
-  dataField: 'isInDebit',
   filterTitle: 'Em Débito',
+  dataField: 'debit',
+  behavior: filterSalesWithDebit,
 }, {
   placeholder: 'Informe a Data em questão',
-  dataField: FILTER_TYPES.DATE.WHEN.BEFORE,
   type: FILTER_TYPES.DATE.ID,
   filterTitle: 'Antes do Dia...',
+  dataField: FILTER_TYPES.DATE.WHEN.BEFORE,
   field: 'date',
 }, {
   placeholder: 'Informe a Data em questão',
-  dataField: FILTER_TYPES.DATE.WHEN.SAME,
   type: FILTER_TYPES.DATE.ID,
   filterTitle: 'No Dia...',
+  dataField: FILTER_TYPES.DATE.WHEN.SAME,
   field: 'date',
 }, {
   placeholder: 'Informe a Data em questão',
-  dataField: FILTER_TYPES.DATE.WHEN.AFTER,
   type: FILTER_TYPES.DATE.ID,
   filterTitle: 'Depois do Dia...',
+  dataField: FILTER_TYPES.DATE.WHEN.AFTER,
   field: 'date',
 }];
+
+export default filterConfig;
