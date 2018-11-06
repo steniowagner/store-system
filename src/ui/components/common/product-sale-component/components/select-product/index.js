@@ -76,6 +76,7 @@ class SelectProduct extends Component<Props, State> {
         <ProductFilter
           onSelectProduct={this.onSelectProduct}
           productSelected={productSelected}
+          mode={mode}
         />
         <SelectProductsValues
           salePrice={productSelected.salePrice || ''}

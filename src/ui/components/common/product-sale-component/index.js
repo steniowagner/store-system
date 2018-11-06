@@ -18,6 +18,8 @@ const Container = styled.div`
 `;
 
 type Props = {
+  withExtraComponent: ?boolean,
+  ExtraComponent: ?Object,
   setFieldValue: Function,
   values: Object,
   errors: Object,
@@ -129,6 +131,15 @@ const renderSelectProduct = (setFieldValue: Function, values: Object, mode: stri
   />
 );
 
+const renderExtraComponent = (ExtraComponent: Object, setFieldValue: Function, values: Object, errors: Object, mode: string): Object => (
+  <ExtraComponent
+    setFieldValue={setFieldValue}
+    errors={errors}
+    values={values}
+    mode={mode}
+  />
+);
+
 const renderProductsList = (setFieldValue: Function, values: Object, errors: Object, mode: string): Object => (
   <ProductsSelectedList
     onEditProductQuantity={(indexProductEdited, quantity) => onEditProductQuantity(values, indexProductEdited, quantity, setFieldValue)}
@@ -163,6 +174,8 @@ const renderFooterValues = (setFieldValue: Function, values: Object, mode: strin
 };
 
 const ProductSale = ({
+  withExtraComponent,
+  ExtraComponent,
   setFieldValue,
   values,
   errors,
@@ -170,6 +183,7 @@ const ProductSale = ({
 }: Props): Object => (
   <Container>
     {renderTopRow(setFieldValue, values, errors, mode)}
+    {withExtraComponent && renderExtraComponent(ExtraComponent, setFieldValue, values, errors, mode)}
     <Paper>
       {renderSelectProduct(setFieldValue, values, mode)}
       {renderProductsList(setFieldValue, values, errors, mode)}

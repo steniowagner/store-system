@@ -33,14 +33,17 @@ const DefaultText = styled.span`
 `;
 
 const filterConfig = [{
+  placeholder: 'Informe o nome do Cliente Buscado',
   type: FILTER_TYPES.TEXT,
   filterTitle: 'Nome',
   dataField: 'name',
 }, {
+  placeholder: 'Informe o CPF do Cliente Buscado',
   type: FILTER_TYPES.TEXT,
   filterTitle: 'CPF',
   dataField: 'cpf',
 }, {
+  placeholder: 'Informe o RG do Cliente Buscado',
   type: FILTER_TYPES.TEXT,
   filterTitle: 'RG',
   dataField: 'rg',

@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 
 import styled from 'styled-components';
 
-import Input from '../../../../../../components/common/CustomInput';
+import Input from '../../../CustomInput';
 
 const Wrapper = styled.div`
   width: 100%;

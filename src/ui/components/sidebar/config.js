@@ -14,6 +14,10 @@ const config = [{
   route: '/stock',
 }, {
   icon: AccountCircle,
+  title: 'ORÇAMENTOS',
+  route: '/budget',
+}, {
+  icon: AccountCircle,
   title: 'CLIENTES',
   route: '/customer',
 }, {

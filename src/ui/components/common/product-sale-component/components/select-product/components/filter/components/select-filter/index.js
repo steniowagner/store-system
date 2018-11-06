@@ -32,14 +32,20 @@ const CustomInput = styled(({ ...props }) => (
   />
 ))``;
 
+const getProperInputColor = (theme: Object, isFormOnDetailMode: boolean): string => {
+  const color = (isFormOnDetailMode ? theme.colors.customInactiveButton : theme.colors.affirmative);
+
+  return color;
+};
+
 const InputWrapper = styled.div`
   width: 100%;
   height: 48px;
   padding: 0 16px;
   display: flex;
-  border-top: 1.5px solid ${({ theme }) => theme.colors.affirmative};
-  border-right: 1.5px solid ${({ theme }) => theme.colors.affirmative};
-  border-bottom: 1.5px solid ${({ theme }) => theme.colors.affirmative};
+  border-top: 1.5px solid ${({ theme, isFormDetailMode }) => getProperInputColor(theme, isFormDetailMode)};
+  border-right: 1.5px solid ${({ theme, isFormDetailMode }) => getProperInputColor(theme, isFormDetailMode)};
+  border-bottom: 1.5px solid ${({ theme, isFormDetailMode }) => getProperInputColor(theme, isFormDetailMode)};
   border-top-right-radius: 4px;
   border-bottom-right-radius: 4px;
   background-color: ${({ disabled, theme }) => (disabled ? theme.colors.lightGray : theme.colors.white)};
@@ -58,7 +64,7 @@ const FilterButtonContent = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: ${({ theme }) => theme.colors.affirmative}
+  background-color: ${({ theme, isFormDetailMode }) => getProperInputColor(theme, isFormDetailMode)};
   border-top-left-radius: 6px;
   border-bottom-left-radius: 6px;
 `;
@@ -95,6 +101,7 @@ type Props = {
   onSelectOption: Function,
   optionSelected: Object,
   filterValue: string,
+  mode: string,
 };
 
 type State = {
@@ -124,7 +131,7 @@ class CustomFilter extends Component<Props, State> {
 
   renderMenuOptionsButton = (): Object => {
     const { isFilterOptionsMenuOpen } = this.state;
-    const { onSelectOption, optionSelected } = this.props;
+    const { onSelectOption, optionSelected, mode } = this.props;
 
     const { title, field } = optionSelected;
 
@@ -133,11 +140,14 @@ class CustomFilter extends Component<Props, State> {
     return (
       <FilterSelector
         onClick={this.onToggleFilterMenu}
+        disabled={(mode === 'detail')}
         aria-haspopup="true"
         variant="contained"
       >
         <FilteWrapper>
-          <FilterButtonContent>
+          <FilterButtonContent
+            isFormDetailMode={(mode === 'detail')}
+          >
             <FilterSelectedText>
               {title.toUpperCase()}
             </FilterSelectedText>
@@ -158,12 +168,18 @@ class CustomFilter extends Component<Props, State> {
   }
 
   render() {
-    const { onTypeFilterValue, optionSelected, filterValue } = this.props;
+    const {
+      onTypeFilterValue,
+      optionSelected,
+      filterValue,
+      mode,
+    } = this.props;
 
     return (
       <Wrapper>
         {this.renderMenuOptionsButton()}
         <InputWrapper
+          isFormDetailMode={(mode === 'detail')}
           disabled={!optionSelected.field}
         >
           <CustomInput

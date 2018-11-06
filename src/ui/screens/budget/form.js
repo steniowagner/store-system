@@ -7,8 +7,9 @@ import * as Yup from 'yup';
 
 import ProductSale from '../../components/common/product-sale-component';
 import ActionFormButton from '../../components/common/ActionFormButton';
-import SaleConfirmation from '../../components/common/sale-confirmation';
 import { Section, Wrapper } from '../../components/common/FormUtils';
+import BudgetExtraComponent from './components/BudgetExtraComponent';
+import SaleConfirmation from '../../components/common/sale-confirmation';
 
 type Props = {
   onChageFormToEditMode: Function,
@@ -25,7 +26,7 @@ type State = {
   isSaleConfirmationDialogOpen: boolean,
 };
 
-class SalesForm extends Component<Props, State> {
+class BudgetForm extends Component<Props, State> {
   state = {
     isSaleConfirmationDialogOpen: false,
   };
@@ -46,10 +47,17 @@ class SalesForm extends Component<Props, State> {
       mode,
     } = this.props;
 
+
     return (
       <Section>
         <ProductSale
           setFieldValue={setFieldValue}
+          ExtraComponent={() => (
+            <BudgetExtraComponent
+              onToggleSaleConfirmationDialog={this.onToggleSaleConfirmationDialog}
+              {...this.props}
+            />)}
+          withExtraComponent
           values={values}
           errors={errors}
           mode={mode}
@@ -98,31 +106,30 @@ class SalesForm extends Component<Props, State> {
     const {
       onChageFormToEditMode,
       onRemoveItem,
-      values,
+      handleSubmit,
+      isSubmitting,
       mode,
     } = this.props;
 
-    const { products } = values;
-    const hasProducts = !!(products.length);
-
     return (
       <ActionFormButton
-        onClick={this.onToggleSaleConfirmationDialog}
         onChageFormToEditMode={onChageFormToEditMode}
         onRemoveItem={onRemoveItem}
-        disabled={!hasProducts}
+        onClick={handleSubmit}
+        disabled={isSubmitting}
         mode={mode}
       />
     );
   };
+
 
   render() {
     return (
       <Wrapper>
         <Form>
           {this.renderProductSale()}
-          {this.renderSaleConfirmation()}
           {this.renderActionFormButton()}
+          {this.renderSaleConfirmation()}
         </Form>
       </Wrapper>
     );
@@ -139,10 +146,12 @@ const CustomForm = withFormik({
       moneyValue: '',
     },
     observation: item.observation || '',
-    isInDebit: item.isInDebit || false,
     discount: item.discount || {},
-    customer: item.customer || '',
     products: item.products || [],
+    customer: item.customer || '',
+    validity: item.validity || '',
+    status: item.status || 'Pendente',
+    isInDebit: item.isInDebit || false,
     subtotal: item.subtotal || 0,
     total: item.total || 0,
   }),
@@ -150,6 +159,12 @@ const CustomForm = withFormik({
   validationSchema: _props => Yup.lazy(() => Yup.object().shape({
     products: Yup.array()
       .required('Ao menos um Produto deve ser Adicionado'),
+
+    customer: Yup.string()
+      .required('O Cliente é obrigatório'),
+
+    validity: Yup.string()
+      .required('A Validade é obrigatória'),
   })),
 
   handleSubmit(values, { setSubmitting, props }) {
@@ -163,6 +178,6 @@ const CustomForm = withFormik({
 
     setSubmitting(false);
   },
-})(SalesForm);
+})(BudgetForm);
 
 export default CustomForm;

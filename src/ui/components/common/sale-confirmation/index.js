@@ -122,7 +122,7 @@ class SaleConfirmation extends Component<Props, State> {
   renderTitle = (): Object => {
     const { mode } = this.props;
 
-    const title = (mode === 'edit' ? 'Editar Venda' : 'Confirmar Venda');
+    const title = (mode === 'edit' ? 'Editar Pagamento' : 'Confirmar Pagamento');
 
     return (
       <DialogTitle

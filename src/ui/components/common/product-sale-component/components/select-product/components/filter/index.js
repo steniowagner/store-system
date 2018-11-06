@@ -50,6 +50,7 @@ const products = [{
 type Props = {
   onSelectProduct: Function,
   productSelected: Object,
+  mode: string,
 };
 
 class ProductFilter extends Component<Props, {}> {
@@ -207,6 +208,8 @@ class ProductFilter extends Component<Props, {}> {
       isListOpen,
     } = this.state;
 
+    const { mode } = this.props;
+
     return (
       <FilterContainer>
         <LabelWrapper>
@@ -219,6 +222,7 @@ class ProductFilter extends Component<Props, {}> {
           onSelectOption={this.onSelectOption}
           optionSelected={optionSelected}
           filterValue={filterValue}
+          mode={mode}
         />
         {isListOpen && this.renderProductsFilteredList()}
       </FilterContainer>

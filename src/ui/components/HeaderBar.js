@@ -33,7 +33,7 @@ const Headerbar = ({ classes }: Props): Object => (
         color="inherit"
         noWrap
       >
-        Minha Loja
+        Eunice Livros
       </Typography>
     </Toolbar>
   </AppBar>

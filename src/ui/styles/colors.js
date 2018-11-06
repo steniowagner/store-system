@@ -7,7 +7,11 @@ export default {
   lightGray: '#f2f2f2',
   inputBorder: '#C9D2D7',
   mediumGray: '#494949',
+  mediumGrayDisabled: '#a3a3a3',
   success: '#1DB954',
+  successDisabled: '#62fc98',
   danger: '#FF5A60',
+  dangerDisabled: '#f97c81',
   warning: '#ffc107',
+  warningDisabled: '#ffdb72',
 };
