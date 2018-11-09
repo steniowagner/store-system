@@ -54,12 +54,12 @@ const ActionButtonsWrapper = styled.div`
 
 type Props = {
   onDetailIconClicked: Function,
-  onRemoveIconClicked: Function,
-  onEditIconClicked: Function,
+  onRemoveIconClicked: ?Function,
+  onEditIconClicked: ?Function,
   updatePageIndex: Function,
+  withPagination: ?boolean,
   canBeRemoved: boolean,
   canBeEdited: boolean,
-  withFilter: boolean,
   tabConfig: Array<Object>,
   dataset: Array<any>,
   currentPage: number,
@@ -82,9 +82,9 @@ class CustomTable extends Component<Props, State> {
 
   renderActionsSection = (item: Object): Object => {
     const {
-      onEditIconClicked,
       onDetailIconClicked,
       onRemoveIconClicked,
+      onEditIconClicked,
       canBeRemoved,
       canBeEdited,
     } = this.props;
@@ -184,7 +184,7 @@ class CustomTable extends Component<Props, State> {
   render() {
     const {
       updatePageIndex,
-      withFilter,
+      withPagination,
       currentPage,
       tabConfig,
       dataset,
@@ -208,11 +208,11 @@ class CustomTable extends Component<Props, State> {
         </Table>
         <Pagination
           onChangeRowsPerPage={this.onChangeRowsPerPage}
+          withPagination={withPagination}
           datasetLength={dataset.length}
           onPageChange={updatePageIndex}
           rowsPerPage={rowsPerPage}
           currentPage={currentPage}
-          withFilter={withFilter}
         />
       </Container>
     );

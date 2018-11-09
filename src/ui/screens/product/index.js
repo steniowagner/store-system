@@ -147,7 +147,6 @@ class Product extends Component {
         canBeCreated
         canBeRemoved
         canBeEdited
-        withFilter
         Form={props => (
           <Form
             manufacturers={manufacturers}

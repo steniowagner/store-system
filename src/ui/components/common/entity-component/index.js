@@ -44,7 +44,6 @@ type Props = {
   canBeRemoved: ?boolean,
   canBeCreated: ?boolean,
   canBeEdited: ?boolean,
-  withFilter: ?boolean,
   dataset: Array<Object>,
 };
 
@@ -353,13 +352,8 @@ class EntityComponent extends Component<Props, State> {
   };
 
   renderTable = (): Object => {
+    const { canBeRemoved, canBeEdited, tabConfig } = this.props;
     const { itemsFiltered, currentPage } = this.state;
-    const {
-      canBeRemoved,
-      canBeEdited,
-      tabConfig,
-      withFilter,
-    } = this.props;
 
     return (
       <Table
@@ -371,8 +365,8 @@ class EntityComponent extends Component<Props, State> {
         canBeEdited={canBeEdited}
         currentPage={currentPage}
         dataset={itemsFiltered}
-        withFilter={withFilter}
         tabConfig={tabConfig}
+        withPagination
       />
     );
   };
@@ -392,14 +386,14 @@ class EntityComponent extends Component<Props, State> {
   };
 
   render() {
-    const { pluralEntityName, withFilter } = this.props;
+    const { pluralEntityName } = this.props;
 
     return (
       <Fragment>
         <Title>
           {pluralEntityName}
         </Title>
-        {withFilter && this.renderFilterAndCreatButtonSection()}
+        {this.renderFilterAndCreatButtonSection()}
         {this.renderTable()}
         {this.renderForm()}
         {this.renderSnackbar()}

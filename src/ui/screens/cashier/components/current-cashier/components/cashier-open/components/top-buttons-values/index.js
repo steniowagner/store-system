@@ -18,7 +18,8 @@ const Container = styled.div`
 type Props = {
   onTakeAwaytMoneyCashier: Function,
   onAddMoneyCashier: Function,
-  onCloseCashier: Function,
+  onEditItem: Function,
+  operationItem: Object,
 };
 
 type State = {
@@ -27,9 +28,29 @@ type State = {
 
 class TopActionButtons extends Component<Props, State> {
   state = {
-    moneyOperationDialogConfig: {},
+    moneyOperationDialogConfig: null,
     isDialogOpen: false,
   };
+
+  componentWillReceiveProps(nextProps) {
+    const { operationItem } = nextProps;
+
+    if (!operationItem) {
+      return;
+    }
+
+    const { operationType, mode } = operationItem;
+
+    const dialogConfig = getDialogConfig(operationType);
+
+    if (mode === 'detail') {
+      this.handleDetailOperation(operationItem, dialogConfig);
+    }
+
+    if (mode === 'edit') {
+      this.handleEditOperation(operationItem, dialogConfig);
+    }
+  }
 
   onToggleMoneyDialog = (): void => {
     const { isDialogOpen } = this.state;
@@ -45,7 +66,7 @@ class TopActionButtons extends Component<Props, State> {
     const dialogConfig = getDialogConfig(DIALOG_TYPES.ADD_MONEY, onAddMoneyCashier);
 
     this.setState({
-      moneyOperationDialogConfig: dialogConfig,
+      moneyOperationDialogConfig: { ...dialogConfig, mode: 'create' },
       isDialogOpen: true,
     });
   };
@@ -56,7 +77,48 @@ class TopActionButtons extends Component<Props, State> {
     const dialogConfig = getDialogConfig(DIALOG_TYPES.TAKE_AWAY_MONEY, onTakeAwaytMoneyCashier);
 
     this.setState({
-      moneyOperationDialogConfig: dialogConfig,
+      moneyOperationDialogConfig: { ...dialogConfig, mode: 'create' },
+      isDialogOpen: true,
+    });
+  };
+
+  handleEditOperation = (operationDetail: Object, dialogConfig: Object): void => {
+    const { reason, value, mode } = operationDetail;
+    const { onEditItem } = this.props;
+
+    const onClickOkButtonWhenEditMode = (moneyInputValue: string, reasonInputValue: string): void => {
+      this.onToggleMoneyDialog();
+      onEditItem(moneyInputValue, reasonInputValue);
+    };
+
+    const moneyOperationDialogConfig = {
+      ...dialogConfig,
+      action: onClickOkButtonWhenEditMode,
+      reason,
+      value,
+      mode,
+    };
+
+    this.setState({
+      moneyOperationDialogConfig,
+      isDialogOpen: true,
+    });
+  };
+
+  handleDetailOperation = (operationDetail: Object, dialogConfig: Object): void => {
+    const { reason, value, mode } = operationDetail;
+
+    const moneyOperationDialogConfig = {
+      ...dialogConfig,
+      action: this.onToggleMoneyDialog,
+      isDisabled: true,
+      reason,
+      value,
+      mode,
+    };
+
+    this.setState({
+      moneyOperationDialogConfig,
       isDialogOpen: true,
     });
   };
@@ -94,7 +156,7 @@ class TopActionButtons extends Component<Props, State> {
   renderMoneyOperationDialog = (): Object => {
     const { moneyOperationDialogConfig, isDialogOpen } = this.state;
 
-    return (
+    return moneyOperationDialogConfig && (
       <MoneyOperationDialog
         {...moneyOperationDialogConfig}
         onToggleMoneyDialog={this.onToggleMoneyDialog}

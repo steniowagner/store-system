@@ -52,7 +52,6 @@ class Provider extends Component {
         canBeCreated
         canBeRemoved
         canBeEdited
-        withFilter
         Form={props => (
           <Form
             {...props}

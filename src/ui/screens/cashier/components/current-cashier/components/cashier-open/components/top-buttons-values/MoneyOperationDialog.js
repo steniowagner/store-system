@@ -36,12 +36,17 @@ const renderSlide = (props: Object): Object => (
     {...props}
   />
 );
+
 type Props = {
   onToggleMoneyDialog: Function,
   action: Function,
   reasonText: string,
   moneyText: string,
+  reason: ?string,
   title: string,
+  value: ?string,
+  mode: string,
+  isDisabled: boolean,
   isOpen: boolean,
 };
 
@@ -50,10 +55,22 @@ type State = {
   moneyInputValue: string,
 };
 
-class InitialMoneyCashDialog extends Component<Props, State> {
+class MoneyOperationDialog extends Component<Props, State> {
   state = {
     reasonInputValue: '',
     moneyInputValue: '',
+  }
+
+  componentDidMount() {
+    const { reason, value } = this.props;
+
+    this.handleValuesFromProps(reason, value);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { reason, value } = nextProps;
+
+    this.handleValuesFromProps(reason, value);
   }
 
   onClickOkButton = (): void => {
@@ -91,38 +108,48 @@ class InitialMoneyCashDialog extends Component<Props, State> {
     });
   };
 
+  handleValuesFromProps = (reason: string, value: string): void => {
+    const parsedValue = (value && value.slice(3, value.length));
+
+    const moneyInputValue = (parsedValue || '');
+    const reasonInputValue = (reason || '');
+
+    this.setState({
+      reasonInputValue,
+      moneyInputValue,
+    });
+  };
+
   renderTitle = (): Object => {
-    const { title } = this.props;
+    const { title, mode } = this.props;
 
     return (
       <DialogTitle
         id="alert-dialog-slide-title"
       >
-        {title}
+        {title[mode]}
       </DialogTitle>
     );
   };
 
-  renderMoneyInput = (): Object => {
-    const { moneyInputValue } = this.state;
+  renderMoneyInput = (onTypeMoneyInputValue: Function, moneyInputValue: string, isDisabled: boolean): Object => (
+    <Input
+      onChange={event => this.onTypeMoneyInputValue(event.target.value)}
+      value={moneyInputValue}
+      disabled={isDisabled}
+      onBlur={() => {}}
+      placeholder=""
+      type="number"
+      id="money"
+      autoFocus
+      error=""
+    />
+  );
 
-    return (
-      <Input
-        onChange={event => this.onTypeMoneyInputValue(event.target.value)}
-        value={moneyInputValue}
-        onBlur={() => {}}
-        placeholder=""
-        type="number"
-        id="money"
-        autoFocus
-        error=""
-      />
-    );
-  };
-
-  renderReasonInput = (onTypeInitialMoney: Function, initialMoney: string): Object => (
+  renderReasonInput = (onTypeInitialMoney: Function, initialMoney: string, isDisabled: boolean): Object => (
     <Input
       onChange={event => onTypeInitialMoney(event.target.value)}
+      disabled={isDisabled}
       value={initialMoney}
       onBlur={() => {}}
       id="reason-text"
@@ -139,16 +166,16 @@ class InitialMoneyCashDialog extends Component<Props, State> {
   );
 
   renderInputMoneySection = (): Object => {
+    const { valueTitle, mode, isDisabled } = this.props;
     const { moneyInputValue } = this.state;
-    const { moneyText } = this.props;
 
     return (
       <Section>
-        {this.renderSectionText(moneyText)}
+        {this.renderSectionText(valueTitle[mode])}
         <ContentWrapper>
           <InputWrapper>
             <InputMoneyWrapper>
-              {this.renderMoneyInput(this.onTypeMoneyInputValue, moneyInputValue)}
+              {this.renderMoneyInput(this.onTypeMoneyInputValue, moneyInputValue, isDisabled)}
             </InputMoneyWrapper>
           </InputWrapper>
         </ContentWrapper>
@@ -157,15 +184,15 @@ class InitialMoneyCashDialog extends Component<Props, State> {
   };
 
   renderInputReasonSection = (): Object => {
+    const { reasonTitle, mode, isDisabled } = this.props;
     const { reasonInputValue } = this.state;
-    const { reasonText } = this.props;
 
     return (
       <Section>
-        {this.renderSectionText(reasonText)}
+        {this.renderSectionText(reasonTitle[mode])}
         <ContentWrapper>
           <InputWrapper>
-            {this.renderReasonInput(this.onTypeReasonInputValue, reasonInputValue)}
+            {this.renderReasonInput(this.onTypeReasonInputValue, reasonInputValue, isDisabled)}
           </InputWrapper>
         </ContentWrapper>
       </Section>
@@ -222,4 +249,4 @@ class InitialMoneyCashDialog extends Component<Props, State> {
   }
 }
 
-export default InitialMoneyCashDialog;
+export default MoneyOperationDialog;

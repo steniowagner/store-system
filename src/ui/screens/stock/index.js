@@ -99,7 +99,6 @@ class Stock extends Component {
         tabConfig={config.tabConfig}
         dataset={stock}
         canBeEdited
-        withFilter
         Form={props => (
           <Form
             {...props}

@@ -69,7 +69,6 @@ class Sales extends Component {
         dataset={sales}
         canBeCreated
         canBeEdited
-        withFilter
         Form={props => (
           <Form
             {...props}

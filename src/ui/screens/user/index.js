@@ -110,7 +110,6 @@ class User extends Component {
         dataset={users}
         canBeCreated
         canBeEdited
-        withFilter
         Form={props => (
           <UserForm
             onEditPassword={this.onEditPassword}

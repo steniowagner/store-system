@@ -3,7 +3,7 @@ const tabConfig = [{
   dataField: 'timestamp',
 }, {
   columnTitle: 'Transação',
-  dataField: 'transactionType',
+  dataField: 'operationType',
 }, {
   columnTitle: 'Cliente',
   dataField: 'customer',

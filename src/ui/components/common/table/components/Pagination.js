@@ -27,11 +27,11 @@ const PaginationActionsWrapper = styled.div`
 
 type Props = {
   datasetLength: number,
+  withPagination: ?boolean,
   rowsPerPage: number,
   currentPage: number,
   onChangeRowsPerPage: Function,
   onPageChange: Function,
-  withFilter: ?boolean,
 };
 
 const onFirstPageClicked = (onPageChange: Function): void => {
@@ -91,11 +91,11 @@ const renderPageControlls = (onPageChange: Function, datasetLength: number, curr
 
 const Pagination = ({
   onChangeRowsPerPage,
+  withPagination,
   datasetLength,
   onPageChange,
   rowsPerPage,
   currentPage,
-  withFilter,
 }: Props) => {
   const PageControlls = renderPageControlls(onPageChange, datasetLength, currentPage, rowsPerPage);
 
@@ -106,9 +106,9 @@ const Pagination = ({
           <TablePagination
             labelDisplayedRows={({ from, to, count }) => `${from}-${to} de ${count}`}
             onChangeRowsPerPage={event => onChangeRowsPerPage(event.target.value)}
+            rowsPerPageOptions={withPagination ? [5, 10] : [5]}
             ActionsComponent={() => PageControlls}
             labelRowsPerPage="Itens por página"
-            rowsPerPageOptions={withFilter ? [5, 10] : [5]}
             rowsPerPage={rowsPerPage}
             count={datasetLength}
             page={currentPage}

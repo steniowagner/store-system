@@ -57,7 +57,6 @@ class Customer extends Component {
         canBeCreated
         canBeRemoved
         canBeEdited
-        withFilter
         Form={props => (
           <Form
             {...props}

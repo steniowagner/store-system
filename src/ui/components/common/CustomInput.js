@@ -10,28 +10,28 @@ const Wrapper = styled.div`
 `;
 
 const TextAreaContainer = styled.div`
+  margin: 8px 0;
+  padding: 2px;
   background-color: ${({ theme, error }) => (error ? theme.colors.danger : theme.colors.inputBorder)};
   border-color: ${({ theme }) => theme.colors.inputBorder};
   border-bottom-right-radius: 4px;
   border-bottom-left-radius: 4px;
   border-top-right-radius: 4px;
   border-top-left-radius: 4px;
-  margin: 8px 0;
-  padding: 2px;
 `;
 
 const TextAreaWrapper = styled.div`
-  background-color: ${({ theme }) => theme.colors.white};
+  padding: 8px;
+  background-color: ${({ theme, disabled }) => (disabled ? theme.colors.lightGray : theme.colors.white)};
   border-color: ${({ theme }) => theme.colors.inputBorder};
   border-bottom-right-radius: 2px;
   border-bottom-left-radius: 2px;
   border-top-right-radius: 2px;
   border-top-left-radius: 2px;
-  padding: 8px;
 `;
 
 const MultiLineInput = (props: Object) => {
-  const { error } = props;
+  const { disabled, error } = props;
 
   const inputProps = {
     ...props,
@@ -43,7 +43,9 @@ const MultiLineInput = (props: Object) => {
     <TextAreaContainer
       error={error}
     >
-      <TextAreaWrapper>
+      <TextAreaWrapper
+        disabled={disabled}
+      >
         <Input
           disableUnderline
           {...inputProps}
@@ -93,35 +95,11 @@ const renderSingleLineInput = (props: Object): Object => (
   />
 );
 
-const renderMultiLineInput = (props: Object): Object => {
-  const {
-    placeholder,
-    autoFocus,
-    disabled,
-    onChange,
-    onBlur,
-    value,
-    error,
-    id,
-  } = props;
-
-  const multiLineProps = {
-    placeholder,
-    autoFocus,
-    disabled,
-    onChange,
-    onBlur,
-    value,
-    error,
-    id,
-  };
-
-  return (
-    <MultiLineInput
-      {...multiLineProps}
-    />
-  );
-};
+const renderMultiLineInput = (props: Object): Object => (
+  <MultiLineInput
+    {...props}
+  />
+);
 
 const renderError = (error: string): Object => (
   error ? (

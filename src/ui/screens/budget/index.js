@@ -60,7 +60,6 @@ class Budget extends Component {
         canBeCreated
         canBeRemoved
         canBeEdited
-        withFilter
         Form={props => (
           <Form
             {...props}
