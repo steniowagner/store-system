@@ -63,7 +63,6 @@ class CashierOpen extends Component<Props, State> {
   state = {
     takeAwayNoneyOperations: [],
     addMoneyOperations: [],
-    totalOutputCashier: '0',
     totalProfit: '',
   };
 
@@ -80,33 +79,38 @@ class CashierOpen extends Component<Props, State> {
     });
   };
 
-  onTakeAwaytMoneyCashier = (amount: string): void => {
-    const { totalOutputCashier } = this.state;
+  onTakeAwaytMoneyCashier = (amount: string, reason: string): void => {
+    const { takeAwayNoneyOperations } = this.state;
+
+    const takeAwaytMoneyCashierOperation = {
+      value: Number(amount),
+      reason,
+    };
 
     this.setState({
-      totalOutputCashier: Number(totalOutputCashier) - Number(amount),
+      takeAwayNoneyOperations: [takeAwaytMoneyCashierOperation, ...takeAwayNoneyOperations],
     });
   };
 
-  calculateTotalInputCashier = (): number => {
-    const { addMoneyOperations } = this.state;
-
-    const total = addMoneyOperations.reduce((current, addOperation) => current + addOperation.value, 0);
+  calculateTotalAmount = (dataset: Array<Object>): number => {
+    const total = dataset.reduce((current, operation) => current + operation.value, 0);
 
     return total;
   };
 
   renderTopActioButtons = (): Object => (
     <TopActionButtons
+      onTakeAwaytMoneyCashier={this.onTakeAwaytMoneyCashier}
       onAddMoneyCashier={this.onAddMoneyCashier}
     />
   );
 
   renderBottomValues = (): Object => {
-    const { totalOutputCashier } = this.state;
+    const { takeAwayNoneyOperations, addMoneyOperations } = this.state;
     const { initialMoneyInCashier } = this.props;
 
-    const totalInputCashier = this.calculateTotalInputCashier();
+    const totalOutputCashier = this.calculateTotalAmount(takeAwayNoneyOperations);
+    const totalInputCashier = this.calculateTotalAmount(addMoneyOperations);
 
     return (
       <BottomValues

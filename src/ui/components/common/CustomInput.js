@@ -10,15 +10,14 @@ const Wrapper = styled.div`
 `;
 
 const TextAreaContainer = styled.div`
-  background-color: ${({ theme, error }) => (error ? theme.colors.danger : theme.colors.lightGray)};
+  background-color: ${({ theme, error }) => (error ? theme.colors.danger : theme.colors.inputBorder)};
   border-color: ${({ theme }) => theme.colors.inputBorder};
   border-bottom-right-radius: 4px;
   border-bottom-left-radius: 4px;
   border-top-right-radius: 4px;
   border-top-left-radius: 4px;
-  border-width: 1.5px;
   margin: 8px 0;
-  padding: 3px;
+  padding: 2px;
 `;
 
 const TextAreaWrapper = styled.div`
@@ -28,7 +27,6 @@ const TextAreaWrapper = styled.div`
   border-bottom-left-radius: 2px;
   border-top-right-radius: 2px;
   border-top-left-radius: 2px;
-  border-width: 1.5px;
   padding: 8px;
 `;
 

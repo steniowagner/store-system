@@ -16,9 +16,9 @@ const Container = styled.div`
 `;
 
 type Props = {
+  onTakeAwaytMoneyCashier: Function,
+  onAddMoneyCashier: Function,
   onCloseCashier: Function,
-  onTakeMoneyOut: Function,
-  onAddMoney: Function,
 };
 
 type State = {
@@ -39,8 +39,21 @@ class TopActionButtons extends Component<Props, State> {
     });
   };
 
-  onClickAddMoney = (): void => {
-    const dialogConfig = getDialogConfig(DIALOG_TYPES.ADD_MONEY);
+  onClickAddMoneyButton = (): void => {
+    const { onAddMoneyCashier } = this.props;
+
+    const dialogConfig = getDialogConfig(DIALOG_TYPES.ADD_MONEY, onAddMoneyCashier);
+
+    this.setState({
+      moneyOperationDialogConfig: dialogConfig,
+      isDialogOpen: true,
+    });
+  };
+
+  onClickTakeAwayMoneyButton = (): void => {
+    const { onTakeAwaytMoneyCashier } = this.props;
+
+    const dialogConfig = getDialogConfig(DIALOG_TYPES.TAKE_AWAY_MONEY, onTakeAwaytMoneyCashier);
 
     this.setState({
       moneyOperationDialogConfig: dialogConfig,
@@ -49,7 +62,7 @@ class TopActionButtons extends Component<Props, State> {
   };
 
   renderAddMoneyButton = (): Object => {
-    const config = getButtonConfig(BUTTON_TYPES.ADD_MONEY, this.onClickAddMoney);
+    const config = getButtonConfig(BUTTON_TYPES.ADD_MONEY, this.onClickAddMoneyButton);
 
     return (
       <CashierButton
@@ -59,9 +72,7 @@ class TopActionButtons extends Component<Props, State> {
   };
 
   renderTakeMoneyOutButton = (): Object => {
-    const { onTakeMoneyOut } = this.props;
-
-    const config = getButtonConfig(BUTTON_TYPES.TAKE_MONEY_OUT, onTakeMoneyOut);
+    const config = getButtonConfig(BUTTON_TYPES.TAKE_MONEY_OUT, this.onClickTakeAwayMoneyButton);
 
     return (
       <CashierButton
@@ -71,9 +82,7 @@ class TopActionButtons extends Component<Props, State> {
   };
 
   renderCloseCashierButton = (): Object => {
-    const { onCloseCashier } = this.props;
-
-    const config = getButtonConfig(BUTTON_TYPES.CLOSE_CASHIER, onCloseCashier);
+    const config = getButtonConfig(BUTTON_TYPES.CLOSE_CASHIER, () => {});
 
     return (
       <CashierButton
