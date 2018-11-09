@@ -41,9 +41,11 @@ type Props = {
   singularEntityName: string,
   pluralEntityName: string,
   withOwnTitle: string,
+  canBeRemoved: ?boolean,
+  canBeCreated: ?boolean,
+  canBeEdited: ?boolean,
+  withFilter: ?boolean,
   dataset: Array<Object>,
-  canBeRemoved: boolean,
-  canBeCreated: boolean,
 };
 
 type State = {
@@ -281,7 +283,7 @@ class EntityComponent extends Component<Props, State> {
     const defaultTitle = `${mode[formMode]} ${singularEntityName.toUpperCase()}`;
     const title = (ownTitle || defaultTitle);
 
-    return (
+    return !!Form && (
       <FullScreenDialog
         onClose={this.onToggleFullScreenDialog}
         isOpen={isFullScreenDialogOpen}
@@ -352,7 +354,12 @@ class EntityComponent extends Component<Props, State> {
 
   renderTable = (): Object => {
     const { itemsFiltered, currentPage } = this.state;
-    const { tabConfig, canBeRemoved } = this.props;
+    const {
+      canBeRemoved,
+      canBeEdited,
+      tabConfig,
+      withFilter,
+    } = this.props;
 
     return (
       <Table
@@ -361,8 +368,10 @@ class EntityComponent extends Component<Props, State> {
         onEditIconClicked={this.onTableEditIconClicked}
         updatePageIndex={this.onTablePageChange}
         canBeRemoved={canBeRemoved}
+        canBeEdited={canBeEdited}
         currentPage={currentPage}
         dataset={itemsFiltered}
+        withFilter={withFilter}
         tabConfig={tabConfig}
       />
     );
@@ -383,14 +392,14 @@ class EntityComponent extends Component<Props, State> {
   };
 
   render() {
-    const { pluralEntityName } = this.props;
+    const { pluralEntityName, withFilter } = this.props;
 
     return (
       <Fragment>
         <Title>
           {pluralEntityName}
         </Title>
-        {this.renderFilterAndCreatButtonSection()}
+        {withFilter && this.renderFilterAndCreatButtonSection()}
         {this.renderTable()}
         {this.renderForm()}
         {this.renderSnackbar()}

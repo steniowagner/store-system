@@ -13,13 +13,15 @@ import Money from '@material-ui/icons/AttachMoney';
 
 import styled from 'styled-components';
 
-import Input from '../../../../../components/common/CustomInput';
+import Input from '../../../../../../../../components/common/CustomInput';
 
 const ContentWrapper = styled.div`
   display: flex;
   align-items: center;
   margin-top: 24px;
 `;
+
+const Section = styled.div``;
 
 const IconWrapper = styled.div`
   width: 48px;
@@ -51,55 +53,60 @@ const renderSlide = (props: Object): Object => (
   />
 );
 
-type Props = {
-  onToggleInitialMoneyDialog: Function,
-  onTypeInitialMoney: Function,
-  initialMoney: string,
-  isOpen: boolean,
-};
-
 const renderTitle = (): Object => (
   <DialogTitle
     id="alert-dialog-slide-title"
   >
-    Dinheiro em Caixa
+    Adicionar Dinheiro no Caixa
   </DialogTitle>
 );
 
-const renderInitialMoneyInput = (onTypeInitialMoney: Function, initialMoney: string): Object => (
+const renderMoneyInput = (onTypeInitialMoney: Function, initialMoney: string): Object => (
   <Input
     onChange={event => onTypeInitialMoney(event.target.value)}
     value={initialMoney}
     onBlur={() => {}}
-    id="initial-money"
     placeholder=""
     type="number"
+    id="money"
     autoFocus
     error=""
   />
 );
 
-const renderContentText = (): Object => (
+const renderReasonText = (onTypeInitialMoney: Function, initialMoney: string): Object => (
+  <Input
+    onChange={event => onTypeInitialMoney(event.target.value)}
+    value={initialMoney}
+    onBlur={() => {}}
+    id="reason-text"
+    placeholder=""
+    type="textarea"
+    autoFocus
+    error=""
+  />
+);
+
+const renderSectionText = (text: string): Object => (
   <DialogContentText>
-    Para iniciar as operações, informe a quantidade inicial de dinheiro em Caixa.
+    {text}
   </DialogContentText>
 );
 
 const renderContent = (onTypeInitialMoney: Function, initialMoney: string): Object => (
   <DialogContent>
-    {renderContentText()}
     <ContentWrapper>
       <IconWrapper>
         <MoneyIcon />
       </IconWrapper>
       <InputWrapper>
-        {renderInitialMoneyInput(onTypeInitialMoney, initialMoney)}
+        {renderMoneyInput(onTypeInitialMoney, initialMoney)}
       </InputWrapper>
     </ContentWrapper>
   </DialogContent>
 );
 
-const renderButtonsActions = (onToggleInitialMoneyDialog: Function, initialMoney: string): Object => (
+const renderButtonsActions = (onToggleInitialMoneyDialog: Function, onSetInitialMoney: Function, initialMoney: string): Object => (
   <DialogActions>
     <Button
       onClick={onToggleInitialMoneyDialog}
@@ -108,7 +115,7 @@ const renderButtonsActions = (onToggleInitialMoneyDialog: Function, initialMoney
       Cancelar
     </Button>
     <Button
-      onClick={onToggleInitialMoneyDialog}
+      onClick={onSetInitialMoney}
       disabled={!initialMoney}
       color="primary"
     >
@@ -117,25 +124,40 @@ const renderButtonsActions = (onToggleInitialMoneyDialog: Function, initialMoney
   </DialogActions>
 );
 
+const renderInputMoneySection = (text: string): Object => {
+  return (
+    <Section>
+      {renderSectionText(text)}
+    </Section>
+  );
+};
+
+type Props = {
+  onToggleMoneyDialog: Function,
+  reasonText: string,
+  moneyText: string,
+  title: string,
+  isOpen: boolean,
+};
+
 const InitialMoneyCashDialog = ({
-  onToggleInitialMoneyDialog,
-  onTypeInitialMoney,
-  initialMoney,
+  onToggleMoneyDialog,
+  moneyText,
+  title,
   isOpen,
 }: Props): Object => (
   <Dialog
     aria-describedby="alert-dialog-slide-description"
     aria-labelledby="alert-dialog-slide-title"
-    onClose={onToggleInitialMoneyDialog}
+    onClose={onToggleMoneyDialog}
     TransitionComponent={renderSlide}
     disableBackdropClick
     keepMounted={false}
     maxWidth="xs"
     open={isOpen}
   >
-    {renderTitle()}
-    {renderContent(onTypeInitialMoney, initialMoney)}
-    {renderButtonsActions(onToggleInitialMoneyDialog, initialMoney)}
+    {renderTitle(title)}
+    {renderInputMoneySection(moneyText)}
   </Dialog>
 );
 

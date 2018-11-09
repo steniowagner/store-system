@@ -59,6 +59,8 @@ class Budget extends Component {
         dataset={budgets}
         canBeCreated
         canBeRemoved
+        canBeEdited
+        withFilter
         Form={props => (
           <Form
             {...props}

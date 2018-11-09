@@ -4,7 +4,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import ActionButton from '../../../../../components/common/ActionButton';
+import ActionButton from '../../../../../../../components/common/ActionButton';
 
 const Wrapper = styled.div`
   width: 100%;

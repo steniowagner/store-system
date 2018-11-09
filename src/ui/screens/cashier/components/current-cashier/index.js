@@ -1,62 +1,48 @@
 // @flow
 
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 
-import styled from 'styled-components';
-
-import InitialMoneyCashDialog from './components/InitialMoneyCashDialog';
-import CashierClosedAlert from './components/CashierClosedAlert';
-
-const Wrapper = styled.div`
-  width: 100%;
-  height: 100%;
-`;
+import CashierClosed from './components/cashier-closed';
+import CashierOpen from './components/cashier-open';
 
 class CurrentCashier extends Component {
   state = {
-    isInitialMoneyDialogOpen: false,
-    initialMoney: '',
+    initialMoneyInCashier: '',
   };
 
-  onToggleInitialMoneyDialog = (): void => {
-    const { isInitialMoneyDialogOpen } = this.state;
-
+  onSetInitialMoneyInCashier = (initialMoneyInCashier: string): void => {
     this.setState({
-      isInitialMoneyDialogOpen: !isInitialMoneyDialogOpen,
+      initialMoneyInCashier,
     });
   };
 
-  onTypeInitialMoney = (initialMoney: string): void => {
-    this.setState({
-      initialMoney,
-    });
-  };
-
-  renderCashierClosedAlert = (): Object => (
-    <CashierClosedAlert
-      onToggleInitialMoneyDialog={this.onToggleInitialMoneyDialog}
-    />
-  );
-
-  renderInitialMoneyCashDialog = (): Object => {
-    const { isInitialMoneyDialogOpen, initialMoney } = this.state;
+  renderCashierClosed = (): Object => {
+    const { initialMoneyInCashier } = this.state;
 
     return (
-      <InitialMoneyCashDialog
-        onToggleInitialMoneyDialog={this.onToggleInitialMoneyDialog}
-        onTypeInitialMoney={this.onTypeInitialMoney}
-        isOpen={isInitialMoneyDialogOpen}
-        initialMoney={initialMoney}
+      <CashierClosed
+        onSetInitialMoneyInCashier={this.onSetInitialMoneyInCashier}
+        initialMoneyInCashier={initialMoneyInCashier}
       />
     );
-  }
+  };
+
+  renderCashierOpen = (): Object => {
+    const { initialMoneyInCashier } = this.state;
+
+    return (
+      <CashierOpen
+        initialMoneyInCashier={initialMoneyInCashier}
+      />
+    );
+  };
 
   render() {
     return (
-      <Wrapper>
-        {this.renderCashierClosedAlert()}
-        {this.renderInitialMoneyCashDialog()}
-      </Wrapper>
+      <Fragment>
+        {/* this.renderCashierClosed() */}
+        {this.renderCashierOpen()}
+      </Fragment>
     );
   }
 }

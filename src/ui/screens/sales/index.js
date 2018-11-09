@@ -68,6 +68,8 @@ class Sales extends Component {
         withOwnTitle="NOVA VENDA"
         dataset={sales}
         canBeCreated
+        canBeEdited
+        withFilter
         Form={props => (
           <Form
             {...props}

@@ -56,6 +56,8 @@ class Customer extends Component {
         dataset={customers}
         canBeCreated
         canBeRemoved
+        canBeEdited
+        withFilter
         Form={props => (
           <Form
             {...props}

@@ -31,6 +31,7 @@ type Props = {
   currentPage: number,
   onChangeRowsPerPage: Function,
   onPageChange: Function,
+  withFilter: ?boolean,
 };
 
 const onFirstPageClicked = (onPageChange: Function): void => {
@@ -94,6 +95,7 @@ const Pagination = ({
   onPageChange,
   rowsPerPage,
   currentPage,
+  withFilter,
 }: Props) => {
   const PageControlls = renderPageControlls(onPageChange, datasetLength, currentPage, rowsPerPage);
 
@@ -106,7 +108,7 @@ const Pagination = ({
             onChangeRowsPerPage={event => onChangeRowsPerPage(event.target.value)}
             ActionsComponent={() => PageControlls}
             labelRowsPerPage="Itens por página"
-            rowsPerPageOptions={[5, 10]}
+            rowsPerPageOptions={withFilter ? [5, 10] : [5]}
             rowsPerPage={rowsPerPage}
             count={datasetLength}
             page={currentPage}

@@ -109,6 +109,8 @@ class User extends Component {
         tabConfig={config.tabConfig}
         dataset={users}
         canBeCreated
+        canBeEdited
+        withFilter
         Form={props => (
           <UserForm
             onEditPassword={this.onEditPassword}

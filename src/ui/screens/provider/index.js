@@ -51,6 +51,8 @@ class Provider extends Component {
         dataset={providers}
         canBeCreated
         canBeRemoved
+        canBeEdited
+        withFilter
         Form={props => (
           <Form
             {...props}

@@ -146,6 +146,8 @@ class Product extends Component {
         dataset={products}
         canBeCreated
         canBeRemoved
+        canBeEdited
+        withFilter
         Form={props => (
           <Form
             manufacturers={manufacturers}

@@ -57,9 +57,11 @@ type Props = {
   onRemoveIconClicked: Function,
   onEditIconClicked: Function,
   updatePageIndex: Function,
+  canBeRemoved: boolean,
+  canBeEdited: boolean,
+  withFilter: boolean,
   tabConfig: Array<Object>,
   dataset: Array<any>,
-  canBeRemoved: boolean,
   currentPage: number,
 };
 
@@ -84,19 +86,22 @@ class CustomTable extends Component<Props, State> {
       onDetailIconClicked,
       onRemoveIconClicked,
       canBeRemoved,
+      canBeEdited,
     } = this.props;
 
     const { rowsPerPage } = this.state;
 
     return (
       <ActionButtonsWrapper>
-        <IconButton
-          onClick={() => onEditIconClicked(item)}
-          aria-label="Edit"
-          disableRipple
-        >
-          <EditIcon />
-        </IconButton>
+        {canBeEdited && (
+          <IconButton
+            onClick={() => onEditIconClicked(item)}
+            aria-label="Edit"
+            disableRipple
+          >
+            <EditIcon />
+          </IconButton>
+        )}
         <IconButton
           onClick={() => onDetailIconClicked(item, rowsPerPage)}
           aria-label="Search"
@@ -179,6 +184,7 @@ class CustomTable extends Component<Props, State> {
   render() {
     const {
       updatePageIndex,
+      withFilter,
       currentPage,
       tabConfig,
       dataset,
@@ -206,6 +212,7 @@ class CustomTable extends Component<Props, State> {
           onPageChange={updatePageIndex}
           rowsPerPage={rowsPerPage}
           currentPage={currentPage}
+          withFilter={withFilter}
         />
       </Container>
     );
