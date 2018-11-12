@@ -2,56 +2,87 @@
 
 import React, { Component, Fragment } from 'react';
 
-import styled from 'styled-components';
+import moment from 'moment';
+import 'moment/locale/pt-br';
 
 import Table from '../../../../../../components/common/table';
 
 import TopActionButtons from './components/top-buttons-values';
 import BottomValues from './components/bottom-valeus';
+import SaleForm from './components/SaleFormHandler';
+
+import { getNewCashierOperationData, parseSaleTableItem } from './cashier-utils';
+import { DIALOG_TYPES } from './components/top-buttons-values/dialog-config';
 
 import config from './config';
 
-const data = [{
-  timestamp: 'Às 15:30',
-  operationType: 'Venda',
-  customer: 'Stenio Wagner Pereira de freitas',
+const sales = [{
+  timestamp: 'Hoje às 15:30',
+  customer: {
+    cpf: '123',
+    rg: '123',
+    id: '123',
+    name: 'Ana Eridan Pereira de Freitas',
+  },
   username: 'swmyself',
-  value: 'R$ 120.50',
-  discount: 'R$ 10.00',
-  total: 'R$ 500.00',
-  valuePaid: 'R$ 500.00',
-  isPending: 'Não',
+  discount: {
+    type: 'percentage',
+    value: 10,
+  },
+  isInDebit: false,
+  observation: 'observation',
+  paymentInfo: {
+    checkValue: '',
+    creditCardValue: '9',
+    debitCardValue: '',
+    moneyValue: '50',
+  },
+  shouldPrintReceipt: true,
+  subtotal: '65.73',
+  total: '59.16',
+  products: [{
+    barCode: '123',
+    brand: 'Samsung',
+    description: 'Mouse',
+    id: 0.14423952784441352,
+    quantity: 3,
+    salePrice: 21.91,
+    costPrice: 20,
+  }],
 }, {
-  id: Math.random(),
-  timestamp: 'Às 15:30',
-  operationType: 'Inserção',
-  customer: '-',
+  timestamp: 'Hoje às 15:30',
+  customer: {
+    cpf: '123',
+    rg: '123',
+    id: '123',
+    name: 'Ana Eridan Pereira de Freitas',
+  },
   username: 'swmyself',
-  value: 'R$ 120.50',
-  discount: '-',
-  total: '-',
-  valuePaid: '-',
-  isPending: '-',
-  reason: 'Inserção-my-REASON',
-}, {
-  id: Math.random(),
-  timestamp: 'Às 15:30',
-  operationType: 'Retirada',
-  customer: '-',
-  username: 'swmyself',
-  value: 'R$ 999.51',
-  discount: '-',
-  total: '-',
-  valuePaid: '-',
-  isPending: '-',
-  reason: 'Retirada-my-REASON',
+  discount: {
+    type: 'percentage',
+    value: 10,
+  },
+  isInDebit: false,
+  observation: 'observation',
+  paymentInfo: {
+    checkValue: '',
+    creditCardValue: '9',
+    debitCardValue: '',
+    moneyValue: '40',
+  },
+  shouldPrintReceipt: true,
+  subtotal: '65.73',
+  total: '59.16',
+  products: [{
+    barCode: '123',
+    brand: 'Samsung',
+    description: 'Mouse',
+    id: 0.14423952784441352,
+    quantity: 3,
+    salePrice: 21.91,
+    costPrice: 20,
+  }],
 }];
-
-const Wrapper = styled.div`
-  width: 100%;
-  dispaly: flex;
-  justify-content: space-between;
-`;
 
 type Props = {
   initialMoneyInCashier: string,
@@ -66,59 +97,73 @@ type State = {
 class CashierOpen extends Component<Props, State> {
   state = {
     contextOperationItem: undefined,
-    takeAwayNoneyOperations: [],
+    takeAwayMoneyOperations: [],
     addMoneyOperations: [],
-    operations: data,
     currentTablePage: 0,
-    totalProfit: '',
+    salesOperations: [],
   };
 
-  onAddMoneyCashier = (amount: string, reason: string): void => {
+  componentDidMount() {
+    moment.locale('pt-br');
+
+    const salesOperations = sales.map(sale => parseSaleTableItem(sale));
+
+    this.setState({
+      salesOperations,
+    });
+  }
+
+  onAddMoneyCashier = (value: string, reason: string): void => {
     const { addMoneyOperations } = this.state;
 
-    const addMoneyCashierOperation = {
-      value: Number(amount),
-      reason,
-    };
+    const addMoneyCashierOperation = getNewCashierOperationData(value, reason, DIALOG_TYPES.ADD_MONEY);
 
     this.setState({
       addMoneyOperations: [addMoneyCashierOperation, ...addMoneyOperations],
+      contextOperationItem: undefined,
     });
   };
 
-  onTakeAwaytMoneyCashier = (amount: string, reason: string): void => {
-    const { takeAwayNoneyOperations } = this.state;
+  onTakeAwaytMoneyCashier = (value: string, reason: string): void => {
+    const { takeAwayMoneyOperations } = this.state;
 
-    const takeAwaytMoneyCashierOperation = {
-      value: Number(amount),
-      reason,
-    };
+    const takeAwaytMoneyCashierOperation = getNewCashierOperationData(value, reason, DIALOG_TYPES.TAKE_AWAY_MONEY);
 
     this.setState({
-      takeAwayNoneyOperations: [takeAwaytMoneyCashierOperation, ...takeAwayNoneyOperations],
+      takeAwayMoneyOperations: [takeAwaytMoneyCashierOperation, ...takeAwayMoneyOperations],
     });
   };
 
-  onEditOperation = (valueEdited: string, reasonEdited: string): void => {
-    const { contextOperationItem, operations } = this.state;
+  onEditCashierOperation = (valueEdited: string, reasonEdited: string): void => {
+    const { contextOperationItem } = this.state;
+    const { type } = contextOperationItem;
 
-    const operationEditedIndex = data.findIndex(operation => operation.id === contextOperationItem.id);
-    const operation = operations[operationEditedIndex];
+    const { dataset, stateRef } = this.getProperCashierOperationDataset(type);
 
-    const value = `R$ ${Number(valueEdited).toFixed(2)}`;
+    const operationEditedIndex = dataset.findIndex(operation => operation.id === contextOperationItem.id);
+    const operation = dataset[operationEditedIndex];
 
     const operationEdited = {
       ...operation,
       reason: reasonEdited,
-      value,
+      valueText: `R$ ${Number(valueEdited).toFixed(2)}`,
+      value: Number(valueEdited).toFixed(2),
     };
 
     this.setState({
-      operations: Object.assign([], operations, {
+      [stateRef]: Object.assign([], dataset, {
         [operationEditedIndex]: operationEdited,
       }),
       contextOperationItem: undefined,
     });
+  };
+
+  onEditSaleOperation = (saleEdited: Object): void => {
+    this.setState({
+      contextOperationItem: undefined,
+    });
+
+    console.log(saleEdited);
   };
 
   onClickTableDetailIcon = (operation: Object): void => {
@@ -139,27 +184,66 @@ class CashierOpen extends Component<Props, State> {
     });
   };
 
-  calculateTotalAmount = (dataset: Array<Object>): number => {
-    const total = dataset.reduce((current, operation) => current + operation.value, 0);
+  getProperCashierOperationDataset = (type: string): Array<Object> => {
+    const { takeAwayMoneyOperations, addMoneyOperations } = this.state;
 
-    return total;
+    const operationInfo = (type === DIALOG_TYPES.ADD_MONEY
+      ? { dataset: addMoneyOperations, stateRef: 'addMoneyOperations' }
+      : { dataset: takeAwayMoneyOperations, stateRef: 'takeAwayMoneyOperations' });
+
+    return operationInfo;
+  };
+
+  getDatasetItems = (): Array<Object> => {
+    const { takeAwayMoneyOperations, addMoneyOperations, salesOperations } = this.state;
+
+    const dataset = [...takeAwayMoneyOperations, ...addMoneyOperations, ...salesOperations];
+
+    return dataset;
+  };
+
+  resetItemSelected = (): void => {
+    this.setState({
+      contextOperationItem: undefined,
+    });
   };
 
   renderTopActioButtons = (): Object => {
     const { contextOperationItem } = this.state;
 
+    const operationItem = (contextOperationItem && (
+      contextOperationItem.type === DIALOG_TYPES.SALE ? undefined : contextOperationItem
+    ));
+
     return (
       <TopActionButtons
         onTakeAwaytMoneyCashier={this.onTakeAwaytMoneyCashier}
         onAddMoneyCashier={this.onAddMoneyCashier}
-        operationItem={contextOperationItem}
-        onEditItem={this.onEditOperation}
+        onEditItem={this.onEditCashierOperation}
+        operationItem={operationItem}
       />
     );
-  }
+  };
+
+  renderSaleForm = (): Object => {
+    const { contextOperationItem } = this.state;
+
+    const shouldShowForm = contextOperationItem && (contextOperationItem.type === DIALOG_TYPES.SALE);
+
+    return (
+      <SaleForm
+        onEditSaleOperation={this.onEditSaleOperation}
+        resetItemSelected={this.resetItemSelected}
+        item={contextOperationItem || {}}
+        isOpen={shouldShowForm}
+      />
+    );
+  };
 
   renderTable = (): Object => {
-    const { currentTablePage, operations } = this.state;
+    const { currentTablePage } = this.state;
+
+    const dataset = this.getDatasetItems();
 
     return (
       <Table
@@ -169,24 +253,22 @@ class CashierOpen extends Component<Props, State> {
         currentPage={currentTablePage}
         tabConfig={config.tabConfig}
         canBeRemoved={false}
-        dataset={operations}
+        dataset={dataset}
         canBeEdited
       />
     );
   };
 
   renderBottomValues = (): Object => {
-    const { takeAwayNoneyOperations, addMoneyOperations } = this.state;
+    const { takeAwayMoneyOperations, addMoneyOperations, salesOperations } = this.state;
     const { initialMoneyInCashier } = this.props;
-
-    const totalOutputCashier = this.calculateTotalAmount(takeAwayNoneyOperations);
-    const totalInputCashier = this.calculateTotalAmount(addMoneyOperations);
 
     return (
       <BottomValues
+        takeAwayMoneyOperations={takeAwayMoneyOperations}
         initialMoneyInCashier={initialMoneyInCashier}
-        totalOutputCashier={totalOutputCashier}
-        totalInputCashier={totalInputCashier}
+        addMoneyOperations={addMoneyOperations}
+        salesOperations={salesOperations}
       />
     );
   };
@@ -194,11 +276,10 @@ class CashierOpen extends Component<Props, State> {
   render() {
     return (
       <Fragment>
-        <Wrapper>
-          {this.renderTopActioButtons()}
-          {this.renderTable()}
-          {this.renderBottomValues()}
-        </Wrapper>
+        {this.renderTopActioButtons()}
+        {this.renderTable()}
+        {this.renderSaleForm()}
+        {this.renderBottomValues()}
       </Fragment>
     );
   }

@@ -2,29 +2,29 @@ const tabConfig = [{
   columnTitle: 'Horário',
   dataField: 'timestamp',
 }, {
-  columnTitle: 'Transação',
-  dataField: 'operationType',
+  columnTitle: 'Operação',
+  dataField: 'type',
 }, {
   columnTitle: 'Cliente',
-  dataField: 'customer',
+  dataField: 'customerName',
 }, {
   columnTitle: 'Vendedor',
   dataField: 'username',
 }, {
   columnTitle: 'Valor',
-  dataField: 'value',
+  dataField: 'valueText',
 }, {
   columnTitle: 'Desconto',
-  dataField: 'discount',
+  dataField: 'discountText',
 }, {
   columnTitle: 'Total',
-  dataField: 'total',
+  dataField: 'totalText',
 }, {
   columnTitle: 'Pago',
   dataField: 'valuePaid',
 }, {
   columnTitle: 'Pendente',
-  dataField: 'isPending',
+  dataField: 'pending',
 }];
 
 export default tabConfig;

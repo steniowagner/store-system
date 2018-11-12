@@ -3,6 +3,7 @@
 export const DIALOG_TYPES = {
   ADD_MONEY: 'Inserção',
   TAKE_AWAY_MONEY: 'Retirada',
+  SALE: 'Venda',
 };
 
 export const getDialogConfig = (type: string, action: Function, isDisabled = false): Object => {

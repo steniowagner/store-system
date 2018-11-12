@@ -38,13 +38,12 @@ const renderSlide = (props: Object): Object => (
 );
 
 type Props = {
+  reasonTitle: Object,
+  title: Object,
   onToggleMoneyDialog: Function,
   action: Function,
-  reasonText: string,
-  moneyText: string,
-  reason: ?string,
-  title: string,
-  value: ?string,
+  type: string,
+  valueTitle: Object,
   mode: string,
   isDisabled: boolean,
   isOpen: boolean,
@@ -108,10 +107,8 @@ class MoneyOperationDialog extends Component<Props, State> {
     });
   };
 
-  handleValuesFromProps = (reason: string, value: string): void => {
-    const parsedValue = (value && value.slice(3, value.length));
-
-    const moneyInputValue = (parsedValue || '');
+  handleValuesFromProps = (reason: string, value: number): void => {
+    const moneyInputValue = (value || '');
     const reasonInputValue = (reason || '');
 
     this.setState({
@@ -230,8 +227,8 @@ class MoneyOperationDialog extends Component<Props, State> {
       <Dialog
         aria-describedby="alert-dialog-slide-description"
         aria-labelledby="alert-dialog-slide-title"
-        onClose={onToggleMoneyDialog}
         TransitionComponent={renderSlide}
+        onClose={onToggleMoneyDialog}
         disableBackdropClick
         keepMounted={false}
         open={isOpen}

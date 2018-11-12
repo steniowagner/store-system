@@ -39,9 +39,9 @@ class TopActionButtons extends Component<Props, State> {
       return;
     }
 
-    const { operationType, mode } = operationItem;
+    const { type, mode } = operationItem;
 
-    const dialogConfig = getDialogConfig(operationType);
+    const dialogConfig = getDialogConfig(type);
 
     if (mode === 'detail') {
       this.handleDetailOperation(operationItem, dialogConfig);

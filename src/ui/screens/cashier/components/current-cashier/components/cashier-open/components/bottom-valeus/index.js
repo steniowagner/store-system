@@ -5,6 +5,7 @@ import React from 'react';
 import Paper from '@material-ui/core/Paper';
 import styled from 'styled-components';
 
+import { calculateTotalInputMoney, calculateTotalCashierOperationValue, calculateTotalProfit } from './calculate-bottom-values';
 import { CONFIGS_TYPES, getBottomValueItemConfig } from './item-config';
 import BottomItemValue from './BottomItemValue';
 
@@ -21,7 +22,8 @@ const SectionWrapper = styled.div`
   margin: 8px 16px;
 `;
 
-const renderTotalInputCashier = (totalInput: string): Object => {
+const renderTotalInputCashier = (addMoneyOperations: Array<Object>, salesOperations: Array<Object>): Object => {
+  const totalInput = calculateTotalInputMoney(addMoneyOperations, salesOperations);
   const config = getBottomValueItemConfig(CONFIGS_TYPES.TOTAL_INPUT, totalInput);
 
   return (
@@ -31,8 +33,10 @@ const renderTotalInputCashier = (totalInput: string): Object => {
   );
 };
 
-const renderTotalOutputCashier = (currentOutput: string): Object => {
-  const config = getBottomValueItemConfig(CONFIGS_TYPES.TOTAL_OUTPUT, currentOutput);
+const renderTotalOutputCashier = (takeAwayMoneyOperations: Array<Object>): Object => {
+  const totalOutput = calculateTotalCashierOperationValue(takeAwayMoneyOperations);
+
+  const config = getBottomValueItemConfig(CONFIGS_TYPES.TOTAL_OUTPUT, totalOutput);
 
   return (
     <BottomItemValue
@@ -51,8 +55,10 @@ const renderInitialMoneyInCashier = (initalMoney: string): Object => {
   );
 };
 
-const renderProfit = (currentProfit: string): Object => {
-  const config = getBottomValueItemConfig(CONFIGS_TYPES.TOTAL_PROFIT, currentProfit);
+const renderProfit = (salesOperations: Array<Object>): Object => {
+  const totalProfit = calculateTotalProfit(salesOperations);
+
+  const config = getBottomValueItemConfig(CONFIGS_TYPES.TOTAL_PROFIT, totalProfit);
 
   return (
     <BottomItemValue
@@ -62,25 +68,27 @@ const renderProfit = (currentProfit: string): Object => {
 };
 
 type Props = {
+  takeAwayMoneyOperations: Array<Object>,
+  addMoneyOperations: Array<Object>,
+  salesOperations: Array<Object>,
   initialMoneyInCashier: string,
-  totalOutputCashier: string,
-  totalInputCashier: string,
 };
 
 const BottomValues = ({
+  takeAwayMoneyOperations,
   initialMoneyInCashier,
-  totalOutputCashier,
-  totalInputCashier,
+  addMoneyOperations,
+  salesOperations,
 }: Props): Object => (
   <Paper>
     <Container>
       <SectionWrapper>
-        {renderTotalInputCashier(totalInputCashier)}
-        {renderTotalOutputCashier(totalOutputCashier)}
+        {renderTotalInputCashier(addMoneyOperations, salesOperations)}
+        {renderTotalOutputCashier(takeAwayMoneyOperations)}
       </SectionWrapper>
       <SectionWrapper>
         {renderInitialMoneyInCashier(initialMoneyInCashier)}
-        {renderProfit("222")}
+        {renderProfit(salesOperations)}
       </SectionWrapper>
     </Container>
   </Paper>
