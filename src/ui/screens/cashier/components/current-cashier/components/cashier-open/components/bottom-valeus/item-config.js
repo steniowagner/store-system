@@ -42,6 +42,7 @@ const InitialMoneyIcon = styled(({ ...props }) => (
 `;
 
 export const CONFIGS_TYPES = {
+  TOTAL_PROFIT_FINISH_CASHIER: 'TOTAL_PROFIT_FINISH_CASHIER',
   TOTAL_INPUT: 'TOTAL_INPUT',
   TOTAL_OUTPUT: 'TOTAL_OUTPUT',
   TOTAL_PROFIT: 'TOTAL_PROFIT',
@@ -64,6 +65,12 @@ export const getBottomValueItemConfig = (item: string, value: string) => {
 
     [CONFIGS_TYPES.TOTAL_PROFIT]: {
       message: `Lucro Atual: R$ ${Number(value).toFixed(2)}`,
+      Icon: MoneyIcon,
+      color: 'affirmative',
+    },
+
+    [CONFIGS_TYPES.TOTAL_PROFIT_FINISH_CASHIER]: {
+      message: `Lucro Total: R$ ${Number(value).toFixed(2)}`,
       Icon: MoneyIcon,
       color: 'affirmative',
     },

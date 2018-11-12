@@ -32,7 +32,7 @@ type ItemConfig = {
   Icon: Function,
 };
 
-const BottomItemValue = ({ message, Icon, color }: ItemConfig): Object => (
+const BottomItem = ({ message, Icon, color }: ItemConfig): Object => (
   <ItemWrapper>
     <IconWrapper
       color={color}
@@ -45,4 +45,4 @@ const BottomItemValue = ({ message, Icon, color }: ItemConfig): Object => (
   </ItemWrapper>
 );
 
-export default BottomItemValue;
+export default BottomItem;

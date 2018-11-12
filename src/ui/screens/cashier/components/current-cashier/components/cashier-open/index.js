@@ -5,16 +5,22 @@ import React, { Component, Fragment } from 'react';
 import moment from 'moment';
 import 'moment/locale/pt-br';
 
-import Table from '../../../../../../components/common/table';
-
+import CloseCashierDialog from './components/CloseCashierDialog';
 import TopActionButtons from './components/top-buttons-values';
 import BottomValues from './components/bottom-valeus';
 import SaleForm from './components/SaleFormHandler';
 
-import { getNewCashierOperationData, parseSaleTableItem } from './cashier-utils';
 import { DIALOG_TYPES } from './components/top-buttons-values/dialog-config';
-
+import Table from '../../../../../../components/common/table';
 import config from './config';
+
+import {
+  calculateTotalCashierOperationValue,
+  getNewCashierOperationData,
+  calculateTotalInputMoney,
+  calculateTotalProfit,
+  parseSaleTableItem,
+} from './cashier-utils';
 
 const sales = [{
   timestamp: 'Hoje às 15:30',
@@ -33,7 +39,7 @@ const sales = [{
   observation: 'observation',
   paymentInfo: {
     checkValue: '',
-    creditCardValue: '9',
+    creditCardValue: '9.16',
     debitCardValue: '',
     moneyValue: '50',
   },
@@ -68,7 +74,7 @@ const sales = [{
     checkValue: '',
     creditCardValue: '9',
     debitCardValue: '',
-    moneyValue: '40',
+    moneyValue: '50.16',
   },
   shouldPrintReceipt: true,
   subtotal: '65.73',
@@ -86,6 +92,7 @@ const sales = [{
 
 type Props = {
   initialMoneyInCashier: string,
+  onCloseCashier: Function,
 };
 
 type State = {
@@ -97,9 +104,13 @@ type State = {
 class CashierOpen extends Component<Props, State> {
   state = {
     contextOperationItem: undefined,
+    isCloseCashierDialogOpen: false,
     takeAwayMoneyOperations: [],
     addMoneyOperations: [],
+    totalOutputCashier: 0,
+    totalInputCashier: 0,
     currentTablePage: 0,
+    totalProfit: 0,
     salesOperations: [],
   };
 
@@ -110,7 +121,7 @@ class CashierOpen extends Component<Props, State> {
 
     this.setState({
       salesOperations,
-    });
+    }, () => this.updateCashierValues());
   }
 
   onAddMoneyCashier = (value: string, reason: string): void => {
@@ -121,7 +132,7 @@ class CashierOpen extends Component<Props, State> {
     this.setState({
       addMoneyOperations: [addMoneyCashierOperation, ...addMoneyOperations],
       contextOperationItem: undefined,
-    });
+    }, () => this.updateCashierValues());
   };
 
   onTakeAwaytMoneyCashier = (value: string, reason: string): void => {
@@ -131,7 +142,7 @@ class CashierOpen extends Component<Props, State> {
 
     this.setState({
       takeAwayMoneyOperations: [takeAwaytMoneyCashierOperation, ...takeAwayMoneyOperations],
-    });
+    }, () => this.updateCashierValues());
   };
 
   onEditCashierOperation = (valueEdited: string, reasonEdited: string): void => {
@@ -155,15 +166,21 @@ class CashierOpen extends Component<Props, State> {
         [operationEditedIndex]: operationEdited,
       }),
       contextOperationItem: undefined,
-    });
+    }, () => this.updateCashierValues());
+  };
+
+  onFinishCashier = (): void => {
+    const { onCloseCashier } = this.props;
+
+    this.setState({
+      isCloseCashierDialogOpen: false,
+    }, () => onCloseCashier());
   };
 
   onEditSaleOperation = (saleEdited: Object): void => {
     this.setState({
       contextOperationItem: undefined,
-    });
-
-    console.log(saleEdited);
+    }, () => this.updateCashierValues());
   };
 
   onClickTableDetailIcon = (operation: Object): void => {
@@ -181,6 +198,14 @@ class CashierOpen extends Component<Props, State> {
   onTablePageChange = (currentTablePage: number): void => {
     this.setState({
       currentTablePage,
+    });
+  };
+
+  onToggleCloseCashierDialog = (): void => {
+    const { isCloseCashierDialogOpen } = this.state;
+
+    this.setState({
+      isCloseCashierDialogOpen: !isCloseCashierDialogOpen,
     });
   };
 
@@ -202,6 +227,20 @@ class CashierOpen extends Component<Props, State> {
     return dataset;
   };
 
+  updateCashierValues = (): void => {
+    const { takeAwayMoneyOperations, addMoneyOperations, salesOperations } = this.state;
+
+    const totalOutputCashier = calculateTotalCashierOperationValue(takeAwayMoneyOperations);
+    const totalInputCashier = calculateTotalInputMoney(addMoneyOperations, salesOperations);
+    const totalProfit = calculateTotalProfit(salesOperations);
+
+    this.setState({
+      totalOutputCashier,
+      totalInputCashier,
+      totalProfit,
+    });
+  };
+
   resetItemSelected = (): void => {
     this.setState({
       contextOperationItem: undefined,
@@ -217,6 +256,7 @@ class CashierOpen extends Component<Props, State> {
 
     return (
       <TopActionButtons
+        onClickCloseCashierButton={this.onToggleCloseCashierDialog}
         onTakeAwaytMoneyCashier={this.onTakeAwaytMoneyCashier}
         onAddMoneyCashier={this.onAddMoneyCashier}
         onEditItem={this.onEditCashierOperation}
@@ -260,15 +300,38 @@ class CashierOpen extends Component<Props, State> {
   };
 
   renderBottomValues = (): Object => {
-    const { takeAwayMoneyOperations, addMoneyOperations, salesOperations } = this.state;
+    const { totalOutputCashier, totalInputCashier, totalProfit } = this.state;
     const { initialMoneyInCashier } = this.props;
 
     return (
       <BottomValues
-        takeAwayMoneyOperations={takeAwayMoneyOperations}
         initialMoneyInCashier={initialMoneyInCashier}
-        addMoneyOperations={addMoneyOperations}
-        salesOperations={salesOperations}
+        totalOutputCashier={totalOutputCashier}
+        totalInputCashier={totalInputCashier}
+        totalProfit={totalProfit}
+      />
+    );
+  };
+
+  renderCloseCashierDialog = (): Object => {
+    const {
+      isCloseCashierDialogOpen,
+      totalOutputCashier,
+      totalInputCashier,
+      totalProfit,
+    } = this.state;
+
+    const { initialMoneyInCashier } = this.props;
+
+    return (
+      <CloseCashierDialog
+        onToggleCloseCashierDialog={this.onToggleCloseCashierDialog}
+        initialMoneyInCashier={initialMoneyInCashier}
+        totalOutputCashier={totalOutputCashier}
+        onFinishCashier={this.onFinishCashier}
+        totalInputCashier={totalInputCashier}
+        isOpen={isCloseCashierDialogOpen}
+        totalProfit={totalProfit}
       />
     );
   };
@@ -280,6 +343,7 @@ class CashierOpen extends Component<Props, State> {
         {this.renderTable()}
         {this.renderSaleForm()}
         {this.renderBottomValues()}
+        {this.renderCloseCashierDialog()}
       </Fragment>
     );
   }

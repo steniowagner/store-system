@@ -16,6 +16,12 @@ class CurrentCashier extends Component {
     });
   };
 
+  onCloseCashier = (): Object => {
+    this.setState({
+      initialMoneyInCashier: '',
+    });
+  };
+
   renderCashierClosed = (): Object => {
     const { initialMoneyInCashier } = this.state;
 
@@ -33,15 +39,17 @@ class CurrentCashier extends Component {
     return (
       <CashierOpen
         initialMoneyInCashier={initialMoneyInCashier}
+        onCloseCashier={this.onCloseCashier}
       />
     );
   };
 
   render() {
+    const { initialMoneyInCashier } = this.state;
+
     return (
       <Fragment>
-        {/* this.renderCashierClosed() */}
-        {this.renderCashierOpen()}
+        {initialMoneyInCashier ? this.renderCashierOpen() : this.renderCashierClosed()}
       </Fragment>
     );
   }

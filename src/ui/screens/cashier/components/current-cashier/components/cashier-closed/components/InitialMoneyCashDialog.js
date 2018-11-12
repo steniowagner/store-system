@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react';
+import React, { Component } from 'react';
 
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -44,72 +44,6 @@ const MoneyIcon = styled(({ ...props }) => (
   color: ${({ theme }) => theme.colors.white}
 `;
 
-const renderSlide = (props: Object): Object => (
-  <Slide
-    direction="up"
-    {...props}
-  />
-);
-
-const renderTitle = (): Object => (
-  <DialogTitle
-    id="alert-dialog-slide-title"
-  >
-    Dinheiro em Caixa
-  </DialogTitle>
-);
-
-const renderInitialMoneyInput = (onTypeInitialMoney: Function, initialMoney: string): Object => (
-  <Input
-    onChange={event => onTypeInitialMoney(event.target.value)}
-    value={initialMoney}
-    onBlur={() => {}}
-    id="initial-money"
-    placeholder=""
-    type="number"
-    autoFocus
-    error=""
-  />
-);
-
-const renderContentText = (): Object => (
-  <DialogContentText>
-    Para iniciar as operações, informe a quantidade inicial de dinheiro em Caixa.
-  </DialogContentText>
-);
-
-const renderContent = (onTypeInitialMoney: Function, initialMoney: string): Object => (
-  <DialogContent>
-    {renderContentText()}
-    <ContentWrapper>
-      <IconWrapper>
-        <MoneyIcon />
-      </IconWrapper>
-      <InputWrapper>
-        {renderInitialMoneyInput(onTypeInitialMoney, initialMoney)}
-      </InputWrapper>
-    </ContentWrapper>
-  </DialogContent>
-);
-
-const renderButtonsActions = (onToggleInitialMoneyDialog: Function, onSetInitialMoney: Function, initialMoney: string): Object => (
-  <DialogActions>
-    <Button
-      onClick={onToggleInitialMoneyDialog}
-      color="primary"
-    >
-      Cancelar
-    </Button>
-    <Button
-      onClick={onSetInitialMoney}
-      disabled={!initialMoney}
-      color="primary"
-    >
-      Ok
-    </Button>
-  </DialogActions>
-);
-
 type Props = {
   onToggleInitialMoneyDialog: Function,
   onTypeInitialMoney: Function,
@@ -118,27 +52,131 @@ type Props = {
   isOpen: boolean,
 };
 
-const InitialMoneyCashDialog = ({
-  onToggleInitialMoneyDialog,
-  onTypeInitialMoney,
-  onSetInitialMoney,
-  initialMoney,
-  isOpen,
-}: Props): Object => (
-  <Dialog
-    aria-describedby="alert-dialog-slide-description"
-    aria-labelledby="alert-dialog-slide-title"
-    onClose={onToggleInitialMoneyDialog}
-    TransitionComponent={renderSlide}
-    disableBackdropClick
-    keepMounted={false}
-    maxWidth="xs"
-    open={isOpen}
-  >
-    {renderTitle()}
-    {renderContent(onTypeInitialMoney, initialMoney)}
-    {renderButtonsActions(onToggleInitialMoneyDialog, onSetInitialMoney, initialMoney)}
-  </Dialog>
-);
+type State = {
+  buttonClicked: string,
+};
+
+class InitialMoneyCashDialog extends Component<Props, State> {
+  state = {
+    buttonClicked: '',
+  };
+
+  onDialogDisappear = (): void => {
+    const { onSetInitialMoney } = this.props;
+    const { buttonClicked } = this.state;
+
+    if (buttonClicked === 'ok') {
+      onSetInitialMoney();
+    }
+  };
+
+  onClickButton = (buttonClicked: string): void => {
+    const { onToggleInitialMoneyDialog } = this.props;
+
+    this.setState({
+      buttonClicked,
+    }, () => onToggleInitialMoneyDialog());
+  };
+
+  renderSlide = (props: Object): Object => (
+    <Slide
+      direction="up"
+      {...props}
+    />
+  );
+
+  renderInitialMoneyInput = (): Object => {
+    const { onTypeInitialMoney, initialMoney } = this.props;
+
+    return (
+      <Input
+        onChange={event => onTypeInitialMoney(event.target.value)}
+        value={initialMoney}
+        onBlur={() => {}}
+        id="initial-money"
+        placeholder=""
+        type="number"
+        autoFocus
+        error=""
+      />
+    );
+  };
+
+  renderContentText = (): Object => (
+    <DialogContentText>
+      Para iniciar as operações, informe a quantidade inicial de dinheiro em Caixa.
+    </DialogContentText>
+  );
+
+  renderTitle = (): Object => (
+    <DialogTitle
+      id="alert-dialog-slide-title"
+    >
+      Dinheiro em Caixa
+    </DialogTitle>
+  );
+
+  renderButtonsActions = (): Object => {
+    const { initialMoney } = this.props;
+
+    return (
+      <DialogActions>
+        <Button
+          onClick={() => this.onClickButton('cancel')}
+          color="primary"
+        >
+          Cancelar
+        </Button>
+        <Button
+          onClick={() => this.onClickButton('ok')}
+          disabled={!initialMoney}
+          color="primary"
+        >
+          Ok
+        </Button>
+      </DialogActions>
+    );
+  };
+
+  renderContent = (): Object => {
+    const { onTypeInitialMoney, initialMoney } = this.props;
+
+    return (
+      <DialogContent>
+        {this.renderContentText()}
+        <ContentWrapper>
+          <IconWrapper>
+            <MoneyIcon />
+          </IconWrapper>
+          <InputWrapper>
+            {this.renderInitialMoneyInput(onTypeInitialMoney, initialMoney)}
+          </InputWrapper>
+        </ContentWrapper>
+      </DialogContent>
+    );
+  };
+
+  render() {
+    const { onToggleInitialMoneyDialog, isOpen } = this.props;
+
+    return (
+      <Dialog
+        aria-describedby="alert-dialog-slide-description"
+        aria-labelledby="alert-dialog-slide-title"
+        TransitionComponent={this.renderSlide}
+        onClose={onToggleInitialMoneyDialog}
+        onExited={this.onDialogDisappear}
+        disableBackdropClick
+        keepMounted={false}
+        maxWidth="xs"
+        open={isOpen}
+      >
+        {this.renderTitle()}
+        {this.renderContent()}
+        {this.renderButtonsActions()}
+      </Dialog>
+    );
+  }
+}
 
 export default InitialMoneyCashDialog;

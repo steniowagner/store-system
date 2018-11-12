@@ -16,6 +16,7 @@ const Container = styled.div`
 `;
 
 type Props = {
+  onClickCloseCashierButton: Function,
   onTakeAwaytMoneyCashier: Function,
   onAddMoneyCashier: Function,
   onEditItem: Function,
@@ -144,7 +145,9 @@ class TopActionButtons extends Component<Props, State> {
   };
 
   renderCloseCashierButton = (): Object => {
-    const config = getButtonConfig(BUTTON_TYPES.CLOSE_CASHIER, () => {});
+    const { onClickCloseCashierButton } = this.props;
+
+    const config = getButtonConfig(BUTTON_TYPES.CLOSE_CASHIER, onClickCloseCashierButton);
 
     return (
       <CashierButton
