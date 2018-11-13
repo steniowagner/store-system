@@ -1,7 +1,5 @@
 // @flow
 
-import React from 'react';
-
 import ArrowForward from '@material-ui/icons/ArrowForward';
 import InitialMoney from '@material-ui/icons/LocalAtm';
 import ArrowBack from '@material-ui/icons/ArrowBack';
@@ -9,36 +7,20 @@ import Money from '@material-ui/icons/AttachMoney';
 
 import styled from 'styled-components';
 
-const ArrowBackIcon = styled(({ ...props }) => (
-  <ArrowBack
-    {...props}
-  />
-))`
-  color: ${({ theme }) => theme.colors.white}
+const ArrowBackIcon = styled(ArrowBack)`
+  color: ${({ theme }) => theme.colors.white};
 `;
 
-const ArrowForwardIcon = styled(({ ...props }) => (
-  <ArrowForward
-    {...props}
-  />
-))`
-  color: ${({ theme }) => theme.colors.white}
+const ArrowForwardIcon = styled(ArrowForward)`
+  color: ${({ theme }) => theme.colors.white};
 `;
 
-const MoneyIcon = styled(({ ...props }) => (
-  <Money
-    {...props}
-  />
-))`
-  color: ${({ theme }) => theme.colors.white}
+const MoneyIcon = styled(Money)`
+  color: ${({ theme }) => theme.colors.white};
 `;
 
-const InitialMoneyIcon = styled(({ ...props }) => (
-  <InitialMoney
-    {...props}
-  />
-))`
-  color: ${({ theme }) => theme.colors.white}
+const InitialMoneyIcon = styled(InitialMoney)`
+  color: ${({ theme }) => theme.colors.white};
 `;
 
 export const CONFIGS_TYPES = {

@@ -9,7 +9,7 @@ import Tab from '@material-ui/core/Tab';
 import styled from 'styled-components';
 
 import CurrentCashier from './components/current-cashier';
-import PastCashiers from './components/PastCashiers';
+import PastCashiers from './components/past-cashier';
 
 const Container = styled.div`
   width: 100%;
@@ -46,12 +46,16 @@ class Cashier extends Component {
     return (
       <Tabs
         onChange={this.handleChangeTab}
-        value={currentTabIndex}
         indicatorColor="primary"
+        value={currentTabIndex}
         textColor="primary"
       >
-        <Tab label="CAIXA ATUAL" />
-        <Tab label="CAIXAS ANTERIORES" />
+        <Tab
+          label="CAIXA ATUAL"
+        />
+        <Tab
+          label="CAIXAS ANTERIORES"
+        />
       </Tabs>
     );
   };
@@ -73,25 +77,21 @@ class Cashier extends Component {
     );
   };
 
-  renderCurrentCashierTab = (): Object => {
-    return (
-      <TabContainer
-        dir="ltr"
-      >
-        <CurrentCashier />
-      </TabContainer>
-    );
-  };
+  renderCurrentCashierTab = (): Object => (
+    <TabContainer
+      dir="ltr"
+    >
+      <CurrentCashier />
+    </TabContainer>
+  );
 
-  renderPastCashiersTab = (): Object => {
-    return (
-      <TabContainer
-        dir="ltr"
-      >
-        <PastCashiers />
-      </TabContainer>
-    );
-  }
+  renderPastCashiersTab = (): Object => (
+    <TabContainer
+      dir="ltr"
+    >
+      <PastCashiers />
+    </TabContainer>
+  );
 
   render() {
     return (
