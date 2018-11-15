@@ -13,7 +13,7 @@ import Slide from '@material-ui/core/Slide';
 import styled from 'styled-components';
 import moment from 'moment';
 
-import { CONFIGS_TYPES, getBottomValueItemConfig } from './bottom-valeus/item-config';
+import { CONFIGS_TYPES, getBottomValueItemConfig } from '../../../../bottom-valeus/item-config';
 
 const ValuesContainer = styled.div`
   margin-top: 24px;

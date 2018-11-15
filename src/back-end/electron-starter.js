@@ -1,14 +1,12 @@
-const electron = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const url = require('url');
 
-// const config = require('../config');
-
-const { app, BrowserWindow, ipcMain } = electron;
+const controller = require('./domain/user/controller');
 
 let mainWindow;
 
-createWindow = () => {
+const createWindow = () => {
   mainWindow = new BrowserWindow();
   mainWindow.maximize();
 
@@ -20,22 +18,14 @@ createWindow = () => {
 
   mainWindow.webContents.openDevTools();
 
-  if (process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true') {
-  }
-
   mainWindow.loadURL(startUrl);
+
   mainWindow.on('closed', () => {
     mainWindow = null;
   });
 };
 
-connectWithDatabase = () => {
-  // mongoose.Promise = global.Promise;
-  // mongoose.connect(config.mongoConnectionURL, { useMongoClient: true });
-};
-
 app.on('ready', () => {
-  connectWithDatabase();
   createWindow();
 });
 
@@ -49,4 +39,9 @@ app.on('activate', () => {
   if (mainWindow === null) {
     createWindow();
   }
+});
+
+ipcMain.on('user', async (event, operation, args) => {
+  const result = await controller.create();
+  event.sender.send('user', result);
 });

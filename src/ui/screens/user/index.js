@@ -5,6 +5,8 @@ import EntityComponent from '../../components/common/entity-component';
 import config from './config';
 import UserForm from './form';
 
+const ipcRenderer = window.require('electron').ipcRenderer;
+
 const test = [{
   name: 's1',
   username: 's1',
@@ -63,6 +65,17 @@ class User extends Component {
   state = {
     users: test,
   };
+
+  componentDidMount() {
+    ipcRenderer.send('user', 'getAll');
+    this.setupIpcRenderer();
+  }
+
+  setupIpcRenderer = () => {
+    ipcRenderer.on('user', (event, operation, result) => {
+      console.log(operation);
+    });
+  }
 
   onCreateUser = (user: Object): void => {
     const { users } = this.state;

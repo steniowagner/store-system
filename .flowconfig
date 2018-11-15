@@ -1,6 +1,6 @@
 [ignore]
 .*node_modules/.*
-.*src/scripts/.*
+.*src/back-end/.*
 
 [include]
 

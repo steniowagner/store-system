@@ -7,7 +7,7 @@ import 'moment/locale/pt-br';
 
 import CloseCashierDialog from './components/CloseCashierDialog';
 import TopActionButtons from './components/top-buttons-values';
-import BottomValues from './components/bottom-valeus';
+import BottomValues from '../../../bottom-valeus';
 import SaleForm from './components/SaleFormHandler';
 
 import { DIALOG_TYPES } from './components/top-buttons-values/dialog-config';
