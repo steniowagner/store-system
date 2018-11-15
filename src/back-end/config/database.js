@@ -1,7 +1,7 @@
 const database = {
-  username: 'root',
-  password: 'password',
-  database: 'eunice_livros',
+  username: 'app',
+  password: 'app',
+  database: 'app',
   host: '127.0.0.1',
   dialect: 'mysql',
 };

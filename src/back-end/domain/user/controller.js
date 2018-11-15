@@ -3,12 +3,12 @@ const { User } = require('../../models');
 exports.create = async () => {
   try {
     const user = await User.create({
-      name: 'Stenio Wagner',
-      username: 'swmyself',
-      password: '123456',
+      name: 'Pereira',
+      username: 'swpdf',
+      password: '654321',
     });
 
-    return user;
+    return user.id;
   } catch (e) {
     return e.message;
   }

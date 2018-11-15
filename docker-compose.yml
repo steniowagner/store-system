@@ -1,0 +1,19 @@
+version: '2'
+
+volumes:
+  store-system-data:
+    driver: local
+
+services:
+  mysql:
+    image: ambientum/mysql:5.7
+    container_name: store-system-app
+    volumes:
+      - store-system-data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=app
+      - MYSQL_DATABASE=app
+      - MYSQL_USER=app
+      - MYSQL_PASSWORD=app
