@@ -5,6 +5,10 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { BrowserRouter as ApplicationRouter } from 'react-router-dom';
 import styled, { ThemeProvider } from 'styled-components';
 
+import { Provider } from 'react-redux';
+import './config/reactotron';
+import store from './store';
+
 import Sidebar from './components/sidebar/index';
 import HeaderBar from './components/HeaderBar';
 import Router from './Router';
@@ -36,13 +40,17 @@ const Root = (): Object => (
       theme={AppTheme}
     >
       <Wrapper>
-        <ApplicationRouter>
-          <Fragment>
-            <Sidebar />
-            <HeaderBar />
-            <Router />
-          </Fragment>
-        </ApplicationRouter>
+        <Provider
+          store={store}
+        >
+          <ApplicationRouter>
+            <Fragment>
+              <Sidebar />
+              <HeaderBar />
+              <Router />
+            </Fragment>
+          </ApplicationRouter>
+        </Provider>
       </Wrapper>
     </ThemeProvider>
   </MuiThemeProvider>

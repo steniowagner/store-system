@@ -13,9 +13,13 @@
     "mysql2": "^1.6.4",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
+    "react-redux": "^5.1.1",
     "react-router-dom": "^4.3.1",
     "react-scripts": "1.1.4",
     "react-swipeable-views": "^0.13.0",
+    "redux": "^4.0.1",
+    "redux-saga": "^0.16.2",
+    "seamless-immutable": "^7.1.4",
     "sequelize": "^4.41.2",
     "styled-components": "^3.3.3",
     "typeface-roboto": "^0.0.54",
@@ -43,6 +47,9 @@
     "eslint-plugin-react": "^7.10.0",
     "flow-bin": "^0.77.0",
     "prettier-eslint": "^8.8.2",
+    "reactotron-react-js": "^2.1.1",
+    "reactotron-redux": "^2.1.0",
+    "reactotron-redux-saga": "^2.1.0",
     "sequelize-cli": "^5.3.0"
   }
 }

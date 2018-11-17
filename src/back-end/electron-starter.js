@@ -2,7 +2,8 @@ const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const url = require('url');
 
-const controller = require('./domain/user/controller');
+const handleEvent = require('./events-handlers');
+const { OPERATION_REQUEST, OPERATION_RESPONSE } = require('../common/entitiesTypes');
 
 let mainWindow;
 
@@ -41,7 +42,9 @@ app.on('activate', () => {
   }
 });
 
-ipcMain.on('user', async (event, operation, args) => {
-  const result = await controller.create();
-  event.sender.send('user', result);
+ipcMain.on(OPERATION_REQUEST, async (event, entitie, operation, args) => {
+  const eventResponseId = `${OPERATION_RESPONSE}_${entitie}`;
+  const result = await handleEvent(entitie, operation, args);
+
+  event.sender.send(eventResponseId, result);
 });

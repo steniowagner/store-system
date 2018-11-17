@@ -33,13 +33,14 @@ const Title = styled.p`
 
 type Props = {
   onCreateItem: Function,
-  onRemoveItem: Function,
-  onEditItem: Function,
+  onRemoveItem: ?Function,
+  onEditItem: ?Function,
   Form: Function,
   filterConfig: Object,
   tabConfig: Object,
   singularEntityName: string,
   pluralEntityName: string,
+  withOwnRemoveAction: ?Function,
   withOwnTitle: string,
   canBeRemoved: ?boolean,
   canBeCreated: ?boolean,
@@ -73,17 +74,14 @@ class EntityComponent extends Component<Props, State> {
     formMode: '',
   };
 
-  componentDidMount() {
-    const { dataset } = this.props;
+  componentWillReceiveProps(nextProps) {
+    const { dataset } = nextProps;
 
     this.setState({
       itemsFiltered: dataset,
     });
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const { formMode } = this.state;
-
+    /* const { formMode } = this.state;
+    console.log(nextProps)
     if (formMode === 'create') {
       this.setState({
         itemsFiltered: nextProps.dataset,
@@ -109,7 +107,7 @@ class EntityComponent extends Component<Props, State> {
           [indexItemEditedOnItemsFiltered]: itemEdited,
         }),
       });
-    }
+    } */
   }
 
   onToggleDialogRemove = (): void => {
@@ -352,13 +350,18 @@ class EntityComponent extends Component<Props, State> {
   };
 
   renderTable = (): Object => {
-    const { canBeRemoved, canBeEdited, tabConfig } = this.props;
+    const {
+      withOwnRemoveAction,
+      canBeRemoved,
+      canBeEdited,
+      tabConfig,
+    } = this.props;
     const { itemsFiltered, currentPage } = this.state;
 
     return (
       <Table
         onDetailIconClicked={this.onTableDetailIconClicked}
-        onRemoveIconClicked={this.onTableRemoveIconClicked}
+        onRemoveIconClicked={withOwnRemoveAction || this.onTableRemoveIconClicked}
         onEditIconClicked={this.onTableEditIconClicked}
         updatePageIndex={this.onTablePageChange}
         canBeRemoved={canBeRemoved}

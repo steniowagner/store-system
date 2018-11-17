@@ -1,137 +1,137 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
+
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { Creators as HomeCreators } from '../../store/ducks/user';
 
 import EntityComponent from '../../components/common/entity-component';
+import RemoveUserDialog from './components/RemoveUserDialog';
 
 import config from './config';
 import UserForm from './form';
 
-const ipcRenderer = window.require('electron').ipcRenderer;
+type Props = {
+  getAllUsers: Function,
+  createUser: Function,
+  removeUser: Function,
+  editUser: Function,
+  users: Array<Object>,
+};
 
-const test = [{
-  name: 's1',
-  username: 's1',
-  password: '123',
-  id: '1',
-}, {
-  name: 's2',
-  username: 's2',
-  password: '123',
-  id: '2',
-}, {
-  name: 's3',
-  username: 's3',
-  password: '123',
-  id: '31',
-}, {
-  name: 'ste4',
-  username: 's4',
-  password: '123',
-  id: '4',
-}, {
-  name: 's5',
-  username: 's5',
-  password: '123',
-  id: '5',
-}, {
-  name: 's6',
-  username: 's6',
-  password: '123',
-  id: '6',
-}, {
-  name: 's7',
-  username: '7',
-  password: '123',
-  id: '7',
-}, {
-  name: 'ste8',
-  username: '8',
-  password: '123',
-  id: '8',
-}, {
-  name: 's9',
-  username: 's9',
-  password: '123',
-  id: '9',
-}, {
-  name: 's10',
-  username: 's10',
-  password: '123',
-  id: '10',
-}];
+type State = {
+  users: Array<Object>,
+};
 
-class User extends Component {
+class User extends Component<Props, State> {
   _passwordEdited = '';
 
   state = {
-    users: test,
+    isRemoveUserDialogOpen: false,
+    contextUser: {},
   };
 
   componentDidMount() {
-    ipcRenderer.send('user', 'getAll');
-    this.setupIpcRenderer();
+    const { getAllUsers } = this.props;
+
+    getAllUsers();
   }
 
-  setupIpcRenderer = () => {
-    ipcRenderer.on('user', (event, operation, result) => {
-      console.log(operation);
-    });
-  }
+  onCreateUser = async (user: Object): void => {
+    const { createUser } = this.props;
 
-  onCreateUser = (user: Object): void => {
-    const { users } = this.state;
-
-    this.setState({
-      users: [{ ...user, id: Math.random() }, ...users],
-    });
+    createUser(user);
   };
 
   onEditUser = (userEdited: Object): void => {
-    const { users } = this.state;
+    const { editUser, users } = this.props;
 
     const userEditedIndex = users.findIndex(user => user.id === userEdited.id);
-    const userPassword = (this._passwordEdited || users[userEditedIndex].password);
+    const password = (this._passwordEdited || users[userEditedIndex].password);
 
-    this.setState({
-      users: Object.assign([], users, { [userEditedIndex]: { ...userEdited, password: userPassword } }),
-    });
+    const user = {
+      ...userEdited,
+      password,
+    };
+
+    editUser(user);
   };
 
   onEditPassword = (newPassword: string): void => {
     this._passwordEdited = newPassword;
   };
 
-  onRemoveUser = (userId: string): void => {
-    const { users } = this.state;
+  onRemoveUser = (): void => {
+    const { contextUser } = this.state;
+    const { removeUser } = this.props;
 
     this.setState({
-      users: users.filter(user => user.id !== userId),
+      isRemoveUserDialogOpen: false,
+    }, () => removeUser(contextUser.id));
+  };
+
+  onClickRemoveTableIcon = (user: Object): void => {
+    this.setState({
+      isRemoveUserDialogOpen: true,
+      contextUser: user,
     });
   };
 
-  render() {
-    const { users } = this.state;
+  onToggleRemoveDialog = (): void => {
+    const { isRemoveUserDialogOpen } = this.state;
+
+    this.setState({
+      isRemoveUserDialogOpen: !isRemoveUserDialogOpen,
+    });
+  };
+
+  renderRemoveUserDialog = (): Object => {
+    const { isRemoveUserDialogOpen, contextUser } = this.state;
+    const { password } = contextUser;
 
     return (
-      <EntityComponent
-        onRemoveItem={this.onRemoveUser}
-        onCreateItem={this.onCreateUser}
-        onEditItem={this.onEditUser}
-        singularEntityName="Usuário"
-        pluralEntityName="Usuários"
-        filterConfig={config.filterConfig}
-        tabConfig={config.tabConfig}
-        dataset={users}
-        canBeCreated
-        canBeEdited
-        Form={props => (
-          <UserForm
-            onEditPassword={this.onEditPassword}
-            {...props}
-          />
-        )}
+      <RemoveUserDialog
+        onCloseDialog={this.onToggleRemoveDialog}
+        onRemoveUser={this.onRemoveUser}
+        isOpen={isRemoveUserDialogOpen}
+        password={password}
       />
+    );
+  };
+
+  render() {
+    const { users } = this.props;
+
+    return (
+      <Fragment>
+        <EntityComponent
+          onCreateItem={this.onCreateUser}
+          onEditItem={this.onEditUser}
+          singularEntityName="Usuário"
+          pluralEntityName="Usuários"
+          filterConfig={config.filterConfig}
+          tabConfig={config.tabConfig}
+          withOwnRemoveAction={this.onClickRemoveTableIcon}
+          dataset={users}
+          canBeCreated
+          canBeRemoved
+          canBeEdited
+          Form={props => (
+            <UserForm
+              onEditPassword={this.onEditPassword}
+              {...props}
+            />
+          )}
+        />
+        {this.renderRemoveUserDialog()}
+      </Fragment>
     );
   }
 }
 
-export default User;
+const mapDispatchToProps = dispatch => bindActionCreators(HomeCreators, dispatch);
+
+const mapStateToProps = state => ({
+  users: state.user.data,
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(User);
