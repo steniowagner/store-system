@@ -307,7 +307,7 @@ class EntityComponent extends Component<Props, State> {
       dataset,
     } = this.props;
 
-    const actionButtonTitle = (withOwnTitle || `Cadastrar ${singularEntityName}`);
+    const actionButtonTitle = (withOwnTitle || singularEntityName);
 
     return (
       <FilterAndCreateButtonWrapper>

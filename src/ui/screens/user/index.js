@@ -2,15 +2,15 @@ import React, { Component, Fragment } from 'react';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Creators as HomeCreators } from '../../store/ducks/user';
+import { Creators as UserCreators } from '../../store/ducks/user';
 
 import EntityComponent from '../../components/common/entity-component';
-import RemoveUserDialog from './components/RemoveUserDialog';
 
 import config from './config';
 import UserForm from './form';
 
 type Props = {
+  unsubscribeEvents: Function,
   getAllUsers: Function,
   createUser: Function,
   removeUser: Function,
@@ -25,15 +25,16 @@ type State = {
 class User extends Component<Props, State> {
   _passwordEdited = '';
 
-  state = {
-    isRemoveUserDialogOpen: false,
-    contextUser: {},
-  };
-
   componentDidMount() {
     const { getAllUsers } = this.props;
 
     getAllUsers();
+  }
+
+  componentWillUnmount() {
+    const { unsubscribeEvents } = this.props;
+
+    unsubscribeEvents();
   }
 
   onCreateUser = async (user: Object): void => {
@@ -60,44 +61,6 @@ class User extends Component<Props, State> {
     this._passwordEdited = newPassword;
   };
 
-  onRemoveUser = (): void => {
-    const { contextUser } = this.state;
-    const { removeUser } = this.props;
-
-    this.setState({
-      isRemoveUserDialogOpen: false,
-    }, () => removeUser(contextUser.id));
-  };
-
-  onClickRemoveTableIcon = (user: Object): void => {
-    this.setState({
-      isRemoveUserDialogOpen: true,
-      contextUser: user,
-    });
-  };
-
-  onToggleRemoveDialog = (): void => {
-    const { isRemoveUserDialogOpen } = this.state;
-
-    this.setState({
-      isRemoveUserDialogOpen: !isRemoveUserDialogOpen,
-    });
-  };
-
-  renderRemoveUserDialog = (): Object => {
-    const { isRemoveUserDialogOpen, contextUser } = this.state;
-    const { password } = contextUser;
-
-    return (
-      <RemoveUserDialog
-        onCloseDialog={this.onToggleRemoveDialog}
-        onRemoveUser={this.onRemoveUser}
-        isOpen={isRemoveUserDialogOpen}
-        password={password}
-      />
-    );
-  };
-
   render() {
     const { users } = this.props;
 
@@ -113,7 +76,6 @@ class User extends Component<Props, State> {
           withOwnRemoveAction={this.onClickRemoveTableIcon}
           dataset={users}
           canBeCreated
-          canBeRemoved
           canBeEdited
           Form={props => (
             <UserForm
@@ -122,13 +84,12 @@ class User extends Component<Props, State> {
             />
           )}
         />
-        {this.renderRemoveUserDialog()}
       </Fragment>
     );
   }
 }
 
-const mapDispatchToProps = dispatch => bindActionCreators(HomeCreators, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators(UserCreators, dispatch);
 
 const mapStateToProps = state => ({
   users: state.user.data,

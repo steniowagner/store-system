@@ -2,6 +2,10 @@
 
 import React, { Component } from 'react';
 
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { Creators as BudgetCreators } from '../../store/ducks/user';
+
 import config from './config';
 
 import EntityComponent from '../../components/common/entity-component';
@@ -15,7 +19,6 @@ class Budget extends Component {
   onCreateBudget = (budget: Object) => {
     const { budgets } = this.state;
 
-    console.log(budget)
     budget.username = 'stenio'
     budget.customerName = 'swmyself'
     budget.id = Math.random();
@@ -44,7 +47,7 @@ class Budget extends Component {
   };
 
   render() {
-    const { budgets } = this.state;
+    const { budgets } = this.props;
 
     return (
       <EntityComponent
@@ -70,4 +73,10 @@ class Budget extends Component {
   }
 }
 
-export default Budget;
+const mapDispatchToProps = dispatch => bindActionCreators(BudgetCreators, dispatch);
+
+const mapStateToProps = state => ({
+  budgets: state.budget.data,
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Budget);

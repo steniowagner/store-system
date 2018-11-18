@@ -4,7 +4,7 @@ import { OPERATION_RESPONSE } from '../../../common/entitiesTypes';
 
 const { ipcRenderer } = window.require('electron');
 
-const handleEventResponse = (entity: string): object => {
+export const handleEventSubscription = (entity: string): Object => {
   const handler = new Promise((resolve) => {
     const eventResponseId = `${OPERATION_RESPONSE}_${entity}`;
 
@@ -16,4 +16,6 @@ const handleEventResponse = (entity: string): object => {
   return handler;
 };
 
-export default handleEventResponse;
+export const handleEventUnsubscription = (entity: string): void => {
+  ipcRenderer.removeAllListeners(`${OPERATION_RESPONSE}_${entity}`);
+};

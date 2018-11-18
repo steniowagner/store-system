@@ -1,9 +1,13 @@
 const ENTITIES = require('../../common/entitiesTypes');
-const handleUserEvent = require('./user');
+
+const handleProviderEvents = require('./provider');
+const handleUserEvents = require('./user');
 
 const eventHandler = (entitie, operation, args) => {
   switch (entitie) {
-    case ENTITIES.USER: return handleUserEvent(operation, args);
+    case ENTITIES.USER: return handleUserEvents(operation, args);
+
+    case ENTITIES.PROVIDER: return handleProviderEvents(operation, args);
 
     default: return {};
   }

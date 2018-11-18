@@ -9,8 +9,8 @@ import {
   DELETE,
 } from '../../../back-end/events-handlers/user/types';
 
+import { handleEventUnsubscription, handleEventSubscription } from './eventHandler';
 import { OPERATION_REQUEST, USER } from '../../../common/entitiesTypes';
-import handleEventResponse from './handleEventResponse';
 
 const { ipcRenderer } = window.require('electron');
 
@@ -20,7 +20,7 @@ export function* createUser(action) {
 
     ipcRenderer.send(OPERATION_REQUEST, USER, CREATE, args);
 
-    const { result } = yield handleEventResponse(USER);
+    const { result } = yield handleEventSubscription(USER);
 
     const newUser = {
       ...args,
@@ -37,7 +37,7 @@ export function* getAllUsers() {
   try {
     ipcRenderer.send(OPERATION_REQUEST, USER, READ);
 
-    const { result } = yield handleEventResponse(USER);
+    const { result } = yield handleEventSubscription(USER);
 
     yield put(UserCreators.getAllUsersSuccess(result));
   } catch (err) {
@@ -51,7 +51,7 @@ export function* editUser(action) {
 
     ipcRenderer.send(OPERATION_REQUEST, USER, UPDATE, user);
 
-    const { result } = yield handleEventResponse(USER);
+    const { result } = yield handleEventSubscription(USER);
 
     yield put(UserCreators.editUserSuccess(result));
   } catch (err) {
@@ -65,10 +65,12 @@ export function* removeUser(action) {
 
     ipcRenderer.send(OPERATION_REQUEST, USER, DELETE, id);
 
-    yield handleEventResponse(USER);
+    yield handleEventSubscription(USER);
 
     yield put(UserCreators.removeUserSuccess(id));
   } catch (err) {
     yield put(UserCreators.removeUserFailure());
   }
 }
+
+export const unsubscribeUserEvents = () => handleEventUnsubscription(USER);
