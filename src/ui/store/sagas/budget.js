@@ -9,8 +9,8 @@ import {
   DELETE,
 } from '../../../back-end/events-handlers/user/types';
 
-import { OPERATION_REQUEST, BUDGET } from '../../../common/entitiesTypes';
 import { handleEventUnsubscription, handleEventSubscription } from './eventHandler';
+import { OPERATION_REQUEST, BUDGET } from '../../../common/entitiesTypes';
 
 const { ipcRenderer } = window.require('electron');
 

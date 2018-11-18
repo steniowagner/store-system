@@ -1,23 +1,23 @@
 import Immutable from 'seamless-immutable';
 
 export const Types = {
-  CREATE_REQUEST: 'user/CREATE_REQUEST',
-  CREATE_SUCCESS: 'user/CREATE_SUCCESS',
-  CREATE_FAILURE: 'user/CREATE_FAILURE',
+  CREATE_REQUEST: 'customer/CREATE_REQUEST',
+  CREATE_SUCCESS: 'customer/CREATE_SUCCESS',
+  CREATE_FAILURE: 'customer/CREATE_FAILURE',
 
-  GET_ALL_REQUEST: 'user/GET_ALL_REQUEST',
-  GET_ALL_SUCCESS: 'user/GET_ALL_SUCCESS',
-  GET_ALL_FAILURE: 'user/GET_ALL_FAILURE',
+  GET_ALL_REQUEST: 'customer/GET_ALL_REQUEST',
+  GET_ALL_SUCCESS: 'customer/GET_ALL_SUCCESS',
+  GET_ALL_FAILURE: 'customer/GET_ALL_FAILURE',
 
-  EDIT_REQUEST: 'user/EDIT_REQUEST',
-  EDIT_REQUEST_SUCCESS: 'user/EDIT_REQUEST_SUCCESS',
-  EDIT_REQUEST_FAILURE: 'user/EDIT_REQUEST_FAILURE',
+  EDIT_REQUEST: 'customer/EDIT_REQUEST',
+  EDIT_REQUEST_SUCCESS: 'customer/EDIT_REQUEST_SUCCESS',
+  EDIT_REQUEST_FAILURE: 'customer/EDIT_REQUEST_FAILURE',
 
-  REMOVE_REQUEST: 'user/REMOVE_REQUEST',
-  REMOVE_REQUEST_SUCCESS: 'user/REMOVE_REQUEST_SUCCESS',
-  REMOVE_REQUEST_FAILURE: 'user/REMOVE_REQUEST_FAILURE',
+  REMOVE_REQUEST: 'customer/REMOVE_REQUEST',
+  REMOVE_REQUEST_SUCCESS: 'customer/REMOVE_REQUEST_SUCCESS',
+  REMOVE_REQUEST_FAILURE: 'customer/REMOVE_REQUEST_FAILURE',
 
-  UNSUBSCRIBE_EVENTS: 'user/UNSUBSCRIBE_EVENTS',
+  UNSUBSCRIBE_EVENTS: 'customer/UNSUBSCRIBE_EVENTS',
 };
 
 const INITIAL_STATE = Immutable({
@@ -26,61 +26,61 @@ const INITIAL_STATE = Immutable({
 });
 
 export const Creators = {
-  createUser: args => ({
+  createCustomer: args => ({
     type: Types.CREATE_REQUEST,
     args,
   }),
 
-  createUserSuccess: user => ({
+  createCustomerSuccess: customer => ({
     type: Types.CREATE_SUCCESS,
-    payload: { user },
+    payload: { customer },
   }),
 
-  createUserFailure: error => ({
+  createCustomerFailure: error => ({
     type: Types.CREATE_FAILURE,
     payload: { error },
   }),
 
-  getAllUsers: () => ({
+  getAllCustomers: () => ({
     type: Types.GET_ALL_REQUEST,
   }),
 
-  getAllUsersSuccess: users => ({
+  getAllCustomersSuccess: customers => ({
     type: Types.GET_ALL_SUCCESS,
-    payload: { users },
+    payload: { customers },
   }),
 
-  getAllUsersFailure: error => ({
+  getAllCustomersFailure: error => ({
     type: Types.GET_ALL_FAILURE,
     payload: { error },
   }),
 
-  editUser: user => ({
+  editCustomer: customer => ({
     type: Types.EDIT_REQUEST,
-    payload: { user },
+    payload: { customer },
   }),
 
-  editUserSuccess: ({ userEdited, index }) => ({
+  editCustomerSuccess: ({ customerEdited, index }) => ({
     type: Types.EDIT_REQUEST_SUCCESS,
-    payload: { userEdited, index },
+    payload: { customerEdited, index },
   }),
 
-  editUserFailure: error => ({
+  editCustomerFailure: error => ({
     type: Types.EDIT_REQUEST_FAILURE,
     payload: { error },
   }),
 
-  removeUser: id => ({
+  removeCustomer: id => ({
     type: Types.REMOVE_REQUEST,
     payload: { id },
   }),
 
-  removeUserSuccess: id => ({
+  removeCustomerSuccess: id => ({
     type: Types.REMOVE_REQUEST_SUCCESS,
     payload: { id },
   }),
 
-  removeUserFailure: error => ({
+  removeCustomerFailure: error => ({
     type: Types.REMOVE_REQUEST_FAILURE,
     payload: { error },
   }),
@@ -90,7 +90,7 @@ export const Creators = {
   }),
 };
 
-const user = (state = INITIAL_STATE, { payload, type }) => {
+const customer = (state = INITIAL_STATE, { payload, type }) => {
   switch (type) {
     case Types.CREATE_REQUEST:
       return {
@@ -99,7 +99,7 @@ const user = (state = INITIAL_STATE, { payload, type }) => {
 
     case Types.CREATE_SUCCESS:
       return {
-        data: [payload.user, ...state.data],
+        data: [payload.customer, ...state.data],
         error: null,
       };
 
@@ -116,7 +116,7 @@ const user = (state = INITIAL_STATE, { payload, type }) => {
 
     case Types.GET_ALL_SUCCESS:
       return {
-        data: [...payload.users],
+        data: [...payload.customers],
         error: null,
       };
 
@@ -132,9 +132,10 @@ const user = (state = INITIAL_STATE, { payload, type }) => {
       };
 
     case Types.EDIT_REQUEST_SUCCESS:
+      console.log()
       return {
         ...state,
-        data: Object.assign([], state.data, { [payload.index]: payload.userEdited }),
+        data: Object.assign([], state.data, { [payload.index]: payload.customerEdited }),
       };
 
     case Types.EDIT_REQUEST_FAILURE:
@@ -170,4 +171,4 @@ const user = (state = INITIAL_STATE, { payload, type }) => {
   }
 };
 
-export default user;
+export default customer;

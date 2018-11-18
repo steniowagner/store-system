@@ -2,47 +2,60 @@
 
 import React, { Component } from 'react';
 
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { Creators as CustomerCreators } from '../../store/ducks/customer';
+
 import EntityComponent from '../../components/common/entity-component';
 
 import config from './config';
 import Form from './form';
 
-class Customer extends Component {
-  state = {
-    customers: [],
-  };
+type Props = {
+  unsubscribeEvents: Function,
+  getAllCustomers: Function,
+  createCustomer: Function,
+  removeCustomer: Function,
+  editCustomer: Function,
+  customers: Array<Object>,
+};
+
+class Customer extends Component<Props, {}> {
+  componentDidMount() {
+    const { getAllCustomers } = this.props;
+
+    getAllCustomers();
+  }
+
+  componentWillUnmount() {
+    const { unsubscribeEvents } = this.props;
+
+    unsubscribeEvents();
+  }
 
   onCreateCustomer = (customer: Object): void => {
-    const { customers } = this.state;
+    const { createCustomer } = this.props;
 
-    this.setState({
-      customers: [{
-        ...customer,
-        id: Math.random(),
-      }, ...customers],
-    });
+    createCustomer(customer);
   };
 
-  onEditCustomer = (userEdited: Object): void => {
-    const { customers } = this.state;
+  onEditCustomer = (customToEdited: Object): void => {
+    const { editCustomer } = this.props;
 
-    const customerEditedIndex = customers.findIndex(product => product.id === userEdited.id);
-
-    this.setState({
-      customers: Object.assign([], customers, { [customerEditedIndex]: userEdited }),
-    });
+    editCustomer(customToEdited);
   };
 
-  onRemoveCustomer = (customerId: string): void => {
-    const { customers } = this.state;
+  onRemoveCustomer = (customerId: number): void => {
+    const { removeCustomer } = this.props;
 
-    this.setState({
-      customers: customers.filter(customer => customer.id !== customerId),
-    });
+    removeCustomer(customerId);
   };
 
   render() {
-    const { customers } = this.state;
+    const { customers } = this.props;
+
+    const cpfsRegistered = customers.map(customer => customer.cpf);
+    const rgsRegistered = customers.map(customer => customer.rg);
 
     return (
       <EntityComponent
@@ -59,6 +72,8 @@ class Customer extends Component {
         canBeEdited
         Form={props => (
           <Form
+            cpfsRegistered={cpfsRegistered}
+            rgsRegistered={rgsRegistered}
             {...props}
           />
         )}
@@ -67,4 +82,10 @@ class Customer extends Component {
   }
 }
 
-export default Customer;
+const mapDispatchToProps = dispatch => bindActionCreators(CustomerCreators, dispatch);
+
+const mapStateToProps = state => ({
+  customers: state.customer.data,
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Customer);

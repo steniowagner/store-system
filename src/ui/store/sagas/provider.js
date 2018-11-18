@@ -9,8 +9,8 @@ import {
   DELETE,
 } from '../../../back-end/events-handlers/provider/types';
 
-import { OPERATION_REQUEST, PROVIDER } from '../../../common/entitiesTypes';
 import { handleEventUnsubscription, handleEventSubscription } from './eventHandler';
+import { OPERATION_REQUEST, PROVIDER } from '../../../common/entitiesTypes';
 
 const { ipcRenderer } = window.require('electron');
 
@@ -73,4 +73,4 @@ export function* removeProvider(action) {
   }
 }
 
-export const unsubscribe = () => handleEventUnsubscription(PROVIDER);
+export const unsubscribeProviderEvents = () => handleEventUnsubscription(PROVIDER);

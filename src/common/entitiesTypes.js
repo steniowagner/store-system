@@ -4,6 +4,7 @@ const entities = {
   USER: 'USER',
   BUDGET: 'BUDGET',
   PROVIDER: 'PROVIDER',
+  CUSTOMER: 'CUSTOMER',
 };
 
 module.exports = entities;

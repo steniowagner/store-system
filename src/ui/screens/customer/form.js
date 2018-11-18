@@ -137,21 +137,15 @@ const CustomForm = withFormik({
     rg: item.rg || '',
   }),
 
-  validationSchema: _props => Yup.lazy(() => Yup.object().shape({
+  validationSchema: ({ cpfsRegistered, rgsRegistered, mode }) => Yup.lazy(() => Yup.object().shape({
     name: Yup.string()
       .required('O Nome é obrigatório.'),
 
     cpf: Yup.string()
-      .required('O CPF é obrigatório.'),
+      .test('cpf-repeated', 'Este CPF já foi cadastrado', value => (mode === 'create' ? (cpfsRegistered.indexOf(value) < 0) : true)),
 
     rg: Yup.string()
-      .required('O RG é obrigatório.'),
-
-    address: Yup.string()
-      .required('O RG é obrigatório.'),
-
-    landline: Yup.string()
-      .required('O Telefone é obrigatório.'),
+      .test('rg-repeated', 'Este RG já foi cadastrado', value => (mode === 'create' ? (rgsRegistered.indexOf(value) < 0) : true)),
 
     email: Yup.string()
       .email('E-mail inválido.'),
