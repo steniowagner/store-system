@@ -63,6 +63,7 @@ class User extends Component<Props, State> {
 
   render() {
     const { users } = this.props;
+    const usernames = users.map(user => user.username);
 
     return (
       <Fragment>
@@ -80,6 +81,7 @@ class User extends Component<Props, State> {
           Form={props => (
             <UserForm
               onEditPassword={this.onEditPassword}
+              usernames={usernames}
               {...props}
             />
           )}

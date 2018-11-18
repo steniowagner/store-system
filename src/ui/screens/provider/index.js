@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -14,7 +14,7 @@ type Props = {
   removeProvider: Function,
   createProvider: Function,
   editProvider: Function,
-  providers: Array<Object>,
+  providers: Arra<Object>,
 };
 
 class Provider extends Component<Props, {}> {
@@ -44,26 +44,30 @@ class Provider extends Component<Props, {}> {
 
   render() {
     const { providers } = this.props;
+    const providersNames = providers.map(provider => provider.name);
 
     return (
-      <EntityComponent
-        onRemoveItem={this.onRemoveProvider}
-        onCreateItem={this.onCreateProvider}
-        onEditItem={this.onEditProvider}
-        singularEntityName="Fornecedor"
-        pluralEntityName="Fornecedores"
-        filterConfig={config.filterConfig}
-        tabConfig={config.tabConfig}
-        dataset={providers}
-        canBeCreated
-        canBeRemoved
-        canBeEdited
-        Form={props => (
-          <Form
-            {...props}
-          />
-        )}
-      />
+      <Fragment>
+        <EntityComponent
+          onRemoveItem={this.onRemoveProvider}
+          onCreateItem={this.onCreateProvider}
+          onEditItem={this.onEditProvider}
+          singularEntityName="Fornecedor"
+          pluralEntityName="Fornecedores"
+          filterConfig={config.filterConfig}
+          tabConfig={config.tabConfig}
+          dataset={providers}
+          canBeCreated
+          canBeRemoved
+          canBeEdited
+          Form={props => (
+            <Form
+              {...props}
+              providersNames={providersNames}
+            />
+          )}
+        />
+      </Fragment>
     );
   }
 }

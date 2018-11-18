@@ -95,12 +95,10 @@ const CustomForm = withFormik({
     city: item.city || '',
   }),
 
-  validationSchema: _props => Yup.lazy(() => Yup.object().shape({
+  validationSchema: ({ providersNames, mode }) => Yup.lazy(() => Yup.object().shape({
     name: Yup.string()
+      .test('name-repeated', 'Este Fornecedor já foi cadastrado', value => (mode === 'create' ? (providersNames.indexOf(value) < 0) : true))
       .required('O Nome é obrigatório.'),
-
-    address: Yup.string()
-      .required('O Endereço do Fornecedor é obrigatório.'),
 
     phone1: Yup.string()
       .required('Ao menos um Telefone deve ser Informado.'),

@@ -25,9 +25,8 @@ const Container = styled.div`
   display: flex;
 `;
 
-const Title = styled.h2`
-  margin-right: 18px,
-  font-size: 28px;
+const Title = styled.span`
+  font-size: 18px;
   font-weight: 700;
   color: ${({ theme }) => theme.colors.white};
 `;
@@ -38,21 +37,10 @@ const FilterSelector = styled(ButtonBase)`
 `;
 
 const FilterSelectorWrapper = styled.div`
-  width: 250px;
   height: 50px;
   border-top-left-radius: 6px;
   border-bottom-left-radius: 6px;
   background-color: ${({ theme }) => theme.colors.affirmative};
-`;
-
-const FilterSelectTextWrapper = styled.div`
-  width: 85%;
-  height: 100%;
-`;
-
-const ExapandIconWrapper = styled.div`
-  width: 15%;
-  height: 100%;
 `;
 
 const TextInput = styled(Input).attrs({
@@ -79,12 +67,20 @@ const TextBoxWrapper = styled.div`
 
 const ExpandLessIcon = styled(ExpandLess)`
   color: ${({ theme }) => theme.colors.white};
-  margin-right: 12px;
+  margin-left: 8px;
 `;
 
 const ExpandMoreIcon = styled(ExpandMore)`
   color: ${({ theme }) => theme.colors.white};
-  margin-right: 12px;
+  margin-left: 8px;
+`;
+
+const SelectorContent = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-right: 16px;
+  margin-left: 16px;
 `;
 
 type Props = {
@@ -359,14 +355,12 @@ class Filter extends Component<Props, State> {
           aria-haspopup="true"
           variant="contained"
         >
-          <FilterSelectTextWrapper>
+          <SelectorContent>
             <Title>
               {filterButtonLabel.toUpperCase()}
             </Title>
-          </FilterSelectTextWrapper>
-          <ExapandIconWrapper>
             {isFilterOpen ? <ExpandLessIcon /> : <ExpandMoreIcon /> }
-          </ExapandIconWrapper>
+          </SelectorContent>
         </FilterSelector>
       </FilterSelectorWrapper>
     );

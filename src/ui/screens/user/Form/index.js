@@ -158,14 +158,15 @@ const CustomForm = withFormik({
     passwordConfirm: '',
   }),
 
-  validationSchema: _props => Yup.lazy(() => Yup.object().shape({
+  validationSchema: ({ usernames, mode }) => Yup.lazy(() => Yup.object().shape({
     name: Yup.string()
       .required('O Nome é obrigatório.'),
 
     username: Yup.string()
+      .test('username-repeated', 'Este Usuário já foi cadastrado', value => (mode === 'create' ? (usernames.indexOf(value) < 0) : true))
       .required('O Nome de Usuário é obrigatório.'),
 
-    ...getPasswordValidation(_props.mode),
+    ...getPasswordValidation(mode),
   })),
 
   handleSubmit(values, { setSubmitting, props }) {

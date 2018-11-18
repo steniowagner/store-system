@@ -4,9 +4,6 @@ const tabConfig = [{
 }, {
   columnTitle: 'Endereço',
   dataField: 'address',
-}, {
-  columnTitle: 'Cidade',
-  dataField: 'city',
 }];
 
 export default tabConfig;

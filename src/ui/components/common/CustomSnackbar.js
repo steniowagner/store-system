@@ -12,6 +12,13 @@ import InfoIcon from '@material-ui/icons/Info';
 import styled from 'styled-components';
 import AppTheme from '../../styles';
 
+export const STYLES = {
+  SUCCESS: 'SUCCESS',
+  ERROR: 'ERROR',
+  WARNING: 'WARNING',
+  INFO: 'INFO',
+};
+
 const MessageWrapper = styled.span.attrs({
   id: 'client-snackbar',
 })`
@@ -21,22 +28,22 @@ const MessageWrapper = styled.span.attrs({
 
 const getConfiguration = (type: string): Object => {
   const styles = {
-    success: {
+    [STYLES.SUCCESS]: {
       Icon: CheckCircleIcon,
       color: AppTheme.colors.success,
     },
 
-    error: {
+    [STYLES.ERROR]: {
       Icon: ErrorIcon,
       color: AppTheme.colors.danger,
     },
 
-    warning: {
+    [STYLES.WARNING]: {
       Icon: WarningIcon,
       color: AppTheme.colors.warning,
     },
 
-    info: {
+    [STYLES.INFO]: {
       Icon: InfoIcon,
       color: AppTheme.colors.affirmative,
     },
@@ -67,7 +74,7 @@ const renderContent = (type: string, message: string, onCloseSnackbar: Function)
       )}
       action={[
         <IconButton
-          onClick={() => onCloseSnackbar()}
+          onClick={onCloseSnackbar}
           aria-label="Close"
           color="inherit"
           key="close"

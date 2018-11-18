@@ -103,7 +103,7 @@ const provider = (state = INITIAL_STATE, { payload, type }) => {
         error: null,
       };
 
-    case Types.GET_SINGLE_FAILURE:
+    case Types.CREATE_FAILURE:
       return {
         ...state,
         error: payload.error,
@@ -133,8 +133,8 @@ const provider = (state = INITIAL_STATE, { payload, type }) => {
 
     case Types.EDIT_REQUEST_SUCCESS:
       return {
-        ...state,
         data: Object.assign([], state.data, { [payload.index]: payload.providerEdited }),
+        error: null,
       };
 
     case Types.EDIT_REQUEST_FAILURE:

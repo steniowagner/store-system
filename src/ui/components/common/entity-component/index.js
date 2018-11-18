@@ -40,7 +40,6 @@ type Props = {
   tabConfig: Object,
   singularEntityName: string,
   pluralEntityName: string,
-  withOwnRemoveAction: ?Function,
   withOwnTitle: string,
   canBeRemoved: ?boolean,
   canBeCreated: ?boolean,
@@ -75,39 +74,32 @@ class EntityComponent extends Component<Props, State> {
   };
 
   componentWillReceiveProps(nextProps) {
+    const { formMode } = this.state;
     const { dataset } = nextProps;
 
     this.setState({
       itemsFiltered: dataset,
     });
-    /* const { formMode } = this.state;
-    console.log(nextProps)
-    if (formMode === 'create') {
-      this.setState({
-        itemsFiltered: nextProps.dataset,
-      });
-    }
 
     if (formMode === 'edit') {
       const { itemsFiltered, contextItem } = this.state;
-      const { dataset } = nextProps;
 
       const indexItemEditedOnItemsFiltered = itemsFiltered.findIndex(
         itemFiltered => itemFiltered.id === contextItem.id,
       );
 
-      const itemEditedIndexOnOriginalDataset = dataset.findIndex(
+      const indexItemEditedOnOriginalDataset = dataset.findIndex(
         item => item.id === contextItem.id,
       );
 
-      const itemEdited = dataset[itemEditedIndexOnOriginalDataset];
+      const itemEdited = dataset[indexItemEditedOnOriginalDataset];
 
       this.setState({
         itemsFiltered: Object.assign([], itemsFiltered, {
           [indexItemEditedOnItemsFiltered]: itemEdited,
         }),
       });
-    } */
+    }
   }
 
   onToggleDialogRemove = (): void => {
@@ -258,9 +250,12 @@ class EntityComponent extends Component<Props, State> {
       itemsFiltered: itemsFilteredAfterRemotion,
       isFullScreenDialogOpen: false,
       isSnackbarOpen: true,
-      snackbarData,
+      snackbarData: {},
       currentPage,
-    }, () => onRemoveItem(contextItem.id));
+    }, () => {
+      this.openSnackBar(snackbarData);
+      onRemoveItem(contextItem.id);
+    });
   };
 
   renderForm = (): Obejct => {
@@ -351,7 +346,6 @@ class EntityComponent extends Component<Props, State> {
 
   renderTable = (): Object => {
     const {
-      withOwnRemoveAction,
       canBeRemoved,
       canBeEdited,
       tabConfig,
@@ -361,7 +355,7 @@ class EntityComponent extends Component<Props, State> {
     return (
       <Table
         onDetailIconClicked={this.onTableDetailIconClicked}
-        onRemoveIconClicked={withOwnRemoveAction || this.onTableRemoveIconClicked}
+        onRemoveIconClicked={this.onTableRemoveIconClicked}
         onEditIconClicked={this.onTableEditIconClicked}
         updatePageIndex={this.onTablePageChange}
         canBeRemoved={canBeRemoved}
