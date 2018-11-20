@@ -30,8 +30,8 @@ const InputWrapper = styled.div`
 
 type Props = {
   onSelectItem: Function,
-  options: Array<string>,
-  itemSelected: any,
+  options: Array<Object>,
+  itemSelected: Object,
   entity: string,
 };
 
@@ -46,13 +46,13 @@ class SearchInput extends Component<Props, State> {
     anchorElement: null,
   };
 
-  onClickSearchButton = (event): void => {
+  onClickSearchButton = (event: Object): void => {
     this.setState({
       anchorElement: event.currentTarget,
     });
   };
 
-  onSelectMenuItem = (index): void => {
+  onSelectMenuItem = (index: number): void => {
     const { onSelectItem } = this.props;
 
     this.handleCloseMenu();
@@ -70,8 +70,6 @@ class SearchInput extends Component<Props, State> {
     const { itemSelected, entity } = this.props;
 
     const entities = {
-      manufacturer: 'o Fabricante',
-      category: 'a Categoria',
       brand: 'a Marca',
     };
 
@@ -82,7 +80,7 @@ class SearchInput extends Component<Props, State> {
     return (
       <Input
         placeholder={placeholder}
-        value={itemSelected}
+        value={itemSelected.name || ''}
         id="newItem"
         type="text"
         disabled
@@ -91,22 +89,20 @@ class SearchInput extends Component<Props, State> {
     );
   };
 
-  renderMenuList = (dataset: Array<any>, itemSelected: string): Object => {
+  renderMenuList = (dataset: Array<Object>, itemSelected: string): Object => {
     const { options, entity } = this.props;
 
     const renderDefaultOptions = options.map((option, index) => (
       <MenuItem
         onClick={() => this.onSelectMenuItem(index)}
         selected={option === itemSelected}
-        key={option}
+        key={option.name}
       >
-        {option}
+        {option.name}
       </MenuItem>
     ));
 
     const entities = {
-      manufacturer: 'Fabricantes',
-      category: 'Categorias',
       brand: 'Marcas',
     };
 

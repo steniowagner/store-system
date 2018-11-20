@@ -1,23 +1,23 @@
 import Immutable from 'seamless-immutable';
 
 export const Types = {
-  CREATE_REQUEST: 'budget/CREATE_REQUEST',
-  CREATE_SUCCESS: 'budget/CREATE_SUCCESS',
-  CREATE_FAILURE: 'budget/CREATE_FAILURE',
+  CREATE_REQUEST: 'product/CREATE_REQUEST',
+  CREATE_SUCCESS: 'product/CREATE_SUCCESS',
+  CREATE_FAILURE: 'product/CREATE_FAILURE',
 
-  GET_ALL_REQUEST: 'budget/GET_ALL_REQUEST',
-  GET_ALL_SUCCESS: 'budget/GET_ALL_SUCCESS',
-  GET_ALL_FAILURE: 'budget/GET_ALL_FAILURE',
+  GET_ALL_REQUEST: 'product/GET_ALL_REQUEST',
+  GET_ALL_SUCCESS: 'product/GET_ALL_SUCCESS',
+  GET_ALL_FAILURE: 'product/GET_ALL_FAILURE',
 
-  EDIT_REQUEST: 'budget/EDIT_REQUEST',
-  EDIT_REQUEST_SUCCESS: 'budget/EDIT_REQUEST_SUCCESS',
-  EDIT_REQUEST_FAILURE: 'budget/EDIT_REQUEST_FAILURE',
+  EDIT_REQUEST: 'product/EDIT_REQUEST',
+  EDIT_REQUEST_SUCCESS: 'product/EDIT_REQUEST_SUCCESS',
+  EDIT_REQUEST_FAILURE: 'product/EDIT_REQUEST_FAILURE',
 
-  REMOVE_REQUEST: 'budget/REMOVE_REQUEST',
-  REMOVE_REQUEST_SUCCESS: 'budget/REMOVE_REQUEST_SUCCESS',
-  REMOVE_REQUEST_FAILURE: 'budget/REMOVE_REQUEST_FAILURE',
+  REMOVE_REQUEST: 'product/REMOVE_REQUEST',
+  REMOVE_REQUEST_SUCCESS: 'product/REMOVE_REQUEST_SUCCESS',
+  REMOVE_REQUEST_FAILURE: 'product/REMOVE_REQUEST_FAILURE',
 
-  UNSUBSCRIBE_EVENTS: 'budget/UNSUBSCRIBE_EVENTS',
+  UNSUBSCRIBE_EVENTS: 'product/UNSUBSCRIBE_EVENTS',
 };
 
 const INITIAL_STATE = Immutable({
@@ -26,61 +26,61 @@ const INITIAL_STATE = Immutable({
 });
 
 export const Creators = {
-  createBudget: args => ({
+  createProduct: args => ({
     type: Types.CREATE_REQUEST,
     args,
   }),
 
-  createBudgetSuccess: budget => ({
+  createProductSuccess: product => ({
     type: Types.CREATE_SUCCESS,
-    payload: { budget },
+    payload: { product },
   }),
 
-  createBudgetFailure: error => ({
+  createProductFailure: error => ({
     type: Types.CREATE_FAILURE,
     payload: { error },
   }),
 
-  getAllBudgets: () => ({
+  getAllProducts: () => ({
     type: Types.GET_ALL_REQUEST,
   }),
 
-  getAllBudgetsSuccess: budgets => ({
+  getAllProductsSuccess: products => ({
     type: Types.GET_ALL_SUCCESS,
-    payload: { budgets },
+    payload: { products },
   }),
 
-  getAllBudgetsFailure: error => ({
+  getAllProductsFailure: error => ({
     type: Types.GET_ALL_FAILURE,
     payload: { error },
   }),
 
-  editBudget: budget => ({
+  editProduct: product => ({
     type: Types.EDIT_REQUEST,
-    payload: { budget },
+    payload: { product },
   }),
 
-  editBudgetSuccess: ({ budgetEdited, index }) => ({
+  editProductSuccess: ({ productEdited, index }) => ({
     type: Types.EDIT_REQUEST_SUCCESS,
-    payload: { budgetEdited, index },
+    payload: { productEdited, index },
   }),
 
-  editBudgetFailure: error => ({
+  editProductFailure: error => ({
     type: Types.EDIT_REQUEST_FAILURE,
     payload: { error },
   }),
 
-  removeBudget: id => ({
+  removeProduct: id => ({
     type: Types.REMOVE_REQUEST,
     payload: { id },
   }),
 
-  removeBudgetSuccess: id => ({
+  removeProductSuccess: id => ({
     type: Types.REMOVE_REQUEST_SUCCESS,
     payload: { id },
   }),
 
-  removeBudgetFailure: error => ({
+  removeProductFailure: error => ({
     type: Types.REMOVE_REQUEST_FAILURE,
     payload: { error },
   }),
@@ -90,7 +90,7 @@ export const Creators = {
   }),
 };
 
-const budget = (state = INITIAL_STATE, { payload, type }) => {
+const product = (state = INITIAL_STATE, { payload, type }) => {
   switch (type) {
     case Types.CREATE_REQUEST:
       return {
@@ -99,11 +99,11 @@ const budget = (state = INITIAL_STATE, { payload, type }) => {
 
     case Types.CREATE_SUCCESS:
       return {
-        data: [payload.budget, ...state.data],
+        data: [payload.product, ...state.data],
         error: null,
       };
 
-    case Types.GET_SINGLE_FAILURE:
+    case Types.CREATE_FAILURE:
       return {
         ...state,
         error: payload.error,
@@ -116,7 +116,7 @@ const budget = (state = INITIAL_STATE, { payload, type }) => {
 
     case Types.GET_ALL_SUCCESS:
       return {
-        data: [...payload.budgets],
+        data: [...payload.products],
         error: null,
       };
 
@@ -134,7 +134,7 @@ const budget = (state = INITIAL_STATE, { payload, type }) => {
     case Types.EDIT_REQUEST_SUCCESS:
       return {
         ...state,
-        data: Object.assign([], state.data, { [payload.index]: payload.budgetEdited }),
+        data: Object.assign([], state.data, { [payload.index]: payload.productEdited }),
       };
 
     case Types.EDIT_REQUEST_FAILURE:
@@ -170,4 +170,4 @@ const budget = (state = INITIAL_STATE, { payload, type }) => {
   }
 };
 
-export default budget;
+export default product;

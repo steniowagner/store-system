@@ -1,96 +1,46 @@
 import React, { Component } from 'react';
+
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { Creators as StockCreators } from '../../store/ducks/stock';
+
 import config from './config';
 import Form from './form';
 
 import EntityComponent from '../../components/common/entity-component';
 
-class Stock extends Component {
-  state = {
-    stock: [{
-      id: Math.random(),
-      barCode: '3',
-      brand: 'brand01',
-      category: 'cat01',
-      costPrice: 3,
-      description: 'Produto 01',
-      manufacturer: 'Manufacturer 02',
-      minStockQuantity: 1,
-      salePrice: 3,
-      stockQuantity: 1,
-    }, {
-      id: Math.random(),
-      barCode: '3',
-      brand: 'brand01',
-      category: 'cat01',
-      costPrice: 3,
-      description: 'Produto 02',
-      manufacturer: 'Manufacturer 02',
-      minStockQuantity: 4,
-      salePrice: 3,
-      stockQuantity: 1,
-    }, {
-      id: Math.random(),
-      barCode: '3',
-      brand: 'brand01',
-      category: 'cat01',
-      costPrice: 3,
-      description: 'Produto 03',
-      manufacturer: 'Manufacturer 02',
-      minStockQuantity: 4,
-      salePrice: 3,
-      stockQuantity: 5,
-    }, {
-      id: Math.random(),
-      barCode: '3',
-      brand: 'brand01',
-      category: 'cat01',
-      costPrice: 3,
-      description: 'Produto 04',
-      manufacturer: 'Manufacturer 02',
-      minStockQuantity: 4,
-      salePrice: 3,
-      stockQuantity: 21,
-    }, {
-      id: Math.random(),
-      barCode: '3',
-      brand: 'brand01',
-      category: 'cat01',
-      costPrice: 3,
-      description: 'Produto 05',
-      manufacturer: 'Manufacturer 02',
-      minStockQuantity: 1,
-      salePrice: 3,
-      stockQuantity: 1,
-    }, {
-      id: Math.random(),
-      barCode: '3',
-      brand: 'brand01',
-      category: 'cat01',
-      costPrice: 3,
-      description: 'Produto 06',
-      manufacturer: 'Manufacturer 02',
-      minStockQuantity: 4,
-      salePrice: 3,
-      stockQuantity: 5,
-    }],
-  };
+type Props = {
+  unsubscribeEvents: Function,
+  getStock: Function,
+  editProduct: Function,
+  stock: Array<Object>,
+};
 
-  onEditProvider = (productInStockToEdit: Object): void => {
-    const { stock } = this.state;
+class Stock extends Component<Props, {}> {
+  componentDidMount() {
+    const { getStock } = this.props;
+    console.log(this.props);
+    // getStock();
+  }
 
-    const productInStockToEditIndex = stock.findIndex(product => product.id === productInStockToEdit.id);
+  componentWillUnmount() {
+    const { unsubscribeEvents } = this.props;
 
-    this.setState({
-      stock: Object.assign([], stock, { [productInStockToEditIndex]: productInStockToEdit }),
-    });
+    unsubscribeEvents();
+  }
+
+  onEditStockItem = (itemToEdit: Object): void => {
+    const { editProduct } = this.props;
+
+    editProduct(itemToEdit);
   };
 
   render() {
-    const { stock } = this.state;
+    const { stock } = this.props;
 
     return (
       <EntityComponent
-        onEditItem={this.onEditProvider}
+        onEditItem={this.onEditStockItem}
         onRemoveItem={() => {}}
         onCreateItem={() => {}}
         singularEntityName="Estoque"
@@ -109,4 +59,11 @@ class Stock extends Component {
   }
 }
 
-export default Stock;
+const mapDispatchToProps = dispatch => bindActionCreators(StockCreators, dispatch);
+
+const mapStateToProps = state => ({
+  stock: state.stock.data,
+  brand: state.brand.data,
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Stock);

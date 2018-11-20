@@ -70,19 +70,9 @@ class DialogChooseItem extends Component<Props, State> {
     const { entity } = this.props;
 
     const titles = {
-      manufacturer: {
-        placeholder: 'Informe o Nome do novo Fabricante',
-        panelTitle: 'Cadastrar um novo Fabricante',
-      },
-
       brand: {
         placeholder: 'Informe o Nome da nova Marca',
         panelTitle: 'Cadastrar uma nova Marca',
-      },
-
-      category: {
-        placeholder: 'Informe o Título da nova Categoria',
-        panelTitle: 'Cadastrar uma nova Categoria',
       },
     };
 
@@ -143,8 +133,6 @@ class DialogChooseItem extends Component<Props, State> {
     } = this.props;
 
     const titles = {
-      manufacturer: 'Fabricante',
-      category: 'Categoria',
       brand: 'Marca',
     };
 

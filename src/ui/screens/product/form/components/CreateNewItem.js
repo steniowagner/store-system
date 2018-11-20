@@ -57,6 +57,7 @@ class CreateNewItem extends Component<Props, State> {
   onTypeInputField = (event: Object) => {
     this.setState({
       newItem: event.target.value,
+      error: '',
     });
   };
 
@@ -82,7 +83,7 @@ class CreateNewItem extends Component<Props, State> {
     this.setState({
       shouldExpandMenu: false,
       newItem: '',
-    }, () => onCreateItem(newItem));
+    }, () => onCreateItem({ name: newItem }));
   };
 
   onCreateError = (): void => {
@@ -90,8 +91,6 @@ class CreateNewItem extends Component<Props, State> {
     const { entity } = this.props;
 
     const errors = {
-      manufacturer: `O Fabricante '${newItem}' já foi Cadastrado`,
-      category: `A Categoria '${newItem}' já foi Cadastrada`,
       brand: `A Marca '${newItem}' já foi Cadastrada`,
     };
 
@@ -104,7 +103,7 @@ class CreateNewItem extends Component<Props, State> {
     const { newItem } = this.state;
     const { dataset } = this.props;
 
-    const itemIndex = dataset.findIndex(item => item.toUpperCase() === newItem.toUpperCase());
+    const itemIndex = dataset.findIndex(item => item.name.toUpperCase() === newItem.toUpperCase());
 
     return itemIndex >= 0;
   };
@@ -119,7 +118,7 @@ class CreateNewItem extends Component<Props, State> {
         onChange={this.onTypeInputField}
         value={newItem}
         error={error}
-        label="Título"
+        label=""
         id="newItem"
         type="text"
       />

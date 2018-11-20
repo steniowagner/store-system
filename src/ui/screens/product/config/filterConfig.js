@@ -15,16 +15,6 @@ const filterConfig = [{
   type: FILTER_TYPES.TEXT,
   filterTitle: 'Marca',
   dataField: 'brand',
-}, {
-  placeholder: 'Informe o Fabricante do Produto Buscado',
-  type: FILTER_TYPES.TEXT,
-  filterTitle: 'Fabricante',
-  dataField: 'manufacturer',
-}, {
-  placeholder: 'Informe a Categoria do Produto Buscado',
-  type: FILTER_TYPES.TEXT,
-  filterTitle: 'Categoria',
-  dataField: 'category',
 }];
 
 export default filterConfig;

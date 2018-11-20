@@ -23,8 +23,6 @@ type Props = {
   setFieldValue: Function,
   handleSubmit: Function,
   onRemoveItem: Function,
-  manufacturers: Array<any>,
-  categories: Array<any>,
   brands: Array<any>,
   values: Object,
   errors: Object,
@@ -36,16 +34,13 @@ type Props = {
 class ProductForm extends Component<Props, {}> {
   state = {
     manufacturersCreated: [],
-    categoriesCreated: [],
     brandsCreated: [],
   };
 
   onSubmitForm = (): void => {
-    const { manufacturersCreated, categoriesCreated, brandsCreated } = this.state;
+    const { brandsCreated } = this.state;
     const { setFieldValue, handleSubmit } = this.props;
 
-    setFieldValue('manufacturersCreated', manufacturersCreated);
-    setFieldValue('categoriesCreated', categoriesCreated);
     setFieldValue('brandsCreated', brandsCreated);
 
     handleSubmit();
@@ -61,10 +56,10 @@ class ProductForm extends Component<Props, {}> {
   };
 
   renderBarcodeAndDescription = (): void => {
-    const barCodeInputFieldData = getRowItemObject('Código de Barras', 'Informe o Código de Barras do Produto', 'text', 'barCode');
+    const barcodeInputFieldData = getRowItemObject('Código de Barras', 'Informe o Código de Barras do Produto', 'text', 'barcode');
     const descriptionInputFieldData = getRowItemObject('Descrição', 'Informe a Descrição do Produto', 'text', 'description');
 
-    return renderRowWithTwoItems(barCodeInputFieldData, descriptionInputFieldData, this.props);
+    return renderRowWithTwoItems(barcodeInputFieldData, descriptionInputFieldData, this.props);
   };
 
   renderPrices = () => {
@@ -105,39 +100,11 @@ class ProductForm extends Component<Props, {}> {
     );
   };
 
-  renderManufacturerInputItem = () => {
-    const { manufacturersCreated } = this.state;
-    const { manufacturers } = this.props;
+  renderBrandRow = (): Object => {
+    const { brandsCreated } = this.state;
+    const { brands } = this.props;
 
-    const manufacturerInputFieldData = getRowItemObject('Fabricante', 'Informe o Fabricante do Produto', 'text', 'manufacturer');
-
-    const manufacturerData = {
-      datasetCreatedId: 'manufacturersCreated',
-      fieldData: manufacturerInputFieldData,
-      datasetCreated: manufacturersCreated,
-      dataset: manufacturers,
-    };
-
-    return (
-      <Row>
-        {this.renderInputWithCreation(manufacturerData)}
-      </Row>
-    );
-  };
-
-  renderCategoryAndBrandRow = (): Object => {
-    const { brandsCreated, categoriesCreated } = this.state;
-    const { categories, brands } = this.props;
-
-    const categorieInputFieldData = getRowItemObject('Categoria', 'Informe a Categoria do Produto', 'text', 'category');
     const brandInputFieldData = getRowItemObject('Marca', 'Informe a Marca do Produto', 'text', 'brand');
-
-    const categoryData = {
-      datasetCreatedId: 'categoriesCreated',
-      fieldData: categorieInputFieldData,
-      datasetCreated: categoriesCreated,
-      dataset: categories,
-    };
 
     const brandData = {
       datasetCreatedId: 'brandsCreated',
@@ -148,7 +115,6 @@ class ProductForm extends Component<Props, {}> {
 
     return (
       <Row>
-        {this.renderInputWithCreation(categoryData)}
         {this.renderInputWithCreation(brandData)}
       </Row>
     );
@@ -159,8 +125,7 @@ class ProductForm extends Component<Props, {}> {
       {renderSectionTitle('Informações do Produto')}
       {this.renderBarcodeAndDescription()}
       {this.renderPrices()}
-      {this.renderCategoryAndBrandRow()}
-      {this.renderManufacturerInputItem()}
+      {this.renderBrandRow()}
     </Section>
   );
 
@@ -190,7 +155,7 @@ class ProductForm extends Component<Props, {}> {
       <Wrapper>
         <Form>
           {this.renderProductInfoSection()}
-          {this.renderStockSection()}
+          {(mode === 'create') && this.renderStockSection()}
           <ActionFormButton
             onChageFormToEditMode={onChageFormToEditMode}
             onClick={this.onSubmitForm}
@@ -207,39 +172,48 @@ class ProductForm extends Component<Props, {}> {
 }
 
 const CustomForm = withFormik({
-  mapPropsToValues: ({ item }) => ({
+  mapPropsToValues: ({ item, mode }) => ({
     minStockQuantity: item.minStockQuantity || '',
     stockQuantity: item.stockQuantity || '',
-    manufacturer: item.manufacturer || '',
     description: item.description || '',
     costPrice: item.costPrice || '',
     salePrice: item.salePrice || '',
-    category: item.category || '',
-    barCode: item.barCode || '',
+    barcode: item.barcode || '',
     brand: item.brand || '',
+    isCreateMode: (mode === 'create'),
   }),
 
-  validationSchema: _props => Yup.lazy(() => Yup.object().shape({
+  validationSchema: () => Yup.lazy(formValues => Yup.object().shape({
+    isCreateMode: Yup.boolean(),
+
     minStockQuantity: Yup.string()
-      .required('A Quantidade Mínima em Estoque é obrigatória.'),
+      .test('min-stock-quantity', 'Quantidade Mínima maior que a Atual.', (value) => {
+        const { stockQuantity } = formValues;
+
+        const stockQuantityValue = (stockQuantity || 0);
+        const minStockValue = (value || 0);
+
+        return (minStockValue <= stockQuantityValue);
+      })
+      .when('isCreateMode', {
+        is: true,
+        then: Yup.string().required('A Quantidade Mínima em Estoque é Obrigatória.'),
+      }),
 
     stockQuantity: Yup.string()
-      .required('A Quantidade em Estoque é obrigatória.'),
+      .when('isCreateMode', {
+        is: true,
+        then: Yup.string().required('A Quantidade em Estoque é Obrigatória.'),
+      }),
 
-    barCode: Yup.string()
-      .required('O Código de Barras é obrigatório.'),
+    /* barcode: Yup.string()
+      .required('O Código de Barras é obrigatório.'), */
 
     costPrice: Yup.string()
       .required('O Preço de Custo é obrigatório.'),
 
     salePrice: Yup.string()
       .required('O Preço de Venda é obrigatório.'),
-
-    manufacturer: Yup.string()
-      .required('O Fabricante é obrigatório.'),
-
-    category: Yup.string()
-      .required('A Categoria é obrigatória.'),
 
     description: Yup.string()
       .required('A Descrição é obrigatório.'),

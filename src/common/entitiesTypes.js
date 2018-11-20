@@ -5,6 +5,9 @@ const entities = {
   BUDGET: 'BUDGET',
   PROVIDER: 'PROVIDER',
   CUSTOMER: 'CUSTOMER',
+  STOCK: 'STOCK',
+  BRAND: 'BRAND',
+  PRODUCT: 'PRODUCT',
 };
 
 module.exports = entities;
