@@ -23,9 +23,7 @@ import {
 const { ipcRenderer } = window.require('electron');
 
 function* handleCreateBrand({ brandsCreated, brand }) {
-  const brands = brandsCreated.map(brandCreated => ({ name: brandCreated }));
-
-  ipcRenderer.send(OPERATION_REQUEST, BRAND, CREATE_BRAND, brands);
+  ipcRenderer.send(OPERATION_REQUEST, BRAND, CREATE_BRAND, brandsCreated);
 
   const { result } = yield handleEventSubscription(BRAND);
 
@@ -51,14 +49,12 @@ export function* createProduct(action) {
     const hasNewBrands = !!args.brandsCreated.length;
     const BrandId = (hasNewBrands ? yield call(handleCreateBrand, args) : args.brand.id);
 
-    /* const id =;
-
     ipcRenderer.send(OPERATION_REQUEST, PRODUCT, CREATE_PRODUCT, {
       costPrice: parseFloat(args.costPrice),
       salePrice: parseFloat(args.salePrice),
       description: args.description,
       barcode: args.barcode,
-      BrandId: id,
+      BrandId,
     });
 
     const { result } = yield handleEventSubscription(PRODUCT);
@@ -70,11 +66,23 @@ export function* createProduct(action) {
       id: result,
     };
 
-    yield put(ProductCreators.createProductSuccess(newProduct)); */
+    yield put(ProductCreators.createProductSuccess(newProduct));
   } catch (err) {
     yield put(ProductCreators.createProductFailure(err.message));
   }
 }
+
+const parseProduct = (product: Object): Object => ({
+  description: product.description,
+  costPrice: product.costPrice,
+  salePrice: product.salePrice,
+  barcode: product.barcode,
+  brand: {
+    name: product['Brand.name'],
+    id: product['Brand.id'],
+  },
+  id: product.id,
+});
 
 export function* getAllProducts() {
   try {
@@ -82,7 +90,9 @@ export function* getAllProducts() {
 
     const { result } = yield handleEventSubscription(PRODUCT);
 
-    yield put(ProductCreators.getAllProductsSuccess(result));
+    const allProducts = result.map(product => parseProduct(product));
+
+    yield put(ProductCreators.getAllProductsSuccess(allProducts));
   } catch (err) {
     yield put(ProductCreators.getAllProductsFailure(err.message));
   }
@@ -92,11 +102,22 @@ export function* editProduct(action) {
   try {
     const { product } = action.payload;
 
-    ipcRenderer.send(OPERATION_REQUEST, PRODUCT, UPDATE_PRODUCT, product);
+    const hasNewBrands = !!product.brandsCreated.length;
+    const BrandId = (hasNewBrands ? yield call(handleCreateBrand, product) : product.brand.id);
+
+    const productEdited = {
+      ...product,
+      BrandId,
+    };
+
+    ipcRenderer.send(OPERATION_REQUEST, PRODUCT, UPDATE_PRODUCT, productEdited);
 
     const { result } = yield handleEventSubscription(PRODUCT);
 
-    yield put(ProductCreators.editProductSuccess(result));
+    yield put(ProductCreators.editProductSuccess({
+      productEdited: parseProduct(result.productEdited),
+      index: result.index,
+    }));
   } catch (err) {
     yield put(ProductCreators.editProductFailure(err.message));
   }

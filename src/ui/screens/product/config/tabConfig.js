@@ -1,12 +1,15 @@
 const tabConfig = [{
+  columnTitle: 'Código',
+  dataField: 'barcode',
+}, {
   columnTitle: 'Descrição',
   dataField: 'description',
 }, {
   columnTitle: 'Marca',
-  dataField: 'brand',
+  dataField: 'brandName',
 }, {
   columnTitle: 'Preço de Venda',
-  dataField: 'salePrice',
+  dataField: 'salePriceText',
 }];
 
 export default tabConfig;

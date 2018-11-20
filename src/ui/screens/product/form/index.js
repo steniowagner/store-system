@@ -8,6 +8,7 @@ import * as Yup from 'yup';
 import InputWithCreation from './components/InputWithCreation';
 
 import {
+  handleRepeatedFormValues,
   renderRowWithTwoItems,
   renderSectionTitle,
   getRowItemObject,
@@ -173,27 +174,38 @@ class ProductForm extends Component<Props, {}> {
 
 const CustomForm = withFormik({
   mapPropsToValues: ({ item, mode }) => ({
+    brand: (mode === 'edit' || mode === 'detail')
+      ? { name: item.brand.name, id: item.brand.id }
+      : { name: '', id: '' },
+    isCreateMode: (mode === 'create'),
     minStockQuantity: item.minStockQuantity || '',
     stockQuantity: item.stockQuantity || '',
     description: item.description || '',
     costPrice: item.costPrice || '',
     salePrice: item.salePrice || '',
     barcode: item.barcode || '',
-    brand: item.brand || '',
-    isCreateMode: (mode === 'create'),
   }),
 
-  validationSchema: () => Yup.lazy(formValues => Yup.object().shape({
+  validationSchema: ({
+    descriptionsRegistered,
+    barcodesRegistered,
+    item,
+    mode,
+  }) => Yup.lazy(values => Yup.object().shape({
     isCreateMode: Yup.boolean(),
 
     minStockQuantity: Yup.string()
-      .test('min-stock-quantity', 'Quantidade Mínima maior que a Atual.', (value) => {
-        const { stockQuantity } = formValues;
+      .test('min-stock-quantity', 'Quantidade Mínima Maior que a em Estoque.', () => {
+        const { minStockQuantity, stockQuantity } = values;
 
+        if (mode === 'edit') {
+          return true;
+        }
+
+        const minStockQuantityValue = (minStockQuantity || 0);
         const stockQuantityValue = (stockQuantity || 0);
-        const minStockValue = (value || 0);
 
-        return (minStockValue <= stockQuantityValue);
+        return minStockQuantityValue <= stockQuantityValue;
       })
       .when('isCreateMode', {
         is: true,
@@ -206,20 +218,43 @@ const CustomForm = withFormik({
         then: Yup.string().required('A Quantidade em Estoque é Obrigatória.'),
       }),
 
-    /* barcode: Yup.string()
-      .required('O Código de Barras é obrigatório.'), */
+    barcode: Yup.string()
+      .test('barcode-repeated', 'Este Código já foi cadastrado.', (value) => {
+        const { barcode } = item;
+        return handleRepeatedFormValues(barcodesRegistered, barcode, value, mode);
+      })
+      .required('O Código de Barras é obrigatório.'),
 
     costPrice: Yup.string()
+      .test('cost-price', 'Preço de Custo Maior que Preço de Venda.', () => {
+        const { salePrice, costPrice } = values;
+
+        if (mode === 'edit') {
+          return true;
+        }
+
+        const salePriceValue = (salePrice || 0);
+        const costPriceValue = (costPrice || 0);
+
+        return salePriceValue >= costPriceValue;
+      })
       .required('O Preço de Custo é obrigatório.'),
 
     salePrice: Yup.string()
       .required('O Preço de Venda é obrigatório.'),
 
     description: Yup.string()
-      .required('A Descrição é obrigatório.'),
+      .test('description-repeated', 'Esta Descrição já foi cadastrada.', (value) => {
+        const { description } = item;
+        return handleRepeatedFormValues(descriptionsRegistered, description, value, mode);
+      })
+      .required('A Descrição é obrigatória.'),
 
-    brand: Yup.string()
-      .required('A Marca é obrigatória.'),
+    brand: Yup.object()
+      .test('brand-undefined', 'A Marca é obrigatória.', (value) => {
+        const { name } = value;
+        return !!name;
+      }),
   })),
 
   handleSubmit(values, { setSubmitting, props }) {

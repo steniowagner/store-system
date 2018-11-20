@@ -31,12 +31,16 @@ exports.edit = async (productUpdated) => {
       },
     });
 
-    const products = await Product.findAll({ raw: true });
-    const customerEditedIndex = products.findIndex(product => product.id === productUpdated.id);
+    const products = await Product.findAll({
+      include: [Brand],
+      raw: true,
+    });
+
+    const productEditedIndex = products.findIndex(product => product.id === productUpdated.id);
 
     return {
-      customerEdited: products[customerEditedIndex],
-      index: customerEditedIndex,
+      productEdited: products[productEditedIndex],
+      index: productEditedIndex,
     };
   } catch (err) {
     return err;

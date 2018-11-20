@@ -133,3 +133,20 @@ export const renderRowWithTwoItems = (firstItem: Object, secondItem: Object, pro
     </Row>
   );
 };
+
+export const handleRepeatedFormValues = (originalDataset: Array<Object>, formValue: any, value: any, mode: string): boolean => {
+  const datasetEditMode = originalDataset.filter((item) => {
+    const valueToCompare = (formValue && formValue.toUpperCase());
+    return item.toUpperCase() !== valueToCompare;
+  });
+
+  const dataset = (mode === 'create') ? originalDataset : datasetEditMode;
+
+  const itemIndex = dataset.findIndex((descriptionItem) => {
+    const valueToCompare = (value && value.toUpperCase());
+
+    return descriptionItem.toUpperCase() === valueToCompare;
+  });
+
+  return itemIndex < 0;
+};

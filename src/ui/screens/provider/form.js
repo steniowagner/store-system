@@ -4,6 +4,7 @@ import { withFormik, Form } from 'formik';
 import * as Yup from 'yup';
 
 import {
+  handleRepeatedFormValues,
   rendeRowWithSingleItem,
   renderRowWithTwoItems,
   renderSectionTitle,
@@ -95,9 +96,12 @@ const CustomForm = withFormik({
     city: item.city || '',
   }),
 
-  validationSchema: ({ providersNames, mode }) => Yup.lazy(() => Yup.object().shape({
+  validationSchema: ({ item, providersNames, mode }) => Yup.lazy(() => Yup.object().shape({
     name: Yup.string()
-      .test('name-repeated', 'Este Fornecedor já foi cadastrado', value => (mode === 'create' ? (providersNames.indexOf(value) < 0) : true))
+      .test('name-repeated', 'Este Fornecedor já foi cadastrado', (value) => {
+        const { name } = item;
+        return handleRepeatedFormValues(providersNames, name, value, mode);
+      })
       .required('O Nome é obrigatório.'),
 
     phone1: Yup.string()

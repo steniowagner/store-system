@@ -6,7 +6,6 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import { Creators as ProductCreators } from '../../store/ducks/product';
-import { Creators as StockCreators } from '../../store/ducks/stock';
 import { Creators as BrandCreators } from '../../store/ducks/brand';
 
 import EntityComponent from '../../components/common/entity-component';
@@ -14,7 +13,17 @@ import EntityComponent from '../../components/common/entity-component';
 import config from './config';
 import Form from './form';
 
-class Product extends Component {
+type Props = {
+  getAllProducts: Function,
+  createProduct: Function,
+  removeProduct: Function,
+  getAllBrands: Function,
+  editProduct: Function,
+  products: Array<Object>,
+  brands: Array<Object>,
+};
+
+class Product extends Component<Props, {}> {
   componentDidMount() {
     const { getAllProducts, getAllBrands } = this.props;
 
@@ -24,9 +33,11 @@ class Product extends Component {
   }
 
   onCreateProduct = (productCreated: Object): void => {
-    const { createProduct } = this.props;
+    const { getAllBrands, createProduct } = this.props;
 
     createProduct(productCreated);
+
+    getAllBrands();
   };
 
   onEditProduct = (productEdited: Object): void => {
@@ -41,46 +52,26 @@ class Product extends Component {
     removeProduct(productId);
   };
 
-  removeCreatedFields = (product: Object): Object => {
-    const cleanProduct = product;
-
-    delete cleanProduct.brandsCreated;
-
-    return cleanProduct;
-  };
-
-  handleNewItemsCreated = (product: Object): void => {
-    const { brandsCreated } = product;
-
-    this.checkHasNewBrands(brandsCreated);
-  };
-
-  handleCreateBrands = (newBrands: Array<string>): void => {
-    const { createBrands } = this.props;
-
-    createBrands(newBrands);
-  };
-
-  checkHasNewBrands = (brandsCreated: Array<any>): void => {
-    const hasNewBrands = (brandsCreated.length > 0);
-    if (hasNewBrands) {
-      this.handleCreateBrands(brandsCreated);
-    }
-  };
-
   getProductsToShow = (): Array<Object> => {
     const { products } = this.props;
 
-    const productsToShow = products.map(product => ({ ...product, brand: product['Brand.name'] }));
+    const productsToShow = products.map(product => ({
+      ...product,
+      brandName: product.brand.name,
+      salePriceText: `R$ ${product.salePrice.toFixed(2)}`,
+    }));
 
     return productsToShow;
   };
 
   render() {
+    const products = this.getProductsToShow();
+
+    const descriptionsRegistered = products.map(product => product.description);
+    const barcodesRegistered = products.map(product => product.barcode);
+
     const { brands } = this.props;
 
-    const products = this.getProductsToShow();
-    console.log(brands)
     return (
       <EntityComponent
         onRemoveItem={this.onRemoverProduct}
@@ -96,6 +87,8 @@ class Product extends Component {
         canBeEdited
         Form={props => (
           <Form
+            descriptionsRegistered={descriptionsRegistered}
+            barcodesRegistered={barcodesRegistered}
             brands={brands}
             {...props}
           />
@@ -105,13 +98,12 @@ class Product extends Component {
   }
 }
 
-const Creators = Object.assign({}, BrandCreators, StockCreators, ProductCreators);
+const Creators = Object.assign({}, BrandCreators, ProductCreators);
 
 const mapDispatchToProps = dispatch => bindActionCreators(Creators, dispatch);
 
 const mapStateToProps = state => ({
   products: state.product.data,
-  stock: state.stock.data,
   brands: state.brand.data,
 });
 

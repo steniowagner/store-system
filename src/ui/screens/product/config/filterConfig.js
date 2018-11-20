@@ -14,7 +14,7 @@ const filterConfig = [{
   placeholder: 'Informe a Marca do Produto Buscado',
   type: FILTER_TYPES.TEXT,
   filterTitle: 'Marca',
-  dataField: 'brand',
+  dataField: 'brandName',
 }];
 
 export default filterConfig;

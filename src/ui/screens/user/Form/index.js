@@ -9,6 +9,7 @@ import ActionFormButton from '../../../components/common/ActionFormButton';
 import ChangePassword from './components/ChangePassword';
 
 import {
+  handleRepeatedFormValues,
   renderRowWithTwoItems,
   renderSectionTitle,
   getRowItemObject,
@@ -158,12 +159,15 @@ const CustomForm = withFormik({
     passwordConfirm: '',
   }),
 
-  validationSchema: ({ usernames, mode }) => Yup.lazy(() => Yup.object().shape({
+  validationSchema: ({ item, usernames, mode }) => Yup.lazy(() => Yup.object().shape({
     name: Yup.string()
       .required('O Nome é obrigatório.'),
 
     username: Yup.string()
-      .test('username-repeated', 'Este Usuário já foi cadastrado', value => (mode === 'create' ? (usernames.indexOf(value) < 0) : true))
+      .test('username-repeated', 'Este Usuário já foi cadastrado', (value) => {
+        const { username } = item;
+        return handleRepeatedFormValues(usernames, username, value, mode);
+      })
       .required('O Nome de Usuário é obrigatório.'),
 
     ...getPasswordValidation(mode),

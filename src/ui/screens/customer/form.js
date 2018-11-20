@@ -4,6 +4,7 @@ import { withFormik, Form } from 'formik';
 import * as Yup from 'yup';
 
 import {
+  handleRepeatedFormValues,
   rendeRowWithSingleItem,
   renderRowWithTwoItems,
   renderSectionTitle,
@@ -137,15 +138,26 @@ const CustomForm = withFormik({
     rg: item.rg || '',
   }),
 
-  validationSchema: ({ cpfsRegistered, rgsRegistered, mode }) => Yup.lazy(() => Yup.object().shape({
+  validationSchema: ({
+    cpfsRegistered,
+    rgsRegistered,
+    item,
+    mode,
+  }) => Yup.lazy(() => Yup.object().shape({
     name: Yup.string()
       .required('O Nome é obrigatório.'),
 
     cpf: Yup.string()
-      .test('cpf-repeated', 'Este CPF já foi cadastrado', value => (mode === 'create' ? (cpfsRegistered.indexOf(value) < 0) : true)),
+      .test('cpf-repeated', 'Este CPF já foi cadastrado', (value) => {
+        const { cpf } = item;
+        return handleRepeatedFormValues(cpfsRegistered, cpf, value, mode);
+      }),
 
     rg: Yup.string()
-      .test('rg-repeated', 'Este RG já foi cadastrado', value => (mode === 'create' ? (rgsRegistered.indexOf(value) < 0) : true)),
+      .test('rg-repeated', 'Este RG já foi cadastrado', (value) => {
+        const { rg } = item;
+        return handleRepeatedFormValues(rgsRegistered, rg, value, mode);
+      }),
 
     email: Yup.string()
       .email('E-mail inválido.'),
