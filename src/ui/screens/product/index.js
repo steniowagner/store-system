@@ -14,6 +14,7 @@ import config from './config';
 import Form from './form';
 
 type Props = {
+  unsubscribeEvents: Function,
   getAllProducts: Function,
   createProduct: Function,
   removeProduct: Function,
@@ -30,6 +31,12 @@ class Product extends Component<Props, {}> {
     getAllProducts();
 
     getAllBrands();
+  }
+
+  componentWillUnmount() {
+    const { unsubscribeEvents } = this.props;
+
+    unsubscribeEvents();
   }
 
   onCreateProduct = (productCreated: Object): void => {

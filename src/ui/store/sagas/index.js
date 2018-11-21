@@ -41,9 +41,9 @@ import {
 
 import {
   unsubscribeStockEvents,
-  insert,
-  edit,
-  get,
+  editProductInStock,
+  insertProduct,
+  getStock,
 } from './stock';
 
 import { getAllBrands } from './brand';
@@ -75,9 +75,9 @@ export default function* rootSaga() {
     takeLatest(ProductTypes.REMOVE_REQUEST, removeProduct),
 
     takeLatest(StockTypes.UNSUBSCRIBE_EVENTS, unsubscribeStockEvents),
-    takeLatest(StockTypes.INSERT_REQUEST, insert),
-    takeLatest(StockTypes.EDIT_REQUEST, edit),
-    takeLatest(StockTypes.GET_REQUEST, get),
+    takeLatest(StockTypes.INSERT_REQUEST, insertProduct),
+    takeLatest(StockTypes.EDIT_REQUEST, editProductInStock),
+    takeLatest(StockTypes.GET_REQUEST, getStock),
 
     takeLatest(BrandTypes.GET_ALL_REQUEST, getAllBrands),
   ]);

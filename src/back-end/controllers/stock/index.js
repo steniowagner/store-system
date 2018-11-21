@@ -11,14 +11,6 @@ exports.getAll = async () => {
   }
 };
 
-exports.getById = async (id) => {
-  try {
-    return await Stock.findOne({ where: { id } });
-  } catch (err) {
-    return err;
-  }
-};
-
 exports.insert = async (productInfo) => {
   try {
     return await Stock.create(productInfo);
@@ -37,11 +29,14 @@ exports.edit = async (productInfoUpdated) => {
       },
     });
 
-    const stock = await Stock.findAll({ raw: true });
+    const stock = await Stock.findAll({
+      include: [Product],
+      raw: true,
+    });
     const stockItemEditedIndex = stock.findIndex(productInfo => productInfo.id === productInfoUpdated.id);
 
     return {
-      providerEdited: stock[stockItemEditedIndex],
+      stockItemEdited: stock[stockItemEditedIndex],
       index: stockItemEditedIndex,
     };
   } catch (err) {

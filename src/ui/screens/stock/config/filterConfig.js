@@ -18,7 +18,7 @@ const filterConfig = [{
   placeholder: 'Informe o Nome do Produto Buscado',
   type: FILTER_TYPES.TEXT,
   dataField: 'description',
-  filterTitle: 'Nome',
+  filterTitle: 'Produto',
 }, {
   placeholder: 'Produtos que estão Acima da Quantidade Mínima',
   type: FILTER_TYPES.FUNCTIONAL,

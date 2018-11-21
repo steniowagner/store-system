@@ -9,8 +9,6 @@ const handleStockEvent = (operation, args) => {
 
     case STOCK_OPERATIONS_TYPES.UPDATE_PRODUCT_STOCK: return stockController.edit(args);
 
-    case STOCK_OPERATIONS_TYPES.READ_BY_ID: return stockController.getById(args);
-
     default: return {};
   }
 };

@@ -195,7 +195,7 @@ const CustomForm = withFormik({
     isCreateMode: Yup.boolean(),
 
     minStockQuantity: Yup.string()
-      .test('min-stock-quantity', 'Quantidade Mínima Maior que a em Estoque.', () => {
+      .test('min-stock-quantity', 'Quantidade Mínima Maior que a Quantidade em Estoque.', () => {
         const { minStockQuantity, stockQuantity } = values;
 
         if (mode === 'edit') {

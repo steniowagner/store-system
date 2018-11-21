@@ -54,7 +54,7 @@ const renderAddressSection = (props: Object): Object => {
 
   return (
     <Section>
-      {renderSectionTitle('Informações deste Produto no Estoque')}
+      {renderSectionTitle('Informações do Produto no Estoque')}
       {renderRowWithTwoItems(stockQuantityData, minStockQuantityFieldData, props)}
     </Section>
   );
@@ -94,11 +94,19 @@ const CustomForm = withFormik({
     description: item.description || '',
   }),
 
-  validationSchema: _props => Yup.lazy(() => Yup.object().shape({
+  validationSchema: () => Yup.lazy(values => Yup.object().shape({
     description: Yup.string()
       .required('A Descrição do Produto é Obrigatória.'),
 
     minStockQuantity: Yup.string()
+      .test('min-stock-quantity', 'Quantidade Mínima Maior que a Quantidade em Estoque.', () => {
+        const { minStockQuantity, stockQuantity } = values;
+
+        const minStockQuantityValue = (minStockQuantity || 0);
+        const stockQuantityValue = (stockQuantity || 0);
+
+        return minStockQuantityValue <= stockQuantityValue;
+      })
       .required('A Quantidade Mínima em Estoque é Obrigatória.'),
 
     stockQuantity: Yup.string()

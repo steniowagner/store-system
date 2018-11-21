@@ -19,8 +19,8 @@ type Props = {
 class Stock extends Component<Props, {}> {
   componentDidMount() {
     const { getStock } = this.props;
-    console.log(this.props);
-    // getStock();
+
+    getStock();
   }
 
   componentWillUnmount() {
@@ -63,7 +63,6 @@ const mapDispatchToProps = dispatch => bindActionCreators(StockCreators, dispatc
 
 const mapStateToProps = state => ({
   stock: state.stock.data,
-  brand: state.brand.data,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Stock);
