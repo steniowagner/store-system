@@ -6,6 +6,7 @@ import { Types as StockTypes } from '../ducks/stock';
 import { Types as BrandTypes } from '../ducks/brand';
 import { Types as ProductTypes } from '../ducks/product';
 import { Types as UserTypes } from '../ducks/user';
+import { Types as SaleTypes } from '../ducks/sale';
 
 import {
   unsubscribeUserEvents,
@@ -46,6 +47,13 @@ import {
   getStock,
 } from './stock';
 
+import {
+  unsubscribeSaleEvents,
+  getAllSales,
+  createSale,
+  editSale,
+} from './sale';
+
 import { getAllBrands } from './brand';
 
 export default function* rootSaga() {
@@ -78,6 +86,11 @@ export default function* rootSaga() {
     takeLatest(StockTypes.INSERT_REQUEST, insertProduct),
     takeLatest(StockTypes.EDIT_REQUEST, editProductInStock),
     takeLatest(StockTypes.GET_REQUEST, getStock),
+
+    takeLatest(SaleTypes.UNSUBSCRIBE_EVENTS, unsubscribeSaleEvents),
+    takeLatest(SaleTypes.CREATE_REQUEST, createSale),
+    takeLatest(SaleTypes.GET_ALL_REQUEST, getAllSales),
+    takeLatest(SaleTypes.EDIT_REQUEST, editSale),
 
     takeLatest(BrandTypes.GET_ALL_REQUEST, getAllBrands),
   ]);

@@ -45,7 +45,7 @@ class SaleConfirmation extends Component<Props, State> {
     const { isInDebit } = this.props;
 
     this.setState({
-      isInDebit,
+      isInDebit: !!isInDebit,
     });
   }
 
@@ -85,23 +85,17 @@ class SaleConfirmation extends Component<Props, State> {
     setFieldValue('shouldPrintReceipt', shouldPrintReceipt);
   };
 
-  restartState = (): void => {
-    const { onCloseDialog, isInDebit } = this.props;
-
-    this.setState({
-      error: '$',
-      isInDebit,
-    }, () => onCloseDialog());
-  };
-
   checkFullPayment = (accumulated: number): void => {
     const { total } = this.props;
 
     let error = '';
 
     if (accumulated > total) {
-      const value = accumulated - total;
-      error = getErrorMessage(ERROR_TYPES.ABOVE_VALUE, value);
+      this.setState({
+        isInDebit: false,
+        error: ERROR_TYPES.ABOVE_VALUE,
+      });
+      return;
     }
 
     if (accumulated < total) {
@@ -110,7 +104,10 @@ class SaleConfirmation extends Component<Props, State> {
     }
 
     if (accumulated === total) {
-      this.restartState();
+      this.setState({
+        isInDebit: false,
+        error: '$',
+      });
       return;
     }
 
@@ -168,10 +165,13 @@ class SaleConfirmation extends Component<Props, State> {
     const { shouldPrintReceipt, isInDebit, error } = this.state;
     const { mode } = this.props;
 
+    const shouldShowFooterValues = (error !== ERROR_TYPES.ABOVE_VALUE);
+
     return (
       <FooterValues
         onToggleShouldPrintReceiptCheckbox={this.onToggleShouldPrintReceiptCheckbox}
         onToggleInDebitCheckbox={this.onToggleInDebitCheckbox}
+        shouldRenderDebitCheckbox={shouldShowFooterValues}
         shouldPrintReceipt={shouldPrintReceipt}
         isInDebit={isInDebit}
         error={error.message}
@@ -189,11 +189,12 @@ class SaleConfirmation extends Component<Props, State> {
   );
 
   renderActionButtons = (): Object => {
-    const { handleSubmit, isSubmitting } = this.props;
+    const { onCloseDialog, handleSubmit, isSubmitting } = this.props;
     const { isInDebit, error } = this.state;
 
-    const hasError = (!!error.message || error === '$');
-    const shouldDisableOkButton = (isSubmitting || hasError) && !isInDebit;
+    const isTotalPaymentBelow = (error.type === ERROR_TYPES.BELOW_VALUE) && !isInDebit;
+
+    const shouldDisableOkButton = (isSubmitting || isTotalPaymentBelow);
 
     const onClickOk = () => {
       this.setIfUserInDebit();
@@ -204,7 +205,11 @@ class SaleConfirmation extends Component<Props, State> {
     return (
       <DialogActions>
         <Button
-          onClick={this.restartState}
+          onClick={() => {
+            this.setState({
+              error: '$',
+            }, () => onCloseDialog());
+          }}
           color="primary"
         >
           CANCELAR

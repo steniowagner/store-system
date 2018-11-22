@@ -9,17 +9,17 @@ type Config = {
 }
 
 const getBeforeDateItems = (dataset: Array<Object>, value: Object): Array<Object> => dataset.filter((item) => {
-  const itemDateParsed = moment(item.date, 'DD-MM-YYYY').toDate();
+  const itemDateParsed = moment(item.createdAt.substring(0, 10), 'YYYY-MM-DD').toDate();
   return moment(itemDateParsed).isBefore(value);
 });
 
 const getSameDateItems = (dataset: Array<Object>, value: Object): Array<Object> => dataset.filter((item) => {
-  const itemDateParsed = moment(item.date, 'DD-MM-YYYY').toDate();
+  const itemDateParsed = moment(item.createdAt.substring(0, 10), 'YYYY-MM-DD').toDate();
   return moment(itemDateParsed).isSame(value);
 });
 
 const getAfterDateItems = (dataset: Array<Object>, value: Object): Array<Object> => dataset.filter((item) => {
-  const itemDateParsed = moment(item.date, 'DD-MM-YYYY').toDate();
+  const itemDateParsed = moment(item.createdAt.substring(0, 10), 'YYYY-MM-DD').toDate();
   return moment(itemDateParsed).isAfter(value);
 });
 
@@ -30,7 +30,7 @@ const filterWithDate = (config: Config, DATE_TYPES: Object): Array<Object> => {
     value,
   } = config;
 
-  const dateParsed = moment(value, 'DD-MM-YYYY').toDate();
+  const dateParsed = moment(value, 'L').toDate();
 
   let datasetFilteredByDate = [];
 

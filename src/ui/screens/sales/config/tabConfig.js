@@ -5,14 +5,14 @@ const tabConfig = [{
   columnTitle: 'Data',
   dataField: 'dateToShow',
 }, {
-  columnTitle: 'Usuário',
-  dataField: 'username',
+  columnTitle: 'Vendedor',
+  dataField: 'salesman',
 }, {
   columnTitle: 'Sub-total',
-  dataField: 'subtotal',
+  dataField: 'subtotalText',
 }, {
   columnTitle: 'Total',
-  dataField: 'total',
+  dataField: 'totalText',
 }];
 
 export default tabConfig;

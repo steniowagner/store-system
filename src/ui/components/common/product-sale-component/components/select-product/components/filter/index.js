@@ -5,8 +5,12 @@ import React, { Component } from 'react';
 import Popper from '@material-ui/core/Popper';
 import Paper from '@material-ui/core/Paper';
 import List from '@material-ui/core/List';
-
 import styled from 'styled-components';
+
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { Creators as ProductCreators } from '../../../../../../../store/ducks/product';
+import { Creators as CustomerCreators } from '../../../../../../../store/ducks/customer';
 
 import { filterList, FILTER_TYPES } from '../../../../../../../utils/filter';
 import ItemFiltered from '../../../../../ItemFiltered';
@@ -62,6 +66,13 @@ class ProductFilter extends Component<Props, {}> {
     isListOpen: false,
     filterValue: '',
   };
+
+  componentDidMount() {
+    const { getAllProducts, getAllCustomers } = this.props;
+
+    getAllCustomers();
+    getAllProducts();
+  }
 
   componentWillReceiveProps(nextProps) {
     const { productSelected } = nextProps;
@@ -230,4 +241,13 @@ class ProductFilter extends Component<Props, {}> {
   }
 }
 
-export default ProductFilter;
+const Creators = Object.assign({}, ProductCreators, CustomerCreators);
+const mapDispatchToProps = dispatch => bindActionCreators(Creators, dispatch);
+
+const mapStateToProps = state => ({
+  customers: state.customer.data,
+  products: state.product.data,
+  sale: state.sale.data,
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProductFilter);

@@ -8,6 +8,7 @@ const entities = {
   STOCK: 'STOCK',
   BRAND: 'BRAND',
   PRODUCT: 'PRODUCT',
+  SALE: 'SALE',
 };
 
 module.exports = entities;

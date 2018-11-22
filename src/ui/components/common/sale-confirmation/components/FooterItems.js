@@ -31,6 +31,7 @@ const ErrorText = styled.span`
 
 type Props = {
   onToggleShouldPrintReceiptCheckbox: Function,
+  shouldRenderDebitCheckbox: boolean,
   onToggleInDebitCheckbox: Function,
   shouldPrintReceipt: boolean,
   isInDebit: boolean,
@@ -38,13 +39,14 @@ type Props = {
   mode: string,
 };
 
-const renderDebitAndErrorRow = (onToggleInDebitCheckbox: Function, isInDebit: boolean, error: string): Object => (
+// isInDebit: number => MySQL tinyint type
+const renderDebitAndErrorRow = (onToggleInDebitCheckbox: Function, isInDebit: number, error: string): Object => (
   <Wrapper>
     <FormControlLabel
       control={(
         <Checkbox
           onChange={onToggleInDebitCheckbox}
-          checked={isInDebit}
+          checked={!!isInDebit}
           color="primary"
           value="debit"
         />
@@ -58,13 +60,14 @@ const renderDebitAndErrorRow = (onToggleInDebitCheckbox: Function, isInDebit: bo
   </Wrapper>
 );
 
-const renderShouldPrintReceipt = (onToggleShouldPrintReceiptCheckbox: Function, shouldPrintReceipt: boolean): Object => (
+// shouldPrintReceipt: number => MySQL tinyint  type
+const renderShouldPrintReceipt = (onToggleShouldPrintReceiptCheckbox: Function, shouldPrintReceipt: number): Object => (
   <Wrapper>
     <FormControlLabel
       control={(
         <Checkbox
           onChange={onToggleShouldPrintReceiptCheckbox}
-          checked={shouldPrintReceipt}
+          checked={!!shouldPrintReceipt}
           color="primary"
           value="shouldPrintReceipt"
         />
@@ -76,6 +79,7 @@ const renderShouldPrintReceipt = (onToggleShouldPrintReceiptCheckbox: Function, 
 
 const FooterItems = ({
   onToggleShouldPrintReceiptCheckbox,
+  shouldRenderDebitCheckbox,
   onToggleInDebitCheckbox,
   shouldPrintReceipt,
   isInDebit,
@@ -86,10 +90,14 @@ const FooterItems = ({
 
   return (
     <Container>
-      {renderDebitAndErrorRow(onToggleInDebitCheckbox, isInDebit, error)}
+      {shouldRenderDebitCheckbox && (
+        <Fragment>
+          {renderDebitAndErrorRow(onToggleInDebitCheckbox, isInDebit, error)}
+          <Divider light />
+        </Fragment>
+      )}
       {isFormOnCreateMode && (
         <Fragment>
-          <Divider light />
           {renderShouldPrintReceipt(onToggleShouldPrintReceiptCheckbox, shouldPrintReceipt)}
         </Fragment>
       )}

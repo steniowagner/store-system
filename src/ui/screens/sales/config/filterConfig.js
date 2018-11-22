@@ -2,13 +2,13 @@
 
 import { FILTER_TYPES } from '../../../utils/filter';
 
-const filterSalesWithDebit = (sales: Array<Object>): Array<Object> => sales.filter(sale => sale.isInDebit);
+const filterSalesWithDebit = (sales: Array<Object>): Array<Object> => sales.filter(sale => !!sale.isInDebit);
 
 const filterConfig = [{
   placeholder: 'Informe o Nome de Usuáro Buscado',
   type: FILTER_TYPES.TEXT,
-  filterTitle: 'Usuário',
-  dataField: 'username',
+  filterTitle: 'Vendedor',
+  dataField: 'salesman',
 }, {
   placeholder: 'Informe o Nome do Cliente Buscado',
   type: FILTER_TYPES.TEXT,
@@ -25,19 +25,19 @@ const filterConfig = [{
   type: FILTER_TYPES.DATE.ID,
   filterTitle: 'Antes do Dia...',
   dataField: FILTER_TYPES.DATE.WHEN.BEFORE,
-  field: 'date',
+  field: 'createdAt',
 }, {
   placeholder: 'Informe a Data em questão',
   type: FILTER_TYPES.DATE.ID,
   filterTitle: 'No Dia...',
   dataField: FILTER_TYPES.DATE.WHEN.SAME,
-  field: 'date',
+  field: 'createdAt',
 }, {
   placeholder: 'Informe a Data em questão',
   type: FILTER_TYPES.DATE.ID,
   filterTitle: 'Depois do Dia...',
   dataField: FILTER_TYPES.DATE.WHEN.AFTER,
-  field: 'date',
+  field: 'createdAt',
 }];
 
 export default filterConfig;

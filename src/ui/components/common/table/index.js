@@ -80,7 +80,7 @@ class CustomTable extends Component<Props, State> {
     });
   };
 
-  renderActionsSection = (item: Object): Object => {
+  renderActionsSection = (item: Object, index: number): Object => {
     const {
       onDetailIconClicked,
       onRemoveIconClicked,
@@ -95,7 +95,7 @@ class CustomTable extends Component<Props, State> {
       <ActionButtonsWrapper>
         {canBeEdited && (
           <IconButton
-            onClick={() => onEditIconClicked(item)}
+            onClick={() => onEditIconClicked({ ...item, index })}
             aria-label="Edit"
             disableRipple
           >
@@ -139,7 +139,7 @@ class CustomTable extends Component<Props, State> {
     </TableHeader>
   );
 
-  renderRowCell = (row: Object, dataFields: Array<string>): Object => {
+  renderRowCell = (row: Object, dataFields: Array<string>, index: number): Object => {
     const rowData = [...dataFields, 'actions'];
 
     return (
@@ -152,7 +152,7 @@ class CustomTable extends Component<Props, State> {
             padding="dense"
           >
             {key === 'actions'
-              ? this.renderActionsSection(row)
+              ? this.renderActionsSection(row, index)
               : (
                 <BodyCellText>
                   {row[key]}
@@ -175,7 +175,7 @@ class CustomTable extends Component<Props, State> {
           index={index}
           key={row.id}
         >
-          {this.renderRowCell(row, dataFields)}
+          {this.renderRowCell(row, dataFields, index)}
         </BodyRow>
       ))}
     </TableBody>

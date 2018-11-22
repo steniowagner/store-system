@@ -2,71 +2,54 @@
 
 import React, { Component } from 'react';
 
-import moment from 'moment';
-import 'moment/locale/pt-br';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { Creators as SaleCreators } from '../../store/ducks/sale';
 
 import EntityComponent from '../../components/common/entity-component';
 
 import config from './config';
 import Form from './form';
 
-class Sales extends Component {
-  state = {
-    sales: [],
-  };
+type Props = {
+  getAllSales: Function,
+  createSale: Function,
+  editSale: Function,
+  sale: Arra<Object>,
+};
 
+class Sales extends Component<Props, {}> {
   componentDidMount() {
-    moment.locale('pt-br');
+    const { getAllSales } = this.props;
+
+    getAllSales();
   }
 
   onCreateSale = (sale: Object): void => {
-    const { sales } = this.state;
+    const { createSale } = this.props;
 
-    console.log(sale);
-
-    const newSale = {
-      customerName: sale.customer.name || '-',
-      dateToShow: moment().format('lll'),
-      date: moment().format('L'),
-      username: 'steniowagner',
-      id: Math.random(),
-      ...sale,
-    };
-
-    this.setState({
-      sales: [newSale, ...sales],
-    });
+    createSale(sale);
   };
 
-  onEditSale = (sale: Object): void => {
-    const { sales } = this.state;
+  onEditSale = (saleEdited: Object): void => {
+    const { editSale } = this.props;
 
-    const saleEdited = {
-      ...sale,
-      customerName: sale.customer.name || '-',
-    };
-
-    const saleEditedIndex = sales.findIndex(saleItem => saleItem.id === saleEdited.id);
-
-    this.setState({
-      sales: Object.assign([], sales, { [saleEditedIndex]: saleEdited }),
-    });
+    editSale(saleEdited);
   };
 
   render() {
-    const { sales } = this.state;
+    const { sale } = this.props;
 
     return (
       <EntityComponent
         filterConfig={config.filterConfig}
-        tabConfig={config.tabConfig}
         onCreateItem={this.onCreateSale}
+        tabConfig={config.tabConfig}
         onEditItem={this.onEditSale}
-        onRemoveItem={() => {}}
         singularEntityName="Venda"
         pluralEntityName="Vendas"
         withOwnTitle="NOVA VENDA"
-        dataset={sales}
+        dataset={sale}
         canBeCreated
         canBeEdited
         Form={props => (
@@ -79,4 +62,10 @@ class Sales extends Component {
   }
 }
 
-export default Sales;
+const mapDispatchToProps = dispatch => bindActionCreators(SaleCreators, dispatch);
+
+const mapStateToProps = state => ({
+  sale: state.sale.data,
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Sales);

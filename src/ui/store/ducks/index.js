@@ -7,6 +7,7 @@ import budget from './budget';
 import stock from './stock';
 import brand from './brand';
 import user from './user';
+import sale from './sale';
 
 export default combineReducers({
   customer,
@@ -15,5 +16,6 @@ export default combineReducers({
   budget,
   brand,
   stock,
+  sale,
   user,
 });
