@@ -16,6 +16,7 @@ type Props = {
   handleSubmit: Function,
   onRemoveItem: Function,
   isSubmitting: boolean,
+  stock: Array<Object>,
   values: Object,
   errors: Object,
   mode: string,
@@ -41,6 +42,7 @@ class SalesForm extends Component<Props, State> {
   renderProductSale = (): Object => {
     const {
       setFieldValue,
+      stock,
       values,
       errors,
       mode,
@@ -52,6 +54,7 @@ class SalesForm extends Component<Props, State> {
           setFieldValue={setFieldValue}
           values={values}
           errors={errors}
+          stock={stock}
           mode={mode}
         />
       </Section>

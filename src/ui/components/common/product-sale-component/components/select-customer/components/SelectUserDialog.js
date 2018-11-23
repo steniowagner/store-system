@@ -11,38 +11,6 @@ import Slide from '@material-ui/core/Slide';
 
 import CustomerFilter from './CustomerFilter';
 
-const customers = [{
-  name: 'Stenio Wagner Pereira de Freitas',
-  cpf: '05482532348',
-  rg: '12312312312312312',
-  id: '11',
-}, {
-  name: 'Ana Eridan Pereira de Freitas',
-  cpf: '',
-  rg: '',
-  id: '13',
-}, {
-  name: 'Manoel Elisval Pereira de Freitas',
-  cpf: '9876',
-  rg: '6789',
-  id: '12',
-}, {
-  name: 'Beatriz Eliana Pereira de Freitas',
-  cpf: '33333',
-  rg: '44444444',
-  id: '1',
-}, {
-  name: 'Sebastião Pereira da Silva',
-  cpf: '33444555222',
-  rg: '5451123444',
-  id: '15',
-}, {
-  name: 'Francisca Pereira da Silva',
-  cpf: '111222333',
-  rg: '3333222111',
-  id: '16666',
-}];
-
 const styles = {
   dialogPaper: {
     minHeight: '40vh',
@@ -90,6 +58,7 @@ class SelectCustomerDialog extends Component<Props, State> {
   renderDialog = (): Object => {
     const {
       customerSelected,
+      customers,
       onToggle,
       classes,
       isOpen,

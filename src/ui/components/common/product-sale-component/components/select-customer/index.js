@@ -4,6 +4,10 @@ import React, { Component } from 'react';
 
 import styled from 'styled-components';
 
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { Creators as CustomerCreators } from '../../../../../store/ducks/customer';
+
 import SelectUserDialog from './components/SelectUserDialog';
 
 import ActionButton from '../../../ActionButton';
@@ -40,6 +44,12 @@ class SelectCustomer extends Component<Props, State> {
   state = {
     isDialogOpen: false,
   };
+
+  componentDidMount() {
+    const { getAllCustomers } = this.props;
+
+    getAllCustomers();
+  }
 
   onToggleDialogChooseCustomer = (): void => {
     const { isDialogOpen } = this.state;
@@ -96,7 +106,7 @@ class SelectCustomer extends Component<Props, State> {
   };
 
   renderDialog = (): Object => {
-    const { customerSelected } = this.props;
+    const { customerSelected, customers } = this.props;
     const { isDialogOpen } = this.state;
 
     return (
@@ -104,6 +114,7 @@ class SelectCustomer extends Component<Props, State> {
         onToggle={() => this.onToggleDialogChooseCustomer()}
         onSelectCustomer={this.onSelectCustomer}
         customerSelected={customerSelected}
+        customers={customers}
         isOpen={isDialogOpen}
       />
     );
@@ -122,4 +133,10 @@ class SelectCustomer extends Component<Props, State> {
   }
 }
 
-export default SelectCustomer;
+const mapDispatchToProps = dispatch => bindActionCreators(CustomerCreators, dispatch);
+
+const mapStateToProps = state => ({
+  customers: state.customer.data,
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(SelectCustomer);

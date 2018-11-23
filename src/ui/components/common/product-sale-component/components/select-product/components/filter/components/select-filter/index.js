@@ -22,16 +22,6 @@ const FilteWrapper = styled.div`
   height: 100%;
 `;
 
-const CustomInput = styled(({ ...props }) => (
-  <Input
-    placeholder="Selecione um Filtro"
-    disableUnderline
-    {...props}
-    autoFocus
-    fullWidth
-  />
-))``;
-
 const getProperInputColor = (theme: Object, isFormOnDetailMode: boolean): string => {
   const color = (isFormOnDetailMode ? theme.colors.customInactiveButton : theme.colors.affirmative);
 
@@ -89,7 +79,7 @@ const ExapandLessIcon = styled(ExpandLess)`
 `;
 
 const FILTER_OPTIONS = [{
-  field: 'barCode',
+  field: 'barcode',
   title: 'Código de Barras',
 }, {
   field: 'description',
@@ -182,11 +172,15 @@ class CustomFilter extends Component<Props, State> {
           isFormDetailMode={(mode === 'detail')}
           disabled={!optionSelected.field}
         >
-          <CustomInput
+          <Input
             inputRef={(input) => { this._inputRef = input; }}
+            placeholder="Selecione um Filtro"
             disabled={!optionSelected.field}
             onChange={onTypeFilterValue}
             value={filterValue}
+            disableUnderline
+            autoFocus
+            fullWidth
           />
         </InputWrapper>
       </Wrapper>

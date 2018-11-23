@@ -43,3 +43,19 @@ exports.edit = async (productInfoUpdated) => {
     return err;
   }
 };
+
+exports.editInBatch = async (items) => {
+  try {
+    return await Promise.all(items.map(async (item) => {
+      await Stock.update({
+        ...item,
+      }, {
+        where: {
+          id: item.id,
+        },
+      });
+    }));
+  } catch (err) {
+    return err;
+  }
+};

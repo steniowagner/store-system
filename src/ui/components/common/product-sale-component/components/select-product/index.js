@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 
 import SelectProductsValues from './components/SelectProductsValues';
+import StockQuantityAlert, { ALERTS_TYPES } from './components/StockQuantityAlert';
 import ProductFilter from './components/filter';
 import ActionButtom from '../../../ActionButton';
 
@@ -26,6 +27,8 @@ const ButtonWrapper = styled.div`
 
 type Props = {
   onAddProduct: Function,
+  stock: Array<Object>,
+  values: Object,
   mode: string,
 };
 
@@ -36,8 +39,18 @@ type State = {
 
 class SelectProduct extends Component<Props, State> {
   state = {
+    isAlertStockQuantityDialogOpen: false,
     productSelected: {},
+    alertConfig: {},
     quantity: '',
+  };
+
+  onToggleAlertStockQuantityDialog = (): void => {
+    const { isAlertStockQuantityDialogOpen } = this.state;
+
+    this.setState({
+      isAlertStockQuantityDialogOpen: !isAlertStockQuantityDialogOpen,
+    });
   };
 
   onSelectProduct = (productSelected: Object): void => {
@@ -54,12 +67,86 @@ class SelectProduct extends Component<Props, State> {
 
   onAddButtonClicked = (): void => {
     const { productSelected, quantity } = this.state;
+
+    const resultingCheck = this.checkProductAvailabilityInStock(productSelected, quantity);
+
+    if (typeof resultingCheck === 'boolean') {
+      this.addProductOnList();
+      return;
+    }
+
+    this.setState({
+      isAlertStockQuantityDialogOpen: true,
+      alertConfig: resultingCheck,
+    });
+  };
+
+  addProductOnList = (): void => {
+    const { productSelected, quantity } = this.state;
     const { onAddProduct } = this.props;
 
     this.setState({
+      isAlertStockQuantityDialogOpen: false,
       productSelected: {},
       quantity: '',
     }, () => onAddProduct(productSelected, quantity));
+  };
+
+  checkProductAvailabilityInStock = (product: Object, quantityDesired: number): string | boolean => {
+    const { stock, values } = this.props;
+    const { products } = values;
+
+    const { stockQuantity, minStockQuantity } = stock.filter(productInStockInfo => productInStockInfo.ProductId === product.id)[0];
+
+    const productAlreadyOnList = products.filter(productOnList => productOnList.id === product.id)[0];
+    const totalQuantity = (productAlreadyOnList && productAlreadyOnList.quantity) || 0;
+
+    const quantity = Number(quantityDesired) + totalQuantity;
+
+    if (quantity > stockQuantity) {
+      return {
+        type: ALERTS_TYPES.STOCK_BELOW_MIN,
+        stockInfo: {
+          minStockQuantity,
+          stockQuantity,
+        },
+        quantity,
+      };
+    }
+
+    const newQuantity = stockQuantity - quantity;
+    if (newQuantity < minStockQuantity) {
+      return {
+        type: ALERTS_TYPES.STOCK_WILL_BELOW_MIN,
+        stockInfo: {
+          minStockQuantity,
+          stockQuantity,
+        },
+        quantity,
+      };
+    }
+
+    return true;
+  };
+
+  renderAlertDialogQuantity = (): Object => {
+    const {
+      isAlertStockQuantityDialogOpen,
+      productSelected,
+      alertConfig,
+      quantity,
+    } = this.state;
+
+    return (
+      <StockQuantityAlert
+        onCloseDialog={this.onToggleAlertStockQuantityDialog}
+        isOpen={isAlertStockQuantityDialogOpen}
+        onClickConfirm={this.addProductOnList}
+        product={productSelected}
+        alertConfig={alertConfig}
+        quantity={quantity}
+      />
+    );
   };
 
   render() {
@@ -92,6 +179,7 @@ class SelectProduct extends Component<Props, State> {
             title="Adicionar"
           />
         </ButtonWrapper>
+        {this.renderAlertDialogQuantity()}
       </Container>
     );
   }

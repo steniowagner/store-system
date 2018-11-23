@@ -10,7 +10,6 @@ import styled from 'styled-components';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Creators as ProductCreators } from '../../../../../../../store/ducks/product';
-import { Creators as CustomerCreators } from '../../../../../../../store/ducks/customer';
 
 import { filterList, FILTER_TYPES } from '../../../../../../../utils/filter';
 import ItemFiltered from '../../../../../ItemFiltered';
@@ -37,23 +36,11 @@ const ListContainer = styled(({ ...props }) => (
   margin-left: 250px;
 `;
 
-const products = [{
-  barCode: '123',
-  description: 'Mouse',
-  salePrice: 21.91,
-  brand: 'Samsung',
-  id: Math.random(),
-}, {
-  barCode: '1234',
-  description: 'Computador',
-  salePrice: 21.90,
-  brand: 'Apple',
-  id: Math.random(),
-}];
-
 type Props = {
   onSelectProduct: Function,
+  getAllProducts: Function,
   productSelected: Object,
+  products: Array<Object>,
   mode: string,
 };
 
@@ -68,9 +55,8 @@ class ProductFilter extends Component<Props, {}> {
   };
 
   componentDidMount() {
-    const { getAllProducts, getAllCustomers } = this.props;
+    const { getAllProducts } = this.props;
 
-    getAllCustomers();
     getAllProducts();
   }
 
@@ -95,12 +81,14 @@ class ProductFilter extends Component<Props, {}> {
 
   onFilterProducts = (): void => {
     const { optionSelected, filterValue } = this.state;
+    const { products } = this.props;
+
     const { field } = optionSelected;
 
-    if (field === 'barCode') {
-      this.handleFilterByBarcode(filterValue);
+    if (field === 'barcode') {
+      this.handleFilterByBarcode(filterValue, products);
     } else {
-      this.handleFilterByDescprition(filterValue);
+      this.handleFilterByDescprition(filterValue, products);
     }
   };
 
@@ -120,23 +108,23 @@ class ProductFilter extends Component<Props, {}> {
     }, () => onSelectProduct(product));
   };
 
-  getBarcodeFilterConfig = (filterValue: string): Object => ({
+  getBarcodeFilterConfig = (filterValue: string, products: Array<Object>): Object => ({
     type: FILTER_TYPES.NUMERIC,
     value: filterValue,
     dataset: products,
-    filter: 'barCode',
+    filter: 'barcode',
     operator: '=',
   });
 
-  getDescriptionFilterConfig = (filterValue: string): Object => ({
+  getDescriptionFilterConfig = (filterValue: string, products: Array<Object>): Object => ({
     type: FILTER_TYPES.TEXT,
     filter: 'description',
     value: filterValue,
     dataset: products,
   });
 
-  handleFilterByBarcode = (filterValue: string): void => {
-    const filterConfig = this.getBarcodeFilterConfig(filterValue);
+  handleFilterByBarcode = (filterValue: string, products: Array<Object>): void => {
+    const filterConfig = this.getBarcodeFilterConfig(filterValue, products);
     const productsFilteredByBarcode = filterList(filterConfig);
 
     const foundProductMatchesBarcode = (!!productsFilteredByBarcode.length);
@@ -153,10 +141,10 @@ class ProductFilter extends Component<Props, {}> {
     }
   };
 
-  handleFilterByDescprition = (filterValue: string): void => {
-    const filterConfig = this.getDescriptionFilterConfig(filterValue);
-
+  handleFilterByDescprition = (filterValue: string, products: Array<Object>): void => {
+    const filterConfig = this.getDescriptionFilterConfig(filterValue, products);
     const productsFiltered = filterList(filterConfig);
+
     const isListOpen = (!!productsFiltered.length && !!filterValue);
 
     this.setState({
@@ -193,7 +181,7 @@ class ProductFilter extends Component<Props, {}> {
 
               const brandItem = {
                 title: 'Marca',
-                value: brand,
+                value: brand.name,
               };
 
               return (
@@ -241,11 +229,9 @@ class ProductFilter extends Component<Props, {}> {
   }
 }
 
-const Creators = Object.assign({}, ProductCreators, CustomerCreators);
-const mapDispatchToProps = dispatch => bindActionCreators(Creators, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators(ProductCreators, dispatch);
 
 const mapStateToProps = state => ({
-  customers: state.customer.data,
   products: state.product.data,
   sale: state.sale.data,
 });

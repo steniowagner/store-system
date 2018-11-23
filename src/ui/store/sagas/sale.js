@@ -1,4 +1,4 @@
-import { select, put } from 'redux-saga/effects';
+import { select, call, put } from 'redux-saga/effects';
 
 import moment from 'moment';
 import 'moment/locale/pt-br';
@@ -13,6 +13,7 @@ import {
 
 import { handleEventUnsubscription, handleEventSubscription } from './eventHandler';
 import { OPERATION_REQUEST, SALE } from '../../../common/entitiesTypes';
+import { editStockProductsInBatch } from './stock';
 
 const { ipcRenderer } = window.require('electron');
 
@@ -46,9 +47,8 @@ export function* createSale(action) {
       id: result,
     };
 
-    console.log(newSale)
-
     yield put(SaleCreators.createSaleSuccess(newSale));
+    yield call(editStockProductsInBatch, args.products);
   } catch (err) {
     yield put(SaleCreators.createSaleFailure(err.message));
   }
@@ -76,16 +76,21 @@ export function* getAllSales() {
 export function* editSale(action) {
   try {
     const { sale } = action.payload;
+    yield call(editStockProductsInBatch, sale.products);
 
     const params = {
       ...sale,
+      customer: sale.customer || {},
       products: JSON.stringify(sale.products),
       subtotal: parseFloat(sale.subtotal),
       total: parseFloat(sale.total),
       salesman: 'steniowagner',
     };
 
-    ipcRenderer.send(OPERATION_REQUEST, SALE, UPDATE_SALE, params);
+    console.log(params)
+
+
+    /* ipcRenderer.send(OPERATION_REQUEST, SALE, UPDATE_SALE, params);
 
     yield handleEventSubscription(SALE);
 
@@ -96,9 +101,8 @@ export function* editSale(action) {
           ...sale,
           ...parseSaleToTableView(allSales[sale.index]),
         },
-      });
-
-    yield put(SaleCreators.editSaleSuccess(salesUpdated));
+      }); */
+    // yield put(SaleCreators.editSaleSuccess(salesUpdated));
   } catch (err) {
     yield put(SaleCreators.editSaleFailure(err.message));
   }

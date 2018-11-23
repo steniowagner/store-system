@@ -32,6 +32,7 @@ type Props = {
   onEditProductQuantity: Function,
   onRemoveProduct: Function,
   products: Array<Object>,
+  stock: Array<Object>,
   error: string,
   mode: string,
 };
@@ -97,7 +98,7 @@ class ProductsSelectedList extends Component<Props, State> {
 
   renderEditQuantityDialog = (): Object => {
     const { productSelectedIndex, isEditQuantityDialogOpen } = this.state;
-    const { products } = this.props;
+    const { products, stock } = this.props;
 
     const isInitialProductSelectedIndexValue = (typeof productSelectedIndex === 'string');
     const isProductListEmpty = !(products.length);
@@ -107,14 +108,14 @@ class ProductsSelectedList extends Component<Props, State> {
     }
 
     const productSelected = products[productSelectedIndex];
-    const { quantity } = productSelected;
 
     return (
       <EditQuantityDialog
         onCloseDialog={this.onToggleEditQuantityDialog}
         onEditQuantity={this.onEditQuantity}
+        productSelected={productSelected}
         isOpen={isEditQuantityDialogOpen}
-        quantity={quantity}
+        stock={stock}
       />
     );
   };

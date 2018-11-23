@@ -128,7 +128,6 @@ const sale = (state = INITIAL_STATE, { payload, type }) => {
       };
 
     case Types.EDIT_REQUEST_SUCCESS:
-      console.log(payload.salesUpdated)
       return {
         ...state,
         data: [...payload.salesUpdated],

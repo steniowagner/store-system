@@ -21,6 +21,7 @@ type Props = {
   withExtraComponent: ?boolean,
   ExtraComponent: ?Object,
   setFieldValue: Function,
+  stock: Array<Object>,
   values: Object,
   errors: Object,
   mode: string,
@@ -124,9 +125,11 @@ const renderTopRow = (setFieldValue: Function, values: Object, errors: Object, m
   );
 };
 
-const renderSelectProduct = (setFieldValue: Function, values: Object, mode: string): Object => (
+const renderSelectProduct = (setFieldValue: Function, values: Object, mode: string, stock: Array<Object>): Object => (
   <SelectProduct
     onAddProduct={(product, quantity) => onAddProduct(product, quantity, setFieldValue, values)}
+    values={values}
+    stock={stock}
     mode={mode}
   />
 );
@@ -140,12 +143,13 @@ const renderExtraComponent = (ExtraComponent: Object, setFieldValue: Function, v
   />
 );
 
-const renderProductsList = (setFieldValue: Function, values: Object, errors: Object, mode: string): Object => (
+const renderProductsList = (setFieldValue: Function, values: Object, errors: Object, mode: string, stock: Array<Object>): Object => (
   <ProductsSelectedList
     onEditProductQuantity={(indexProductEdited, quantity) => onEditProductQuantity(values, indexProductEdited, quantity, setFieldValue)}
     onRemoveProduct={productSelectedIndex => onRemoveProduct(productSelectedIndex, values, setFieldValue)}
     products={values.products}
     error={errors.products}
+    stock={stock}
     mode={mode}
   />
 );
@@ -177,6 +181,7 @@ const ProductSale = ({
   withExtraComponent,
   ExtraComponent,
   setFieldValue,
+  stock,
   values,
   errors,
   mode,
@@ -185,8 +190,8 @@ const ProductSale = ({
     {renderTopRow(setFieldValue, values, errors, mode)}
     {withExtraComponent && renderExtraComponent(ExtraComponent, setFieldValue, values, errors, mode)}
     <Paper>
-      {renderSelectProduct(setFieldValue, values, mode)}
-      {renderProductsList(setFieldValue, values, errors, mode)}
+      {renderSelectProduct(setFieldValue, values, mode, stock)}
+      {renderProductsList(setFieldValue, values, errors, mode, stock)}
       {renderFooterValues(setFieldValue, values, mode)}
     </Paper>
   </Container>

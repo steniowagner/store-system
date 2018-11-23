@@ -1,9 +1,10 @@
-import { put } from 'redux-saga/effects';
+import { select, put } from 'redux-saga/effects';
 
 import { Creators as StockCreators } from '../ducks/stock';
 
 import {
   UPDATE_PRODUCT_STOCK,
+  UPDATE_IN_BATCH,
   READ_STOCK,
   INSERT,
 } from '../../../back-end/events-handlers/stock/types';
@@ -46,6 +47,24 @@ export function* insertProduct(action) {
   } catch (err) {
     yield put(StockCreators.insertProductFailure(err.message));
   }
+}
+
+export function* editStockProductsInBatch(products) {
+  const stock = yield select(state => state.stock.data);
+
+  const productsStockInfo = products.map((product) => {
+    const productInStockIndex = stock.findIndex(stockItem => stockItem['Product.id'] === product.id);
+
+    return ({
+      stockQuantity: stock[productInStockIndex].stockQuantity - product.quantity,
+      minStockQuantity: stock[productInStockIndex].minStockQuantity,
+      ProductId: stock[productInStockIndex].ProductId,
+      id: stock[productInStockIndex].id,
+    });
+  });
+
+  console.log(productsStockInfo);
+  // ipcRenderer.send(OPERATION_REQUEST, STOCK, UPDATE_IN_BATCH, productsStockInfo);
 }
 
 export function* editProductInStock(action) {
