@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 import Popper from '@material-ui/core/Popper';
 import Paper from '@material-ui/core/Paper';
 import List from '@material-ui/core/List';
+
 import styled from 'styled-components';
 
 import { bindActionCreators } from 'redux';
@@ -31,7 +32,8 @@ const ListContainer = styled(({ ...props }) => (
     {...props}
   />
 ))`
-  max-height: 300px;
+  overflow-y: scroll;
+  max-height: 400px;
   margin-top: 8px;
   margin-left: 250px;
 `;
@@ -164,7 +166,7 @@ class ProductFilter extends Component<Props, {}> {
       >
         <ListContainer>
           <List
-            component="nav"
+            component="div"
           >
             {productsFiltered.map((product, index) => {
               const {

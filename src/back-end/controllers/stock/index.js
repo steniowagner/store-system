@@ -19,6 +19,24 @@ exports.insert = async (productInfo) => {
   }
 };
 
+exports.editInBatch = async (stockUpdated) => {
+  try {
+    stockUpdated.forEach(async (stockItem) => {
+      await Stock.update({
+        ...stockItem,
+      }, {
+        where: {
+          id: stockItem.id,
+        },
+      });
+    });
+
+    return null;
+  } catch (err) {
+    return err;
+  }
+};
+
 exports.edit = async (productInfoUpdated) => {
   try {
     await Stock.update({

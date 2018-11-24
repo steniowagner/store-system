@@ -9,6 +9,10 @@ export const Types = {
   GET_SUCCESS: 'stock/GET_SUCCESS',
   GET_FAILURE: 'stock/GET_FAILURE',
 
+  EDIT_REQUEST_IN_BATCH: 'stock/EDIT_REQUEST_IN_BATCH',
+  EDIT_REQUEST_IN_BATCH_SUCCESS: 'stock/EDIT_REQUEST_IN_BATCH_SUCCESS',
+  EDIT_REQUEST_IN_BATCH_FAILURE: 'stock/EDIT_REQUEST_IN_BATCH_FAILURE',
+
   EDIT_REQUEST: 'stock/EDIT_REQUEST',
   EDIT_REQUEST_SUCCESS: 'stock/EDIT_REQUEST_SUCCESS',
   EDIT_REQUEST_FAILURE: 'stock/EDIT_REQUEST_FAILURE',
@@ -51,17 +55,32 @@ export const Creators = {
     payload: { error },
   }),
 
-  editProduct: productInfo => ({
+  editStock: productInfo => ({
     type: Types.EDIT_REQUEST,
     payload: { productInfo },
   }),
 
-  editProductSuccess: ({ stockItemEdited, index }) => ({
+  editStockSuccess: ({ stockItemEdited, index }) => ({
     type: Types.EDIT_REQUEST_SUCCESS,
     payload: { stockItemEdited, index },
   }),
 
-  editProductFailure: error => ({
+  editStockFailure: error => ({
+    type: Types.EDIT_REQUEST_FAILURE,
+    payload: { error },
+  }),
+
+  editStockInBatch: saleUpdated => ({
+    type: Types.EDIT_REQUEST,
+    payload: { saleUpdated },
+  }),
+
+  editStockInBatchSuccess: stockUpdated => ({
+    type: Types.EDIT_REQUEST_IN_BATCH_SUCCESS,
+    payload: { stockUpdated },
+  }),
+
+  editStockInBatchFailure: error => ({
     type: Types.EDIT_REQUEST_FAILURE,
     payload: { error },
   }),
@@ -122,6 +141,12 @@ const stock = (state = INITIAL_STATE, { payload, type }) => {
       return {
         ...state,
         error: payload.error,
+      };
+
+    case Types.EDIT_REQUEST_IN_BATCH_SUCCESS:
+      return {
+        ...state,
+        data: [...payload.stockUpdated],
       };
 
     case Types.UNSUBSCRIBE_EVENTS:

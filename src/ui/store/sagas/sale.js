@@ -48,7 +48,7 @@ export function* createSale(action) {
     };
 
     yield put(SaleCreators.createSaleSuccess(newSale));
-    yield call(editStockProductsInBatch, args.products, newSale.id, CREATE_SALE);
+    yield call(editStockProductsInBatch, args, CREATE_SALE);
   } catch (err) {
     yield put(SaleCreators.createSaleFailure(err.message));
   }
@@ -87,7 +87,7 @@ export function* editSale(action) {
       salesman: 'steniowagner',
     };
 
-    // ipcRenderer.send(OPERATION_REQUEST, SALE, UPDATE_SALE, params);
+    ipcRenderer.send(OPERATION_REQUEST, SALE, UPDATE_SALE, params);
 
     const allSales = yield select(state => state.sale.data);
 

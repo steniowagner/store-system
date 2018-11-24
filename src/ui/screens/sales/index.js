@@ -43,7 +43,7 @@ class Sales extends Component<Props, {}> {
 
   render() {
     const { sale, stock } = this.props;
-
+    console.log(stock);
     return (
       <EntityComponent
         filterConfig={config.filterConfig}

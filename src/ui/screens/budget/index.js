@@ -58,7 +58,6 @@ class Budget extends Component {
         onRemoveItem={this.onRemoveBudget}
         singularEntityName="Orçamento"
         pluralEntityName="Orçamentos"
-        withOwnTitle="NOVO ORÇAMENTO"
         dataset={budgets}
         canBeCreated
         canBeRemoved
