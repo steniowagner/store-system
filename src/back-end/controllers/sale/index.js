@@ -18,9 +18,23 @@ exports.getAll = async () => {
   }
 };
 
+exports.getById = async (id) => {
+  try {
+    return await Sale.findOne({
+      raw: true,
+    }, {
+      where: {
+        id,
+      },
+    });
+  } catch (err) {
+    return err;
+  }
+};
+
 exports.edit = async (saleUpdated) => {
   try {
-    await Sale.update({
+    return await Sale.update({
       ...saleUpdated,
     }, {
       where: {

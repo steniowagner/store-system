@@ -20,6 +20,10 @@ const SaleModel = (sequelize, DataTypes) => {
       type: JSON,
     },
 
+    dateToShow: {
+      type: STRING,
+    },
+
     discount: {
       type: JSON,
     },

@@ -22,7 +22,6 @@ const parseSaleToTableView = (sale: Object): Object => ({
   customerName: sale.customer.name || '-',
   totalText: `R$ ${sale.total.toFixed(2)}`,
   products: JSON.parse(sale.products),
-  dateToShow: moment().format('lll'),
 });
 
 export function* createSale(action) {
@@ -33,6 +32,7 @@ export function* createSale(action) {
       ...args,
       products: JSON.stringify(args.products),
       subtotal: parseFloat(args.subtotal),
+      dateToShow: moment().format('lll'),
       total: parseFloat(args.total),
       salesman: 'steniowagner',
     };
@@ -48,7 +48,7 @@ export function* createSale(action) {
     };
 
     yield put(SaleCreators.createSaleSuccess(newSale));
-    yield call(editStockProductsInBatch, args.products);
+    yield call(editStockProductsInBatch, args.products, newSale.id, CREATE_SALE);
   } catch (err) {
     yield put(SaleCreators.createSaleFailure(err.message));
   }
@@ -76,33 +76,34 @@ export function* getAllSales() {
 export function* editSale(action) {
   try {
     const { sale } = action.payload;
-    yield call(editStockProductsInBatch, sale.products);
+
+    yield call(editStockProductsInBatch, sale, UPDATE_SALE);
 
     const params = {
       ...sale,
-      customer: sale.customer || {},
       products: JSON.stringify(sale.products),
       subtotal: parseFloat(sale.subtotal),
       total: parseFloat(sale.total),
       salesman: 'steniowagner',
     };
 
-    console.log(params)
-
-
-    /* ipcRenderer.send(OPERATION_REQUEST, SALE, UPDATE_SALE, params);
-
-    yield handleEventSubscription(SALE);
+    // ipcRenderer.send(OPERATION_REQUEST, SALE, UPDATE_SALE, params);
 
     const allSales = yield select(state => state.sale.data);
+
+    const { subtotal, total } = sale;
+
     const salesUpdated = Object.assign([],
       allSales, {
         [sale.index]: {
           ...sale,
-          ...parseSaleToTableView(allSales[sale.index]),
+          subtotalText: `R$ ${parseFloat(subtotal).toFixed(2)}`,
+          totalText: `R$ ${parseFloat(total).toFixed(2)}`,
+          customerName: sale.customer.name || '-',
         },
-      }); */
-    // yield put(SaleCreators.editSaleSuccess(salesUpdated));
+      });
+
+    yield put(SaleCreators.editSaleSuccess(salesUpdated));
   } catch (err) {
     yield put(SaleCreators.editSaleFailure(err.message));
   }

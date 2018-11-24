@@ -54,6 +54,10 @@ const onMigrate = (queryInterface, DataTypes) => {
       type: FLOAT,
     },
 
+    dateToShow: {
+      type: STRING,
+    },
+
     observation: {
       type: STRING,
     },
