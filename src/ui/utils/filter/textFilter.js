@@ -7,11 +7,7 @@ type Config = {
 };
 
 const textFilter = (filterConfig: Config): Array<Object> => {
-  const {
-    dataset,
-    filter,
-    value,
-  } = filterConfig;
+  const { dataset, filter, value } = filterConfig;
 
   if (filter === 'all') return dataset;
 

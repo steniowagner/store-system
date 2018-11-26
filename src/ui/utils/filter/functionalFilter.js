@@ -6,10 +6,7 @@ type Config = {
 };
 
 const functionalFilter = (config: Config): Array<Object> => {
-  const {
-    behavior,
-    dataset,
-  } = config;
+  const { behavior, dataset } = config;
 
   return behavior(dataset);
 };

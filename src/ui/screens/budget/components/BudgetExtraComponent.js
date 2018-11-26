@@ -9,7 +9,7 @@ import PayBudgetButton from './PayBudgetButton';
 import BudgetStatus from './BudgetStatus';
 
 const Wrapper = styled.div`
-  margin: 16px 0;
+  margin: 24px 0;
 `;
 
 const LineWrapper = styled.div`
@@ -18,6 +18,12 @@ const LineWrapper = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 16px;
+`;
+
+const StatusAndPaymentWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
 `;
 
 type Props = {
@@ -30,7 +36,7 @@ type Props = {
 
 const BudgetExtraComponent = (props: Props): Object => {
   const { mode } = props;
-  const shouldRenderPayBudgetButton = (mode === 'detail');
+  const shouldRenderPayBudgetButton = (mode !== 'create');
 
   return (
     <Wrapper>
@@ -38,15 +44,17 @@ const BudgetExtraComponent = (props: Props): Object => {
         <SelectLimitDate
           {...props}
         />
-        <BudgetStatus
-          {...props}
-        />
+        <StatusAndPaymentWrapper>
+          {shouldRenderPayBudgetButton && (
+            <PayBudgetButton
+              {...props}
+            />
+          )}
+          <BudgetStatus
+            {...props}
+          />
+        </StatusAndPaymentWrapper>
       </LineWrapper>
-      {shouldRenderPayBudgetButton && (
-        <PayBudgetButton
-          {...props}
-        />
-      )}
     </Wrapper>
   );
 };

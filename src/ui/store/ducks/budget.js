@@ -5,17 +5,17 @@ export const Types = {
   CREATE_SUCCESS: 'budget/CREATE_SUCCESS',
   CREATE_FAILURE: 'budget/CREATE_FAILURE',
 
-  GET_ALL_REQUEST: 'budget/GET_ALL_REQUEST',
-  GET_ALL_SUCCESS: 'budget/GET_ALL_SUCCESS',
-  GET_ALL_FAILURE: 'budget/GET_ALL_FAILURE',
+  READ_ALL_REQUEST: 'budget/READ_ALL_REQUEST',
+  READ_ALL_SUCCESS: 'budget/READ_ALL_SUCCESS',
+  READ_ALL_FAILURE: 'budget/READ_ALL_FAILURE',
 
   EDIT_REQUEST: 'budget/EDIT_REQUEST',
   EDIT_REQUEST_SUCCESS: 'budget/EDIT_REQUEST_SUCCESS',
   EDIT_REQUEST_FAILURE: 'budget/EDIT_REQUEST_FAILURE',
 
-  REMOVE_REQUEST: 'budget/REMOVE_REQUEST',
-  REMOVE_REQUEST_SUCCESS: 'budget/REMOVE_REQUEST_SUCCESS',
-  REMOVE_REQUEST_FAILURE: 'budget/REMOVE_REQUEST_FAILURE',
+  DELETE_REQUEST: 'budget/DELETE_REQUEST',
+  DELETE_REQUEST_SUCCESS: 'budget/DELETE_REQUEST_SUCCESS',
+  DELETE_REQUEST_FAILURE: 'budget/DELETE_REQUEST_FAILURE',
 
   UNSUBSCRIBE_EVENTS: 'budget/UNSUBSCRIBE_EVENTS',
 };
@@ -41,17 +41,17 @@ export const Creators = {
     payload: { error },
   }),
 
-  getAllBudgets: () => ({
-    type: Types.GET_ALL_REQUEST,
+  readAllBudgets: () => ({
+    type: Types.READ_ALL_REQUEST,
   }),
 
-  getAllBudgetsSuccess: budgets => ({
-    type: Types.GET_ALL_SUCCESS,
+  readAllBudgetsSuccess: budgets => ({
+    type: Types.READ_ALL_SUCCESS,
     payload: { budgets },
   }),
 
-  getAllBudgetsFailure: error => ({
-    type: Types.GET_ALL_FAILURE,
+  readAllBudgetsFailure: error => ({
+    type: Types.READ_ALL_FAILURE,
     payload: { error },
   }),
 
@@ -70,18 +70,18 @@ export const Creators = {
     payload: { error },
   }),
 
-  removeBudget: id => ({
-    type: Types.REMOVE_REQUEST,
+  deleteBudget: id => ({
+    type: Types.DELETE_REQUEST,
     payload: { id },
   }),
 
-  removeBudgetSuccess: id => ({
-    type: Types.REMOVE_REQUEST_SUCCESS,
+  deleteBudgetSuccess: id => ({
+    type: Types.DELETE_REQUEST_SUCCESS,
     payload: { id },
   }),
 
-  removeBudgetFailure: error => ({
-    type: Types.REMOVE_REQUEST_FAILURE,
+  deleteBudgetFailure: error => ({
+    type: Types.DELETE_REQUEST_FAILURE,
     payload: { error },
   }),
 
@@ -103,24 +103,24 @@ const budget = (state = INITIAL_STATE, { payload, type }) => {
         error: null,
       };
 
-    case Types.GET_SINGLE_FAILURE:
+    case Types.READ_SINGLE_FAILURE:
       return {
         ...state,
         error: payload.error,
       };
 
-    case Types.GET_ALL_REQUEST:
+    case Types.READ_ALL_REQUEST:
       return {
         ...state,
       };
 
-    case Types.GET_ALL_SUCCESS:
+    case Types.READ_ALL_SUCCESS:
       return {
         data: [...payload.budgets],
         error: null,
       };
 
-    case Types.GET_ALL_FAILURE:
+    case Types.READ_ALL_FAILURE:
       return {
         ...state,
         error: payload.error,
@@ -143,18 +143,18 @@ const budget = (state = INITIAL_STATE, { payload, type }) => {
         error: payload.error,
       };
 
-    case Types.REMOVE_REQUEST:
+    case Types.DELETE_REQUEST:
       return {
         ...state,
       };
 
-    case Types.REMOVE_REQUEST_SUCCESS:
+    case Types.DELETE_REQUEST_SUCCESS:
       return {
         data: state.data.filter(item => item.id !== payload.id),
         error: null,
       };
 
-    case Types.REMOVE_REQUEST_FAILURE:
+    case Types.DELETE_REQUEST_FAILURE:
       return {
         ...state,
         error: payload.error,

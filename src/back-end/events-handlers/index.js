@@ -6,6 +6,7 @@ const handleProductEvents = require('./product');
 const handlerStockEvents = require('./stock');
 const handleUserEvents = require('./user');
 const handleBrandEvents = require('./brand');
+const handleBudgetEvents = require('./budget');
 const handleSaleEvents = require('./sale');
 
 const eventHandler = (entitie, operation, args) => {
@@ -19,6 +20,8 @@ const eventHandler = (entitie, operation, args) => {
     case ENTITIES.STOCK: return handlerStockEvents(operation, args);
 
     case ENTITIES.BRAND: return handleBrandEvents(operation, args);
+
+    case ENTITIES.BUDGET: return handleBudgetEvents(operation, args);
 
     case ENTITIES.PRODUCT: return handleProductEvents(operation, args);
 

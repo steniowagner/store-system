@@ -14,15 +14,17 @@ import Pending from '@material-ui/icons/History';
 import styled from 'styled-components';
 import appStyles from '../../../styles';
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  margin-left: 24px;
+`;
 
 const SelectorWrapper = styled.div`
-  height: 52px;
+  height: 50px;
   display: flex;
   justify-content: center;
   align-items: center;
   margin-top: 8px;
-  border-radius: 4px;
+  border-radius: 6px;
   background-color: ${({ color }) => color};
 `;
 

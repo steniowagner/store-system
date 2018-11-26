@@ -4,7 +4,8 @@ import React, { Component } from 'react';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Creators as BudgetCreators } from '../../store/ducks/user';
+import { Creators as BudgetCreators } from '../../store/ducks/budget';
+import { Creators as StockCreators } from '../../store/ducks/stock';
 
 import config from './config';
 
@@ -15,6 +16,13 @@ class Budget extends Component {
   state = {
     budgets: [],
   };
+
+  componentDidMount() {
+    const { readAllBudgets, getStock } = this.props;
+
+    readAllBudgets();
+    getStock();
+  }
 
   onCreateBudget = (budget: Object) => {
     const { budgets } = this.state;
@@ -29,25 +37,15 @@ class Budget extends Component {
   };
 
   onEditBudget = (budgetEdited: Object): void => {
-    const { budgets } = this.state;
-
-    const budgetEditedIndex = budgets.findIndex(budget => budget.id === budgetEdited.id);
-
-    this.setState({
-      budgets: Object.assign([], budgets, { [budgetEditedIndex]: budgetEdited }),
-    });
+    console.log(budgetEdited);
   };
 
-  onRemoveBudget = (budgetId: string): void => {
-    const { budgets } = this.state;
-
-    this.setState({
-      budgets: budgets.filter(budget => budget.id !== budgetId),
-    });
+  onRemoveBudget = (budget: Object): void => {
+    console.log(budget);
   };
 
   render() {
-    const { budgets } = this.props;
+    const { budgets, stock } = this.props;
 
     return (
       <EntityComponent
@@ -58,13 +56,14 @@ class Budget extends Component {
         onRemoveItem={this.onRemoveBudget}
         singularEntityName="Orçamento"
         pluralEntityName="Orçamentos"
-        dataset={budgets}
+        dataset={this.state.budgets}
         canBeCreated
         canBeRemoved
         canBeEdited
         Form={props => (
           <Form
             {...props}
+            stock={stock}
           />
         )}
       />
@@ -72,10 +71,13 @@ class Budget extends Component {
   }
 }
 
-const mapDispatchToProps = dispatch => bindActionCreators(BudgetCreators, dispatch);
+const Creators = Object.assign({}, StockCreators, BudgetCreators);
+
+const mapDispatchToProps = dispatch => bindActionCreators(Creators, dispatch);
 
 const mapStateToProps = state => ({
   budgets: state.budget.data,
+  stock: state.stock.data,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Budget);

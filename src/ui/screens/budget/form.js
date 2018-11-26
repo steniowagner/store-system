@@ -17,6 +17,7 @@ type Props = {
   handleSubmit: Function,
   onRemoveItem: Function,
   isSubmitting: boolean,
+  stock: Array<Object>,
   values: Object,
   errors: Object,
   mode: string,
@@ -44,9 +45,9 @@ class BudgetForm extends Component<Props, State> {
       setFieldValue,
       values,
       errors,
+      stock,
       mode,
     } = this.props;
-
 
     return (
       <Section>
@@ -60,6 +61,7 @@ class BudgetForm extends Component<Props, State> {
           withExtraComponent
           values={values}
           errors={errors}
+          stock={stock}
           mode={mode}
         />
       </Section>

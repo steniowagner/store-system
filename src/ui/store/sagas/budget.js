@@ -39,9 +39,9 @@ export function* getAllBudgets() {
 
     const { result } = yield handleEventSubscription(BUDGET);
 
-    yield put(BudgetCreators.getAllBudgetsSuccess(result));
+    yield put(BudgetCreators.readAllBudgetsSuccess(result));
   } catch (err) {
-    yield put(BudgetCreators.getAllBudgetsFailure(err));
+    yield put(BudgetCreators.readAllBudgetsFailure(err));
   }
 }
 
@@ -59,7 +59,7 @@ export function* editBudget(action) {
   }
 }
 
-export function* removeBudget(action) {
+export function* deleteBudget(action) {
   try {
     const { id } = action.payload;
 
@@ -67,9 +67,9 @@ export function* removeBudget(action) {
 
     yield handleEventSubscription(BUDGET);
 
-    yield put(BudgetCreators.removeBudgetSuccess(id));
+    yield put(BudgetCreators.deleteBudgetSuccess(id));
   } catch (err) {
-    yield put(BudgetCreators.removeBudgetFailure());
+    yield put(BudgetCreators.deleteBudgetFailure(err));
   }
 }
 
