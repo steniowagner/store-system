@@ -34,10 +34,7 @@ export const Creators = {
 
   createBudgetSuccess: budget => ({
     type: Types.CREATE_SUCCESS,
-    payload: {
-      message: 'Orçamento Criado com Sucesso',
-      budget,
-    },
+    payload: { message: 'Orçamento Criado com Sucesso', budget },
   }),
 
   createBudgetFailure: () => ({
@@ -115,16 +112,15 @@ const budget = (state = INITIAL_STATE, { payload, type }) => {
 
     case Types.READ_ALL_SUCCESS:
       return {
+        ...state,
         data: [...payload.budgets],
-        message: payload.message,
-        error: null,
       };
 
     case Types.READ_ALL_FAILURE:
       return {
         ...state,
-        message: null,
         error: payload.error,
+        message: null,
       };
 
     case Types.EDIT_REQUEST:
@@ -153,15 +149,14 @@ const budget = (state = INITIAL_STATE, { payload, type }) => {
 
     case Types.DELETE_REQUEST_SUCCESS:
       return {
+        ...state,
         data: state.data.filter(item => item.id !== payload.id),
         message: payload.message,
-        error: null,
       };
 
     case Types.DELETE_REQUEST_FAILURE:
       return {
         ...state,
-        message: null,
         error: payload.error,
       };
 

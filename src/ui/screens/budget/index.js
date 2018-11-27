@@ -8,7 +8,7 @@ import { Creators as BudgetCreators } from '../../store/ducks/budget';
 import { Creators as StockCreators } from '../../store/ducks/stock';
 import { Creators as SaleCreators } from '../../store/ducks/sale';
 
-import Snackbar, { STYLES } from '../../components/common/snackbar';
+import Snackbar, { STYLES } from '../../components/common/Snackbar';
 
 import EntityComponent from '../../components/common/entity-component';
 
@@ -43,11 +43,19 @@ class Budget extends Component<Props, State> {
     const { readAllBudgets, getStock } = this.props;
 
     readAllBudgets();
+
     getStock();
   }
 
-  componentWillReceiveProps() {
-    const { message, error } = this.props;
+  componentWillReceiveProps(nextProps) {
+    const { budget } = nextProps;
+    const { message, error } = budget;
+
+    const openSnackBar = () => setTimeout(() => {
+      this.setState({
+        isSnackbarOpen: true,
+      });
+    }, 700);
 
     if (error) {
       this.setState({
@@ -55,7 +63,7 @@ class Budget extends Component<Props, State> {
           type: STYLES.ERROR,
           message: error,
         },
-      });
+      }, () => openSnackBar());
     }
 
     if (message) {
@@ -64,7 +72,7 @@ class Budget extends Component<Props, State> {
           type: STYLES.SUCCESS,
           message,
         },
-      });
+      }, () => openSnackBar());
     }
   }
 
@@ -105,7 +113,7 @@ class Budget extends Component<Props, State> {
     return (
       <Snackbar
         onCloseSnackbar={this.onCloseSnackbar}
-        isOpen={!!type && isSnackbarOpen}
+        isOpen={isSnackbarOpen}
         message={message}
         type={type}
       />

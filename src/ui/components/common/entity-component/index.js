@@ -3,11 +3,8 @@
 import React, { Component, Fragment } from 'react';
 import styled from 'styled-components';
 
-import { getConfig as getSnackbarConfig, TYPES as snackbarTypes } from './snackBarConfig';
-
 import FullScreenDialog from '../FullScreenDialog';
 import ActionButton from '../ActionButton';
-import Snackbar from '../CustomSnackbar';
 import Filter from '../Filter';
 import Dialog from '../Dialog';
 import Table from '../table';
@@ -50,10 +47,8 @@ type Props = {
 type State = {
   isFullScreenDialogOpen: boolean,
   isRemoveDialogOpen: boolean,
-  isSnackbarOpen: boolean,
   itemsFiltered: Array<Object>,
   items: Array<Object>,
-  snackbarData: Object,
   contextItem: Object,
   currentPage: number,
   rowsPerPage: number,
@@ -64,9 +59,7 @@ class EntityComponent extends Component<Props, State> {
   state = {
     isFullScreenDialogOpen: false,
     isRemoveDialogOpen: false,
-    isSnackbarOpen: false,
     itemsFiltered: [],
-    snackbarData: {},
     contextItem: {},
     currentPage: 0,
     rowsPerPage: 0,
@@ -121,12 +114,6 @@ class EntityComponent extends Component<Props, State> {
   onChageFormToEditMode = (): void => {
     this.setState({
       formMode: 'edit',
-    });
-  };
-
-  onCloseSnackbar = (): void => {
-    this.setState({
-      isSnackbarOpen: false,
     });
   };
 
@@ -191,32 +178,17 @@ class EntityComponent extends Component<Props, State> {
     return currentPage - 1;
   };
 
-  openSnackBar = (snackbarData: Object): void => {
-    setTimeout(() => {
-      this.setState({
-        snackbarData,
-      });
-    }, 700);
-  };
-
   createItem = (itemCreated: Object): void => {
-    const { onCreateItem, singularEntityName } = this.props;
-
-    const snackBarData = getSnackbarConfig(snackbarTypes.CREATE_SUCCESS, singularEntityName);
+    const { onCreateItem } = this.props;
 
     this.setState({
       isFullScreenDialogOpen: false,
-      isSnackbarOpen: true,
-      snackbarData: {},
       currentPage: 0,
-    }, () => {
-      this.openSnackBar(snackBarData);
-      onCreateItem(itemCreated);
-    });
+    }, () => onCreateItem(itemCreated));
   };
 
   editItem = (item: Object): void => {
-    const { onEditItem, singularEntityName } = this.props;
+    const { onEditItem } = this.props;
     const { contextItem } = this.state;
 
     const itemEdited = {
@@ -224,38 +196,24 @@ class EntityComponent extends Component<Props, State> {
       ...item,
     };
 
-    const snackBarData = getSnackbarConfig(snackbarTypes.EDIT_SUCCESSS, singularEntityName);
-
     this.setState({
       isFullScreenDialogOpen: false,
-      isSnackbarOpen: true,
-      snackbarData: {},
-    }, () => {
-      this.openSnackBar(snackBarData);
-      onEditItem(itemEdited);
-    });
+    }, () => onEditItem(itemEdited));
   };
 
   removeItem = (): void => {
-    const { onRemoveItem, singularEntityName } = this.props;
     const { itemsFiltered, contextItem } = this.state;
+    const { onRemoveItem } = this.props;
 
     const itemsFilteredAfterRemotion = itemsFiltered.filter(itemFiltered => itemFiltered.id !== contextItem.id);
-
-    const snackbarData = getSnackbarConfig(snackbarTypes.REMOVE_SUCCESS, singularEntityName);
 
     const currentPage = this.getCurrentPageAfterRemotion();
 
     this.setState({
       itemsFiltered: itemsFilteredAfterRemotion,
       isFullScreenDialogOpen: false,
-      isSnackbarOpen: true,
-      snackbarData: {},
       currentPage,
-    }, () => {
-      this.openSnackBar(snackbarData);
-      onRemoveItem(contextItem.id);
-    });
+    }, () => onRemoveItem(contextItem.id));
   };
 
   renderForm = (): Obejct => {
@@ -369,20 +327,6 @@ class EntityComponent extends Component<Props, State> {
     );
   };
 
-  renderSnackbar = (): Object => {
-    const { snackbarData, isSnackbarOpen } = this.state;
-    const { type, message } = snackbarData;
-
-    return (
-      <Snackbar
-        onCloseSnackbar={this.onCloseSnackbar}
-        isOpen={isSnackbarOpen && !!type}
-        message={message}
-        type={type}
-      />
-    );
-  };
-
   render() {
     const { pluralEntityName } = this.props;
 
@@ -394,7 +338,6 @@ class EntityComponent extends Component<Props, State> {
         {this.renderFilterAndCreatButtonSection()}
         {this.renderTable()}
         {this.renderForm()}
-        {this.renderSnackbar()}
         {this.renderRemoveDialog()}
       </Fragment>
     );
