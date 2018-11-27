@@ -12,10 +12,10 @@ const filterDenied = (budgets: Array<Object>): Array<Object> => budgets.filter(b
 const filterOutOfTime = (budgets: Array<Object>): Array<Object> => budgets.filter(budget => budget.status === BUDGET_STATUS.OUT_OF_TIME);
 
 const filterConfig = [{
-  placeholder: 'Informe o Nome de Usuáro Buscado',
+  placeholder: 'Informe o Nome do Vendedor',
   type: FILTER_TYPES.TEXT,
   filterTitle: 'Usuário',
-  dataField: 'username',
+  dataField: 'salesman',
 }, {
   placeholder: 'Estes são todos os Orçamentos Pendentes',
   type: FILTER_TYPES.FUNCTIONAL,

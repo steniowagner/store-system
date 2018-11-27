@@ -282,6 +282,7 @@ class EntityComponent extends Component<Props, State> {
         title={title}
       >
         <Form
+          onToggleFullScreenDialog={this.onToggleFullScreenDialog}
           onChageFormToEditMode={this.onChageFormToEditMode}
           onRemoveItem={this.removeItem}
           onCreateItem={this.createItem}

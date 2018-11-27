@@ -1,18 +1,21 @@
 const tabConfig = [{
+  columnTitle: 'Data',
+  dataField: 'dateToShow',
+}, {
   columnTitle: 'Cliente',
   dataField: 'customerName',
 }, {
   columnTitle: 'Status',
   dataField: 'status',
 }, {
-  columnTitle: 'Usuário',
-  dataField: 'username',
+  columnTitle: 'Vendedor',
+  dataField: 'salesman',
 }, {
   columnTitle: 'Sub-total',
-  dataField: 'subtotal',
+  dataField: 'subtotalText',
 }, {
   columnTitle: 'Total',
-  dataField: 'total',
+  dataField: 'totalText',
 }];
 
 export default tabConfig;

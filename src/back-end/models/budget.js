@@ -44,6 +44,14 @@ const BudgetModel = (sequelize, DataTypes) => {
       type: STRING,
     },
 
+    validity: {
+      type: STRING,
+    },
+
+    status: {
+      type: STRING,
+    },
+
     salesman: {
       validate: {
         notEmpty: true,

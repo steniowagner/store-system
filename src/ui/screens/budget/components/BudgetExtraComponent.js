@@ -36,7 +36,8 @@ type Props = {
 
 const BudgetExtraComponent = (props: Props): Object => {
   const { mode } = props;
-  const shouldRenderPayBudgetButton = (mode !== 'create');
+
+  const shouldRenderPayBudgetButton = (mode === 'detail');
 
   return (
     <Wrapper>

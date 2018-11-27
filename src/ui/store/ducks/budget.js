@@ -21,6 +21,7 @@ export const Types = {
 };
 
 const INITIAL_STATE = Immutable({
+  message: null,
   error: null,
   data: [],
 });
@@ -33,12 +34,15 @@ export const Creators = {
 
   createBudgetSuccess: budget => ({
     type: Types.CREATE_SUCCESS,
-    payload: { budget },
+    payload: {
+      message: 'Orçamento Criado com Sucesso',
+      budget,
+    },
   }),
 
-  createBudgetFailure: error => ({
+  createBudgetFailure: () => ({
     type: Types.CREATE_FAILURE,
-    payload: { error },
+    payload: { error: 'Houve um erro ao Criar o Orçamento' },
   }),
 
   readAllBudgets: () => ({
@@ -50,9 +54,9 @@ export const Creators = {
     payload: { budgets },
   }),
 
-  readAllBudgetsFailure: error => ({
+  readAllBudgetsFailure: () => ({
     type: Types.READ_ALL_FAILURE,
-    payload: { error },
+    payload: { error: 'Houve um erro ao Ler os Orçamentos' },
   }),
 
   editBudget: budget => ({
@@ -62,12 +66,13 @@ export const Creators = {
 
   editBudgetSuccess: ({ budgetEdited, index }) => ({
     type: Types.EDIT_REQUEST_SUCCESS,
+    message: 'Orçamento Editado com Sucesso',
     payload: { budgetEdited, index },
   }),
 
-  editBudgetFailure: error => ({
+  editBudgetFailure: () => ({
     type: Types.EDIT_REQUEST_FAILURE,
-    payload: { error },
+    payload: { error: 'Houve um erro ao Editar o Orçamento' },
   }),
 
   deleteBudget: id => ({
@@ -77,12 +82,13 @@ export const Creators = {
 
   deleteBudgetSuccess: id => ({
     type: Types.DELETE_REQUEST_SUCCESS,
+    message: 'Orçamento Removido com Sucesso',
     payload: { id },
   }),
 
-  deleteBudgetFailure: error => ({
+  deleteBudgetFailure: () => ({
     type: Types.DELETE_REQUEST_FAILURE,
-    payload: { error },
+    payload: { error: 'Houve um erro ao Remover o Orçamento' },
   }),
 
   unsubscribeEvents: () => ({
@@ -100,13 +106,8 @@ const budget = (state = INITIAL_STATE, { payload, type }) => {
     case Types.CREATE_SUCCESS:
       return {
         data: [payload.budget, ...state.data],
+        message: payload.message,
         error: null,
-      };
-
-    case Types.READ_SINGLE_FAILURE:
-      return {
-        ...state,
-        error: payload.error,
       };
 
     case Types.READ_ALL_REQUEST:
@@ -117,12 +118,14 @@ const budget = (state = INITIAL_STATE, { payload, type }) => {
     case Types.READ_ALL_SUCCESS:
       return {
         data: [...payload.budgets],
+        message: payload.message,
         error: null,
       };
 
     case Types.READ_ALL_FAILURE:
       return {
         ...state,
+        message: null,
         error: payload.error,
       };
 
@@ -135,12 +138,14 @@ const budget = (state = INITIAL_STATE, { payload, type }) => {
       return {
         ...state,
         data: Object.assign([], state.data, { [payload.index]: payload.budgetEdited }),
+        message: payload.message,
       };
 
     case Types.EDIT_REQUEST_FAILURE:
       return {
         ...state,
         error: payload.error,
+        message: null,
       };
 
     case Types.DELETE_REQUEST:
@@ -151,12 +156,14 @@ const budget = (state = INITIAL_STATE, { payload, type }) => {
     case Types.DELETE_REQUEST_SUCCESS:
       return {
         data: state.data.filter(item => item.id !== payload.id),
+        message: payload.message,
         error: null,
       };
 
     case Types.DELETE_REQUEST_FAILURE:
       return {
         ...state,
+        message: null,
         error: payload.error,
       };
 

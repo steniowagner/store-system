@@ -70,36 +70,14 @@ class BudgetForm extends Component<Props, State> {
 
   renderSaleConfirmation = (): Object => {
     const { isSaleConfirmationDialogOpen } = this.state;
-
-    const {
-      setFieldValue,
-      handleSubmit,
-      isSubmitting,
-      values,
-      mode,
-    } = this.props;
-
-    const {
-      paymentInfo,
-      isInDebit,
-      discount,
-      subtotal,
-      total,
-    } = values;
+    const { values } = this.props;
 
     return (
       <SaleConfirmation
         onCloseDialog={this.onToggleSaleConfirmationDialog}
         isOpen={isSaleConfirmationDialogOpen}
-        setFieldValue={setFieldValue}
-        handleSubmit={handleSubmit}
-        isSubmitting={isSubmitting}
-        paymentInfo={paymentInfo}
-        isInDebit={isInDebit}
-        discount={discount}
-        subtotal={subtotal}
-        total={total}
-        mode={mode}
+        {...this.props}
+        {...values}
       />
     );
   };
@@ -124,11 +102,12 @@ class BudgetForm extends Component<Props, State> {
     );
   };
 
-
   render() {
     return (
       <Wrapper>
-        <Form>
+        <Form
+          {...this.staet}
+        >
           {this.renderProductSale()}
           {this.renderActionFormButton()}
           {this.renderSaleConfirmation()}
@@ -170,13 +149,30 @@ const CustomForm = withFormik({
   })),
 
   handleSubmit(values, { setSubmitting, props }) {
-    const { onCreateItem, onEditItem, mode } = props;
+    const {
+      onToggleFullScreenDialog,
+      onConfirmBudgetPayment,
+      onCreateItem,
+      onEditItem,
+      mode,
+    } = props;
 
-    const properCallback = (mode === 'edit' ? onEditItem : onCreateItem);
+    if (mode === 'create') {
+      onCreateItem({
+        ...values,
+      });
+    }
 
-    properCallback({
-      ...values,
-    });
+    if (mode === 'edit') {
+      onEditItem({
+        ...values,
+      });
+    }
+
+    if (mode === 'detail') {
+      onConfirmBudgetPayment(values);
+      onToggleFullScreenDialog();
+    }
 
     setSubmitting(false);
   },
