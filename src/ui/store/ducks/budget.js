@@ -64,10 +64,9 @@ export const Creators = {
     payload: { budget },
   }),
 
-  editBudgetSuccess: ({ budgetEdited, index }) => ({
+  editBudgetSuccess: budgets => ({
     type: Types.EDIT_REQUEST_SUCCESS,
-    message: 'Orçamento Editado com Sucesso',
-    payload: { budgetEdited, index },
+    payload: { message: 'Orçamento Editado com Sucesso', budgets },
   }),
 
   editBudgetFailure: () => ({
@@ -82,8 +81,7 @@ export const Creators = {
 
   deleteBudgetSuccess: id => ({
     type: Types.DELETE_REQUEST_SUCCESS,
-    message: 'Orçamento Removido com Sucesso',
-    payload: { id },
+    payload: { message: 'Orçamento Removido com Sucesso', id },
   }),
 
   deleteBudgetFailure: () => ({
@@ -137,7 +135,7 @@ const budget = (state = INITIAL_STATE, { payload, type }) => {
     case Types.EDIT_REQUEST_SUCCESS:
       return {
         ...state,
-        data: Object.assign([], state.data, { [payload.index]: payload.budgetEdited }),
+        data: [...payload.budgets],
         message: payload.message,
       };
 

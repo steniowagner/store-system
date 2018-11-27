@@ -15,7 +15,25 @@ import EntityComponent from '../../components/common/entity-component';
 import config from './config';
 import Form from './form';
 
-class Budget extends Component {
+type Props = {
+  readAllBudgets: Function,
+  createBudget: Function,
+  deleteBudget: Function,
+  createSale: Function,
+  editBudget: Function,
+  getStock: Function,
+  stock: Array<Object>,
+  budget: Object,
+  message: string,
+  error: string,
+};
+
+type State = {
+  isSnackbarOpen: boolean,
+  snackbarConfig: Object,
+};
+
+class Budget extends Component<Props, State> {
   state = {
     isSnackbarOpen: false,
     snackbarConfig: {},
@@ -68,10 +86,10 @@ class Budget extends Component {
     editBudget(budgetEdited);
   };
 
-  onRemoveBudget = (budget: Object): void => {
+  onRemoveBudget = (id: number): void => {
     const { deleteBudget } = this.props;
 
-    deleteBudget(budget.id);
+    deleteBudget(id);
   };
 
   onCloseSnackbar = (): void => {
@@ -96,8 +114,6 @@ class Budget extends Component {
 
   render() {
     const { budget, stock } = this.props;
-
-    console.log(this.props)
 
     return (
       <Fragment>

@@ -42,7 +42,6 @@ export function* createSale(action) {
     const { result } = yield handleEventSubscription(SALE);
 
     const newSale = {
-      ...params,
       ...parseSaleToTableView(params),
       id: result,
     };

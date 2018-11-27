@@ -1,4 +1,4 @@
-import { put } from 'redux-saga/effects';
+import { select, put } from 'redux-saga/effects';
 
 import moment from 'moment';
 import 'moment/locale/pt-br';
@@ -19,10 +19,11 @@ const { ipcRenderer } = window.require('electron');
 
 const parseBudgetToTableView = (budget: Object): Object => ({
   ...budget,
-  subtotalText: `R$ ${budget.subtotal.toFixed(2)}`,
-  totalText: `R$ ${budget.total.toFixed(2)}`,
+  validityDate: moment(budget.validity, 'YYYY-MM-DD').format('ll'),
+  dateToShow: moment().format('ll'),
+  subtotalText: `R$ ${parseFloat(budget.subtotal).toFixed(2)}`,
+  totalText: `R$ ${parseFloat(budget.total).toFixed(2)}`,
   customerName: budget.customer.name || '-',
-  products: JSON.parse(budget.products),
 });
 
 export function* createBudget(action) {
@@ -44,6 +45,7 @@ export function* createBudget(action) {
 
     const newBudget = {
       ...parseBudgetToTableView(params),
+      products: JSON.parse(params.products),
       id: result,
     };
 
@@ -63,6 +65,7 @@ export function* getAllBudgets() {
 
     const allBudgets = result.map(budget => ({
       ...parseBudgetToTableView(budget),
+      products: JSON.parse(budget.products),
     }));
 
     yield put(BudgetCreators.readAllBudgetsSuccess(allBudgets));
@@ -73,13 +76,24 @@ export function* getAllBudgets() {
 
 export function* editBudget(action) {
   try {
-    const { user } = action.payload;
+    const { budget } = action.payload;
 
-    ipcRenderer.send(OPERATION_REQUEST, BUDGET, UPDATE_BUDGET, user);
+    const params = {
+      ...budget,
+      products: JSON.stringify(budget.products),
+      subtotal: parseFloat(budget.subtotal),
+      total: parseFloat(budget.total),
+    };
 
-    const { result } = yield handleEventSubscription(BUDGET);
+    ipcRenderer.send(OPERATION_REQUEST, BUDGET, UPDATE_BUDGET, params);
 
-    yield put(BudgetCreators.editBudgetSuccess(result));
+    yield handleEventSubscription(BUDGET);
+
+    const allBudgets = yield select(state => state.budget.data);
+
+    const budgets = Object.assign([], allBudgets, { [budget.index]: { ...parseBudgetToTableView(budget) } });
+
+    yield put(BudgetCreators.editBudgetSuccess(budgets));
   } catch (err) {
     yield put(BudgetCreators.editBudgetFailure());
   }
