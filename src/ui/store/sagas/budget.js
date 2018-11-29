@@ -1,4 +1,4 @@
-import { select, put } from 'redux-saga/effects';
+import { select, call, put } from 'redux-saga/effects';
 
 import moment from 'moment';
 import 'moment/locale/pt-br';
@@ -12,8 +12,11 @@ import {
   DELETE_BUDGET,
 } from '../../../back-end/events-handlers/budget/types';
 
+import { TAKE_AWAY_PRODUCTS_STOCK, UPDATE_PRODUCTS_STOCK, RETURN_PRODUTS_STOCK } from '../../../back-end/events-handlers/stock/types';
+
 import { handleEventUnsubscription, handleEventSubscription } from './eventHandler';
 import { OPERATION_REQUEST, BUDGET } from '../../../common/entitiesTypes';
+import { editStockProductsInBatch } from './stock';
 
 const { ipcRenderer } = window.require('electron');
 
@@ -50,6 +53,7 @@ export function* createBudget(action) {
     };
 
     yield put(BudgetCreators.createBudgetSuccess(newBudget));
+    yield call(editStockProductsInBatch, args, [], TAKE_AWAY_PRODUCTS_STOCK);
   } catch (err) {
     yield put(BudgetCreators.createBudgetFailure());
   }
@@ -76,7 +80,10 @@ export function* getAllBudgets() {
 
 export function* editBudget(action) {
   try {
+    const allBudgets = yield select(state => state.budget.data);
     const { budget } = action.payload;
+
+    yield call(editStockProductsInBatch, budget, allBudgets, UPDATE_PRODUCTS_STOCK);
 
     const params = {
       ...budget,
@@ -89,8 +96,6 @@ export function* editBudget(action) {
 
     yield handleEventSubscription(BUDGET);
 
-    const allBudgets = yield select(state => state.budget.data);
-
     const budgets = Object.assign([], allBudgets, { [budget.index]: { ...parseBudgetToTableView(budget) } });
 
     yield put(BudgetCreators.editBudgetSuccess(budgets));
@@ -102,6 +107,10 @@ export function* editBudget(action) {
 export function* deleteBudget(action) {
   try {
     const { id } = action.payload;
+
+    const allBudgets = yield select(state => state.budget.data);
+    const budgetRemoved = allBudgets.filter(budget => budget.id === id)[0];
+    yield call(editStockProductsInBatch, budgetRemoved, [], RETURN_PRODUTS_STOCK);
 
     ipcRenderer.send(OPERATION_REQUEST, BUDGET, DELETE_BUDGET, id);
 

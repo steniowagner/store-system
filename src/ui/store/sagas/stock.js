@@ -3,13 +3,13 @@ import { select, put } from 'redux-saga/effects';
 import { Creators as StockCreators } from '../ducks/stock';
 
 import {
-  UPDATE_PRODUCTS_IN_BATCH,
+  TAKE_AWAY_PRODUCTS_STOCK,
+  UPDATE_PRODUCTS_STOCK,
+  RETURN_PRODUTS_STOCK,
   UPDATE_PRODUCT_STOCK,
   READ_STOCK,
   INSERT,
 } from '../../../back-end/events-handlers/stock/types';
-
-import { CREATE_SALE, UPDATE_SALE } from '../../../back-end/events-handlers/sale/types';
 
 import { handleEventUnsubscription, handleEventSubscription } from './eventHandler';
 import { OPERATION_REQUEST, STOCK } from '../../../common/entitiesTypes';
@@ -86,29 +86,29 @@ const findItemInStock = (stock, productId) => {
   return stock[index];
 };
 
-const calculateDiffBetweenProductsQuantities = (saleUpdatedProducts, pastSaleProducts, stock) => {
-  const stockUpdated = saleUpdatedProducts.map((saleUpdatedProduct, index) => {
-    const saleUpdatedProductQuantity = parseInt(saleUpdatedProduct.quantity, 10);
-    const pastSaleProductQuantity = parseInt(pastSaleProducts[index].quantity, 10);
+const calculateDiffBetweenProductsQuantities = (datasetUpdatedProducts, pastDatasetProducts, stock) => {
+  const stockUpdated = datasetUpdatedProducts.map((datasetUpdatedProduct, index) => {
+    const datasetUpdatedProductQuantity = parseInt(datasetUpdatedProduct.quantity, 10);
+    const pastDatasetProductQuantity = parseInt(pastDatasetProducts[index].quantity, 10);
 
-    const isSameQuantity = (saleUpdatedProductQuantity === pastSaleProductQuantity);
-    const stockProductInfo = findItemInStock(stock, saleUpdatedProduct.id);
+    const isSameQuantity = (datasetUpdatedProductQuantity === pastDatasetProductQuantity);
+    const stockProductInfo = findItemInStock(stock, datasetUpdatedProduct.id);
 
     if (isSameQuantity) {
       return stockProductInfo;
     }
 
-    const isIncreasingQuantity = (saleUpdatedProductQuantity > pastSaleProductQuantity);
-    const isDecreasingQuantity = (saleUpdatedProductQuantity < pastSaleProductQuantity);
+    const isIncreasingQuantity = (datasetUpdatedProductQuantity > pastDatasetProductQuantity);
+    const isDecreasingQuantity = (datasetUpdatedProductQuantity < pastDatasetProductQuantity);
 
     let newQuantity;
 
     if (isIncreasingQuantity) {
-      newQuantity = stockProductInfo.stockQuantity - (saleUpdatedProductQuantity - pastSaleProductQuantity);
+      newQuantity = stockProductInfo.stockQuantity - (datasetUpdatedProductQuantity - pastDatasetProductQuantity);
     }
 
     if (isDecreasingQuantity) {
-      newQuantity = stockProductInfo.stockQuantity + (pastSaleProductQuantity - saleUpdatedProductQuantity);
+      newQuantity = stockProductInfo.stockQuantity + (pastDatasetProductQuantity - datasetUpdatedProductQuantity);
     }
 
     return {
@@ -126,9 +126,9 @@ const getDifferenceBetweenDatasets = (firstDataset, secondDataset) => {
 
   firstDataset.products.forEach((firstDatasetProduct) => {
     const indexProductInSecondDataset = secondDataset.products.findIndex(secondDatasetItem => (secondDatasetItem.id === firstDatasetProduct.id));
-    const productStillInSale = (indexProductInSecondDataset >= 0);
+    const productStillInDataset = (indexProductInSecondDataset >= 0);
 
-    if (productStillInSale) {
+    if (productStillInDataset) {
       productsRemained.push(firstDatasetProduct);
     } else {
       productsRemovedOrCreated.push(firstDatasetProduct);
@@ -154,7 +154,7 @@ const returnProductsToStock = (products, stock) => {
   return stockUpdated;
 };
 
-const inserProductsOnStock = (products, stock) => {
+const takeAwayProductsFromStock = (products, stock) => {
   const stockUpdated = products.map((product) => {
     const productStockInfo = findItemInStock(stock, product.id);
 
@@ -167,36 +167,38 @@ const inserProductsOnStock = (products, stock) => {
   return stockUpdated;
 };
 
-const handleStockEditAfterUpdateSale = (saleUpdated, pastSale, stock) => {
-  const firstOperation = getDifferenceBetweenDatasets(pastSale, saleUpdated);
-  const secondOperation = getDifferenceBetweenDatasets(saleUpdated, pastSale);
+const handleStockEdit = (datasetUpdated, pastDataset, stock) => {
+  const firstOperation = getDifferenceBetweenDatasets(pastDataset, datasetUpdated);
+  const secondOperation = getDifferenceBetweenDatasets(datasetUpdated, pastDataset);
 
   const diffBetweenRemainedProductsQuantities = calculateDiffBetweenProductsQuantities(secondOperation.productsRemained, firstOperation.productsRemained, stock);
   const stockUpdtedAfterReturnProductsToStock = returnProductsToStock(firstOperation.productsRemovedOrCreated, stock);
-  const stockUpdtedAfterInsertProducts = inserProductsOnStock(secondOperation.productsRemovedOrCreated, stock);
+  const stockUpdtedAfterInsertProducts = takeAwayProductsFromStock(secondOperation.productsRemovedOrCreated, stock);
 
   return [...diffBetweenRemainedProductsQuantities, ...stockUpdtedAfterReturnProductsToStock, ...stockUpdtedAfterInsertProducts];
 };
 
-export function* editStockProductsInBatch(saleUpdated, saleOperationType) {
-  const { stock, sales } = yield select(state => ({
-    stock: state.stock.data,
-    sales: state.sale.data,
-  }));
-
+export function* editStockProductsInBatch(data, dataset, operationType) {
   try {
+    const { stock } = yield select(state => ({ stock: state.stock.data }));
+
     let stockUpdatedAfterOperation;
 
-    if (saleOperationType === UPDATE_SALE) {
-      const { index } = saleUpdated;
-      stockUpdatedAfterOperation = handleStockEditAfterUpdateSale(saleUpdated, sales[index], stock);
+    if (operationType === UPDATE_PRODUCTS_STOCK) {
+      const { index } = data;
+      stockUpdatedAfterOperation = handleStockEdit(data, dataset[index], stock);
     }
 
-    if (saleOperationType === CREATE_SALE) {
-      stockUpdatedAfterOperation = inserProductsOnStock(saleUpdated.products, stock);
+    if (operationType === TAKE_AWAY_PRODUCTS_STOCK) {
+      stockUpdatedAfterOperation = takeAwayProductsFromStock(data.products, stock);
     }
 
-    ipcRenderer.send(OPERATION_REQUEST, STOCK, UPDATE_PRODUCTS_IN_BATCH, stockUpdatedAfterOperation);
+    if (operationType === RETURN_PRODUTS_STOCK) {
+      const stockWithoutDatasetProducts = stock.filter(stockItem => data.products.findIndex(product => product.id === stockItem['Product.id']));
+      stockUpdatedAfterOperation = [...stockWithoutDatasetProducts, ...returnProductsToStock(data.products, stock)];
+    }
+
+    ipcRenderer.send(OPERATION_REQUEST, STOCK, UPDATE_PRODUCTS_STOCK, stockUpdatedAfterOperation);
 
     const stockUpdated = stock.map((stockItem) => {
       const stockItemUpdatedIndex = stockUpdatedAfterOperation.findIndex(stockItemUpdated => stockItemUpdated.id === stockItem.id);

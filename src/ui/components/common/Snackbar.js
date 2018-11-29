@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 import IconButton from '@material-ui/core/IconButton';

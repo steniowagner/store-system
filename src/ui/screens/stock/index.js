@@ -11,8 +11,8 @@ import EntityComponent from '../../components/common/entity-component';
 
 type Props = {
   unsubscribeEvents: Function,
+  editStock: Function,
   getStock: Function,
-  editProduct: Function,
   stock: Array<Object>,
 };
 
@@ -30,9 +30,9 @@ class Stock extends Component<Props, {}> {
   }
 
   onEditStockItem = (itemToEdit: Object): void => {
-    const { editProduct } = this.props;
+    const { editStock } = this.props;
 
-    editProduct(itemToEdit);
+    editStock(itemToEdit);
   };
 
   render() {
@@ -41,8 +41,6 @@ class Stock extends Component<Props, {}> {
     return (
       <EntityComponent
         onEditItem={this.onEditStockItem}
-        onRemoveItem={() => {}}
-        onCreateItem={() => {}}
         singularEntityName="Estoque"
         pluralEntityName="Estoque"
         filterConfig={config.filterConfig}

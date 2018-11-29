@@ -5,6 +5,8 @@ import 'moment/locale/pt-br';
 
 import { Creators as SaleCreators } from '../ducks/sale';
 
+import { UPDATE_PRODUCTS_STOCK, TAKE_AWAY_PRODUCTS_STOCK } from '../../../back-end/events-handlers/stock/types';
+
 import {
   CREATE_SALE,
   UPDATE_SALE,
@@ -47,7 +49,7 @@ export function* createSale(action) {
     };
 
     yield put(SaleCreators.createSaleSuccess(newSale));
-    yield call(editStockProductsInBatch, args, CREATE_SALE);
+    yield call(editStockProductsInBatch, args, TAKE_AWAY_PRODUCTS_STOCK);
   } catch (err) {
     yield put(SaleCreators.createSaleFailure(err.message));
   }
@@ -74,9 +76,11 @@ export function* getAllSales() {
 
 export function* editSale(action) {
   try {
+    const allSales = yield select(state => state.sale.data);
+
     const { sale } = action.payload;
 
-    yield call(editStockProductsInBatch, sale, UPDATE_SALE);
+    yield call(editStockProductsInBatch, sale, allSales, UPDATE_PRODUCTS_STOCK);
 
     const params = {
       ...sale,
@@ -87,8 +91,6 @@ export function* editSale(action) {
     };
 
     ipcRenderer.send(OPERATION_REQUEST, SALE, UPDATE_SALE, params);
-
-    const allSales = yield select(state => state.sale.data);
 
     const { subtotal, total } = sale;
 
