@@ -79,7 +79,7 @@ class Budget extends Component<Props, State> {
   onConfirmBudgetPayment = (budget: Object) => {
     const { createSale } = this.props;
 
-    createSale(budget);
+    createSale({ ...budget, createdFromBudget: true });
   }
 
   onCreateBudget = (budget: Object) => {

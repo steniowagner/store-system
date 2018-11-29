@@ -96,6 +96,8 @@ const budget = (state = INITIAL_STATE, { payload, type }) => {
     case Types.CREATE_REQUEST:
       return {
         ...state,
+        message: null,
+        error: null,
       };
 
     case Types.CREATE_SUCCESS:
@@ -108,6 +110,8 @@ const budget = (state = INITIAL_STATE, { payload, type }) => {
     case Types.READ_ALL_REQUEST:
       return {
         ...state,
+        message: null,
+        error: null,
       };
 
     case Types.READ_ALL_SUCCESS:
@@ -126,6 +130,8 @@ const budget = (state = INITIAL_STATE, { payload, type }) => {
     case Types.EDIT_REQUEST:
       return {
         ...state,
+        message: null,
+        error: null,
       };
 
     case Types.EDIT_REQUEST_SUCCESS:
@@ -145,6 +151,8 @@ const budget = (state = INITIAL_STATE, { payload, type }) => {
     case Types.DELETE_REQUEST:
       return {
         ...state,
+        message: null,
+        error: null,
       };
 
     case Types.DELETE_REQUEST_SUCCESS:
@@ -162,7 +170,7 @@ const budget = (state = INITIAL_STATE, { payload, type }) => {
 
     case Types.UNSUBSCRIBE_EVENTS:
       return {
-        ...state,
+        ...INITIAL_STATE,
       };
 
     default:

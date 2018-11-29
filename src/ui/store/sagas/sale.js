@@ -15,11 +15,12 @@ import {
 
 import { handleEventUnsubscription, handleEventSubscription } from './eventHandler';
 import { OPERATION_REQUEST, SALE } from '../../../common/entitiesTypes';
-import { editStockProductsInBatch } from './stock';
+import { editStockProducts } from './stock';
 
 const { ipcRenderer } = window.require('electron');
 
 const parseSaleToTableView = (sale: Object): Object => ({
+  ...sale,
   subtotalText: `R$ ${sale.subtotal.toFixed(2)}`,
   customerName: sale.customer.name || '-',
   totalText: `R$ ${sale.total.toFixed(2)}`,
@@ -49,7 +50,14 @@ export function* createSale(action) {
     };
 
     yield put(SaleCreators.createSaleSuccess(newSale));
-    yield call(editStockProductsInBatch, args, TAKE_AWAY_PRODUCTS_STOCK);
+
+    const { createdFromBudget } = args;
+
+    if (!createdFromBudget) {
+      const allSales = yield select(state => state.sale.data);
+
+      yield call(editStockProducts, args, allSales, TAKE_AWAY_PRODUCTS_STOCK);
+    }
   } catch (err) {
     yield put(SaleCreators.createSaleFailure(err.message));
   }
@@ -64,7 +72,6 @@ export function* getAllSales() {
     const { result } = yield handleEventSubscription(SALE);
 
     const allSales = result.map(sale => ({
-      ...sale,
       ...parseSaleToTableView(sale),
     }));
 
@@ -80,7 +87,7 @@ export function* editSale(action) {
 
     const { sale } = action.payload;
 
-    yield call(editStockProductsInBatch, sale, allSales, UPDATE_PRODUCTS_STOCK);
+    yield call(editStockProducts, sale, allSales, UPDATE_PRODUCTS_STOCK);
 
     const params = {
       ...sale,

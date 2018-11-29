@@ -16,17 +16,17 @@ import { TAKE_AWAY_PRODUCTS_STOCK, UPDATE_PRODUCTS_STOCK, RETURN_PRODUTS_STOCK }
 
 import { handleEventUnsubscription, handleEventSubscription } from './eventHandler';
 import { OPERATION_REQUEST, BUDGET } from '../../../common/entitiesTypes';
-import { editStockProductsInBatch } from './stock';
+import { editStockProducts } from './stock';
 
 const { ipcRenderer } = window.require('electron');
 
 const parseBudgetToTableView = (budget: Object): Object => ({
   ...budget,
   validityDate: moment(budget.validity, 'YYYY-MM-DD').format('ll'),
-  dateToShow: moment().format('ll'),
   subtotalText: `R$ ${parseFloat(budget.subtotal).toFixed(2)}`,
   totalText: `R$ ${parseFloat(budget.total).toFixed(2)}`,
   customerName: budget.customer.name || '-',
+  dateToShow: moment().format('ll'),
 });
 
 export function* createBudget(action) {
@@ -53,7 +53,7 @@ export function* createBudget(action) {
     };
 
     yield put(BudgetCreators.createBudgetSuccess(newBudget));
-    yield call(editStockProductsInBatch, args, [], TAKE_AWAY_PRODUCTS_STOCK);
+    yield call(editStockProducts, args, [], TAKE_AWAY_PRODUCTS_STOCK);
   } catch (err) {
     yield put(BudgetCreators.createBudgetFailure());
   }
@@ -83,7 +83,7 @@ export function* editBudget(action) {
     const allBudgets = yield select(state => state.budget.data);
     const { budget } = action.payload;
 
-    yield call(editStockProductsInBatch, budget, allBudgets, UPDATE_PRODUCTS_STOCK);
+    yield call(editStockProducts, budget, allBudgets, UPDATE_PRODUCTS_STOCK);
 
     const params = {
       ...budget,
@@ -110,7 +110,7 @@ export function* deleteBudget(action) {
 
     const allBudgets = yield select(state => state.budget.data);
     const budgetRemoved = allBudgets.filter(budget => budget.id === id)[0];
-    yield call(editStockProductsInBatch, budgetRemoved, [], RETURN_PRODUTS_STOCK);
+    yield call(editStockProducts, budgetRemoved, [], RETURN_PRODUTS_STOCK);
 
     ipcRenderer.send(OPERATION_REQUEST, BUDGET, DELETE_BUDGET, id);
 

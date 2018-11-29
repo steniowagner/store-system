@@ -178,7 +178,7 @@ const handleStockEdit = (datasetUpdated, pastDataset, stock) => {
   return [...diffBetweenRemainedProductsQuantities, ...stockUpdtedAfterReturnProductsToStock, ...stockUpdtedAfterInsertProducts];
 };
 
-export function* editStockProductsInBatch(data, dataset, operationType) {
+export function* editStockProducts(data, dataset, operationType) {
   try {
     const { stock } = yield select(state => ({ stock: state.stock.data }));
 
