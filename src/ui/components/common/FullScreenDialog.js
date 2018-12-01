@@ -20,18 +20,12 @@ const Wrapper = styled.div`
 
 const styles = theme => ({
   container: {
-    paddingTop: theme.spacing.unit * 3,
-    paddingLeft: theme.spacing.unit * 20,
-    paddingRight: theme.spacing.unit * 20,
-    paddingBottom: theme.spacing.unit * 20,
+    padding: `${theme.spacing.unit * 4}px ${theme.spacing.unit * 8}px`,
+  },
+  content: {
+    padding: `${theme.spacing.unit * 4}px ${theme.spacing.unit * 8}px`,
   },
   toolbar: theme.mixins.toolbar,
-  content: {
-    paddingTop: theme.spacing.unit * 2,
-    paddingLeft: theme.spacing.unit * 8,
-    paddingRight: theme.spacing.unit * 8,
-    paddingBottom: theme.spacing.unit * 5,
-  },
 });
 
 type Props = {
@@ -42,7 +36,12 @@ type Props = {
   title: string,
 };
 
-const TransitionComponent = (props: Object): Object => <Slide direction="up" {...props} />;
+const TransitionComponent = (props: Object): Object => (
+  <Slide
+    {...props}
+    direction="up"
+  />
+);
 
 const FullScreenDialog = ({
   children,

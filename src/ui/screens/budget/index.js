@@ -7,17 +7,17 @@ import { connect } from 'react-redux';
 import { Creators as BudgetCreators } from '../../store/ducks/budget';
 import { Creators as StockCreators } from '../../store/ducks/stock';
 
-import Snackbar, { STYLES } from '../../components/common/Snackbar';
+import Snackbar from '../../components/common/Snackbar';
 import EntityComponent from '../../components/common/entity-component';
 
 import config from './config';
 import Form from './form';
 
 type Props = {
+  confirmBudgetPayment: Function,
   readAllBudgets: Function,
   createBudget: Function,
   deleteBudget: Function,
-  confirmBudgetPayment: Function,
   editBudget: Function,
   getStock: Function,
   stock: Array<Object>,
@@ -34,7 +34,6 @@ type State = {
 class Budget extends Component<Props, State> {
   state = {
     isSnackbarOpen: false,
-    snackbarConfig: {},
   };
 
   componentDidMount() {
@@ -49,28 +48,12 @@ class Budget extends Component<Props, State> {
     const { budget } = nextProps;
     const { message, error } = budget;
 
-    const openSnackBar = () => setTimeout(() => {
-      this.setState({
-        isSnackbarOpen: true,
-      });
-    }, 700);
-
-    if (error) {
-      this.setState({
-        snackbarConfig: {
-          type: STYLES.ERROR,
-          message: error,
-        },
-      }, () => openSnackBar());
-    }
-
-    if (message) {
-      this.setState({
-        snackbarConfig: {
-          type: STYLES.SUCCESS,
-          message,
-        },
-      }, () => openSnackBar());
+    if (message || error) {
+      setTimeout(() => {
+        this.setState({
+          isSnackbarOpen: true,
+        });
+      }, 700);
     }
   }
 
@@ -104,16 +87,16 @@ class Budget extends Component<Props, State> {
     });
   };
 
-  renderSnackbar = (): Object => {
-    const { snackbarConfig, isSnackbarOpen } = this.state;
-    const { type, message } = snackbarConfig;
+  renderSnackbar = (budget: Object): Object => {
+    const { isSnackbarOpen } = this.state;
+    const { message, error } = budget;
 
     return (
       <Snackbar
         onCloseSnackbar={this.onCloseSnackbar}
         isOpen={isSnackbarOpen}
         message={message}
-        type={type}
+        error={error}
       />
     );
   };
@@ -143,7 +126,7 @@ class Budget extends Component<Props, State> {
             />
           )}
         />
-        {this.renderSnackbar()}
+        {this.renderSnackbar(budget)}
       </Fragment>
     );
   }

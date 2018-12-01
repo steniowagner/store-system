@@ -14,10 +14,10 @@ import InfoIcon from '@material-ui/icons/Info';
 import styled from 'styled-components';
 import AppTheme from '../../styles';
 
-export const STYLES = {
+const STYLES = {
   SUCCESS: 'SUCCESS',
-  ERROR: 'ERROR',
   WARNING: 'WARNING',
+  ERROR: 'ERROR',
   INFO: 'INFO',
 };
 
@@ -89,9 +89,9 @@ const renderContent = (type: string, message: string, onCloseSnackbar: Function)
 };
 
 type Props = {
-  message: string,
-  type: string,
   onCloseSnackbar: Function,
+  message: string,
+  error: string,
   isOpen: boolean,
 };
 
@@ -99,19 +99,36 @@ const CustomSnackbar = ({
   onCloseSnackbar,
   message,
   isOpen,
-  type,
-}: Props): Object => (
-  <Snackbar
-    anchorOrigin={{
-      vertical: 'bottom',
-      horizontal: 'left',
-    }}
-    onClose={onCloseSnackbar}
-    autoHideDuration={3500}
-    open={isOpen}
-  >
-    {type && renderContent(type, message, onCloseSnackbar)}
-  </Snackbar>
-);
+  error,
+}: Props): Object => {
+  let text;
+  let type;
+
+  if (message) {
+    type = STYLES.SUCCESS;
+    text = message;
+  }
+
+  if (error) {
+    type = STYLES.ERROR;
+    text = error;
+  }
+
+  const shouldRenderContent = (!!type && !!text);
+
+  return (
+    <Snackbar
+      anchorOrigin={{
+        vertical: 'bottom',
+        horizontal: 'left',
+      }}
+      onClose={onCloseSnackbar}
+      autoHideDuration={3500}
+      open={isOpen}
+    >
+      {shouldRenderContent && renderContent(type, text, onCloseSnackbar)}
+    </Snackbar>
+  );
+};
 
 export default CustomSnackbar;
