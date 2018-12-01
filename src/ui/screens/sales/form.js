@@ -63,36 +63,14 @@ class SalesForm extends Component<Props, State> {
 
   renderSaleConfirmation = (): Object => {
     const { isSaleConfirmationDialogOpen } = this.state;
-
-    const {
-      setFieldValue,
-      handleSubmit,
-      isSubmitting,
-      values,
-      mode,
-    } = this.props;
-
-    const {
-      paymentInfo,
-      isInDebit,
-      discount,
-      subtotal,
-      total,
-    } = values;
+    const { values } = this.props;
 
     return (
       <SaleConfirmation
         onCloseDialog={this.onToggleSaleConfirmationDialog}
         isOpen={isSaleConfirmationDialogOpen}
-        setFieldValue={setFieldValue}
-        handleSubmit={handleSubmit}
-        isSubmitting={isSubmitting}
-        paymentInfo={paymentInfo}
-        isInDebit={isInDebit}
-        discount={discount}
-        subtotal={subtotal}
-        total={total}
-        mode={mode}
+        {...this.props}
+        {...values}
       />
     );
   };
@@ -142,7 +120,7 @@ const CustomForm = withFormik({
       moneyValue: '',
     },
     observation: item.observation || '',
-    isInDebit: item.isInDebit || false,
+    inDebit: item.inDebit || 0,
     discount: item.discount || {},
     customer: item.customer || '',
     products: item.products || [],

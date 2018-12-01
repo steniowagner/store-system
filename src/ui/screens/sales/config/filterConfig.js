@@ -2,7 +2,7 @@
 
 import { FILTER_TYPES } from '../../../utils/filter';
 
-const filterSalesWithDebit = (sales: Array<Object>): Array<Object> => sales.filter(sale => !!sale.isInDebit);
+const filterSalesWithDebit = (sales: Array<Object>): Array<Object> => sales.filter(sale => sale.inDebit > 0);
 
 const filterConfig = [{
   placeholder: 'Informe o Nome de Usuáro Buscado',

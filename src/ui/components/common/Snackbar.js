@@ -28,7 +28,7 @@ const MessageWrapper = styled.span.attrs({
   alignItems: center;
 `;
 
-const getConfiguration = (type: string): Object => {
+const getStyle = (type: string): Object => {
   const styles = {
     [STYLES.SUCCESS]: {
       Icon: CheckCircleIcon,
@@ -55,7 +55,7 @@ const getConfiguration = (type: string): Object => {
 };
 
 const renderContent = (type: string, message: string, onCloseSnackbar: Function): Object => {
-  const { Icon, color } = getConfiguration(type);
+  const { Icon, color } = getStyle(type);
 
   return (
     <SnackbarContent
@@ -88,6 +88,26 @@ const renderContent = (type: string, message: string, onCloseSnackbar: Function)
   );
 };
 
+const getConfiguration = (message: any, error: any): Object => {
+  let text;
+  let type;
+
+  if (message) {
+    type = STYLES.SUCCESS;
+    text = message;
+  }
+
+  if (error) {
+    type = STYLES.ERROR;
+    text = error;
+  }
+
+  return {
+    text,
+    type,
+  };
+};
+
 type Props = {
   onCloseSnackbar: Function,
   message: string,
@@ -101,18 +121,7 @@ const CustomSnackbar = ({
   isOpen,
   error,
 }: Props): Object => {
-  let text;
-  let type;
-
-  if (message) {
-    type = STYLES.SUCCESS;
-    text = message;
-  }
-
-  if (error) {
-    type = STYLES.ERROR;
-    text = error;
-  }
+  const { text, type } = getConfiguration(message, error);
 
   const shouldRenderContent = (!!type && !!text);
 

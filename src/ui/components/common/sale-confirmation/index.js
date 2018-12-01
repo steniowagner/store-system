@@ -22,8 +22,8 @@ type Props = {
   paymentInfo: Object,
   discount: Object,
   isSubmitting: boolean,
-  isInDebit: boolean,
   isOpen: boolean,
+  inDebit: number,
   subtotal: string,
   total: string,
   mode: string,
@@ -42,10 +42,10 @@ class SaleConfirmation extends Component<Props, State> {
   };
 
   componentDidMount() {
-    const { isInDebit } = this.props;
+    const { inDebit } = this.props;
 
     this.setState({
-      isInDebit: !!isInDebit,
+      isInDebit: inDebit > 0,
     });
   }
 
@@ -71,11 +71,19 @@ class SaleConfirmation extends Component<Props, State> {
     setFieldValue('paymentInfo', paymentInfo);
   };
 
-  setIfUserInDebit = (): void => {
+  setDebit = (): void => {
     const { setFieldValue } = this.props;
-    const { isInDebit } = this.state;
+    const { error } = this.state;
+    const { message } = error;
 
-    setFieldValue('isInDebit', isInDebit);
+    let debit = 0;
+
+    if (message) {
+      const messageSplitted = message.split(' ');
+      debit = messageSplitted[messageSplitted.length - 1];
+    }
+
+    setFieldValue('inDebit', parseFloat(debit));
   };
 
   setIfShouldPrintReceipt = (): void => {
@@ -92,8 +100,8 @@ class SaleConfirmation extends Component<Props, State> {
 
     if (accumulated > total) {
       this.setState({
-        isInDebit: false,
         error: ERROR_TYPES.ABOVE_VALUE,
+        isInDebit: false,
       });
       return;
     }
@@ -197,7 +205,7 @@ class SaleConfirmation extends Component<Props, State> {
     const shouldDisableOkButton = (isSubmitting || isTotalPaymentBelow);
 
     const onClickOk = () => {
-      this.setIfUserInDebit();
+      this.setDebit();
       this.setIfShouldPrintReceipt();
       handleSubmit();
     };

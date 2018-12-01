@@ -1,6 +1,5 @@
 const SaleModel = (sequelize, DataTypes) => {
   const {
-    BOOLEAN,
     STRING,
     FLOAT,
     JSON,
@@ -61,12 +60,12 @@ const SaleModel = (sequelize, DataTypes) => {
       type: STRING,
     },
 
-    isInDebit: {
+    inDebit: {
       validate: {
         notEmpty: true,
       },
       allowNull: false,
-      type: BOOLEAN,
+      type: FLOAT,
     },
   });
 

@@ -1,7 +1,6 @@
 const onMigrate = (queryInterface, DataTypes) => {
   const {
     INTEGER,
-    BOOLEAN,
     STRING,
     FLOAT,
     DATE,
@@ -70,12 +69,12 @@ const onMigrate = (queryInterface, DataTypes) => {
       type: STRING,
     },
 
-    isInDebit: {
+    inDebit: {
       validate: {
         notEmpty: true,
       },
       allowNull: false,
-      type: BOOLEAN,
+      type: FLOAT,
     },
 
     createdAt: {
