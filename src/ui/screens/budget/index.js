@@ -6,10 +6,8 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Creators as BudgetCreators } from '../../store/ducks/budget';
 import { Creators as StockCreators } from '../../store/ducks/stock';
-import { Creators as SaleCreators } from '../../store/ducks/sale';
 
 import Snackbar, { STYLES } from '../../components/common/Snackbar';
-
 import EntityComponent from '../../components/common/entity-component';
 
 import config from './config';
@@ -19,7 +17,7 @@ type Props = {
   readAllBudgets: Function,
   createBudget: Function,
   deleteBudget: Function,
-  createSale: Function,
+  confirmBudgetPayment: Function,
   editBudget: Function,
   getStock: Function,
   stock: Array<Object>,
@@ -76,13 +74,13 @@ class Budget extends Component<Props, State> {
     }
   }
 
-  onConfirmBudgetPayment = (budget: Object) => {
-    const { createSale } = this.props;
+  onConfirmBudgetPayment = (budget: Object): void => {
+    const { confirmBudgetPayment } = this.props;
 
-    createSale({ ...budget, createdFromBudget: true });
-  }
+    confirmBudgetPayment(budget);
+  };
 
-  onCreateBudget = (budget: Object) => {
+  onCreateBudget = (budget: Object): void => {
     const { createBudget } = this.props;
 
     createBudget(budget);
@@ -151,7 +149,7 @@ class Budget extends Component<Props, State> {
   }
 }
 
-const Creators = Object.assign({}, StockCreators, BudgetCreators, SaleCreators);
+const Creators = Object.assign({}, StockCreators, BudgetCreators);
 
 const mapDispatchToProps = dispatch => bindActionCreators(Creators, dispatch);
 

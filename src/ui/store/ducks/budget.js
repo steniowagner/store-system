@@ -1,6 +1,12 @@
 import Immutable from 'seamless-immutable';
 
+import { BUDGET_STATUS } from '../../screens/budget/components/BudgetStatus';
+
 export const Types = {
+  CONFIRM_BUDGET_SALE_REQUEST: 'budget/CONFIRM_BUDGET_SALE_REQUEST',
+  CONFIRM_BUDGET_SALE_SUCCESS: 'budget/CONFIRM_BUDGET_SALE_SUCCESS',
+  CONFIRM_BUDGET_SALE_FAILURE: 'budget/CONFIRM_BUDGET_SALE_FAILURE',
+
   CREATE_REQUEST: 'budget/CREATE_REQUEST',
   CREATE_SUCCESS: 'budget/CREATE_SUCCESS',
   CREATE_FAILURE: 'budget/CREATE_FAILURE',
@@ -16,6 +22,9 @@ export const Types = {
   DELETE_REQUEST: 'budget/DELETE_REQUEST',
   DELETE_REQUEST_SUCCESS: 'budget/DELETE_REQUEST_SUCCESS',
   DELETE_REQUEST_FAILURE: 'budget/DELETE_REQUEST_FAILURE',
+
+  SET_OUTDATED_ITEMS_REQUEST: 'budget/SET_OUTDATED_ITEMS_REQUEST',
+  SET_OUTDATED_ITEMS_FAILURE: 'budget/SET_OUTDATED_ITEMS_FAILURE',
 
   UNSUBSCRIBE_EVENTS: 'budget/UNSUBSCRIBE_EVENTS',
 };
@@ -88,6 +97,30 @@ export const Creators = {
 
   unsubscribeEvents: () => ({
     type: Types.UNSUBSCRIBE_EVENTS,
+  }),
+
+  confirmBudgetPayment: budget => ({
+    type: Types.CONFIRM_BUDGET_SALE_REQUEST,
+    payload: { budget },
+  }),
+
+  confirmBudgetPaymentSuccess: id => ({
+    type: Types.CONFIRM_BUDGET_SALE_SUCCESS,
+    payload: { message: 'O Pagamento do Orçamento foi consolidado com Sucesso', id },
+  }),
+
+  confirmBudgetPaymentFailure: () => ({
+    type: Types.CONFIRM_BUDGET_SALE_FAILURE,
+    payload: { error: 'Houve um erro Consolidar o Pagamento do Orçamento' },
+  }),
+
+  setOutdatedBudgets: () => ({
+    type: Types.SET_OUTDATED_ITEMS_REQUEST,
+  }),
+
+  setOutdatedBudgetsFailure: () => ({
+    type: Types.SET_OUTDATED_ITEMS_FAILURE,
+    payload: { error: 'Houve um erro ao tentar ao atualizar os Orçamentos Fora do Prazo' },
   }),
 };
 
@@ -171,6 +204,38 @@ const budget = (state = INITIAL_STATE, { payload, type }) => {
     case Types.UNSUBSCRIBE_EVENTS:
       return {
         ...INITIAL_STATE,
+      };
+
+    case Types.CONFIRM_BUDGET_SALE_REQUEST:
+      return {
+        ...state,
+        message: null,
+        error: null,
+      };
+
+    case Types.CONFIRM_BUDGET_SALE_SUCCESS:
+      return {
+        ...state,
+        data: state.data.map(budgetItem => (budgetItem.id === payload.id
+          ? { ...budgetItem, status: BUDGET_STATUS.APPROVED } : budgetItem)),
+        message: payload.message,
+      };
+
+    case Types.CONFIRM_BUDGET_SALE_FAILURE:
+      return {
+        ...state,
+        error: payload.error,
+      };
+
+    case Types.SET_OUTDATED_ITEMS_REQUEST:
+      return {
+        ...state,
+      };
+
+    case Types.SET_OUTDATED_ITEMS_FAILURE:
+      return {
+        ...state,
+        error: payload.error,
       };
 
     default:

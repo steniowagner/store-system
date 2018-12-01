@@ -1,12 +1,7 @@
 // @flow
 
-import React, { Component } from 'react';
+import React from 'react';
 
-import ButtonBase from '@material-ui/core/ButtonBase';
-import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';
-
-import Denied from '@material-ui/icons/HighlightOffOutlined';
 import Approved from '@material-ui/icons/CheckCircleOutline';
 import OutOfTime from '@material-ui/icons/TimerOff';
 import Pending from '@material-ui/icons/History';
@@ -43,24 +38,6 @@ const ItemWrapper = styled.div`
   padding: 0 16px;
 `;
 
-const SelectorButton = styled(({ ...props }) => (
-  <ButtonBase
-    {...props}
-  />
-))`
-  width: 100%;
-  height: 100%;
-`;
-
-const DeniedIcon = styled(({ ...props }) => (
-  <Denied
-    {...props}
-  />
-))`
-  padding-bottom: 2px;
-  color: ${({ theme }) => theme.colors.white};
-`;
-
 const ApprovedIcon = styled(({ ...props }) => (
   <Approved
     {...props}
@@ -89,159 +66,53 @@ const PendingIcon = styled(({ ...props }) => (
 `;
 
 export const BUDGET_STATUS = {
-  PENDING: 'Pendente',
-  APPROVED: 'Aprovado',
-  DENIED: 'Negado',
-  OUT_OF_TIME: 'Fora do Prazo',
+  PENDING: 'PENDENTE',
+  APPROVED: 'APROVADO',
+  OUT_OF_TIME: 'FORA DO PRAZO',
 };
 
 const STATUS_TYPES = [{
   color: appStyles.colors.warning,
-  disabledColor: appStyles.colors.warningDisabled,
-  status: BUDGET_STATUS.PENDING,
+  statusText: BUDGET_STATUS.PENDING,
   Icon: PendingIcon,
 }, {
   color: appStyles.colors.success,
-  disabledColor: appStyles.colors.successDisabled,
-  status: BUDGET_STATUS.APPROVED,
+  statusText: BUDGET_STATUS.APPROVED,
   Icon: ApprovedIcon,
 }, {
-  color: appStyles.colors.danger,
-  disabledColor: appStyles.colors.dangerDisabled,
-  status: BUDGET_STATUS.DENIED,
-  Icon: DeniedIcon,
-}, {
   color: appStyles.colors.mediumGray,
-  disabledColor: appStyles.colors.mediumGrayDisabled,
-  status: BUDGET_STATUS.OUT_OF_TIME,
+  statusText: BUDGET_STATUS.OUT_OF_TIME,
   Icon: OutOfTimeIcon,
 }];
 
 type Props = {
-  setFieldValue: Function,
-  values: Object,
-  mode: string,
+  status: string,
 };
 
-type State = {
-  anchorElement: Object,
-  itemSelected: Object,
-};
+const getStatusConfig = (status: string): Object => STATUS_TYPES.filter(statusType => statusType.statusText === status)[0];
 
-class BudgetStatus extends Component<Props, State> {
-  state = {
-    itemSelected: { ...STATUS_TYPES[0] },
-    anchorElement: null,
-  };
+const BudgetStatus = ({ status }: Props): Object => {
+  const currentStatus = status || BUDGET_STATUS.PENDING;
 
-  componentDidMount() {
-    this.handleInitialStatus();
-  }
+  const { Icon, color, statusText } = getStatusConfig(currentStatus);
 
-  onClickSelectorButton = (event: Object): void => {
-    this.setState({
-      anchorElement: event.currentTarget,
-    });
-  };
-
-  onCloseMenu = (): void => {
-    this.setState({
-      anchorElement: null,
-    });
-  };
-
-  onSelectItem = (itemSelected: Object): void => {
-    const { setFieldValue } = this.props;
-    const { status } = itemSelected;
-
-    this.setState({
-      anchorElement: null,
-      itemSelected,
-    }, () => setFieldValue('status', status));
-  };
-
-  getItemStatusSelected = (statusSelected: string): Object => {
-    const item = STATUS_TYPES.filter(statusType => statusType.status === statusSelected);
-
-    return item[0];
-  };
-
-  handleInitialStatus = (): void => {
-    const { values } = this.props;
-
-    const itemSelected = this.getItemStatusSelected(values.status);
-
-    this.setState({
-      itemSelected,
-    });
-  };
-
-  renderSelector = (): Object => {
-    const { itemSelected } = this.state;
-    const { mode } = this.props;
-
-    const {
-      disabledColor,
-      status,
-      Icon,
-      color,
-    } = itemSelected;
-
-    const shouldDisableButton = (mode === 'detail');
-    const properColor = (shouldDisableButton ? disabledColor : color);
-
-    return (
+  return (
+    <Wrapper>
+      <span>
+        Status
+      </span>
       <SelectorWrapper
-        color={properColor}
+        color={color}
       >
-        <SelectorButton
-          onClick={this.onClickSelectorButton}
-          disabled={(mode === 'detail')}
-        >
-          <ItemWrapper>
-            <ItemSelectedText>
-              {status.toUpperCase()}
-            </ItemSelectedText>
-            <Icon />
-          </ItemWrapper>
-        </SelectorButton>
+        <ItemWrapper>
+          <ItemSelectedText>
+            {statusText}
+          </ItemSelectedText>
+          <Icon />
+        </ItemWrapper>
       </SelectorWrapper>
-    );
-  };
-
-  renderMenu = (): Object => {
-    const { anchorElement } = this.state;
-
-    return (
-      <Menu
-        open={Boolean(anchorElement)}
-        onClose={this.onCloseMenu}
-        anchorEl={anchorElement}
-        id="status-menu"
-      >
-        {STATUS_TYPES.map(statusType => (
-          <MenuItem
-            key={statusType.status}
-            onClick={() => this.onSelectItem(statusType)}
-          >
-            {statusType.status}
-          </MenuItem>
-        ))}
-      </Menu>
-    );
-  };
-
-  render() {
-    return (
-      <Wrapper>
-        <span>
-          Status
-        </span>
-        {this.renderSelector()}
-        {this.renderMenu()}
-      </Wrapper>
-    );
-  }
-}
+    </Wrapper>
+  );
+};
 
 export default BudgetStatus;

@@ -9,6 +9,7 @@ import ProductSale from '../../components/common/product-sale-component';
 import ActionFormButton from '../../components/common/ActionFormButton';
 import { Section, Wrapper } from '../../components/common/FormUtils';
 import BudgetExtraComponent from './components/BudgetExtraComponent';
+import { BUDGET_STATUS } from './components/BudgetStatus';
 import SaleConfirmation from '../../components/common/sale-confirmation';
 
 type Props = {
@@ -131,10 +132,11 @@ const CustomForm = withFormik({
     products: item.products || [],
     customer: item.customer || '',
     validity: item.validity || '',
-    status: item.status || 'Pendente',
+    status: item.status || BUDGET_STATUS.PENDING,
     isInDebit: item.isInDebit || false,
     subtotal: item.subtotal || 0,
     total: item.total || 0,
+    id: item.id || null,
   }),
 
   validationSchema: _props => Yup.lazy(() => Yup.object().shape({

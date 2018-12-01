@@ -6,7 +6,7 @@ import styled from 'styled-components';
 
 import SelectLimitDate from './SelectLimitDate';
 import PayBudgetButton from './PayBudgetButton';
-import BudgetStatus from './BudgetStatus';
+import BudgetStatus, { BUDGET_STATUS } from './BudgetStatus';
 
 const Wrapper = styled.div`
   margin: 24px 0;
@@ -35,9 +35,10 @@ type Props = {
 };
 
 const BudgetExtraComponent = (props: Props): Object => {
-  const { mode } = props;
+  const { values, mode } = props;
+  const { status } = values;
 
-  const shouldRenderPayBudgetButton = (mode === 'detail');
+  const shouldRenderPayBudgetButton = (mode === 'detail' && status !== BUDGET_STATUS.APPROVED);
 
   return (
     <Wrapper>
@@ -52,7 +53,7 @@ const BudgetExtraComponent = (props: Props): Object => {
             />
           )}
           <BudgetStatus
-            {...props}
+            status={status}
           />
         </StatusAndPaymentWrapper>
       </LineWrapper>

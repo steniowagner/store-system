@@ -24,11 +24,7 @@ const getAfterDateItems = (dataset: Array<Object>, value: Object): Array<Object>
 });
 
 const filterWithDate = (config: Config, DATE_TYPES: Object): Array<Object> => {
-  const {
-    filterSelected,
-    dataset,
-    value,
-  } = config;
+  const { filterSelected, dataset, value } = config;
 
   const dateParsed = moment(value, 'L').toDate();
 

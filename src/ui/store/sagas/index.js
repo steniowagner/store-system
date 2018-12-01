@@ -50,6 +50,8 @@ import {
 
 import {
   unsubscribeBudgetEvents,
+  setOutdatedBudgets,
+  confirmBudgetPayment,
   getAllBudgets,
   createBudget,
   editBudget,
@@ -101,6 +103,8 @@ export default function* rootSaga() {
     takeLatest(SaleTypes.GET_ALL_REQUEST, getAllSales),
     takeLatest(SaleTypes.EDIT_REQUEST, editSale),
 
+    takeLatest(BudgetTypes.CONFIRM_BUDGET_SALE_REQUEST, confirmBudgetPayment),
+    takeLatest(BudgetTypes.SET_OUTDATED_ITEMS_REQUEST, setOutdatedBudgets),
     takeLatest(BudgetTypes.UNSUBSCRIBE_EVENTS, unsubscribeBudgetEvents),
     takeLatest(BudgetTypes.CREATE_REQUEST, createBudget),
     takeLatest(BudgetTypes.READ_ALL_REQUEST, getAllBudgets),

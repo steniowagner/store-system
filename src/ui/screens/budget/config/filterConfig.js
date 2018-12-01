@@ -7,8 +7,6 @@ const filterPending = (budgets: Array<Object>): Array<Object> => budgets.filter(
 
 const filterApprovead = (budgets: Array<Object>): Array<Object> => budgets.filter(budget => budget.status === BUDGET_STATUS.APPROVED);
 
-const filterDenied = (budgets: Array<Object>): Array<Object> => budgets.filter(budget => budget.status === BUDGET_STATUS.DENIED);
-
 const filterOutOfTime = (budgets: Array<Object>): Array<Object> => budgets.filter(budget => budget.status === BUDGET_STATUS.OUT_OF_TIME);
 
 const filterConfig = [{
@@ -28,12 +26,6 @@ const filterConfig = [{
   filterTitle: 'Aprovados',
   dataField: 'approvead',
   behavior: filterApprovead,
-}, {
-  placeholder: 'Estes são todos os Orçamentos Negados',
-  type: FILTER_TYPES.FUNCTIONAL,
-  filterTitle: 'Negados',
-  dataField: 'denied',
-  behavior: filterDenied,
 }, {
   placeholder: 'Estes são todos os Orçamentos Fora do Prazo',
   type: FILTER_TYPES.FUNCTIONAL,

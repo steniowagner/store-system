@@ -15,8 +15,10 @@ import {
 import { TAKE_AWAY_PRODUCTS_STOCK, UPDATE_PRODUCTS_STOCK, RETURN_PRODUTS_STOCK } from '../../../back-end/events-handlers/stock/types';
 
 import { handleEventUnsubscription, handleEventSubscription } from './eventHandler';
+import { BUDGET_STATUS } from '../../screens/budget/components/BudgetStatus';
 import { OPERATION_REQUEST, BUDGET } from '../../../common/entitiesTypes';
 import { editStockProducts } from './stock';
+import { createSale } from './sale';
 
 const { ipcRenderer } = window.require('electron');
 
@@ -119,6 +121,65 @@ export function* deleteBudget(action) {
     yield put(BudgetCreators.deleteBudgetSuccess(id));
   } catch (err) {
     yield put(BudgetCreators.deleteBudgetFailure());
+  }
+}
+
+export function* confirmBudgetPayment(action) {
+  try {
+    const { payload } = action;
+    const { budget } = payload;
+
+    yield createSale({ args: { ...payload.budget, createdFromBudget: true } });
+
+    const params = {
+      ...budget,
+      products: JSON.stringify(budget.products),
+      subtotal: parseFloat(budget.subtotal),
+      total: parseFloat(budget.total),
+    };
+
+    ipcRenderer.send(OPERATION_REQUEST, BUDGET, UPDATE_BUDGET, params);
+
+    yield handleEventSubscription(BUDGET);
+    yield put(BudgetCreators.confirmBudgetPaymentSuccess(budget.id));
+  } catch (err) {
+    yield put(BudgetCreators.confirmBudgetPaymentFailure());
+  }
+}
+
+const getOutdatedBudgets = (budgets) => {
+  const today = moment().format('YYYY-MM-DD');
+
+  const budgetsOutdated = budgets.filter((budget) => {
+    const budgetValidity = moment(budget.validity, 'YYYY-MM-DD').toDate();
+
+    const isBudgetPending = (budget.status === BUDGET_STATUS.PENDING);
+    const isOutdated = moment(today).isAfter(budgetValidity);
+
+    return isBudgetPending && isOutdated;
+  });
+
+  return budgetsOutdated;
+};
+
+export function* setOutdatedBudgets() {
+  try {
+    ipcRenderer.send(OPERATION_REQUEST, BUDGET, READ_BUDGETS);
+
+    const { result } = yield handleEventSubscription(BUDGET);
+
+    const outdatedBudgets = getOutdatedBudgets(result);
+
+    outdatedBudgets.forEach((outdatedBudget) => {
+      const budgetOutdated = {
+        ...outdatedBudget,
+        status: BUDGET_STATUS.OUT_OF_TIME,
+      };
+
+      ipcRenderer.send(OPERATION_REQUEST, BUDGET, UPDATE_BUDGET, budgetOutdated);
+    });
+  } catch (err) {
+    yield put(BudgetCreators.setOutdatedBudgetsFailure());
   }
 }
 
