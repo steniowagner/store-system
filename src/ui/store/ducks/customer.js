@@ -9,6 +9,10 @@ export const Types = {
   GET_ALL_SUCCESS: 'customer/GET_ALL_SUCCESS',
   GET_ALL_FAILURE: 'customer/GET_ALL_FAILURE',
 
+  GET_DEBITS_REQUEST: 'customer/GET_DEBITS_REQUEST',
+  GET_DEBITS_SUCCESS: 'customer/GET_DEBITS_SUCCESS',
+  GET_DEBITS_FAILURE: 'customer/GET_DEBITS_FAILURE',
+
   EDIT_REQUEST: 'customer/EDIT_REQUEST',
   EDIT_REQUEST_SUCCESS: 'customer/EDIT_REQUEST_SUCCESS',
   EDIT_REQUEST_FAILURE: 'customer/EDIT_REQUEST_FAILURE',
@@ -17,11 +21,14 @@ export const Types = {
   REMOVE_REQUEST_SUCCESS: 'customer/REMOVE_REQUEST_SUCCESS',
   REMOVE_REQUEST_FAILURE: 'customer/REMOVE_REQUEST_FAILURE',
 
+  REMOVE_DEBIT: 'customer/REMOVE_DEBIT',
+
   UNSUBSCRIBE_EVENTS: 'customer/UNSUBSCRIBE_EVENTS',
 };
 
 const INITIAL_STATE = Immutable({
   error: null,
+  debits: [],
   data: [],
 });
 
@@ -55,6 +62,21 @@ export const Creators = {
     payload: { error },
   }),
 
+  getDebits: id => ({
+    type: Types.GET_DEBITS_REQUEST,
+    payload: { id },
+  }),
+
+  getDebitsSuccess: sales => ({
+    type: Types.GET_DEBITS_SUCCESS,
+    payload: { sales },
+  }),
+
+  getDebitsFailure: error => ({
+    type: Types.GET_DEBITS_FAILURE,
+    payload: { error },
+  }),
+
   editCustomer: customer => ({
     type: Types.EDIT_REQUEST,
     payload: { customer },
@@ -85,6 +107,11 @@ export const Creators = {
     payload: { error },
   }),
 
+  onRemoveDebit: saleId => ({
+    type: Types.REMOVE_DEBIT,
+    payload: { saleId },
+  }),
+
   unsubscribeEvents: () => ({
     type: Types.UNSUBSCRIBE_EVENTS,
   }),
@@ -99,6 +126,7 @@ const customer = (state = INITIAL_STATE, { payload, type }) => {
 
     case Types.CREATE_SUCCESS:
       return {
+        ...state,
         data: [payload.customer, ...state.data],
         error: null,
       };
@@ -116,11 +144,36 @@ const customer = (state = INITIAL_STATE, { payload, type }) => {
 
     case Types.GET_ALL_SUCCESS:
       return {
+        ...state,
         data: [...payload.customers],
         error: null,
       };
 
     case Types.GET_ALL_FAILURE:
+      return {
+        ...state,
+        error: payload.error,
+      };
+
+    case Types.GET_DEBITS_REQUEST:
+      return {
+        ...state,
+      };
+
+    case Types.GET_DEBITS_SUCCESS:
+      return {
+        ...state,
+        debits: payload.sales.map(sale => ({
+          ...sale,
+          paidValueText: `R$ ${(sale.total - sale.inDebit).toFixed(2)}`,
+          subtotalText: `R$ ${sale.subtotal.toFixed(2)}`,
+          inDebitText: `R$ ${sale.inDebit.toFixed(2)}`,
+          totalText: `R$ ${sale.total.toFixed(2)}`,
+        })),
+        error: null,
+      };
+
+    case Types.GET_DEBITS_FAILURE:
       return {
         ...state,
         error: payload.error,
@@ -132,7 +185,6 @@ const customer = (state = INITIAL_STATE, { payload, type }) => {
       };
 
     case Types.EDIT_REQUEST_SUCCESS:
-      console.log()
       return {
         ...state,
         data: Object.assign([], state.data, { [payload.index]: payload.customerEdited }),
@@ -151,6 +203,7 @@ const customer = (state = INITIAL_STATE, { payload, type }) => {
 
     case Types.REMOVE_REQUEST_SUCCESS:
       return {
+        ...state,
         data: state.data.filter(item => item.id !== payload.id),
         error: null,
       };
@@ -159,6 +212,12 @@ const customer = (state = INITIAL_STATE, { payload, type }) => {
       return {
         ...state,
         error: payload.error,
+      };
+
+    case Types.REMOVE_DEBIT:
+      return {
+        ...state,
+        debits: state.debits.filter(sale => sale.id !== payload.saleId),
       };
 
     case Types.UNSUBSCRIBE_EVENTS:

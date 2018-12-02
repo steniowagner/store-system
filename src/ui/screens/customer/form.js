@@ -14,6 +14,7 @@ import {
 } from '../../components/common/FormUtils';
 
 import ActionFormButton from '../../components/common/ActionFormButton';
+import Debits from './components/Debits';
 
 const renderNameAndBirthday = (props: Object): Object => {
   const nameFieldData = getRowItemObject('Nome', 'Informe o Nome do Cliente', 'text', 'name');
@@ -89,12 +90,26 @@ const renderObservationSection = (props: Object) => {
   );
 };
 
+const renderCustomerDebits = (values: Object, mode: string): any => {
+  const isDetailMode = (mode === 'detail');
+
+  return isDetailMode && (
+    <Section>
+      {renderSectionTitle('Débitos')}
+      <Debits
+        {...values}
+      />
+    </Section>
+  );
+};
+
 const CustomerForm = (props: Object): Object => {
   const {
     onChageFormToEditMode,
     isSubmitting,
     onRemoveItem,
     handleSubmit,
+    values,
     mode,
   } = props;
 
@@ -106,6 +121,7 @@ const CustomerForm = (props: Object): Object => {
         {renderAddressSection(props)}
         {renderContactSection(props)}
         {renderObservationSection(props)}
+        {renderCustomerDebits(values, mode)}
         <ActionFormButton
           onChageFormToEditMode={onChageFormToEditMode}
           onClick={handleSubmit}
@@ -135,6 +151,7 @@ const CustomForm = withFormik({
     obs: item.obs || '',
     name: item.name || '',
     cpf: item.cpf || '',
+    id: item.id || null,
     rg: item.rg || '',
   }),
 

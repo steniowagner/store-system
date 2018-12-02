@@ -304,11 +304,7 @@ class EntityComponent extends Component<Props, State> {
   };
 
   renderTable = (): Object => {
-    const {
-      canBeRemoved,
-      canBeEdited,
-      tabConfig,
-    } = this.props;
+    const { canBeRemoved, canBeEdited, tabConfig } = this.props;
     const { itemsFiltered, currentPage } = this.state;
 
     return (

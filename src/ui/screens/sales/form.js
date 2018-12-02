@@ -6,8 +6,8 @@ import { withFormik, Form } from 'formik';
 import * as Yup from 'yup';
 
 import ProductSale from '../../components/common/product-sale-component';
-import ActionFormButton from '../../components/common/ActionFormButton';
 import SaleConfirmation from '../../components/common/sale-confirmation';
+import ActionFormButton from '../../components/common/ActionFormButton';
 import { Section, Wrapper } from '../../components/common/FormUtils';
 
 type Props = {

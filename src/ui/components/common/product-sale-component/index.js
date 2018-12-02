@@ -17,16 +17,6 @@ const Container = styled.div`
   height: 100%;
 `;
 
-type Props = {
-  withExtraComponent: ?boolean,
-  ExtraComponent: ?Object,
-  setFieldValue: Function,
-  stock: Array<Object>,
-  values: Object,
-  errors: Object,
-  mode: string,
-};
-
 const getIndexProductOnList = (products: Array<Object>, productSearched: Object): number => {
   const indexProduct = (products.findIndex(product => product.id === productSearched.id));
 
@@ -175,6 +165,16 @@ const renderFooterValues = (setFieldValue: Function, values: Object, mode: strin
       mode={mode}
     />
   );
+};
+
+type Props = {
+  withExtraComponent: ?boolean,
+  ExtraComponent: ?Object,
+  setFieldValue: Function,
+  stock: Array<Object>,
+  values: Object,
+  errors: Object,
+  mode: string,
 };
 
 const ProductSale = ({

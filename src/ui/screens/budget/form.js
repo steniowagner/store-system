@@ -6,11 +6,12 @@ import { withFormik, Form } from 'formik';
 import * as Yup from 'yup';
 
 import ProductSale from '../../components/common/product-sale-component';
+import SaleConfirmation from '../../components/common/sale-confirmation';
 import ActionFormButton from '../../components/common/ActionFormButton';
 import { Section, Wrapper } from '../../components/common/FormUtils';
+
 import BudgetExtraComponent from './components/BudgetExtraComponent';
 import { BUDGET_STATUS } from './components/BudgetStatus';
-import SaleConfirmation from '../../components/common/sale-confirmation';
 
 type Props = {
   onChageFormToEditMode: Function,

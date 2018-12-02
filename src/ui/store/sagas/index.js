@@ -21,6 +21,7 @@ import {
   unsubscribeCustomerEvents,
   createCustomer,
   getAllCustomers,
+  getUserDebits,
   editCustomer,
   removeCustomer,
 } from './customer';
@@ -82,6 +83,7 @@ export default function* rootSaga() {
     takeLatest(ProviderTypes.REMOVE_REQUEST, removeProvider),
 
     takeLatest(CustomerTypes.UNSUBSCRIBE_EVENTS, unsubscribeCustomerEvents),
+    takeLatest(CustomerTypes.GET_DEBITS_REQUEST, getUserDebits),
     takeLatest(CustomerTypes.CREATE_REQUEST, createCustomer),
     takeLatest(CustomerTypes.GET_ALL_REQUEST, getAllCustomers),
     takeLatest(CustomerTypes.EDIT_REQUEST, editCustomer),
