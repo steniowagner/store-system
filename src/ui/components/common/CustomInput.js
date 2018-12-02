@@ -47,8 +47,9 @@ const MultiLineInput = (props: Object) => {
         disabled={disabled}
       >
         <Input
+          disabled={inputProps.disabled}
+          inputProps={{ ...inputProps }}
           disableUnderline
-          {...inputProps}
           rowsMax={10}
           fullWidth
           multiline

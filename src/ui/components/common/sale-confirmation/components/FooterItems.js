@@ -39,8 +39,7 @@ type Props = {
   mode: string,
 };
 
-// isInDebit: number => MySQL tinyint type
-const renderDebitAndErrorRow = (onToggleInDebitCheckbox: Function, isInDebit: number, error: string): Object => (
+const renderDebitAndErrorRow = (onToggleInDebitCheckbox: Function, isInDebit: boolean, error: string): Object => (
   <Wrapper>
     <FormControlLabel
       control={(
@@ -60,7 +59,6 @@ const renderDebitAndErrorRow = (onToggleInDebitCheckbox: Function, isInDebit: nu
   </Wrapper>
 );
 
-// shouldPrintReceipt: number => MySQL tinyint  type
 const renderShouldPrintReceipt = (onToggleShouldPrintReceiptCheckbox: Function, shouldPrintReceipt: number): Object => (
   <Wrapper>
     <FormControlLabel
@@ -93,11 +91,11 @@ const FooterItems = ({
       {shouldRenderDebitCheckbox && (
         <Fragment>
           {renderDebitAndErrorRow(onToggleInDebitCheckbox, isInDebit, error)}
-          <Divider light />
         </Fragment>
       )}
       {isFormOnCreateMode && (
         <Fragment>
+          <Divider light />
           {renderShouldPrintReceipt(onToggleShouldPrintReceiptCheckbox, shouldPrintReceipt)}
         </Fragment>
       )}
