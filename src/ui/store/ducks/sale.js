@@ -17,6 +17,7 @@ export const Types = {
 };
 
 const INITIAL_STATE = Immutable({
+  message: null,
   error: null,
   data: [],
 });
@@ -29,12 +30,12 @@ export const Creators = {
 
   createSaleSuccess: sale => ({
     type: Types.CREATE_SUCCESS,
-    payload: { sale },
+    payload: { message: 'Venda Cadastrada com Sucesso', sale },
   }),
 
-  createSaleFailure: error => ({
+  createSaleFailure: () => ({
     type: Types.CREATE_FAILURE,
-    payload: { error },
+    payload: { error: 'Houve um Erro ao Cadastrar a Venda' },
   }),
 
   getAllSales: () => ({
@@ -46,9 +47,9 @@ export const Creators = {
     payload: { sales },
   }),
 
-  getAllSalesFailure: error => ({
+  getAllSalesFailure: () => ({
     type: Types.GET_ALL_FAILURE,
-    payload: { error },
+    payload: { error: 'Houve um Erro ao Ler as Vendas' },
   }),
 
   editSale: sale => ({
@@ -58,12 +59,12 @@ export const Creators = {
 
   editSaleSuccess: salesUpdated => ({
     type: Types.EDIT_REQUEST_SUCCESS,
-    payload: { salesUpdated },
+    payload: { message: 'Venda Editada com Sucesso', salesUpdated },
   }),
 
-  editSaleFailure: error => ({
+  editSaleFailure: () => ({
     type: Types.EDIT_REQUEST_FAILURE,
-    payload: { error },
+    payload: { error: 'Houve um Erro ao Editar a Venda' },
   }),
 
   removeSale: id => ({
@@ -73,12 +74,12 @@ export const Creators = {
 
   removeSaleSuccess: id => ({
     type: Types.REMOVE_REQUEST_SUCCESS,
-    payload: { id },
+    payload: { message: 'Venda Removida com Sucesso', id },
   }),
 
-  removeSaleFailure: error => ({
+  removeSaleFailure: () => ({
     type: Types.REMOVE_REQUEST_FAILURE,
-    payload: { error },
+    payload: { error: 'Houve um Erro ao Remover a Venda' },
   }),
 
   unsubscribeSaleEvents: () => ({
@@ -91,12 +92,15 @@ const sale = (state = INITIAL_STATE, { payload, type }) => {
     case Types.CREATE_REQUEST:
       return {
         ...state,
+        message: null,
+        error: null,
       };
 
     case Types.CREATE_SUCCESS:
       return {
+        ...state,
+        message: payload.message,
         data: [payload.sale, ...state.data],
-        error: null,
       };
 
     case Types.CREATE_FAILURE:
@@ -108,6 +112,8 @@ const sale = (state = INITIAL_STATE, { payload, type }) => {
     case Types.GET_ALL_REQUEST:
       return {
         ...state,
+        message: null,
+        error: null,
       };
 
     case Types.GET_ALL_SUCCESS:
@@ -125,11 +131,14 @@ const sale = (state = INITIAL_STATE, { payload, type }) => {
     case Types.EDIT_REQUEST:
       return {
         ...state,
+        message: null,
+        error: null,
       };
 
     case Types.EDIT_REQUEST_SUCCESS:
       return {
         ...state,
+        message: payload.message,
         data: Object.assign([], state.data, { [payload.salesUpdated.index]: payload.salesUpdated }),
       };
 
@@ -142,12 +151,15 @@ const sale = (state = INITIAL_STATE, { payload, type }) => {
     case Types.REMOVE_REQUEST:
       return {
         ...state,
+        message: null,
+        error: null,
       };
 
     case Types.REMOVE_REQUEST_SUCCESS:
       return {
+        ...state,
+        message: payload.message,
         data: state.data.filter(item => item.id !== payload.id),
-        error: null,
       };
 
     case Types.REMOVE_REQUEST_FAILURE:
@@ -158,7 +170,7 @@ const sale = (state = INITIAL_STATE, { payload, type }) => {
 
     case Types.UNSUBSCRIBE_EVENTS:
       return {
-        ...state,
+        ...INITIAL_STATE,
       };
 
     default:

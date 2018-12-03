@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -9,6 +9,7 @@ import { Creators as ProductCreators } from '../../store/ducks/product';
 import { Creators as BrandCreators } from '../../store/ducks/brand';
 
 import EntityComponent from '../../components/common/entity-component';
+import Snackbar from '../../components/common/Snackbar';
 
 import config from './config';
 import Form from './form';
@@ -25,12 +26,26 @@ type Props = {
 };
 
 class Product extends Component<Props, {}> {
+  state = {
+    isSnackbarOpen: false,
+  };
+
   componentDidMount() {
     const { getAllProducts, getAllBrands } = this.props;
 
     getAllProducts();
 
     getAllBrands();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { message, error } = nextProps.products;
+
+    if (message || error) {
+      this.setState({
+        isSnackbarOpen: true,
+      });
+    }
   }
 
   componentWillUnmount() {
@@ -62,13 +77,29 @@ class Product extends Component<Props, {}> {
   getProductsToShow = (): Array<Object> => {
     const { products } = this.props;
 
-    const productsToShow = products.map(product => ({
+    const productsToShow = products.data.map(product => ({
       ...product,
       brandName: product.brand.name,
       salePriceText: `R$ ${product.salePrice.toFixed(2)}`,
     }));
 
     return productsToShow;
+  };
+
+  renderSnackbar = (): Object => {
+    const { isSnackbarOpen } = this.state;
+    const { products } = this.props;
+
+    const { message, error } = products;
+
+    return (
+      <Snackbar
+        onCloseSnackbar={() => this.setState({ isSnackbarOpen: false })}
+        isOpen={isSnackbarOpen}
+        message={message}
+        error={error}
+      />
+    );
   };
 
   render() {
@@ -80,27 +111,30 @@ class Product extends Component<Props, {}> {
     const { brands } = this.props;
 
     return (
-      <EntityComponent
-        onRemoveItem={this.onRemoverProduct}
-        onCreateItem={this.onCreateProduct}
-        onEditItem={this.onEditProduct}
-        singularEntityName="Produto"
-        pluralEntityName="Produtos"
-        filterConfig={config.filterConfig}
-        tabConfig={config.tabConfig}
-        dataset={products}
-        canBeCreated
-        canBeRemoved
-        canBeEdited
-        Form={props => (
-          <Form
-            descriptionsRegistered={descriptionsRegistered}
-            barcodesRegistered={barcodesRegistered}
-            brands={brands}
-            {...props}
-          />
-        )}
-      />
+      <Fragment>
+        <EntityComponent
+          onRemoveItem={this.onRemoverProduct}
+          onCreateItem={this.onCreateProduct}
+          onEditItem={this.onEditProduct}
+          singularEntityName="Produto"
+          pluralEntityName="Produtos"
+          filterConfig={config.filterConfig}
+          tabConfig={config.tabConfig}
+          dataset={products}
+          canBeCreated
+          canBeRemoved
+          canBeEdited
+          Form={props => (
+            <Form
+              descriptionsRegistered={descriptionsRegistered}
+              barcodesRegistered={barcodesRegistered}
+              brands={brands}
+              {...props}
+            />
+          )}
+        />
+        {this.renderSnackbar()}
+      </Fragment>
     );
   }
 }
@@ -110,7 +144,7 @@ const Creators = Object.assign({}, BrandCreators, ProductCreators);
 const mapDispatchToProps = dispatch => bindActionCreators(Creators, dispatch);
 
 const mapStateToProps = state => ({
-  products: state.product.data,
+  products: state.product,
   brands: state.brand.data,
 });
 

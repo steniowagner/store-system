@@ -8,6 +8,7 @@ import config from './config';
 import Form from './form';
 
 import EntityComponent from '../../components/common/entity-component';
+import Snackbar from '../../components/common/Snackbar';
 
 type Props = {
   unsubscribeProviderEvents: Function,
@@ -18,15 +19,33 @@ type Props = {
   providers: Arra<Object>,
 };
 
-class Provider extends Component<Props, {}> {
+type State = {
+  isSnackbarOpen: boolean,
+};
+
+class Provider extends Component<Props, State> {
+  state = {
+    isSnackbarOpen: false,
+  };
+
   componentDidMount() {
     const { getAllProviders } = this.props;
 
     getAllProviders();
   }
 
+  componentWillReceiveProps(nextProps) {
+    const { message, error } = nextProps.providers;
+
+    if (message || error) {
+      this.setState({
+        isSnackbarOpen: true,
+      });
+    }
+  }
+
   componentWillUnmount() {
-    const { unsubscribeProviderEvents } = this.state;
+    const { unsubscribeProviderEvents } = this.props;
 
     unsubscribeProviderEvents();
   }
@@ -49,9 +68,24 @@ class Provider extends Component<Props, {}> {
     removeProvider(providerId);
   };
 
+  renderSnackbar = (providers: Object): Object => {
+    const { isSnackbarOpen } = this.state;
+    const { message, error } = providers;
+
+    return (
+      <Snackbar
+        onCloseSnackbar={() => this.setState({ isSnackbarOpen: false })}
+        isOpen={isSnackbarOpen}
+        message={message}
+        error={error}
+      />
+    );
+  };
+
   render() {
     const { providers } = this.props;
-    const providersNames = providers.map(provider => provider.name);
+
+    const providersNames = providers.data.map(provider => provider.name);
 
     return (
       <Fragment>
@@ -63,7 +97,7 @@ class Provider extends Component<Props, {}> {
           pluralEntityName="Fornecedores"
           filterConfig={config.filterConfig}
           tabConfig={config.tabConfig}
-          dataset={providers}
+          dataset={providers.data}
           canBeCreated
           canBeRemoved
           canBeEdited
@@ -74,6 +108,7 @@ class Provider extends Component<Props, {}> {
             />
           )}
         />
+        {this.renderSnackbar(providers)}
       </Fragment>
     );
   }
@@ -82,7 +117,7 @@ class Provider extends Component<Props, {}> {
 const mapDispatchToProps = dispatch => bindActionCreators(ProviderCreators, dispatch);
 
 const mapStateToProps = state => ({
-  providers: state.provider.data,
+  providers: state.provider,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Provider);

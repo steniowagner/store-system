@@ -21,6 +21,7 @@ export const Types = {
 };
 
 const INITIAL_STATE = Immutable({
+  message: null,
   error: null,
   data: [],
 });
@@ -33,12 +34,12 @@ export const Creators = {
 
   createUserSuccess: user => ({
     type: Types.CREATE_SUCCESS,
-    payload: { user },
+    payload: { message: 'Usuário Cadastrado com Sucesso', user },
   }),
 
-  createUserFailure: error => ({
+  createUserFailure: () => ({
     type: Types.CREATE_FAILURE,
-    payload: { error },
+    payload: { error: 'Houve um Erro ao Cadastrar o Usuário' },
   }),
 
   getAllUsers: () => ({
@@ -50,9 +51,9 @@ export const Creators = {
     payload: { users },
   }),
 
-  getAllUsersFailure: error => ({
+  getAllUsersFailure: () => ({
     type: Types.GET_ALL_FAILURE,
-    payload: { error },
+    payload: { error: 'Houve um Erro ao Ler os Usuários' },
   }),
 
   editUser: user => ({
@@ -62,12 +63,12 @@ export const Creators = {
 
   editUserSuccess: ({ userEdited, index }) => ({
     type: Types.EDIT_REQUEST_SUCCESS,
-    payload: { userEdited, index },
+    payload: { message: 'Usuário Editado com Sucesso', userEdited, index },
   }),
 
-  editUserFailure: error => ({
+  editUserFailure: () => ({
     type: Types.EDIT_REQUEST_FAILURE,
-    payload: { error },
+    payload: { error: 'Houve um Erro ao Editar o Usuário' },
   }),
 
   removeUser: id => ({
@@ -77,12 +78,12 @@ export const Creators = {
 
   removeUserSuccess: id => ({
     type: Types.REMOVE_REQUEST_SUCCESS,
-    payload: { id },
+    payload: { message: 'Usuário Removido com Sucesso', id },
   }),
 
-  removeUserFailure: error => ({
+  removeUserFailure: () => ({
     type: Types.REMOVE_REQUEST_FAILURE,
-    payload: { error },
+    payload: { error: 'Houve um Erro ao Remover o Usuário' },
   }),
 
   unsubscribeUserEvents: () => ({
@@ -95,12 +96,15 @@ const user = (state = INITIAL_STATE, { payload, type }) => {
     case Types.CREATE_REQUEST:
       return {
         ...state,
+        message: null,
+        error: null,
       };
 
     case Types.CREATE_SUCCESS:
       return {
+        ...state,
+        message: payload.message,
         data: [payload.user, ...state.data],
-        error: null,
       };
 
     case Types.CREATE_FAILURE:
@@ -112,6 +116,8 @@ const user = (state = INITIAL_STATE, { payload, type }) => {
     case Types.GET_ALL_REQUEST:
       return {
         ...state,
+        message: null,
+        error: null,
       };
 
     case Types.GET_ALL_SUCCESS:
@@ -129,11 +135,14 @@ const user = (state = INITIAL_STATE, { payload, type }) => {
     case Types.EDIT_REQUEST:
       return {
         ...state,
+        message: null,
+        error: null,
       };
 
     case Types.EDIT_REQUEST_SUCCESS:
       return {
         ...state,
+        message: payload.message,
         data: Object.assign([], state.data, { [payload.index]: payload.userEdited }),
       };
 
@@ -146,12 +155,15 @@ const user = (state = INITIAL_STATE, { payload, type }) => {
     case Types.REMOVE_REQUEST:
       return {
         ...state,
+        message: null,
+        error: null,
       };
 
     case Types.REMOVE_REQUEST_SUCCESS:
       return {
+        ...state,
+        message: payload.message,
         data: state.data.filter(item => item.id !== payload.id),
-        error: null,
       };
 
     case Types.REMOVE_REQUEST_FAILURE:
@@ -162,7 +174,7 @@ const user = (state = INITIAL_STATE, { payload, type }) => {
 
     case Types.UNSUBSCRIBE_EVENTS:
       return {
-        ...state,
+        ...INITIAL_STATE,
       };
 
     default:

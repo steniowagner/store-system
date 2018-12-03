@@ -7,8 +7,8 @@ import { connect } from 'react-redux';
 import { Creators as BudgetCreators } from '../../store/ducks/budget';
 import { Creators as StockCreators } from '../../store/ducks/stock';
 
-import Snackbar from '../../components/common/Snackbar';
 import EntityComponent from '../../components/common/entity-component';
+import Snackbar from '../../components/common/Snackbar';
 
 import config from './config';
 import Form from './form';
@@ -47,15 +47,12 @@ class Budget extends Component<Props, State> {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { budget } = nextProps;
-    const { message, error } = budget;
+    const { message, error } = nextProps.budget;
 
     if (message || error) {
-      setTimeout(() => {
-        this.setState({
-          isSnackbarOpen: true,
-        });
-      }, 700);
+      this.setState({
+        isSnackbarOpen: true,
+      });
     }
   }
 
@@ -90,19 +87,13 @@ class Budget extends Component<Props, State> {
     deleteBudget(id);
   };
 
-  onCloseSnackbar = (): void => {
-    this.setState({
-      isSnackbarOpen: false,
-    });
-  };
-
   renderSnackbar = (budget: Object): Object => {
     const { isSnackbarOpen } = this.state;
     const { message, error } = budget;
 
     return (
       <Snackbar
-        onCloseSnackbar={this.onCloseSnackbar}
+        onCloseSnackbar={() => this.setState({ isSnackbarOpen: false })}
         isOpen={isSnackbarOpen}
         message={message}
         error={error}

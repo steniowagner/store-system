@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -8,6 +8,7 @@ import config from './config';
 import Form from './form';
 
 import EntityComponent from '../../components/common/entity-component';
+import Snackbar from '../../components/common/Snackbar';
 
 type Props = {
   unsubscribeStockEvents: Function,
@@ -16,11 +17,29 @@ type Props = {
   stock: Array<Object>,
 };
 
-class Stock extends Component<Props, {}> {
+type State = {
+  isSnackbarOpen: boolean,
+};
+
+class Stock extends Component<Props, State> {
+  state = {
+    isSnackbarOpen: false,
+  };
+
   componentDidMount() {
     const { getStock } = this.props;
 
     getStock();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { message, error } = nextProps.stock;
+
+    if (message || error) {
+      this.setState({
+        isSnackbarOpen: true,
+      });
+    }
   }
 
   componentWillUnmount() {
@@ -35,24 +54,41 @@ class Stock extends Component<Props, {}> {
     editStock(itemToEdit);
   };
 
+  renderSnackbar = (stock: Object): Object => {
+    const { isSnackbarOpen } = this.state;
+    const { message, error } = stock;
+
+    return (
+      <Snackbar
+        onCloseSnackbar={() => this.setState({ isSnackbarOpen: false })}
+        isOpen={isSnackbarOpen}
+        message={message}
+        error={error}
+      />
+    );
+  };
+
   render() {
     const { stock } = this.props;
 
     return (
-      <EntityComponent
-        onEditItem={this.onEditStockItem}
-        singularEntityName="Estoque"
-        pluralEntityName="Estoque"
-        filterConfig={config.filterConfig}
-        tabConfig={config.tabConfig}
-        dataset={stock}
-        canBeEdited
-        Form={props => (
-          <Form
-            {...props}
-          />
-        )}
-      />
+      <Fragment>
+        <EntityComponent
+          onEditItem={this.onEditStockItem}
+          singularEntityName="Estoque"
+          pluralEntityName="Estoque"
+          filterConfig={config.filterConfig}
+          tabConfig={config.tabConfig}
+          dataset={stock.data}
+          canBeEdited
+          Form={props => (
+            <Form
+              {...props}
+            />
+          )}
+        />
+        {this.renderSnackbar(stock)}
+      </Fragment>
     );
   }
 }
@@ -60,7 +96,7 @@ class Stock extends Component<Props, {}> {
 const mapDispatchToProps = dispatch => bindActionCreators(StockCreators, dispatch);
 
 const mapStateToProps = state => ({
-  stock: state.stock.data,
+  stock: state.stock,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Stock);

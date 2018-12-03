@@ -62,7 +62,7 @@ export const Creators = {
 
   readAllBudgetsFailure: () => ({
     type: Types.READ_ALL_FAILURE,
-    payload: { error: 'Houve um erro ao Ler os Orçamentos' },
+    payload: { error: 'Houve um erro na leitura dos Orçamentos' },
   }),
 
   editBudget: budget => ({

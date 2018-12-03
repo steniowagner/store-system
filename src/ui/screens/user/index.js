@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { Creators as UserCreators } from '../../store/ducks/user';
 
 import EntityComponent from '../../components/common/entity-component';
+import Snackbar from '../../components/common/Snackbar';
 
 import config from './config';
 import UserForm from './form';
@@ -19,16 +20,30 @@ type Props = {
 };
 
 type State = {
-  users: Array<Object>,
+  isSnackbarOpen: boolean,
 };
 
 class User extends Component<Props, State> {
   _passwordEdited = '';
 
+  state = {
+    isSnackbarOpen: false,
+  };
+
   componentDidMount() {
     const { getAllUsers } = this.props;
 
     getAllUsers();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { message, error } = nextProps.users;
+
+    if (message || error) {
+      this.setState({
+        isSnackbarOpen: true,
+      });
+    }
   }
 
   componentWillUnmount() {
@@ -46,8 +61,8 @@ class User extends Component<Props, State> {
   onEditUser = (userEdited: Object): void => {
     const { editUser, users } = this.props;
 
-    const userEditedIndex = users.findIndex(user => user.id === userEdited.id);
-    const password = (this._passwordEdited || users[userEditedIndex].password);
+    const userEditedIndex = users.data.findIndex(user => user.id === userEdited.id);
+    const password = (this._passwordEdited || users.data[userEditedIndex].password);
 
     const user = {
       ...userEdited,
@@ -61,9 +76,23 @@ class User extends Component<Props, State> {
     this._passwordEdited = newPassword;
   };
 
+  renderSnackbar = (stock: Object): Object => {
+    const { isSnackbarOpen } = this.state;
+    const { message, error } = stock;
+
+    return (
+      <Snackbar
+        onCloseSnackbar={() => this.setState({ isSnackbarOpen: false })}
+        isOpen={isSnackbarOpen}
+        message={message}
+        error={error}
+      />
+    );
+  };
+
   render() {
     const { users } = this.props;
-    const usernames = users.map(user => user.username);
+    const usernames = users.data.map(user => user.username);
 
     return (
       <Fragment>
@@ -75,7 +104,7 @@ class User extends Component<Props, State> {
           filterConfig={config.filterConfig}
           tabConfig={config.tabConfig}
           withOwnRemoveAction={this.onClickRemoveTableIcon}
-          dataset={users}
+          dataset={users.data}
           canBeCreated
           canBeEdited
           Form={props => (
@@ -86,6 +115,7 @@ class User extends Component<Props, State> {
             />
           )}
         />
+        {this.renderSnackbar(users)}
       </Fragment>
     );
   }
@@ -94,7 +124,7 @@ class User extends Component<Props, State> {
 const mapDispatchToProps = dispatch => bindActionCreators(UserCreators, dispatch);
 
 const mapStateToProps = state => ({
-  users: state.user.data,
+  users: state.user,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(User);

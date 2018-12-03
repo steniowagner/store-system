@@ -1,12 +1,13 @@
 // @flow
 
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Creators as CustomerCreators } from '../../store/ducks/customer';
 
 import EntityComponent from '../../components/common/entity-component';
+import Snackbar from '../../components/common/Snackbar';
 
 import config from './config';
 import Form from './form';
@@ -17,14 +18,28 @@ type Props = {
   createCustomer: Function,
   removeCustomer: Function,
   editCustomer: Function,
-  customers: Array<Object>,
+  customer: Object,
 };
 
 class Customer extends Component<Props, {}> {
+  state = {
+    isSnackbarOpen: false,
+  };
+
   componentDidMount() {
     const { getAllCustomers } = this.props;
 
     getAllCustomers();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { message, error } = nextProps.customer;
+
+    if (message || error) {
+      this.setState({
+        isSnackbarOpen: true,
+      });
+    }
   }
 
   componentWillUnmount() {
@@ -51,33 +66,50 @@ class Customer extends Component<Props, {}> {
     removeCustomer(customerId);
   };
 
-  render() {
-    const { customers } = this.props;
-
-    const cpfsRegistered = customers.map(customer => customer.cpf);
-    const rgsRegistered = customers.map(customer => customer.rg);
+  renderSnackbar = (customer: Object): Object => {
+    const { isSnackbarOpen } = this.state;
+    const { message, error } = customer;
 
     return (
-      <EntityComponent
-        onRemoveItem={this.onRemoveCustomer}
-        onCreateItem={this.onCreateCustomer}
-        onEditItem={this.onEditCustomer}
-        singularEntityName="Cliente"
-        pluralEntityName="Clientes"
-        filterConfig={config.filterConfig}
-        tabConfig={config.tabConfig}
-        dataset={customers}
-        canBeCreated
-        canBeRemoved
-        canBeEdited
-        Form={props => (
-          <Form
-            cpfsRegistered={cpfsRegistered}
-            rgsRegistered={rgsRegistered}
-            {...props}
-          />
-        )}
+      <Snackbar
+        onCloseSnackbar={() => this.setState({ isSnackbarOpen: false })}
+        isOpen={isSnackbarOpen}
+        message={message}
+        error={error}
       />
+    );
+  };
+
+  render() {
+    const { customer } = this.props;
+
+    const cpfsRegistered = customer.data.map(customerInfo => customerInfo.cpf);
+    const rgsRegistered = customer.data.map(customerInfo => customerInfo.rg);
+
+    return (
+      <Fragment>
+        <EntityComponent
+          onRemoveItem={this.onRemoveCustomer}
+          onCreateItem={this.onCreateCustomer}
+          onEditItem={this.onEditCustomer}
+          singularEntityName="Cliente"
+          pluralEntityName="Clientes"
+          filterConfig={config.filterConfig}
+          tabConfig={config.tabConfig}
+          dataset={customer.data}
+          canBeCreated
+          canBeRemoved
+          canBeEdited
+          Form={props => (
+            <Form
+              cpfsRegistered={cpfsRegistered}
+              rgsRegistered={rgsRegistered}
+              {...props}
+            />
+          )}
+        />
+        {this.renderSnackbar(customer)}
+      </Fragment>
     );
   }
 }
@@ -85,7 +117,7 @@ class Customer extends Component<Props, {}> {
 const mapDispatchToProps = dispatch => bindActionCreators(CustomerCreators, dispatch);
 
 const mapStateToProps = state => ({
-  customers: state.customer.data,
+  customer: state.customer,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Customer);

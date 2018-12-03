@@ -21,6 +21,7 @@ export const Types = {
 };
 
 const INITIAL_STATE = Immutable({
+  message: null,
   error: null,
   data: [],
 });
@@ -33,12 +34,12 @@ export const Creators = {
 
   createProductSuccess: product => ({
     type: Types.CREATE_SUCCESS,
-    payload: { product },
+    payload: { message: 'Produto Cadastrado com Sucesso', product },
   }),
 
-  createProductFailure: error => ({
+  createProductFailure: () => ({
     type: Types.CREATE_FAILURE,
-    payload: { error },
+    payload: { error: 'Houve um erro ao Cadastrar o Produto' },
   }),
 
   getAllProducts: () => ({
@@ -62,12 +63,12 @@ export const Creators = {
 
   editProductSuccess: ({ productEdited, index }) => ({
     type: Types.EDIT_REQUEST_SUCCESS,
-    payload: { productEdited, index },
+    payload: { message: 'Produto Editado com Sucesso', productEdited, index },
   }),
 
-  editProductFailure: error => ({
+  editProductFailure: () => ({
     type: Types.EDIT_REQUEST_FAILURE,
-    payload: { error },
+    payload: { error: 'Houve um erro ao Editar o Produto' },
   }),
 
   removeProduct: id => ({
@@ -77,12 +78,12 @@ export const Creators = {
 
   removeProductSuccess: id => ({
     type: Types.REMOVE_REQUEST_SUCCESS,
-    payload: { id },
+    payload: { message: 'Produto Removido com Sucesso', id },
   }),
 
-  removeProductFailure: error => ({
+  removeProductFailure: () => ({
     type: Types.REMOVE_REQUEST_FAILURE,
-    payload: { error },
+    payload: { error: 'Houve um erro ao Remover o Produto' },
   }),
 
   unsubscribeProductEvents: () => ({
@@ -95,12 +96,15 @@ const product = (state = INITIAL_STATE, { payload, type }) => {
     case Types.CREATE_REQUEST:
       return {
         ...state,
+        message: null,
+        error: null,
       };
 
     case Types.CREATE_SUCCESS:
       return {
+        ...state,
+        message: payload.message,
         data: [payload.product, ...state.data],
-        error: null,
       };
 
     case Types.CREATE_FAILURE:
@@ -112,12 +116,14 @@ const product = (state = INITIAL_STATE, { payload, type }) => {
     case Types.GET_ALL_REQUEST:
       return {
         ...state,
+        message: null,
+        error: null,
       };
 
     case Types.GET_ALL_SUCCESS:
       return {
+        ...state,
         data: [...payload.products],
-        error: null,
       };
 
     case Types.GET_ALL_FAILURE:
@@ -129,11 +135,14 @@ const product = (state = INITIAL_STATE, { payload, type }) => {
     case Types.EDIT_REQUEST:
       return {
         ...state,
+        message: null,
+        error: null,
       };
 
     case Types.EDIT_REQUEST_SUCCESS:
       return {
         ...state,
+        message: payload.message,
         data: Object.assign([], state.data, { [payload.index]: payload.productEdited }),
       };
 
@@ -146,12 +155,15 @@ const product = (state = INITIAL_STATE, { payload, type }) => {
     case Types.REMOVE_REQUEST:
       return {
         ...state,
+        message: null,
+        error: null,
       };
 
     case Types.REMOVE_REQUEST_SUCCESS:
       return {
+        ...state,
+        message: payload.message,
         data: state.data.filter(item => item.id !== payload.id),
-        error: null,
       };
 
     case Types.REMOVE_REQUEST_FAILURE:
@@ -162,7 +174,7 @@ const product = (state = INITIAL_STATE, { payload, type }) => {
 
     case Types.UNSUBSCRIBE_EVENTS:
       return {
-        ...state,
+        ...INITIAL_STATE,
       };
 
     default:

@@ -21,6 +21,7 @@ export const Types = {
 };
 
 const INITIAL_STATE = Immutable({
+  message: null,
   error: null,
   data: [],
 });
@@ -62,7 +63,7 @@ export const Creators = {
 
   editStockSuccess: ({ stockItemEdited, index }) => ({
     type: Types.EDIT_REQUEST_SUCCESS,
-    payload: { stockItemEdited, index },
+    payload: { message: 'Estoque Editado com Sucesso', stockItemEdited, index },
   }),
 
   editStockFailure: error => ({
@@ -95,12 +96,14 @@ const stock = (state = INITIAL_STATE, { payload, type }) => {
     case Types.INSERT_REQUEST:
       return {
         ...state,
+        message: null,
+        error: null,
       };
 
     case Types.INSERT_SUCCESS:
       return {
+        ...state,
         data: [payload.productInfo, ...state.data],
-        error: null,
       };
 
     case Types.INSERT_FAILURE:
@@ -112,12 +115,14 @@ const stock = (state = INITIAL_STATE, { payload, type }) => {
     case Types.GET_REQUEST:
       return {
         ...state,
+        message: null,
+        error: null,
       };
 
     case Types.GET_SUCCESS:
       return {
+        ...state,
         data: [...payload.stock],
-        error: null,
       };
 
     case Types.GET_FAILURE:
@@ -129,11 +134,14 @@ const stock = (state = INITIAL_STATE, { payload, type }) => {
     case Types.EDIT_REQUEST:
       return {
         ...state,
+        message: null,
+        error: null,
       };
 
     case Types.EDIT_REQUEST_SUCCESS:
       return {
         ...state,
+        message: payload.message,
         data: Object.assign([], state.data, { [payload.index]: payload.stockItemEdited }),
       };
 

@@ -21,6 +21,7 @@ export const Types = {
 };
 
 const INITIAL_STATE = Immutable({
+  message: null,
   error: null,
   data: [],
 });
@@ -33,12 +34,12 @@ export const Creators = {
 
   createProviderSuccess: provider => ({
     type: Types.CREATE_SUCCESS,
-    payload: { provider },
+    payload: { message: 'Fornecedor Cadastrado com Suceso', provider },
   }),
 
-  createProviderFailure: error => ({
+  createProviderFailure: () => ({
     type: Types.CREATE_FAILURE,
-    payload: { error },
+    payload: { error: 'Houve um Erro ao Cadastrar o Fornecedor' },
   }),
 
   getAllProviders: () => ({
@@ -50,9 +51,9 @@ export const Creators = {
     payload: { providers },
   }),
 
-  getAllProvidersFailure: error => ({
+  getAllProvidersFailure: () => ({
     type: Types.GET_ALL_FAILURE,
-    payload: { error },
+    payload: { error: 'Houve um Erro ao Ler os Fornecedores' },
   }),
 
   editProvider: provider => ({
@@ -62,12 +63,12 @@ export const Creators = {
 
   editProviderSuccess: ({ providerEdited, index }) => ({
     type: Types.EDIT_REQUEST_SUCCESS,
-    payload: { providerEdited, index },
+    payload: { message: 'Fornecedor Editado com Sucesso', providerEdited, index },
   }),
 
-  editProviderFailure: error => ({
+  editProviderFailure: () => ({
     type: Types.EDIT_REQUEST_FAILURE,
-    payload: { error },
+    payload: { error: 'Houve um erro ao Editar o Fornecedor' },
   }),
 
   removeProvider: id => ({
@@ -77,12 +78,12 @@ export const Creators = {
 
   removeProviderSuccess: id => ({
     type: Types.REMOVE_REQUEST_SUCCESS,
-    payload: { id },
+    payload: { message: 'Fornecedor Removido com Sucesso', id },
   }),
 
-  removeProviderFailure: error => ({
+  removeProviderFailure: () => ({
     type: Types.REMOVE_REQUEST_FAILURE,
-    payload: { error },
+    payload: { error: 'Houve um erro ao Remover o Fornecedor' },
   }),
 
   unsubscribeProviderEvents: () => ({
@@ -95,12 +96,15 @@ const provider = (state = INITIAL_STATE, { payload, type }) => {
     case Types.CREATE_REQUEST:
       return {
         ...state,
+        message: null,
+        error: null,
       };
 
     case Types.CREATE_SUCCESS:
       return {
+        ...state,
+        message: payload.message,
         data: [payload.provider, ...state.data],
-        error: null,
       };
 
     case Types.CREATE_FAILURE:
@@ -112,12 +116,15 @@ const provider = (state = INITIAL_STATE, { payload, type }) => {
     case Types.GET_ALL_REQUEST:
       return {
         ...state,
+        message: null,
+        error: null,
       };
 
     case Types.GET_ALL_SUCCESS:
       return {
+        ...state,
+        message: payload.message,
         data: [...payload.providers],
-        error: null,
       };
 
     case Types.GET_ALL_FAILURE:
@@ -129,12 +136,15 @@ const provider = (state = INITIAL_STATE, { payload, type }) => {
     case Types.EDIT_REQUEST:
       return {
         ...state,
+        message: null,
+        error: null,
       };
 
     case Types.EDIT_REQUEST_SUCCESS:
       return {
+        ...state,
+        message: payload.message,
         data: Object.assign([], state.data, { [payload.index]: payload.providerEdited }),
-        error: null,
       };
 
     case Types.EDIT_REQUEST_FAILURE:
@@ -146,12 +156,15 @@ const provider = (state = INITIAL_STATE, { payload, type }) => {
     case Types.REMOVE_REQUEST:
       return {
         ...state,
+        message: null,
+        error: null,
       };
 
     case Types.REMOVE_REQUEST_SUCCESS:
       return {
+        ...state,
+        message: payload.message,
         data: state.data.filter(item => item.id !== payload.id),
-        error: null,
       };
 
     case Types.REMOVE_REQUEST_FAILURE:
@@ -162,7 +175,7 @@ const provider = (state = INITIAL_STATE, { payload, type }) => {
 
     case Types.UNSUBSCRIBE_EVENTS:
       return {
-        ...state,
+        ...INITIAL_STATE,
       };
 
     default:

@@ -27,6 +27,7 @@ export const Types = {
 };
 
 const INITIAL_STATE = Immutable({
+  message: null,
   error: null,
   debits: [],
   data: [],
@@ -40,12 +41,12 @@ export const Creators = {
 
   createCustomerSuccess: customer => ({
     type: Types.CREATE_SUCCESS,
-    payload: { customer },
+    payload: { message: 'Cliente Criado com Sucesso', customer },
   }),
 
-  createCustomerFailure: error => ({
+  createCustomerFailure: () => ({
     type: Types.CREATE_FAILURE,
-    payload: { error },
+    payload: { error: 'Houve um erro ao Criar o Cliente' },
   }),
 
   getAllCustomers: () => ({
@@ -57,9 +58,9 @@ export const Creators = {
     payload: { customers },
   }),
 
-  getAllCustomersFailure: error => ({
+  getAllCustomersFailure: () => ({
     type: Types.GET_ALL_FAILURE,
-    payload: { error },
+    payload: { error: 'Houve um erro na leitura dos Orçamentos' },
   }),
 
   getDebits: id => ({
@@ -84,12 +85,12 @@ export const Creators = {
 
   editCustomerSuccess: ({ customerEdited, index }) => ({
     type: Types.EDIT_REQUEST_SUCCESS,
-    payload: { customerEdited, index },
+    payload: { message: 'Cliente Editado com Sucesso', customerEdited, index },
   }),
 
-  editCustomerFailure: error => ({
+  editCustomerFailure: () => ({
     type: Types.EDIT_REQUEST_FAILURE,
-    payload: { error },
+    payload: { error: 'Houve um erro ao Editar o Cliente' },
   }),
 
   removeCustomer: id => ({
@@ -99,12 +100,12 @@ export const Creators = {
 
   removeCustomerSuccess: id => ({
     type: Types.REMOVE_REQUEST_SUCCESS,
-    payload: { id },
+    payload: { message: 'Cliente Removido com Sucesso', id },
   }),
 
-  removeCustomerFailure: error => ({
+  removeCustomerFailure: () => ({
     type: Types.REMOVE_REQUEST_FAILURE,
-    payload: { error },
+    payload: { error: 'Houve um erro ao Remover o Cliente' },
   }),
 
   onRemoveDebit: saleId => ({
@@ -122,11 +123,14 @@ const customer = (state = INITIAL_STATE, { payload, type }) => {
     case Types.CREATE_REQUEST:
       return {
         ...state,
+        message: null,
+        error: null,
       };
 
     case Types.CREATE_SUCCESS:
       return {
         ...state,
+        message: payload.message,
         data: [payload.customer, ...state.data],
         error: null,
       };
@@ -140,6 +144,8 @@ const customer = (state = INITIAL_STATE, { payload, type }) => {
     case Types.GET_ALL_REQUEST:
       return {
         ...state,
+        message: null,
+        error: null,
       };
 
     case Types.GET_ALL_SUCCESS:
@@ -158,6 +164,8 @@ const customer = (state = INITIAL_STATE, { payload, type }) => {
     case Types.GET_DEBITS_REQUEST:
       return {
         ...state,
+        message: null,
+        error: null,
       };
 
     case Types.GET_DEBITS_SUCCESS:
@@ -182,11 +190,14 @@ const customer = (state = INITIAL_STATE, { payload, type }) => {
     case Types.EDIT_REQUEST:
       return {
         ...state,
+        message: null,
+        error: null,
       };
 
     case Types.EDIT_REQUEST_SUCCESS:
       return {
         ...state,
+        message: payload.message,
         data: Object.assign([], state.data, { [payload.index]: payload.customerEdited }),
       };
 
@@ -199,13 +210,15 @@ const customer = (state = INITIAL_STATE, { payload, type }) => {
     case Types.REMOVE_REQUEST:
       return {
         ...state,
+        message: null,
+        error: null,
       };
 
     case Types.REMOVE_REQUEST_SUCCESS:
       return {
         ...state,
+        message: payload.message,
         data: state.data.filter(item => item.id !== payload.id),
-        error: null,
       };
 
     case Types.REMOVE_REQUEST_FAILURE:

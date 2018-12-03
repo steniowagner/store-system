@@ -47,9 +47,15 @@ class Sidebar extends Component<Props, State> {
     indexSelected: 0,
   };
 
-  onSelectIndex = (indexSelected: number): void => {
+  onSelectIndex = (index: number): void => {
+    const { indexSelected } = this.state;
+
+    if (indexSelected === index) {
+      return;
+    }
+
     this.setState({
-      indexSelected,
+      indexSelected: index,
     });
   }
 
