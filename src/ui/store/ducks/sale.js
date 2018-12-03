@@ -130,7 +130,7 @@ const sale = (state = INITIAL_STATE, { payload, type }) => {
     case Types.EDIT_REQUEST_SUCCESS:
       return {
         ...state,
-        data: [...payload.salesUpdated],
+        data: Object.assign([], state.data, { [payload.salesUpdated.index]: payload.salesUpdated }),
       };
 
     case Types.EDIT_REQUEST_FAILURE:

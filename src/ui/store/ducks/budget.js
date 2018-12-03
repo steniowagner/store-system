@@ -70,9 +70,9 @@ export const Creators = {
     payload: { budget },
   }),
 
-  editBudgetSuccess: budgets => ({
+  editBudgetSuccess: budgetUpdated => ({
     type: Types.EDIT_REQUEST_SUCCESS,
-    payload: { message: 'Orçamento Editado com Sucesso', budgets },
+    payload: { message: 'Orçamento Editado com Sucesso', budgetUpdated },
   }),
 
   editBudgetFailure: () => ({
@@ -170,7 +170,7 @@ const budget = (state = INITIAL_STATE, { payload, type }) => {
     case Types.EDIT_REQUEST_SUCCESS:
       return {
         ...state,
-        data: [...payload.budgets],
+        data: Object.assign([], state.data, { [payload.budgetUpdated.index]: payload.budgetUpdated }),
         message: payload.message,
       };
 

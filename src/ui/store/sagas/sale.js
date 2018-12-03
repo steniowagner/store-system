@@ -105,20 +105,18 @@ export function* editSale(action) {
     };
 
     ipcRenderer.send(OPERATION_REQUEST, SALE, UPDATE_SALE, EVENT_TAGS.EDIT_SALE, params);
+    yield handleEventSubscription(EVENT_TAGS.EDIT_SALE);
 
     const { subtotal, total } = sale;
 
-    const salesUpdated = Object.assign([],
-      allSales, {
-        [sale.index]: {
-          ...sale,
-          subtotalText: `R$ ${parseFloat(subtotal).toFixed(2)}`,
-          totalText: `R$ ${parseFloat(total).toFixed(2)}`,
-          customerName: sale.customer.name || '-',
-        },
-      });
+    const saleUpdated = {
+      ...sale,
+      subtotalText: `R$ ${parseFloat(subtotal).toFixed(2)}`,
+      totalText: `R$ ${parseFloat(total).toFixed(2)}`,
+      customerName: sale.customer.name || '-',
+    };
 
-    yield put(SaleCreators.editSaleSuccess(salesUpdated));
+    yield put(SaleCreators.editSaleSuccess(saleUpdated));
   } catch (err) {
     yield put(SaleCreators.editSaleFailure(err.message));
   }

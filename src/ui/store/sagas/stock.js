@@ -207,6 +207,7 @@ export function* editStockProducts(data, dataset, operationType) {
     }
 
     ipcRenderer.send(OPERATION_REQUEST, STOCK, UPDATE_PRODUCTS_STOCK, EVENT_TAGS.EDIT_PRODUCTS_STOCK, stockUpdatedAfterOperation);
+    yield handleEventSubscription(EVENT_TAGS.EDIT_PRODUCTS_STOCK);
 
     const stockUpdated = stock.map((stockItem) => {
       const stockItemUpdatedIndex = stockUpdatedAfterOperation.findIndex(stockItemUpdated => stockItemUpdated.id === stockItem.id);

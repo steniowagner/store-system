@@ -104,12 +104,10 @@ export function* editBudget(action) {
     };
 
     ipcRenderer.send(OPERATION_REQUEST, BUDGET, UPDATE_BUDGET, EVENT_TAGS.UPDATE_BUDGET, params);
-
     yield handleEventSubscription(EVENT_TAGS.UPDATE_BUDGET);
 
-    const budgets = Object.assign([], allBudgets, { [budget.index]: { ...parseBudgetToTableView(budget) } });
-
-    yield put(BudgetCreators.editBudgetSuccess(budgets));
+    const budgetUpdated = parseBudgetToTableView(budget);
+    yield put(BudgetCreators.editBudgetSuccess(budgetUpdated));
   } catch (err) {
     yield put(BudgetCreators.editBudgetFailure());
   }
