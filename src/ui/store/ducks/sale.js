@@ -81,7 +81,7 @@ export const Creators = {
     payload: { error },
   }),
 
-  unsubscribeEvents: () => ({
+  unsubscribeSaleEvents: () => ({
     type: Types.UNSUBSCRIBE_EVENTS,
   }),
 };

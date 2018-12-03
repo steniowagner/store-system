@@ -14,13 +14,20 @@ import { OPERATION_REQUEST, USER } from '../../../common/entitiesTypes';
 
 const { ipcRenderer } = window.require('electron');
 
+const EVENT_TAGS = {
+  CREATE_USER: 'USER_CREATE',
+  GET_ALL_USERS: 'USERS_GET_ALL',
+  EDIT_USER: 'USER_EDIT',
+  REMOVE_USER: 'USER_REMOVE',
+};
+
 export function* createUser(action) {
   try {
     const { args } = action;
 
-    ipcRenderer.send(OPERATION_REQUEST, USER, CREATE, args);
+    ipcRenderer.send(OPERATION_REQUEST, USER, CREATE, EVENT_TAGS.CREATE_USER, args);
 
-    const { result } = yield handleEventSubscription(USER);
+    const { result } = yield handleEventSubscription(EVENT_TAGS.CREATE_USER);
 
     const newUser = {
       ...args,
@@ -35,9 +42,9 @@ export function* createUser(action) {
 
 export function* getAllUsers() {
   try {
-    ipcRenderer.send(OPERATION_REQUEST, USER, READ);
+    ipcRenderer.send(OPERATION_REQUEST, USER, READ, EVENT_TAGS.GET_ALL_USERS);
 
-    const { result } = yield handleEventSubscription(USER);
+    const { result } = yield handleEventSubscription(EVENT_TAGS.GET_ALL_USERS);
 
     yield put(UserCreators.getAllUsersSuccess(result));
   } catch (err) {
@@ -49,9 +56,9 @@ export function* editUser(action) {
   try {
     const { user } = action.payload;
 
-    ipcRenderer.send(OPERATION_REQUEST, USER, UPDATE, user);
+    ipcRenderer.send(OPERATION_REQUEST, USER, UPDATE, EVENT_TAGS.EDIT_USER, user);
 
-    const { result } = yield handleEventSubscription(USER);
+    const { result } = yield handleEventSubscription(EVENT_TAGS.EDIT_USER);
 
     yield put(UserCreators.editUserSuccess(result));
   } catch (err) {
@@ -63,9 +70,9 @@ export function* removeUser(action) {
   try {
     const { id } = action.payload;
 
-    ipcRenderer.send(OPERATION_REQUEST, USER, DELETE, id);
+    ipcRenderer.send(OPERATION_REQUEST, USER, DELETE, EVENT_TAGS.REMOVE_USER, id);
 
-    yield handleEventSubscription(USER);
+    yield handleEventSubscription(EVENT_TAGS.REMOVE_USER);
 
     yield put(UserCreators.removeUserSuccess(id));
   } catch (err) {
@@ -73,4 +80,4 @@ export function* removeUser(action) {
   }
 }
 
-export const unsubscribeUserEvents = () => handleEventUnsubscription(USER);
+export const unsubscribeUserEvents = () => handleEventUnsubscription(EVENT_TAGS);

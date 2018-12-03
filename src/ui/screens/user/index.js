@@ -10,7 +10,7 @@ import config from './config';
 import UserForm from './form';
 
 type Props = {
-  unsubscribeEvents: Function,
+  unsubscribeUserEvents: Function,
   getAllUsers: Function,
   createUser: Function,
   removeUser: Function,
@@ -32,9 +32,9 @@ class User extends Component<Props, State> {
   }
 
   componentWillUnmount() {
-    const { unsubscribeEvents } = this.props;
+    const { unsubscribeUserEvents } = this.props;
 
-    unsubscribeEvents();
+    unsubscribeUserEvents();
   }
 
   onCreateUser = async (user: Object): void => {

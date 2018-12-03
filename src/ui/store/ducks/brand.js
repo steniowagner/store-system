@@ -27,6 +27,10 @@ export const Creators = {
     type: Types.GET_ALL_FAILURE,
     payload: { error },
   }),
+
+  unsubscribeBrandEvents: () => ({
+    type: Types.UNSUBSCRIBE_EVENTS,
+  }),
 };
 
 const brand = (state = INITIAL_STATE, { payload, type }) => {

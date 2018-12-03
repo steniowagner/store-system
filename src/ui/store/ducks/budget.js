@@ -95,10 +95,6 @@ export const Creators = {
     payload: { error: 'Houve um erro ao Remover o Orçamento' },
   }),
 
-  unsubscribeEvents: () => ({
-    type: Types.UNSUBSCRIBE_EVENTS,
-  }),
-
   confirmBudgetPayment: budget => ({
     type: Types.CONFIRM_BUDGET_SALE_REQUEST,
     payload: { budget },
@@ -121,6 +117,10 @@ export const Creators = {
   setOutdatedBudgetsFailure: () => ({
     type: Types.SET_OUTDATED_ITEMS_FAILURE,
     payload: { error: 'Houve um erro ao tentar ao atualizar os Orçamentos Fora do Prazo' },
+  }),
+
+  unsubscribeBudgetEvents: () => ({
+    type: Types.UNSUBSCRIBE_EVENTS,
   }),
 };
 

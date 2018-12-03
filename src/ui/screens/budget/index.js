@@ -14,6 +14,8 @@ import config from './config';
 import Form from './form';
 
 type Props = {
+  unsubscribeBudgetEvents: Function,
+  unsubscribeStockEvents: Function,
   confirmBudgetPayment: Function,
   readAllBudgets: Function,
   createBudget: Function,
@@ -55,6 +57,13 @@ class Budget extends Component<Props, State> {
         });
       }, 700);
     }
+  }
+
+  componentWillUnmount() {
+    const { unsubscribeBudgetEvents, unsubscribeStockEvents } = this.props;
+
+    unsubscribeBudgetEvents();
+    unsubscribeStockEvents();
   }
 
   onConfirmBudgetPayment = (budget: Object): void => {

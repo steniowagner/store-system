@@ -16,11 +16,19 @@ import { OPERATION_REQUEST, STOCK } from '../../../common/entitiesTypes';
 
 const { ipcRenderer } = window.require('electron');
 
+const EVENT_TAGS = {
+  INSERT_PRODUCT_STOCK: 'STOCK_INSERT_PRODUCT',
+  STOCK_GET: 'GET_STOCK',
+  EDIT_SINGLE_PRODUCT_STOCK: 'STOCK_EDIT_SINGLE_PRODUCT',
+  EDIT_PRODUCTS_STOCK: 'STOCK_EDIT_PRODUCTS',
+  REMOVE_STOCK: 'STOCK_REMOVE',
+};
+
 export function* getStock() {
   try {
-    ipcRenderer.send(OPERATION_REQUEST, STOCK, READ_STOCK);
+    ipcRenderer.send(OPERATION_REQUEST, STOCK, READ_STOCK, EVENT_TAGS.STOCK_GET);
 
-    const { result } = yield handleEventSubscription(STOCK);
+    const { result } = yield handleEventSubscription(EVENT_TAGS.STOCK_GET);
 
     const stockProducts = result.map(product => ({
       ...product,
@@ -36,9 +44,9 @@ export function* getStock() {
 export function* insertProduct(action) {
   try {
     const { args } = action;
-    ipcRenderer.send(OPERATION_REQUEST, STOCK, INSERT, args);
+    ipcRenderer.send(OPERATION_REQUEST, STOCK, INSERT, EVENT_TAGS.INSERT_PRODUCT_STOCK, args);
 
-    const { result } = yield handleEventSubscription(STOCK);
+    const { result } = yield handleEventSubscription(EVENT_TAGS.INSERT_PRODUCT_STOCK);
 
     const productInfo = {
       ...args,
@@ -61,9 +69,9 @@ export function* editProductInStock(action) {
       id: productInfo.id,
     };
 
-    ipcRenderer.send(OPERATION_REQUEST, STOCK, UPDATE_PRODUCT_STOCK, productEdited);
+    ipcRenderer.send(OPERATION_REQUEST, STOCK, UPDATE_PRODUCT_STOCK, EVENT_TAGS.EDIT_SINGLE_PRODUCT_STOCK, productEdited);
 
-    const { result } = yield handleEventSubscription(STOCK);
+    const { result } = yield handleEventSubscription(EVENT_TAGS.EDIT_SINGLE_PRODUCT_STOCK);
     const { stockItemEdited, index } = result;
 
     const productInStockEdited = {
@@ -198,7 +206,7 @@ export function* editStockProducts(data, dataset, operationType) {
       stockUpdatedAfterOperation = [...stockWithoutDatasetProducts, ...returnProductsToStock(data.products, stock)];
     }
 
-    ipcRenderer.send(OPERATION_REQUEST, STOCK, UPDATE_PRODUCTS_STOCK, stockUpdatedAfterOperation);
+    ipcRenderer.send(OPERATION_REQUEST, STOCK, UPDATE_PRODUCTS_STOCK, EVENT_TAGS.EDIT_PRODUCTS_STOCK, stockUpdatedAfterOperation);
 
     const stockUpdated = stock.map((stockItem) => {
       const stockItemUpdatedIndex = stockUpdatedAfterOperation.findIndex(stockItemUpdated => stockItemUpdated.id === stockItem.id);
@@ -217,4 +225,4 @@ export function* editStockProducts(data, dataset, operationType) {
   }
 }
 
-export const unsubscribeStockEvents = () => handleEventUnsubscription(STOCK);
+export const unsubscribeStockEvents = () => handleEventUnsubscription(EVENT_TAGS);

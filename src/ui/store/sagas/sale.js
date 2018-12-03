@@ -27,6 +27,13 @@ const parseSaleToTableView = (sale: Object): Object => ({
   products: JSON.parse(sale.products),
 });
 
+const EVENT_TAGS = {
+  SALE_CREATE: 'CREATE_SALE',
+  SALES_GET_ALL: 'GET_ALL_SALES',
+  EDIT_SALE: 'SALE_EDIT',
+  REMOVE_SALE: 'SALE_REMOVE',
+};
+
 export function* createSale(action) {
   try {
     const { args } = action;
@@ -40,9 +47,9 @@ export function* createSale(action) {
       salesman: 'steniowagner',
     };
 
-    ipcRenderer.send(OPERATION_REQUEST, SALE, CREATE_SALE, params);
+    ipcRenderer.send(OPERATION_REQUEST, SALE, CREATE_SALE, EVENT_TAGS.SALE_CREATE, params);
 
-    const { result } = yield handleEventSubscription(SALE);
+    const { result } = yield handleEventSubscription(EVENT_TAGS.SALE_CREATE);
 
     const newSale = {
       ...parseSaleToTableView(params),
@@ -67,9 +74,9 @@ export function* getAllSales() {
   try {
     moment.locale('pt-br');
 
-    ipcRenderer.send(OPERATION_REQUEST, SALE, READ_SALES);
+    ipcRenderer.send(OPERATION_REQUEST, SALE, READ_SALES, EVENT_TAGS.SALES_GET_ALL);
 
-    const { result } = yield handleEventSubscription(SALE);
+    const { result } = yield handleEventSubscription(EVENT_TAGS.SALES_GET_ALL);
 
     const allSales = result.map(sale => ({
       ...parseSaleToTableView(sale),
@@ -97,7 +104,7 @@ export function* editSale(action) {
       salesman: 'steniowagner',
     };
 
-    ipcRenderer.send(OPERATION_REQUEST, SALE, UPDATE_SALE, params);
+    ipcRenderer.send(OPERATION_REQUEST, SALE, UPDATE_SALE, EVENT_TAGS.EDIT_SALE, params);
 
     const { subtotal, total } = sale;
 
@@ -117,4 +124,4 @@ export function* editSale(action) {
   }
 }
 
-export const unsubscribeSaleEvents = () => handleEventUnsubscription(SALE);
+export const unsubscribeSaleEvents = () => handleEventUnsubscription(EVENT_TAGS);

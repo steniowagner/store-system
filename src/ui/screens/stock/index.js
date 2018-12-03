@@ -10,7 +10,7 @@ import Form from './form';
 import EntityComponent from '../../components/common/entity-component';
 
 type Props = {
-  unsubscribeEvents: Function,
+  unsubscribeStockEvents: Function,
   editStock: Function,
   getStock: Function,
   stock: Array<Object>,
@@ -24,9 +24,9 @@ class Stock extends Component<Props, {}> {
   }
 
   componentWillUnmount() {
-    const { unsubscribeEvents } = this.props;
+    const { unsubscribeStockEvents } = this.props;
 
-    unsubscribeEvents();
+    unsubscribeStockEvents();
   }
 
   onEditStockItem = (itemToEdit: Object): void => {

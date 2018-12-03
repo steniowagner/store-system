@@ -13,6 +13,8 @@ import config from './config';
 import Form from './form';
 
 type Props = {
+  unsubscribeStockEvents: Function,
+  unsubscribeSaleEvents: Function,
   getAllSales: Function,
   createSale: Function,
   getStock: Function,
@@ -27,6 +29,13 @@ class Sales extends Component<Props, {}> {
 
     getAllSales();
     getStock();
+  }
+
+  componentWillUnmount() {
+    const { unsubscribeStockEvents, unsubscribeSaleEvents } = this.props;
+
+    unsubscribeStockEvents();
+    unsubscribeSaleEvents();
   }
 
   onCreateSale = (sale: Object): void => {

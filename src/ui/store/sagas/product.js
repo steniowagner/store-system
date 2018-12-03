@@ -22,10 +22,19 @@ import {
 
 const { ipcRenderer } = window.require('electron');
 
-function* handleCreateBrand({ brandsCreated, brand }) {
-  ipcRenderer.send(OPERATION_REQUEST, BRAND, CREATE_BRAND, brandsCreated);
+const EVENT_TAGS = {
+  INSERT_PRODUCT_IN_STOCK_PRODUCT: 'PRODUCT_INSERT_PRODUCT_IN_STOCK',
+  PRODUCT_CREATE: 'CREATE_PRODUCT',
+  PRODUCT_CREATE_BRAND: 'CREATE_BRAND_PRODUCT',
+  GET_ALL_PRODUCTS: 'PRODUCTS_GET_ALL',
+  EDIT_PRODUCT: 'PRODUCT_EDIT',
+  REMOVE_PRODUCT: 'PRODUCT_REMOVE',
+};
 
-  const { result } = yield handleEventSubscription(BRAND);
+function* handleCreateBrand({ brandsCreated, brand }) {
+  ipcRenderer.send(OPERATION_REQUEST, BRAND, CREATE_BRAND, EVENT_TAGS.PRODUCT_CREATE_BRAND, brandsCreated);
+
+  const { result } = yield handleEventSubscription(EVENT_TAGS.PRODUCT_CREATE_BRAND);
 
   const brandSelectedIndex = result.findIndex(brandCreated => brandCreated.name === brand.name);
 
@@ -39,7 +48,7 @@ const handleInsertProductStock = ({ minStockQuantity, stockQuantity }, ProductId
     ProductId,
   };
 
-  ipcRenderer.send(OPERATION_REQUEST, STOCK, INSERT_PRODUCT_STOCK, productInfo);
+  ipcRenderer.send(OPERATION_REQUEST, STOCK, INSERT_PRODUCT_STOCK, EVENT_TAGS.INSERT_PRODUCT_IN_STOCK_PRODUCT, productInfo);
 };
 
 export function* createProduct(action) {
@@ -49,7 +58,7 @@ export function* createProduct(action) {
     const hasNewBrands = !!args.brandsCreated.length;
     const BrandId = (hasNewBrands ? yield call(handleCreateBrand, args) : args.brand.id);
 
-    ipcRenderer.send(OPERATION_REQUEST, PRODUCT, CREATE_PRODUCT, {
+    ipcRenderer.send(OPERATION_REQUEST, PRODUCT, CREATE_PRODUCT, EVENT_TAGS.PRODUCT_CREATE, {
       costPrice: parseFloat(args.costPrice),
       salePrice: parseFloat(args.salePrice),
       description: args.description,
@@ -57,7 +66,7 @@ export function* createProduct(action) {
       BrandId,
     });
 
-    const { result } = yield handleEventSubscription(PRODUCT);
+    const { result } = yield handleEventSubscription(EVENT_TAGS.PRODUCT_CREATE);
 
     yield call(handleInsertProductStock, args, result);
 
@@ -86,9 +95,9 @@ const parseProduct = (product: Object): Object => ({
 
 export function* getAllProducts() {
   try {
-    ipcRenderer.send(OPERATION_REQUEST, PRODUCT, READ_PRODUCT);
+    ipcRenderer.send(OPERATION_REQUEST, PRODUCT, READ_PRODUCT, EVENT_TAGS.GET_ALL_PRODUCTS);
 
-    const { result } = yield handleEventSubscription(PRODUCT);
+    const { result } = yield handleEventSubscription(EVENT_TAGS.GET_ALL_PRODUCTS);
 
     const allProducts = result.map(product => parseProduct(product));
 
@@ -110,9 +119,9 @@ export function* editProduct(action) {
       BrandId,
     };
 
-    ipcRenderer.send(OPERATION_REQUEST, PRODUCT, UPDATE_PRODUCT, productEdited);
+    ipcRenderer.send(OPERATION_REQUEST, PRODUCT, UPDATE_PRODUCT, EVENT_TAGS.EDIT_PRODUCT, productEdited);
 
-    const { result } = yield handleEventSubscription(PRODUCT);
+    const { result } = yield handleEventSubscription(EVENT_TAGS.EDIT_PRODUCT);
 
     yield put(ProductCreators.editProductSuccess({
       productEdited: parseProduct(result.productEdited),
@@ -127,9 +136,9 @@ export function* removeProduct(action) {
   try {
     const { id } = action.payload;
 
-    ipcRenderer.send(OPERATION_REQUEST, PRODUCT, DELETE_PRODUCT, id);
+    ipcRenderer.send(OPERATION_REQUEST, PRODUCT, DELETE_PRODUCT, EVENT_TAGS.REMOVE_PRODUCT, id);
 
-    yield handleEventSubscription(PRODUCT);
+    yield handleEventSubscription(EVENT_TAGS.REMOVE_PRODUCT);
 
     yield put(ProductCreators.removeProductSuccess(id));
   } catch (err) {
@@ -137,7 +146,4 @@ export function* removeProduct(action) {
   }
 }
 
-export const unsubscribeProductEvents = () => {
-  handleEventUnsubscription(PRODUCT);
-  handleEventUnsubscription(BRAND);
-};
+export const unsubscribeProductEvents = () => handleEventUnsubscription(EVENT_TAGS);

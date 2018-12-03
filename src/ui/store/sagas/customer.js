@@ -16,13 +16,21 @@ import { OPERATION_REQUEST, CUSTOMER, SALE } from '../../../common/entitiesTypes
 
 const { ipcRenderer } = window.require('electron');
 
+const EVENT_TAGS = {
+  READ_ALL: 'CUSTOMERS_READ_ALL',
+  CREATE_CUSTOMER: 'CUSTOMER_CREATE',
+  GET_DEBITS: 'CUSTOMER_GET_DEBITS',
+  UPDATE_CUSTOMER: 'CUSTOMER_UPDATE',
+  REMOVE_CUSTOMER: 'CUSTOMER_REMOVE',
+};
+
 export function* createCustomer(action) {
   try {
     const { args } = action;
 
-    ipcRenderer.send(OPERATION_REQUEST, CUSTOMER, CREATE, args);
+    ipcRenderer.send(OPERATION_REQUEST, CUSTOMER, CREATE, EVENT_TAGS.CREATE_CUSTOMER, args);
 
-    const { result } = yield handleEventSubscription(CUSTOMER);
+    const { result } = yield handleEventSubscription(EVENT_TAGS.CREATE_CUSTOMER);
 
     const newCustomer = {
       ...args,
@@ -37,9 +45,9 @@ export function* createCustomer(action) {
 
 export function* getAllCustomers() {
   try {
-    ipcRenderer.send(OPERATION_REQUEST, CUSTOMER, READ);
+    ipcRenderer.send(OPERATION_REQUEST, CUSTOMER, READ, EVENT_TAGS.READ_ALL);
 
-    const { result } = yield handleEventSubscription(CUSTOMER);
+    const { result } = yield handleEventSubscription(EVENT_TAGS.READ_ALL);
 
     yield put(CustomerCreators.getAllCustomersSuccess(result));
   } catch (err) {
@@ -51,9 +59,9 @@ export function* getUserDebits(action) {
   try {
     const { id } = action.payload;
 
-    ipcRenderer.send(OPERATION_REQUEST, SALE, READ_SALES);
+    ipcRenderer.send(OPERATION_REQUEST, SALE, READ_SALES, EVENT_TAGS.GET_DEBITS);
 
-    const { result } = yield handleEventSubscription(SALE);
+    const { result } = yield handleEventSubscription(EVENT_TAGS.GET_DEBITS);
 
     const userSalesWithDebits = result.filter(sale => (sale.customer.id === id && sale.inDebit > 0));
 
@@ -67,9 +75,9 @@ export function* editCustomer(action) {
   try {
     const { customer } = action.payload;
 
-    ipcRenderer.send(OPERATION_REQUEST, CUSTOMER, UPDATE, customer);
+    ipcRenderer.send(OPERATION_REQUEST, CUSTOMER, UPDATE, EVENT_TAGS.UPDATE_CUSTOMER, customer);
 
-    const { result } = yield handleEventSubscription(CUSTOMER);
+    const { result } = yield handleEventSubscription(EVENT_TAGS.UPDATE_CUSTOMER);
 
     yield put(CustomerCreators.editCustomerSuccess(result));
   } catch (err) {
@@ -81,9 +89,9 @@ export function* removeCustomer(action) {
   try {
     const { id } = action.payload;
 
-    ipcRenderer.send(OPERATION_REQUEST, CUSTOMER, DELETE, id);
+    ipcRenderer.send(OPERATION_REQUEST, CUSTOMER, DELETE, EVENT_TAGS.REMOVE_CUSTOMER, id);
 
-    yield handleEventSubscription(CUSTOMER);
+    yield handleEventSubscription(EVENT_TAGS.REMOVE_CUSTOMER);
 
     yield put(CustomerCreators.removeCustomerSuccess(id));
   } catch (err) {
@@ -91,4 +99,4 @@ export function* removeCustomer(action) {
   }
 }
 
-export const unsubscribeCustomerEvents = () => handleEventUnsubscription(CUSTOMER);
+export const unsubscribeCustomerEvents = () => handleEventUnsubscription(EVENT_TAGS);

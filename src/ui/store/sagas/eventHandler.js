@@ -4,9 +4,9 @@ import { OPERATION_RESPONSE } from '../../../common/entitiesTypes';
 
 const { ipcRenderer } = window.require('electron');
 
-export const handleEventSubscription = (entity: string): Object => {
+export const handleEventSubscription = (eventTag: string): Object => {
   const handler = new Promise((resolve) => {
-    const eventResponseId = `${OPERATION_RESPONSE}_${entity}`;
+    const eventResponseId = `${OPERATION_RESPONSE}_${eventTag}`;
 
     ipcRenderer.on(eventResponseId, (_, result) => {
       resolve({ result });
@@ -16,6 +16,8 @@ export const handleEventSubscription = (entity: string): Object => {
   return handler;
 };
 
-export const handleEventUnsubscription = (entity: string): void => {
-  ipcRenderer.removeAllListeners(`${OPERATION_RESPONSE}_${entity}`);
+export const handleEventUnsubscription = (EVENT_TAGS: Object): void => {
+  const tags = Object.entries(EVENT_TAGS);
+
+  tags.forEach(tagItem => ipcRenderer.removeAllListeners(`${OPERATION_RESPONSE}_${tagItem[1]}`));
 };

@@ -10,6 +10,7 @@ import Form from './form';
 import EntityComponent from '../../components/common/entity-component';
 
 type Props = {
+  unsubscribeProviderEvents: Function,
   getAllProviders: Function,
   removeProvider: Function,
   createProvider: Function,
@@ -22,6 +23,12 @@ class Provider extends Component<Props, {}> {
     const { getAllProviders } = this.props;
 
     getAllProviders();
+  }
+
+  componentWillUnmount() {
+    const { unsubscribeProviderEvents } = this.state;
+
+    unsubscribeProviderEvents();
   }
 
   onCreateProvider = (provider: Object): void => {

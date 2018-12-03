@@ -12,7 +12,7 @@ import config from './config';
 import Form from './form';
 
 type Props = {
-  unsubscribeEvents: Function,
+  unsubscribeCustomerEvents: Function,
   getAllCustomers: Function,
   createCustomer: Function,
   removeCustomer: Function,
@@ -28,9 +28,9 @@ class Customer extends Component<Props, {}> {
   }
 
   componentWillUnmount() {
-    const { unsubscribeEvents } = this.props;
+    const { unsubscribeCustomerEvents } = this.props;
 
-    unsubscribeEvents();
+    unsubscribeCustomerEvents();
   }
 
   onCreateCustomer = (customer: Object): void => {

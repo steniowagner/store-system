@@ -42,8 +42,8 @@ app.on('activate', () => {
   }
 });
 
-ipcMain.on(OPERATION_REQUEST, async (event, entitie, operation, args) => {
-  const eventResponseId = `${OPERATION_RESPONSE}_${entitie}`;
+ipcMain.on(OPERATION_REQUEST, async (event, entitie, operation, tag, args) => {
+  const eventResponseId = `${OPERATION_RESPONSE}_${tag}`;
   const result = await handleEvent(entitie, operation, args);
 
   event.sender.send(eventResponseId, result);
