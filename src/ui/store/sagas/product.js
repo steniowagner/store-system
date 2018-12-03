@@ -9,36 +9,26 @@ import {
   DELETE_PRODUCT,
 } from '../../../back-end/events-handlers/product/types';
 
-import { CREATE_BRAND } from '../../../back-end/events-handlers/brand/types';
 import { INSERT_PRODUCT_STOCK } from '../../../back-end/events-handlers/stock/types';
 
 import { handleEventUnsubscription, handleEventSubscription } from './eventHandler';
-import {
-  OPERATION_REQUEST,
-  PRODUCT,
-  BRAND,
-  STOCK,
-} from '../../../common/entitiesTypes';
+import { OPERATION_REQUEST, PRODUCT, STOCK } from '../../../common/entitiesTypes';
+import { createBrands } from './brand';
 
 const { ipcRenderer } = window.require('electron');
 
 const EVENT_TAGS = {
   INSERT_PRODUCT_IN_STOCK_PRODUCT: 'PRODUCT_INSERT_PRODUCT_IN_STOCK',
-  PRODUCT_CREATE: 'CREATE_PRODUCT',
-  PRODUCT_CREATE_BRAND: 'CREATE_BRAND_PRODUCT',
   GET_ALL_PRODUCTS: 'PRODUCTS_GET_ALL',
-  EDIT_PRODUCT: 'PRODUCT_EDIT',
+  PRODUCT_CREATE: 'CREATE_PRODUCT',
   REMOVE_PRODUCT: 'PRODUCT_REMOVE',
+  EDIT_PRODUCT: 'PRODUCT_EDIT',
 };
 
 function* handleCreateBrand({ brandsCreated, brand }) {
-  ipcRenderer.send(OPERATION_REQUEST, BRAND, CREATE_BRAND, EVENT_TAGS.PRODUCT_CREATE_BRAND, brandsCreated);
+  const { id } = yield call(createBrands, brandsCreated, brand.name);
 
-  const { result } = yield handleEventSubscription(EVENT_TAGS.PRODUCT_CREATE_BRAND);
-
-  const brandSelectedIndex = result.findIndex(brandCreated => brandCreated.name === brand.name);
-
-  return result[brandSelectedIndex].id;
+  return id;
 }
 
 const handleInsertProductStock = ({ minStockQuantity, stockQuantity }, ProductId) => {
@@ -58,13 +48,15 @@ export function* createProduct(action) {
     const hasNewBrands = !!args.brandsCreated.length;
     const BrandId = (hasNewBrands ? yield call(handleCreateBrand, args) : args.brand.id);
 
-    ipcRenderer.send(OPERATION_REQUEST, PRODUCT, CREATE_PRODUCT, EVENT_TAGS.PRODUCT_CREATE, {
+    const newProductData = {
       costPrice: parseFloat(args.costPrice),
       salePrice: parseFloat(args.salePrice),
       description: args.description,
       barcode: args.barcode,
       BrandId,
-    });
+    };
+
+    ipcRenderer.send(OPERATION_REQUEST, PRODUCT, CREATE_PRODUCT, EVENT_TAGS.PRODUCT_CREATE, newProductData);
 
     const { result } = yield handleEventSubscription(EVENT_TAGS.PRODUCT_CREATE);
 

@@ -1,5 +1,5 @@
 const brandEventTypes = {
-  CREATE_BRAND: 'CREATE_BRAND',
+  CREATE_BRANDS: 'CREATE_BRANDS',
   READ_BRANDS: 'READ_BRANDS',
 };
 

@@ -1,18 +1,20 @@
 const { Brand } = require('../../models');
 
-exports.createBrand = async (brands) => {
+exports.getAllBrands = async () => {
   try {
-    await Promise.all(brands.map(async brand => Brand.create(brand)));
-
     return await Brand.findAll({ raw: true });
   } catch (err) {
     return err;
   }
 };
 
-exports.getAllBrands = async () => {
+exports.createBrands = async ({ brandsCreated, brandSelected }) => {
   try {
-    return await Brand.findAll({ raw: true });
+    await Promise.all(brandsCreated.map(async brand => Brand.create(brand)));
+
+    const brandCreated = await Brand.findOne({ raw: true, where: { name: brandSelected } });
+
+    return brandCreated;
   } catch (err) {
     return err;
   }
