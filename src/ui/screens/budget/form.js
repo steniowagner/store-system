@@ -105,13 +105,17 @@ class BudgetForm extends Component<Props, State> {
   };
 
   render() {
+    const { values } = this.props;
+
+    const shouldShowActionFormButton = (values.status !== BUDGET_STATUS.APPROVED);
+
     return (
       <Wrapper>
         <Form
           {...this.staet}
         >
           {this.renderProductSale()}
-          {this.renderActionFormButton()}
+          {shouldShowActionFormButton && this.renderActionFormButton()}
           {this.renderSaleConfirmation()}
         </Form>
       </Wrapper>
@@ -161,19 +165,19 @@ const CustomForm = withFormik({
     } = props;
 
     if (mode === 'create') {
-      onCreateItem({
-        ...values,
-      });
+      onCreateItem(values);
     }
 
     if (mode === 'edit') {
-      onEditItem({
-        ...values,
-      });
+      onEditItem(values);
     }
 
     if (mode === 'detail') {
-      onConfirmBudgetPayment(values);
+      onConfirmBudgetPayment({
+        ...values,
+        status: BUDGET_STATUS.APPROVED,
+      });
+
       onToggleFullScreenDialog();
     }
 

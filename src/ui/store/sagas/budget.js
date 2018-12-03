@@ -104,6 +104,7 @@ export function* editBudget(action) {
     };
 
     ipcRenderer.send(OPERATION_REQUEST, BUDGET, UPDATE_BUDGET, EVENT_TAGS.UPDATE_BUDGET, params);
+
     yield handleEventSubscription(EVENT_TAGS.UPDATE_BUDGET);
 
     const budgetUpdated = parseBudgetToTableView(budget);
@@ -136,7 +137,11 @@ export function* confirmBudgetPayment(action) {
     const { payload } = action;
     const { budget } = payload;
 
-    yield createSale({ args: { ...payload.budget, createdFromBudget: true } });
+    const newSaleInfo = Object.assign({}, budget);
+
+    delete newSaleInfo.id; // id from budget
+
+    yield call(createSale, { args: { ...newSaleInfo, createdFromBudget: true } });
 
     const params = {
       ...budget,
