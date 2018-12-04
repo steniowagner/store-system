@@ -23,6 +23,7 @@ const ValueText = styled.p`
 const ValueTitle = styled.span`
   margin-left: 8px;
   font-size: 28px;
+  font-weight: 500;
   color: ${({ theme }) => theme.colors.affirmative};
 `;
 
@@ -73,9 +74,9 @@ const renderLeftValues = (totalText: string, subtotalText: string, discount: Obj
     <Wrapper
       direction="left"
     >
-      {renderItem('Sub-Total', totalText, false)}
-      {renderItem('Desconto', discountText, true)}
-      {renderItem('Total', subtotalText, true)}
+      {renderItem('SUB-TOTAL', totalText, false)}
+      {renderItem('DESCONTO', discountText, true)}
+      {renderItem('TOTAL', subtotalText, true)}
     </Wrapper>
   );
 };
@@ -84,8 +85,8 @@ const renderRightValues = (paidValueText: string, inDebitText: string): Object =
   <Wrapper
     direction="right"
   >
-    {renderItem('Valor Pago', paidValueText, false)}
-    {renderItem('Valor em Débito', inDebitText, true)}
+    {renderItem('VALOR PAGO', paidValueText, false)}
+    {renderItem('VALOR EM DÉBITO', inDebitText, true)}
   </Wrapper>
 );
 

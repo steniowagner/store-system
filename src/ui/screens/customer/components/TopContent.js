@@ -3,6 +3,9 @@
 import React from 'react';
 
 import AssignmentInd from '@material-ui/icons/AssignmentInd';
+import ArrowBack from '@material-ui/icons/ArrowBack';
+import Button from '@material-ui/core/Button';
+
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
@@ -33,6 +36,10 @@ const UserIconWrapper = styled.div`
   background-color: ${({ theme }) => theme.colors.affirmative};
 `;
 
+const ArrowBackIcon = styled(ArrowBack)`
+  color: ${({ theme }) => theme.colors.white};
+`;
+
 const UserIcon = styled(({ ...props }) => (
   <AssignmentInd
     {...props}
@@ -42,23 +49,40 @@ const UserIcon = styled(({ ...props }) => (
 `;
 
 type Props = {
+  onClickBackButton: Function,
   dateToShow: string,
   salesman: string,
 };
 
-const TopContent = ({ dateToShow, salesman }: Props): Object => (
+const renderBackButton = (onClickBackButton: Function): Object => (
+  <Button
+    onClick={onClickBackButton}
+    aria-label="Close"
+    color="primary"
+    variant="fab"
+  >
+    <ArrowBackIcon />
+  </Button>
+);
+
+const renderSalesmanInfo = (salesman: string): Object => (
+  <SalerInfoWrapper>
+    <UserIconWrapper>
+      <UserIcon />
+    </UserIconWrapper>
+    <SalerText>
+      {salesman}
+    </SalerText>
+  </SalerInfoWrapper>
+);
+
+const TopContent = ({ onClickBackButton, dateToShow, salesman }: Props): Object => (
   <Wrapper>
+    {renderBackButton(onClickBackButton)}
     <h2>
       {dateToShow}
     </h2>
-    <SalerInfoWrapper>
-      <UserIconWrapper>
-        <UserIcon />
-      </UserIconWrapper>
-      <SalerText>
-        {salesman}
-      </SalerText>
-    </SalerInfoWrapper>
+    {renderSalesmanInfo(salesman)}
   </Wrapper>
 );
 

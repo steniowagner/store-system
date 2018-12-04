@@ -9,10 +9,6 @@ export const Types = {
   GET_ALL_SUCCESS: 'customer/GET_ALL_SUCCESS',
   GET_ALL_FAILURE: 'customer/GET_ALL_FAILURE',
 
-  GET_DEBITS_REQUEST: 'customer/GET_DEBITS_REQUEST',
-  GET_DEBITS_SUCCESS: 'customer/GET_DEBITS_SUCCESS',
-  GET_DEBITS_FAILURE: 'customer/GET_DEBITS_FAILURE',
-
   EDIT_REQUEST: 'customer/EDIT_REQUEST',
   EDIT_REQUEST_SUCCESS: 'customer/EDIT_REQUEST_SUCCESS',
   EDIT_REQUEST_FAILURE: 'customer/EDIT_REQUEST_FAILURE',
@@ -61,21 +57,6 @@ export const Creators = {
   getAllCustomersFailure: () => ({
     type: Types.GET_ALL_FAILURE,
     payload: { error: 'Houve um erro na leitura dos Orçamentos' },
-  }),
-
-  getDebits: id => ({
-    type: Types.GET_DEBITS_REQUEST,
-    payload: { id },
-  }),
-
-  getDebitsSuccess: sales => ({
-    type: Types.GET_DEBITS_SUCCESS,
-    payload: { sales },
-  }),
-
-  getDebitsFailure: error => ({
-    type: Types.GET_DEBITS_FAILURE,
-    payload: { error },
   }),
 
   editCustomer: customer => ({
@@ -156,32 +137,6 @@ const customer = (state = INITIAL_STATE, { payload, type }) => {
       };
 
     case Types.GET_ALL_FAILURE:
-      return {
-        ...state,
-        error: payload.error,
-      };
-
-    case Types.GET_DEBITS_REQUEST:
-      return {
-        ...state,
-        message: null,
-        error: null,
-      };
-
-    case Types.GET_DEBITS_SUCCESS:
-      return {
-        ...state,
-        debits: payload.sales.map(sale => ({
-          ...sale,
-          paidValueText: `R$ ${(sale.total - sale.inDebit).toFixed(2)}`,
-          subtotalText: `R$ ${sale.subtotal.toFixed(2)}`,
-          inDebitText: `R$ ${sale.inDebit.toFixed(2)}`,
-          totalText: `R$ ${sale.total.toFixed(2)}`,
-        })),
-        error: null,
-      };
-
-    case Types.GET_DEBITS_FAILURE:
       return {
         ...state,
         error: payload.error,

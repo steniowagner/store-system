@@ -46,6 +46,7 @@ const SaleDetailDialog = ({
     >
       <DialogContent>
         <TopContent
+          onClickBackButton={onToggleSaleDetailDialog}
           dateToShow={dateToShow}
           salesman={salesman}
         />

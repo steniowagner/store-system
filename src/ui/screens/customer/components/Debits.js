@@ -6,8 +6,7 @@ import styled from 'styled-components';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Creators as CustomerCreators } from '../../../store/ducks/customer';
-import { Creators as SaleCreators } from '../../../store/ducks/sale';
+import { Creators as CustomerDebitsCreators } from '../../../store/ducks/customerDebits';
 
 import SaleDetailDialog from './SaleWithDebitDetail';
 import Dialog from '../../../components/common/Dialog';
@@ -192,12 +191,10 @@ class Debits extends Component<Props, State> {
   }
 }
 
-const Creators = Object.assign({}, SaleCreators, CustomerCreators);
-
-const mapDispatchToProps = dispatch => bindActionCreators(Creators, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators(CustomerDebitsCreators, dispatch);
 
 const mapStateToProps = state => ({
-  debits: state.customer.debits,
+  debits: state.debits.data,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Debits);

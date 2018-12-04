@@ -9,17 +9,14 @@ import {
   DELETE,
 } from '../../../back-end/events-handlers/customer/types';
 
-import { READ_SALES } from '../../../back-end/events-handlers/sale/types';
-
 import { handleEventUnsubscription, handleEventSubscription } from './eventHandler';
-import { OPERATION_REQUEST, CUSTOMER, SALE } from '../../../common/entitiesTypes';
+import { OPERATION_REQUEST, CUSTOMER } from '../../../common/entitiesTypes';
 
 const { ipcRenderer } = window.require('electron');
 
 const EVENT_TAGS = {
   READ_ALL: 'CUSTOMERS_READ_ALL',
   CREATE_CUSTOMER: 'CUSTOMER_CREATE',
-  GET_DEBITS: 'CUSTOMER_GET_DEBITS',
   UPDATE_CUSTOMER: 'CUSTOMER_UPDATE',
   REMOVE_CUSTOMER: 'CUSTOMER_REMOVE',
 };
@@ -52,22 +49,6 @@ export function* getAllCustomers() {
     yield put(CustomerCreators.getAllCustomersSuccess(result));
   } catch (err) {
     yield put(CustomerCreators.getAllCustomersFailure(err.message));
-  }
-}
-
-export function* getUserDebits(action) {
-  try {
-    const { id } = action.payload;
-
-    ipcRenderer.send(OPERATION_REQUEST, SALE, READ_SALES, EVENT_TAGS.GET_DEBITS);
-
-    const { result } = yield handleEventSubscription(EVENT_TAGS.GET_DEBITS);
-
-    const userSalesWithDebits = result.filter(sale => (sale.customer.id === id && sale.inDebit > 0));
-
-    yield put(CustomerCreators.getDebitsSuccess(userSalesWithDebits));
-  } catch (err) {
-    yield put(CustomerCreators.getDebitsFailure(err.message));
   }
 }
 

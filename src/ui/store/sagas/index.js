@@ -1,5 +1,6 @@
 import { all, takeLatest } from 'redux-saga/effects';
 
+import { Types as CustomerDebitsTypes } from '../ducks/customerDebits';
 import { Types as CustomerTypes } from '../ducks/customer';
 import { Types as ProviderTypes } from '../ducks/provider';
 import { Types as StockTypes } from '../ducks/stock';
@@ -21,7 +22,6 @@ import {
   unsubscribeCustomerEvents,
   createCustomer,
   getAllCustomers,
-  getUserDebits,
   editCustomer,
   removeCustomer,
 } from './customer';
@@ -66,6 +66,8 @@ import {
   editSale,
 } from './sale';
 
+import { getCustomerDebits } from './customerDebits';
+
 import { getAllBrands } from './brand';
 
 export default function* rootSaga() {
@@ -83,7 +85,6 @@ export default function* rootSaga() {
     takeLatest(ProviderTypes.REMOVE_REQUEST, removeProvider),
 
     takeLatest(CustomerTypes.UNSUBSCRIBE_EVENTS, unsubscribeCustomerEvents),
-    takeLatest(CustomerTypes.GET_DEBITS_REQUEST, getUserDebits),
     takeLatest(CustomerTypes.CREATE_REQUEST, createCustomer),
     takeLatest(CustomerTypes.GET_ALL_REQUEST, getAllCustomers),
     takeLatest(CustomerTypes.EDIT_REQUEST, editCustomer),
@@ -112,6 +113,8 @@ export default function* rootSaga() {
     takeLatest(BudgetTypes.READ_ALL_REQUEST, getAllBudgets),
     takeLatest(BudgetTypes.EDIT_REQUEST, editBudget),
     takeLatest(BudgetTypes.DELETE_REQUEST, deleteBudget),
+
+    takeLatest(CustomerDebitsTypes.GET_DEBITS_REQUEST, getCustomerDebits),
 
     takeLatest(BrandTypes.GET_ALL_REQUEST, getAllBrands),
   ]);

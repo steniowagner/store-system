@@ -135,7 +135,7 @@ const CustomSnackbar = ({
       autoHideDuration={3500}
       open={isOpen}
     >
-      {shouldRenderContent && renderContent(type, text, onCloseSnackbar)}
+      {shouldRenderContent ? renderContent(type, text, onCloseSnackbar) : null}
     </Snackbar>
   );
 };
