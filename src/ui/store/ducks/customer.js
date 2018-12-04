@@ -17,8 +17,6 @@ export const Types = {
   REMOVE_REQUEST_SUCCESS: 'customer/REMOVE_REQUEST_SUCCESS',
   REMOVE_REQUEST_FAILURE: 'customer/REMOVE_REQUEST_FAILURE',
 
-  REMOVE_DEBIT: 'customer/REMOVE_DEBIT',
-
   UNSUBSCRIBE_EVENTS: 'customer/UNSUBSCRIBE_EVENTS',
 };
 
@@ -87,11 +85,6 @@ export const Creators = {
   removeCustomerFailure: () => ({
     type: Types.REMOVE_REQUEST_FAILURE,
     payload: { error: 'Houve um erro ao Remover o Cliente' },
-  }),
-
-  onRemoveDebit: saleId => ({
-    type: Types.REMOVE_DEBIT,
-    payload: { saleId },
   }),
 
   unsubscribeCustomerEvents: () => ({
@@ -180,12 +173,6 @@ const customer = (state = INITIAL_STATE, { payload, type }) => {
       return {
         ...state,
         error: payload.error,
-      };
-
-    case Types.REMOVE_DEBIT:
-      return {
-        ...state,
-        debits: state.debits.filter(sale => sale.id !== payload.saleId),
       };
 
     case Types.UNSUBSCRIBE_EVENTS:

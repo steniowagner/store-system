@@ -4,6 +4,10 @@ export const Types = {
   GET_DEBITS_REQUEST: 'debits/GET_DEBITS_REQUEST',
   GET_DEBITS_SUCCESS: 'debits/GET_DEBITS_SUCCESS',
   GET_DEBITS_FAILURE: 'debits/GET_DEBITS_FAILURE',
+
+  REMOVE_DEBITS_REQUEST: 'debits/REMOVE_DEBITS_REQUEST',
+  REMOVE_DEBITS_SUCCESS: 'debits/REMOVE_DEBITS_SUCCESS',
+  REMOVE_DEBITS_FAILURE: 'debits/REMOVE_DEBITS_FAILURE',
 };
 
 const INITIAL_STATE = Immutable({
@@ -25,9 +29,24 @@ export const Creators = {
     type: Types.GET_DEBITS_FAILURE,
     payload: { error },
   }),
+
+  removeDebit: sale => ({
+    type: Types.REMOVE_DEBITS_REQUEST,
+    payload: { sale },
+  }),
+
+  removeDebitSuccess: id => ({
+    type: Types.REMOVE_DEBITS_SUCCESS,
+    payload: { id },
+  }),
+
+  removeDebitFailure: error => ({
+    type: Types.REMOVE_DEBITS_FAILURE,
+    payload: { error },
+  }),
 };
 
-const customer = (state = INITIAL_STATE, { payload, type }) => {
+const customerDebit = (state = INITIAL_STATE, { payload, type }) => {
   switch (type) {
     case Types.GET_DEBITS_REQUEST:
       return {
@@ -54,9 +73,26 @@ const customer = (state = INITIAL_STATE, { payload, type }) => {
         error: payload.error,
       };
 
+    case Types.REMOVE_DEBITS_REQUEST:
+      return {
+        ...state,
+      };
+
+    case Types.REMOVE_DEBITS_SUCCESS:
+      return {
+        ...state,
+        data: state.data.filter(sale => sale.id !== payload.id),
+      };
+
+    case Types.REMOVE_DEBITS_FAILURE:
+      return {
+        ...state,
+        error: payload.error,
+      };
+
     default:
       return state;
   }
 };
 
-export default customer;
+export default customerDebit;

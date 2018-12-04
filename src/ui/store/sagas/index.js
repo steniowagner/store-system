@@ -66,7 +66,7 @@ import {
   editSale,
 } from './sale';
 
-import { getCustomerDebits } from './customerDebits';
+import { getCustomerDebits, removeDebit } from './customerDebits';
 
 import { getAllBrands } from './brand';
 
@@ -115,6 +115,7 @@ export default function* rootSaga() {
     takeLatest(BudgetTypes.DELETE_REQUEST, deleteBudget),
 
     takeLatest(CustomerDebitsTypes.GET_DEBITS_REQUEST, getCustomerDebits),
+    takeLatest(CustomerDebitsTypes.REMOVE_DEBITS_REQUEST, removeDebit),
 
     takeLatest(BrandTypes.GET_ALL_REQUEST, getAllBrands),
   ]);

@@ -43,9 +43,8 @@ const tabConfig = [{
 
 type Props = {
   debits: Array<Object>,
-  onRemoveDebit: Function,
+  removeDebit: Function,
   getDebits: Function,
-  editSale: Function,
   id: number,
 };
 
@@ -98,18 +97,10 @@ class Debits extends Component<Props, State> {
   };
 
   onRemoveDebit = () => {
-    const { onRemoveDebit, editSale } = this.props;
+    const { removeDebit } = this.props;
     const { saleSelected } = this.state;
 
-    onRemoveDebit(saleSelected.id);
-
-    const saleWithouDebit = {
-      ...saleSelected,
-      products: JSON.parse(saleSelected.products),
-      inDebit: 0,
-    };
-
-    editSale(saleWithouDebit);
+    removeDebit(saleSelected);
   };
 
   renderSaleDetailDialog = (): Object => {

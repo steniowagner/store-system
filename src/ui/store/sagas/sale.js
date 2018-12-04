@@ -6,13 +6,7 @@ import 'moment/locale/pt-br';
 import { Creators as SaleCreators } from '../ducks/sale';
 
 import { UPDATE_PRODUCTS_STOCK, TAKE_AWAY_PRODUCTS_STOCK } from '../../../back-end/events-handlers/stock/types';
-
-import {
-  CREATE_SALE,
-  UPDATE_SALE,
-  READ_SALES,
-} from '../../../back-end/events-handlers/sale/types';
-
+import { CREATE_SALE, UPDATE_SALE, READ_SALES } from '../../../back-end/events-handlers/sale/types';
 import { handleEventUnsubscription, handleEventSubscription } from './eventHandler';
 import { OPERATION_REQUEST, SALE } from '../../../common/entitiesTypes';
 import { editStockProducts } from './stock';
@@ -28,10 +22,10 @@ const parseSaleToTableView = (sale: Object): Object => ({
 });
 
 const EVENT_TAGS = {
-  SALE_CREATE: 'CREATE_SALE',
   SALES_GET_ALL: 'GET_ALL_SALES',
-  EDIT_SALE: 'SALE_EDIT',
+  SALE_CREATE: 'CREATE_SALE',
   REMOVE_SALE: 'SALE_REMOVE',
+  EDIT_SALE: 'SALE_EDIT',
 };
 
 export function* createSale(action) {
