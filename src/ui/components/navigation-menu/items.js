@@ -1,37 +1,37 @@
 import AccountCircle from '@material-ui/icons/AccountCircle';
 
-const config = [{
-  icon: AccountCircle,
+const items = [{
+  Icon: AccountCircle,
   title: 'CAIXA',
   route: '/cashier',
 }, {
-  icon: AccountCircle,
+  Icon: AccountCircle,
   title: 'VENDAS',
   route: '/sale',
 }, {
-  icon: AccountCircle,
+  Icon: AccountCircle,
   title: 'PRODUTOS',
   route: '/product',
 }, {
-  icon: AccountCircle,
+  Icon: AccountCircle,
   title: 'ESTOQUE',
   route: '/stock',
 }, {
-  icon: AccountCircle,
+  Icon: AccountCircle,
   title: 'ORÇAMENTOS',
   route: '/budget',
 }, {
-  icon: AccountCircle,
+  Icon: AccountCircle,
   title: 'CLIENTES',
   route: '/customer',
 }, {
-  icon: AccountCircle,
+  Icon: AccountCircle,
   title: 'FORNECEDORES',
   route: '/provider',
 }, {
-  icon: AccountCircle,
+  Icon: AccountCircle,
   title: 'USUÁRIOS',
   route: '/user',
 }];
 
-export default config;
+export default items;

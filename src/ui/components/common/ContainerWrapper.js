@@ -8,12 +8,11 @@ import styled from 'styled-components';
 
 const Container = styled.main`
   height: 100%;
-  flex-grow: 1;
-  min-width: 0;
 `;
 
+// margin-left: 250px;
 const Wrapper = styled(Paper)`
-  margin-left: 250px;
+  margin-top: 12px;
   height: 80%;
 `;
 
@@ -25,7 +24,6 @@ const styles = theme => ({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  toolbar: theme.mixins.toolbar,
   content: {
     paddingTop: theme.spacing.unit * 1.5,
     paddingRight: theme.spacing.unit * 3,
@@ -43,9 +41,6 @@ const ContainerWrapper = ({ children, classes }: Props): Object => (
   <Container
     className={classes.container}
   >
-    <div
-      className={classes.toolbar}
-    />
     <Wrapper
       className={classes.content}
     >
