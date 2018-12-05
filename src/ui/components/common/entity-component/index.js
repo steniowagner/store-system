@@ -15,7 +15,7 @@ const FilterAndCreateButtonWrapper = styled.div`
   flex: 1;
   justify-content: space-between;
   align-items: center;
-  margin: 16px 0;
+  margin: 16px 0 32px 0;
 `;
 
 const FilterWrapper = styled.div`

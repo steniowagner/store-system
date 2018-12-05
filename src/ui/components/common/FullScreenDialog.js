@@ -20,10 +20,10 @@ const Wrapper = styled.div`
 
 const styles = theme => ({
   container: {
-    padding: `${theme.spacing.unit * 4}px ${theme.spacing.unit * 8}px`,
+    padding: `${theme.spacing.unit * 4}px ${theme.spacing.unit * 6}px`,
   },
   content: {
-    padding: `${theme.spacing.unit * 4}px ${theme.spacing.unit * 8}px`,
+    padding: `${theme.spacing.unit * 4}px ${theme.spacing.unit * 6}px`,
   },
   toolbar: theme.mixins.toolbar,
 });
