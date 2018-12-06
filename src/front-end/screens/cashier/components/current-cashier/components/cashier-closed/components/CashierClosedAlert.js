@@ -8,11 +8,11 @@ import ActionButton from '../../../../../../../components/common/ActionButton';
 
 const Wrapper = styled.div`
   width: 100%;
-  height: 350px;
+  height: 100%;
   display: flex;
   flex: 1;
   justify-content: center;
-  align-items: flex-end;
+  align-items: center;
 `;
 
 const BigText = styled.p`

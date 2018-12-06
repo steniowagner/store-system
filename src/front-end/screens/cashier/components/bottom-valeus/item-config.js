@@ -46,7 +46,7 @@ export const getBottomValueItemConfig = (item: string, value: string) => {
     },
 
     [CONFIGS_TYPES.TOTAL_PROFIT]: {
-      message: `Lucro Atual: R$ ${Number(value).toFixed(2)}`,
+      message: `Lucro: R$ ${Number(value).toFixed(2)}`,
       Icon: MoneyIcon,
       color: 'affirmative',
     },

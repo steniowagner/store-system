@@ -22,77 +22,12 @@ import {
   parseSaleTableItem,
 } from './cashier-utils';
 
-const sales = [{
-  timestamp: 'Hoje às 15:30',
-  customer: {
-    cpf: '123',
-    rg: '123',
-    id: '123',
-    name: 'Ana Eridan Pereira de Freitas',
-  },
-  username: 'swmyself',
-  discount: {
-    type: 'percentage',
-    value: 10,
-  },
-  isInDebit: false,
-  observation: 'observation',
-  paymentInfo: {
-    checkValue: '',
-    creditCardValue: '9.16',
-    debitCardValue: '',
-    moneyValue: '50',
-  },
-  shouldPrintReceipt: true,
-  subtotal: '65.73',
-  total: '59.16',
-  products: [{
-    barCode: '123',
-    brand: 'Samsung',
-    description: 'Mouse',
-    id: 0.14423952784441352,
-    quantity: 3,
-    salePrice: 21.91,
-    costPrice: 20,
-  }],
-}, {
-  timestamp: 'Hoje às 15:30',
-  customer: {
-    cpf: '123',
-    rg: '123',
-    id: '123',
-    name: 'Ana Eridan Pereira de Freitas',
-  },
-  username: 'swmyself',
-  discount: {
-    type: 'percentage',
-    value: 10,
-  },
-  isInDebit: false,
-  observation: 'observation',
-  paymentInfo: {
-    checkValue: '',
-    creditCardValue: '9',
-    debitCardValue: '',
-    moneyValue: '50.16',
-  },
-  shouldPrintReceipt: true,
-  subtotal: '65.73',
-  total: '59.16',
-  products: [{
-    barCode: '123',
-    brand: 'Samsung',
-    description: 'Mouse',
-    id: 0.14423952784441352,
-    quantity: 3,
-    salePrice: 21.91,
-    costPrice: 20,
-  }],
-}];
-
 type Props = {
-  initialMoneyInCashier: string,
+  onEditInOutCashierOperation: Function,
+  onTakeMoneyFromCashier: Function,
+  onAddMoneyIntoCashier: Function,
   onCloseCashier: Function,
+  initialMoneyInCashier: string,
 };
 
 type State = {
@@ -114,39 +49,29 @@ class CashierOpen extends Component<Props, State> {
     salesOperations: [],
   };
 
-  componentDidMount() {
-    moment.locale('pt-br');
-
-    const salesOperations = sales.map(sale => parseSaleTableItem(sale));
-
-    this.setState({
-      salesOperations,
-    }, () => this.updateCashierValues());
-  }
-
   onAddMoneyCashier = (value: string, reason: string): void => {
-    const { addMoneyOperations } = this.state;
+    const { onAddMoneyIntoCashier } = this.props;
 
     const addMoneyCashierOperation = getNewCashierOperationData(value, reason, DIALOG_TYPES.ADD_MONEY);
 
-    this.setState({
-      addMoneyOperations: [addMoneyCashierOperation, ...addMoneyOperations],
-      contextOperationItem: undefined,
-    }, () => this.updateCashierValues());
+    onAddMoneyIntoCashier(addMoneyCashierOperation);
   };
 
   onTakeAwaytMoneyCashier = (value: string, reason: string): void => {
-    const { takeAwayMoneyOperations } = this.state;
+    const { onTakeMoneyFromCashier } = this.props;
 
     const takeAwaytMoneyCashierOperation = getNewCashierOperationData(value, reason, DIALOG_TYPES.TAKE_AWAY_MONEY);
 
-    this.setState({
-      takeAwayMoneyOperations: [takeAwaytMoneyCashierOperation, ...takeAwayMoneyOperations],
-    }, () => this.updateCashierValues());
+    onTakeMoneyFromCashier(takeAwaytMoneyCashierOperation);
   };
 
   onEditCashierOperation = (valueEdited: string, reasonEdited: string): void => {
+    const { onEditInOutCashierOperation } = this.props;
     const { contextOperationItem } = this.state;
+
+    onEditInOutCashierOperation(contextOperationItem, valueEdited, reasonEdited);
+
+    /* const { contextOperationItem } = this.state;
     const { type } = contextOperationItem;
 
     const { dataset, stateRef } = this.getProperCashierOperationDataset(type);
@@ -166,7 +91,7 @@ class CashierOpen extends Component<Props, State> {
         [operationEditedIndex]: operationEdited,
       }),
       contextOperationItem: undefined,
-    }, () => this.updateCashierValues());
+    }, () => this.updateCashierValues()); */
   };
 
   onFinishCashier = (): void => {
@@ -190,6 +115,7 @@ class CashierOpen extends Component<Props, State> {
   };
 
   onClickTableEditIcon = (operation: Object): void => {
+    console.log(operation)
     this.setState({
       contextOperationItem: { ...operation, mode: 'edit' },
     });
@@ -217,14 +143,6 @@ class CashierOpen extends Component<Props, State> {
       : { dataset: takeAwayMoneyOperations, stateRef: 'takeAwayMoneyOperations' });
 
     return operationInfo;
-  };
-
-  getDatasetItems = (): Array<Object> => {
-    const { takeAwayMoneyOperations, addMoneyOperations, salesOperations } = this.state;
-
-    const dataset = [...takeAwayMoneyOperations, ...addMoneyOperations, ...salesOperations];
-
-    return dataset;
   };
 
   updateCashierValues = (): void => {
@@ -282,8 +200,7 @@ class CashierOpen extends Component<Props, State> {
 
   renderTable = (): Object => {
     const { currentTablePage } = this.state;
-
-    const dataset = this.getDatasetItems();
+    const { currentCashier } = this.props;
 
     return (
       <Table
@@ -293,7 +210,7 @@ class CashierOpen extends Component<Props, State> {
         currentPage={currentTablePage}
         tabConfig={config.tabConfig}
         canBeRemoved={false}
-        dataset={dataset}
+        dataset={currentCashier.operations}
         canBeEdited
       />
     );

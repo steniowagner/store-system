@@ -7,13 +7,13 @@ import styled from 'styled-components';
 
 const Container = styled.div`
   height: 100%;
-  padding: 90px 20px 0 20px;
+  padding: 84px 28px 0 28px;
   overflow: scroll;
 `;
 
 const ChildrenWrapper = styled(Paper)`
-  padding: 16px 16px 28px 16px;
-  margin-bottom: 32px;
+  padding: 28px;
+  margin: 32px 0;
 `;
 
 type Props = {

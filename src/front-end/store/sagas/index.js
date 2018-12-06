@@ -3,12 +3,13 @@ import { all, takeLatest } from 'redux-saga/effects';
 import { Types as CustomerDebitsTypes } from '../ducks/customerDebits';
 import { Types as CustomerTypes } from '../ducks/customer';
 import { Types as ProviderTypes } from '../ducks/provider';
+import { Types as ProductTypes } from '../ducks/product';
+import { Types as CashierTypes } from '../ducks/cashier';
+import { Types as BudgetTypes } from '../ducks/budget';
 import { Types as StockTypes } from '../ducks/stock';
 import { Types as BrandTypes } from '../ducks/brand';
-import { Types as ProductTypes } from '../ducks/product';
 import { Types as UserTypes } from '../ducks/user';
 import { Types as SaleTypes } from '../ducks/sale';
-import { Types as BudgetTypes } from '../ducks/budget';
 
 import {
   unsubscribeUserEvents,
@@ -58,6 +59,12 @@ import {
   editBudget,
   deleteBudget,
 } from './budget';
+
+import {
+  unsubscribeCashierEvents,
+  createCashier,
+  editCashier,
+} from './cashier';
 
 import {
   unsubscribeSaleEvents,
@@ -113,6 +120,10 @@ export default function* rootSaga() {
     takeLatest(BudgetTypes.READ_ALL_REQUEST, getAllBudgets),
     takeLatest(BudgetTypes.EDIT_REQUEST, editBudget),
     takeLatest(BudgetTypes.DELETE_REQUEST, deleteBudget),
+
+    takeLatest(CashierTypes.UNSUBSCRIBE_EVENTS, unsubscribeCashierEvents),
+    takeLatest(CashierTypes.CREATE_REQUEST, createCashier),
+    takeLatest(CashierTypes.EDIT_REQUEST, editCashier),
 
     takeLatest(CustomerDebitsTypes.GET_DEBITS_REQUEST, getCustomerDebits),
     takeLatest(CustomerDebitsTypes.REMOVE_DEBITS_REQUEST, removeDebit),

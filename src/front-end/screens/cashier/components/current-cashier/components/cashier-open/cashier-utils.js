@@ -2,24 +2,20 @@
 
 import moment from 'moment';
 
-export const getNewCashierOperationData = (value: string, reason: string, type: string): Object => {
-  const newCashierOperation = {
-    valueText: `R$ ${Number(value).toFixed(2)}`,
-    value: Number(value),
-    timestamp: moment().calendar(),
-    username: 'swmyself',
-    id: Math.random(),
-    customerName: '-',
-    discountText: '-',
-    valuePaid: '-',
-    totalText: '-',
-    pending: '-',
-    reason,
-    type,
-  };
-
-  return newCashierOperation;
-};
+export const getNewCashierOperationData = (value: string, reason: string, type: string): Object => ({
+  valueText: `R$ ${parseFloat(value).toFixed(2)}`,
+  value: parseFloat(value),
+  timestamp: moment().calendar(),
+  username: 'swmyself',
+  id: Math.random(),
+  customerName: '-',
+  discountText: '-',
+  valuePaid: '-',
+  totalText: '-',
+  pending: '-',
+  reason,
+  type,
+});
 
 export const getTotalPaymentValue = (paymentInfo: Object): number => {
   const valuePaid = Object.keys(paymentInfo).reduce((current, item) => current + Number(paymentInfo[item]), 0);
