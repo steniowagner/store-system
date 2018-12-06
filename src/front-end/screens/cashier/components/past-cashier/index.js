@@ -93,7 +93,6 @@ class PastCashiers extends Component {
         updatePageIndex={this.onTablePageChange}
         currentPage={currentPage}
         tabConfig={config.tabConfig}
-        withPagination={false}
         dataset={Array(10).fill({
           date: '13 de novembro de 2018',
           initalCashierValue: 'R$ 29.90',

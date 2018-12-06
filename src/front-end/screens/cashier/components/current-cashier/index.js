@@ -5,8 +5,8 @@ import React, { Component, Fragment } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
+import { CASHIER_OPERATIONS } from './components/cashier-open/components/top-buttons-values/dialog-config';
 import { Creators as CashierCreators } from '../../../../store/ducks/cashier';
-import { DIALOG_TYPES } from './components/cashier-open/components/top-buttons-values/dialog-config';
 
 import CashierClosed from './components/cashier-closed';
 import CashierOpen from './components/cashier-open';
@@ -50,12 +50,12 @@ class CurrentCashier extends Component<Props, State> {
     let stateRef = '';
     let pastAmount = 0;
 
-    if (type === DIALOG_TYPES.TAKE_AWAY_MONEY) {
+    if (type === CASHIER_OPERATIONS.TAKE_AWAY_MONEY) {
       stateRef = 'totalOutcome';
       pastAmount = currentCashier.totalOutcome - parseFloat(value);
     }
 
-    if (type === DIALOG_TYPES.ADD_MONEY) {
+    if (type === CASHIER_OPERATIONS.ADD_MONEY) {
       stateRef = 'totalIncome';
       pastAmount = currentCashier.totalIncome - parseFloat(value);
     }
@@ -75,7 +75,7 @@ class CurrentCashier extends Component<Props, State> {
       [stateRef]: pastAmount + parseFloat(valueEdited),
     };
 
-    console.log(cashierUpdated);
+    editCashier(cashierUpdated);
   };
 
   onTakeMoneyFromCashier = (operationInfo: Object): void => {

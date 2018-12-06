@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 
 import { BUTTON_TYPES, getButtonConfig } from './button-config';
-import { DIALOG_TYPES, getDialogConfig } from './dialog-config';
+import { CASHIER_OPERATIONS, getDialogConfig } from './dialog-config';
 
 import MoneyOperationDialog from './MoneyOperationDialog';
 import CashierButton from './CashierButton';
@@ -64,7 +64,7 @@ class TopActionButtons extends Component<Props, State> {
   onClickAddMoneyButton = (): void => {
     const { onAddMoneyCashier } = this.props;
 
-    const dialogConfig = getDialogConfig(DIALOG_TYPES.ADD_MONEY, onAddMoneyCashier);
+    const dialogConfig = getDialogConfig(CASHIER_OPERATIONS.ADD_MONEY, onAddMoneyCashier);
 
     this.setState({
       moneyOperationDialogConfig: { ...dialogConfig, mode: 'create' },
@@ -75,7 +75,7 @@ class TopActionButtons extends Component<Props, State> {
   onClickTakeAwayMoneyButton = (): void => {
     const { onTakeAwaytMoneyCashier } = this.props;
 
-    const dialogConfig = getDialogConfig(DIALOG_TYPES.TAKE_AWAY_MONEY, onTakeAwaytMoneyCashier);
+    const dialogConfig = getDialogConfig(CASHIER_OPERATIONS.TAKE_AWAY_MONEY, onTakeAwaytMoneyCashier);
 
     this.setState({
       moneyOperationDialogConfig: { ...dialogConfig, mode: 'create' },

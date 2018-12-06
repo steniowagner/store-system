@@ -54,7 +54,7 @@ const FullScreenDialog = ({
     TransitionComponent={TransitionComponent}
     disableBackdropClick
     onClose={onClose}
-    open={isOpen}
+    open={!!isOpen}
     fullScreen
   >
     <AppBar>

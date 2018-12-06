@@ -31,7 +31,7 @@ export const CONFIGS_TYPES = {
   INITAL_MONEY: 'INITAL_MONEY',
 };
 
-export const getBottomValueItemConfig = (item: string, value: string) => {
+export const getBottomValueItemConfig = (item: string, value: number): Object => {
   const configs = {
     [CONFIGS_TYPES.TOTAL_INPUT]: {
       message: `Total de Entrada no Caixa: R$ ${Number(value).toFixed(2)}`,

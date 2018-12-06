@@ -92,7 +92,7 @@ class SelectProduct extends Component<Props, State> {
     }, () => onAddProduct(productSelected, quantity));
   };
 
-  checkProductAvailabilityInStock = (product: Object, quantityDesired: number): string | boolean => {
+  checkProductAvailabilityInStock = (product: Object, quantityDesired: number): Object | boolean => {
     const { stock, values } = this.props;
     const { products } = values;
 

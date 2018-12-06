@@ -150,7 +150,6 @@ class Debits extends Component<Props, State> {
         currentPage={currentPage}
         tabConfig={tabConfig}
         dataset={debits}
-        withPagination
         canBeRemoved
       />
     );

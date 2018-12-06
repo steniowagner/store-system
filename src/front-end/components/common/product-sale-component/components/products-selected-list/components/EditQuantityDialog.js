@@ -77,6 +77,7 @@ class EditQuantityDialog extends Component<Props, State> {
 
   handleProductAvailabilityInStock = (quantity: string): string => {
     const { productSelected, stock } = this.props;
+
     const { stockQuantity, minStockQuantity } = stock.filter(productInStockInfo => productInStockInfo.ProductId === productSelected.id)[0];
 
     if (Number(quantity) > stockQuantity) {

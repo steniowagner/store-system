@@ -17,6 +17,9 @@ export const Types = {
   CLOSE_REQUEST_SUCCESS: 'cashier/CLOSE_REQUEST_SUCCESS',
   CLOSE_REQUEST_FAILURE: 'cashier/CLOSE_REQUEST_FAILURE',
 
+  CREATE_SALE: 'cashier/CREATE_SALE',
+  EDIT_SALE: 'cashier/EDIT_SALE',
+
   UNSUBSCRIBE_EVENTS: 'cashier/UNSUBSCRIBE_EVENTS',
 };
 
@@ -55,7 +58,7 @@ export const Creators = {
 
   readAllCashiersFailure: () => ({
     type: Types.READ_ALL_FAILURE,
-    payload: { error: 'Houve um erro na leitura dos Caixas' },
+    payload: { error: 'Houve um erro na leitura dos Caixas ' },
   }),
 
   editCashier: cashier => ({
@@ -70,6 +73,16 @@ export const Creators = {
 
   editCashierFailure: () => ({
     type: Types.EDIT_REQUEST_FAILURE,
+  }),
+
+  onCreateSale: sale => ({
+    type: Types.CREATE_SALE,
+    payload: { sale },
+  }),
+
+  onEditSale: saleEdited => ({
+    type: Types.EDIT_SALE,
+    payload: { saleEdited },
   }),
 
   unsubscribeCashierEvents: () => ({
@@ -136,9 +149,27 @@ const cashier = (state = INITIAL_STATE, { payload, type }) => {
         error: payload.error,
       };
 
+    case Types.CREATE_SALE:
+      return {
+        ...state,
+        currentCashier: {
+          ...state.currentCashier,
+          operations: [payload.sale, ...state.currentCashier.operations],
+        },
+      };
+
+    case Types.EDIT_SALE:
+      return {
+        ...state,
+        currentCashier: {
+          ...payload.cashierUpdated,
+          operations: JSON.parse(payload.cashierUpdated.operations),
+        },
+      };
+
     case Types.UNSUBSCRIBE_EVENTS: {
       return {
-        ...INITIAL_STATE,
+        ...state,
       };
     }
 

@@ -41,7 +41,7 @@ const renderTotalOutputCashier = (totalOutputCashier: number): Object => {
   );
 };
 
-const renderInitialMoneyInCashier = (initalMoney: string): Object => {
+const renderInitialMoneyInCashier = (initalMoney: number): Object => {
   const config = getBottomValueItemConfig(CONFIGS_TYPES.INITAL_MONEY, initalMoney);
 
   return (
@@ -62,14 +62,14 @@ const renderProfit = (totalProfit: number): Object => {
 };
 
 type Props = {
-  initialMoneyInCashier: string,
+  initialMoneyCashier: string,
   totalOutputCashier: number,
   totalInputCashier: number,
   totalProfit: number,
 };
 
 const BottomValues = ({
-  initialMoneyInCashier,
+  initialMoneyCashier,
   totalOutputCashier,
   totalInputCashier,
   totalProfit,
@@ -81,7 +81,7 @@ const BottomValues = ({
         {renderTotalOutputCashier(totalOutputCashier)}
       </SectionWrapper>
       <SectionWrapper>
-        {renderInitialMoneyInCashier(initialMoneyInCashier)}
+        {renderInitialMoneyInCashier(initialMoneyCashier)}
         {renderProfit(totalProfit)}
       </SectionWrapper>
     </Container>

@@ -1,6 +1,6 @@
 const tabConfig = [{
   columnTitle: 'Horário',
-  dataField: 'timestamp',
+  dataField: 'timestampText',
 }, {
   columnTitle: 'Operação',
   dataField: 'type',
@@ -9,7 +9,7 @@ const tabConfig = [{
   dataField: 'customerName',
 }, {
   columnTitle: 'Vendedor',
-  dataField: 'username',
+  dataField: 'salesman',
 }, {
   columnTitle: 'Valor',
   dataField: 'valueText',

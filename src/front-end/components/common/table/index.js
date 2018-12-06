@@ -57,7 +57,6 @@ type Props = {
   onRemoveIconClicked: ?Function,
   onEditIconClicked: ?Function,
   updatePageIndex: Function,
-  withPagination: ?boolean,
   canBeRemoved: boolean,
   canBeEdited: boolean,
   tabConfig: Array<Object>,
@@ -184,7 +183,6 @@ class CustomTable extends Component<Props, State> {
   render() {
     const {
       updatePageIndex,
-      withPagination,
       currentPage,
       tabConfig,
       dataset,
@@ -208,7 +206,6 @@ class CustomTable extends Component<Props, State> {
         </Table>
         <Pagination
           onChangeRowsPerPage={this.onChangeRowsPerPage}
-          withPagination={withPagination}
           datasetLength={dataset.length}
           onPageChange={updatePageIndex}
           rowsPerPage={rowsPerPage}

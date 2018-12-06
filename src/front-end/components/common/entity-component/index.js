@@ -318,7 +318,6 @@ class EntityComponent extends Component<Props, State> {
         currentPage={currentPage}
         dataset={itemsFiltered}
         tabConfig={tabConfig}
-        withPagination
       />
     );
   };

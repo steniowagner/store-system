@@ -1,11 +1,13 @@
-import { put } from 'redux-saga/effects';
+import { select, call, put } from 'redux-saga/effects';
 
 import moment from 'moment';
 import 'moment/locale/pt-br';
 
+import { CASHIER_OPERATIONS } from '../../screens/cashier/components/current-cashier/components/cashier-open/components/top-buttons-values/dialog-config';
 import { CREATE_CASHIER, UPDATE_CASHIER, READ_CASHIER } from '../../../back-end/events-handlers/cashier/types';
 import { handleEventUnsubscription, handleEventSubscription } from './eventHandler';
 import { OPERATION_REQUEST, CASHIER } from '../../../common/entitiesTypes';
+import { calculateTotalProfit, parseSaleTableItem } from '../../screens/cashier/cashier-utils';
 import { Creators as CashierCreators } from '../ducks/cashier';
 
 const { ipcRenderer } = window.require('electron');
@@ -29,7 +31,7 @@ export function* createCashier(action) {
       totalOutcome: parseFloat(0),
       totalIncome: parseFloat(0),
       totalProfit: parseFloat(0),
-      salesman: 'stenio',
+      salesman: 'steniowagner',
       operations: '',
     };
 
@@ -64,11 +66,62 @@ export function* editCashier(action) {
     ipcRenderer.send(OPERATION_REQUEST, CASHIER, UPDATE_CASHIER, EVENT_TAGS.UPDATE_CASHIER, cashierUpdated);
 
     yield handleEventSubscription(EVENT_TAGS.UPDATE_CASHIER);
-
     yield put(CashierCreators.editCashierSuccess(cashierUpdated));
   } catch (err) {
     yield put(CashierCreators.editCashierFailure(err.message));
   }
+}
+
+const getTotalProfit = (operations) => {
+  const saleOperations = operations.filter(operation => operation.type === CASHIER_OPERATIONS.SALE);
+  const totalProfit = calculateTotalProfit(saleOperations);
+
+  return totalProfit;
+};
+
+export function* onAddSaleOperation(newSale) {
+  const { currentCashier } = yield select(state => state.cashier);
+  const { operations } = currentCashier;
+
+  const saleParsedToTableView = parseSaleTableItem(newSale);
+  const operationsUpdated = [saleParsedToTableView, ...operations];
+  const totalProfit = getTotalProfit(operationsUpdated);
+
+  const payload = {
+    cashier: {
+      ...currentCashier,
+      operations: operationsUpdated,
+      totalProfit,
+    },
+  };
+
+  yield call(editCashier, { payload });
+}
+
+export function* onEditSaleOperation(saleUpdated) {
+  const { currentCashier } = yield select(state => state.cashier);
+  const { operations } = currentCashier;
+
+  const saleParsedToTableView = parseSaleTableItem(saleUpdated);
+  const operationsUpdated = operations.map((operation) => {
+    const isOperationSaleType = (operation.type === CASHIER_OPERATIONS.SALE
+      || operation.type === CASHIER_OPERATIONS.CONSOLIDATE_BUDGET_PAYMENT);
+
+    const isSaleUpdated = (isOperationSaleType && operation.id === saleUpdated.id);
+
+    return (isSaleUpdated ? saleParsedToTableView : operation);
+  });
+  const totalProfit = getTotalProfit(operationsUpdated);
+
+  const payload = {
+    cashier: {
+      ...currentCashier,
+      operations: operationsUpdated,
+      totalProfit,
+    },
+  };
+
+  yield call(editCashier, { payload });
 }
 
 export const unsubscribeCashierEvents = () => handleEventUnsubscription(EVENT_TAGS);

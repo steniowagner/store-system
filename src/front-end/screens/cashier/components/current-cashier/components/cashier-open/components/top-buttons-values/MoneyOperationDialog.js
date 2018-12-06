@@ -38,15 +38,16 @@ const renderSlide = (props: Object): Object => (
 );
 
 type Props = {
-  reasonTitle: Object,
-  title: Object,
   onToggleMoneyDialog: Function,
   action: Function,
-  type: string,
+  reasonTitle: Object,
   valueTitle: Object,
-  mode: string,
+  title: Object,
   isDisabled: boolean,
   isOpen: boolean,
+  reason: string,
+  value: string,
+  mode: string,
 };
 
 type State = {

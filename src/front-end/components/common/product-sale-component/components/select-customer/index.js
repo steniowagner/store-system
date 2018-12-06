@@ -30,6 +30,8 @@ const InputButtonWrapper = styled.div`
 `;
 
 type Props = {
+  unsubscribeCustomerEvents: Function,
+  getAllCustomers: Function,
   customerSelected: Object,
   setFieldValue: Function,
   error: Object,
@@ -49,6 +51,12 @@ class SelectCustomer extends Component<Props, State> {
     const { getAllCustomers } = this.props;
 
     getAllCustomers();
+  }
+
+  componentWillUnmount() {
+    const { unsubscribeCustomerEvents } = this.props;
+
+    unsubscribeCustomerEvents();
   }
 
   onToggleDialogChooseCustomer = (): void => {

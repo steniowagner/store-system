@@ -9,6 +9,7 @@ import { UPDATE_PRODUCTS_STOCK, TAKE_AWAY_PRODUCTS_STOCK } from '../../../back-e
 import { CREATE_SALE, UPDATE_SALE, READ_SALES } from '../../../back-end/events-handlers/sale/types';
 import { handleEventUnsubscription, handleEventSubscription } from './eventHandler';
 import { OPERATION_REQUEST, SALE } from '../../../common/entitiesTypes';
+import { onAddSaleOperation, onEditSaleOperation } from './cashier';
 import { editStockProducts } from './stock';
 
 const { ipcRenderer } = window.require('electron');
@@ -51,6 +52,7 @@ export function* createSale(action) {
     };
 
     yield put(SaleCreators.createSaleSuccess(newSale));
+    yield call(onAddSaleOperation, newSale);
 
     const { createdFromBudget } = args;
 
@@ -111,6 +113,7 @@ export function* editSale(action) {
     };
 
     yield put(SaleCreators.editSaleSuccess(saleUpdated));
+    yield call(onEditSaleOperation, saleUpdated);
   } catch (err) {
     yield put(SaleCreators.editSaleFailure(err.message));
   }

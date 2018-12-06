@@ -2,11 +2,13 @@
 
 import moment from 'moment';
 
+import { CASHIER_OPERATIONS } from './components/current-cashier/components/cashier-open/components/top-buttons-values/dialog-config';
+
 export const getNewCashierOperationData = (value: string, reason: string, type: string): Object => ({
   valueText: `R$ ${parseFloat(value).toFixed(2)}`,
   value: parseFloat(value),
-  timestamp: moment().calendar(),
-  username: 'swmyself',
+  timestampText: moment().calendar(),
+  salesman: 'swmyself',
   id: Math.random(),
   customerName: '-',
   discountText: '-',
@@ -17,23 +19,37 @@ export const getNewCashierOperationData = (value: string, reason: string, type: 
   type,
 });
 
-export const getTotalPaymentValue = (paymentInfo: Object): number => {
+const getTotalPaymentValue = (paymentInfo: Object): number => {
   const valuePaid = Object.keys(paymentInfo).reduce((current, item) => current + Number(paymentInfo[item]), 0);
 
   return valuePaid;
 };
 
+const getDiscountText = ({ type, value }) => {
+  let discountText = '-';
+
+  if (type === 'percentage') {
+    discountText = `${value}%`;
+  }
+
+  if (type === 'money') {
+    discountText = `R$ ${Number(value).toFixed(2)}`;
+  }
+
+  return discountText;
+};
+
 export const parseSaleTableItem = (sale: Object): Object => {
   const {
+    createdFromBudget,
     paymentInfo,
     customer,
     discount,
     subtotal,
     total,
   } = sale;
-  const { type, value } = discount;
 
-  const discountText = (type === 'percentage' ? `${value}%` : `R$ ${Number(value).toFixed(2)}`);
+  const discountText = getDiscountText(discount);
 
   const valuePaid = getTotalPaymentValue(paymentInfo);
   const pending = valuePaid - total;
@@ -41,12 +57,13 @@ export const parseSaleTableItem = (sale: Object): Object => {
   return {
     ...sale,
     valueText: `R$ ${Number(subtotal).toFixed(2)}`,
+    customerName: (customer ? customer.name : '-'),
     pending: `R$ ${Math.abs(pending).toFixed(2)}`,
+    totalText: `R$ ${Number(total).toFixed(2)}`,
     valuePaid: `R$ ${valuePaid.toFixed(2)}`,
-    customerName: customer.name,
-    totalText: `R$ ${total}`,
+    timestampText: moment().calendar(),
+    type: (createdFromBudget ? CASHIER_OPERATIONS.CONSOLIDATE_BUDGET_PAYMENT : CASHIER_OPERATIONS.SALE),
     discountText,
-    type: 'Venda',
   };
 };
 
@@ -60,17 +77,4 @@ export const calculateTotalProfit = (sales: Array<Object>): number => {
   });
 
   return totalProfit;
-};
-
-export const calculateTotalCashierOperationValue = (dataset: Array<Object>): number => {
-  const total = dataset.reduce((current, operation) => current + operation.value, 0);
-
-  return total;
-};
-
-export const calculateTotalInputMoney = (addMoneyOperations: Array<Object>, salesOperations: Array<Object>): number => {
-  const totalAddMoneyOperations = calculateTotalCashierOperationValue(addMoneyOperations);
-  const totalSalesOperations = salesOperations.reduce((current, sale) => current + getTotalPaymentValue(sale.paymentInfo), 0);
-
-  return totalAddMoneyOperations + totalSalesOperations;
 };

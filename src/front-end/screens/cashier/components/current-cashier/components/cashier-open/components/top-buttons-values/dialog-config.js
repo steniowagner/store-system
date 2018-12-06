@@ -1,15 +1,16 @@
 // @flow
 
-export const DIALOG_TYPES = {
-  ADD_MONEY: 'Inserção',
+export const CASHIER_OPERATIONS = {
+  CONSOLIDATE_BUDGET_PAYMENT: 'Pgto. de Orçamento',
   TAKE_AWAY_MONEY: 'Retirada',
+  ADD_MONEY: 'Inserção',
   SALE: 'Venda',
 };
 
 export const getDialogConfig = (type: string, action: Function, isDisabled = false): Object => {
   const CONFIGS = {
-    [DIALOG_TYPES.ADD_MONEY]: {
-      type: DIALOG_TYPES.ADD_MONEY,
+    [CASHIER_OPERATIONS.ADD_MONEY]: {
+      type: CASHIER_OPERATIONS.ADD_MONEY,
       title: {
         create: 'Adicionar Dinheiro',
         edit: 'Editar Entrada de Dinheiro',
@@ -29,8 +30,8 @@ export const getDialogConfig = (type: string, action: Function, isDisabled = fal
       action,
     },
 
-    [DIALOG_TYPES.TAKE_AWAY_MONEY]: {
-      type: DIALOG_TYPES.TAKE_AWAY_MONEY,
+    [CASHIER_OPERATIONS.TAKE_AWAY_MONEY]: {
+      type: CASHIER_OPERATIONS.TAKE_AWAY_MONEY,
       title: {
         create: 'Retirar Dinheiro',
         edit: 'Editar Retirada de Dinheiro',
