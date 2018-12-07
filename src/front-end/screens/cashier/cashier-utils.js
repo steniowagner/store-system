@@ -14,7 +14,7 @@ export const getNewCashierOperationData = (value: string, reason: string, type: 
   discountText: '-',
   valuePaid: '-',
   totalText: '-',
-  pending: '-',
+  inDebitText: '-',
   reason,
   type,
 });
@@ -46,19 +46,18 @@ export const parseSaleTableItem = (sale: Object): Object => {
     customer,
     discount,
     subtotal,
+    inDebit,
     total,
   } = sale;
 
   const discountText = getDiscountText(discount);
-
   const valuePaid = getTotalPaymentValue(paymentInfo);
-  const pending = valuePaid - total;
 
   return {
     ...sale,
     valueText: `R$ ${Number(subtotal).toFixed(2)}`,
     customerName: (customer ? customer.name : '-'),
-    pending: `R$ ${Math.abs(pending).toFixed(2)}`,
+    inDebitText: `R$ ${Math.abs(inDebit).toFixed(2)}`,
     totalText: `R$ ${Number(total).toFixed(2)}`,
     valuePaid: `R$ ${valuePaid.toFixed(2)}`,
     timestampText: moment().calendar(),

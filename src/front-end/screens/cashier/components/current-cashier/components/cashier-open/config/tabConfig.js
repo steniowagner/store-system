@@ -23,8 +23,8 @@ const tabConfig = [{
   columnTitle: 'Pago',
   dataField: 'valuePaid',
 }, {
-  columnTitle: 'Pendente',
-  dataField: 'pending',
+  columnTitle: 'Débito',
+  dataField: 'inDebitText',
 }];
 
 export default tabConfig;

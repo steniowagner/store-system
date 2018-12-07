@@ -14,5 +14,4 @@ export default {
   dangerDisabled: '#f97c81',
   warning: '#ffc107',
   warningDisabled: '#ffdb72',
-  asd: '#4F5052',
 };
