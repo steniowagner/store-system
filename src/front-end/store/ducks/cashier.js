@@ -13,14 +13,12 @@ export const Types = {
   EDIT_REQUEST_SUCCESS: 'cashier/EDIT_REQUEST_SUCCESS',
   EDIT_REQUEST_FAILURE: 'cashier/EDIT_REQUEST_FAILURE',
 
-  CLOSE_REQUEST: 'cashier/CLOSE_REQUEST',
-  CLOSE_REQUEST_SUCCESS: 'cashier/CLOSE_REQUEST_SUCCESS',
-  CLOSE_REQUEST_FAILURE: 'cashier/CLOSE_REQUEST_FAILURE',
-
   CREATE_SALE: 'cashier/CREATE_SALE',
   EDIT_SALE: 'cashier/EDIT_SALE',
 
   UNSUBSCRIBE_EVENTS: 'cashier/UNSUBSCRIBE_EVENTS',
+
+  CLOSE_CASHIER: 'cashier/CLOSE_CASHIER',
 };
 
 const INITIAL_STATE = Immutable({
@@ -83,6 +81,10 @@ export const Creators = {
   onEditSale: saleEdited => ({
     type: Types.EDIT_SALE,
     payload: { saleEdited },
+  }),
+
+  onCloseCashier: () => ({
+    type: Types.CLOSE_CASHIER,
   }),
 
   unsubscribeCashierEvents: () => ({
@@ -165,6 +167,11 @@ const cashier = (state = INITIAL_STATE, { payload, type }) => {
           ...payload.cashierUpdated,
           operations: JSON.parse(payload.cashierUpdated.operations),
         },
+      };
+
+    case Types.CLOSE_CASHIER:
+      return {
+        ...INITIAL_STATE,
       };
 
     case Types.UNSUBSCRIBE_EVENTS: {

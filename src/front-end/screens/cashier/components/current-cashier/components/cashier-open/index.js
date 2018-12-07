@@ -23,9 +23,9 @@ type Props = {
 };
 
 type State = {
-  totalInputCashier: string,
-  totalOutputCashier: string,
-  totalProfit: string,
+  isCloseCashierDialogOpen: boolean,
+  contextOperationItem: any,
+  currentTablePage: number,
 };
 
 class CashierOpen extends Component<Props, State> {
@@ -68,7 +68,7 @@ class CashierOpen extends Component<Props, State> {
     }, () => onCloseCashier());
   };
 
-  onEditSaleOperation = (saleEdited: Object): void => {
+  onEditSaleOperation = (): void => {
     this.setState({
       contextOperationItem: undefined,
     });
@@ -109,9 +109,10 @@ class CashierOpen extends Component<Props, State> {
   renderTopActioButtons = (): Object => {
     const { contextOperationItem } = this.state;
 
-    const operationItem = (contextOperationItem && (
-      contextOperationItem.type === CASHIER_OPERATIONS.SALE ? undefined : contextOperationItem
-    ));
+    const isOperationSaleType = (contextOperationItem && (contextOperationItem.type === CASHIER_OPERATIONS.SALE
+      || contextOperationItem.type === CASHIER_OPERATIONS.CONSOLIDATE_BUDGET_PAYMENT));
+
+    const operationItem = (isOperationSaleType ? undefined : contextOperationItem);
 
     return (
       <TopActionButtons
@@ -151,10 +152,10 @@ class CashierOpen extends Component<Props, State> {
         onDetailIconClicked={this.onClickTableDetailIcon}
         onEditIconClicked={this.onClickTableEditIcon}
         updatePageIndex={this.onTablePageChange}
+        dataset={currentCashier.operations}
         currentPage={currentTablePage}
         tabConfig={config.tabConfig}
         canBeRemoved={false}
-        dataset={currentCashier.operations}
         canBeEdited
       />
     );
@@ -174,17 +175,18 @@ class CashierOpen extends Component<Props, State> {
   };
 
   renderCloseCashierDialog = (): Object => {
-    const { initialMoneyInCashier, currentCashier } = this.props;
+    const { currentCashier } = this.props;
     const { isCloseCashierDialogOpen } = this.state;
 
     return (
       <CloseCashierDialog
         onToggleCloseCashierDialog={this.onToggleCloseCashierDialog}
+        initialMoneyInCashier={currentCashier.initialMoneyCashier}
         totalOutputCashier={currentCashier.totalOutcome}
         totalInputCashier={currentCashier.totalIncome}
-        initialMoneyInCashier={initialMoneyInCashier}
         totalProfit={currentCashier.totalProfit}
         onFinishCashier={this.onFinishCashier}
+        salesman={currentCashier.salesman}
         isOpen={isCloseCashierDialogOpen}
       />
     );

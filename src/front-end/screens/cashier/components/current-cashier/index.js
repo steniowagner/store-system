@@ -13,6 +13,7 @@ import CashierOpen from './components/cashier-open';
 
 type Props = {
   unsubscribeCashierEvents: Function,
+  onCloseCashier: Function,
   createCashier: Function,
   editCashier: Function,
   cashier: Object,
@@ -108,10 +109,12 @@ class CurrentCashier extends Component<Props, State> {
     editCashier(currentCashierUpdated);
   };
 
-  onCloseCashier = (cashierInfo: Object): void => {
+  onCloseCashier = (): void => {
+    const { onCloseCashier } = this.props;
+
     this.setState({
       initialMoneyInCashier: '',
-    });
+    }, () => onCloseCashier());
   };
 
   renderCashierClosed = (): Object => {

@@ -27,7 +27,7 @@ const Divider = styled.div`
   background-color: ${({ theme }) => theme.colors.inputBorder};
 `;
 
-const MomentText = styled.p`
+const DateText = styled.p`
   margin-top: 2px;
   margin-right: 8px;
   font-size: 18px;
@@ -63,8 +63,20 @@ const IconWrapper = styled.div`
 
 const ItemText = styled.span`
   font-size: 18px
+  font-weight: 600;
+  color: ${({ theme }) => theme.colors.darkText};
+`;
+
+const ValueText = styled.p`
+  margin-left: 6px;
+  font-size: 18px
   font-weight: 400;
   color: ${({ theme }) => theme.colors.darkText};
+`;
+
+const ItemTextWrapper = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 const UserSectionWrapper = styled.div`
@@ -150,7 +162,12 @@ class CloseCashierDialog extends Component<Props, State> {
   );
 
   renderItem = (config: Object) => {
-    const { message, Icon, color } = config;
+    const {
+      message,
+      value,
+      Icon,
+      color,
+    } = config;
 
     return (
       <ItemWrapper>
@@ -160,9 +177,14 @@ class CloseCashierDialog extends Component<Props, State> {
           >
             <Icon />
           </IconWrapper>
-          <ItemText>
-            {message}
-          </ItemText>
+          <ItemTextWrapper>
+            <ItemText>
+              {message}
+            </ItemText>
+            <ValueText>
+              {value}
+            </ValueText>
+          </ItemTextWrapper>
         </IconTextWrapper>
       </ItemWrapper>
     );
@@ -212,9 +234,9 @@ class CloseCashierDialog extends Component<Props, State> {
     );
   };
 
-  renderUserInfo = (): Object => {
+  renderSalesmanInfo = (salesman: string): Object => {
     const config = {
-      message: 'swmyself',
+      message: salesman,
       color: 'inputBorder',
       Icon: UserIcon,
     };
@@ -222,12 +244,12 @@ class CloseCashierDialog extends Component<Props, State> {
     return this.renderItem(config);
   };
 
-  renderUserSection = (): Object => (
+  renderSalesmanSection = (salesman: string): Object => (
     <UserSectionWrapper>
-      {this.renderUserInfo()}
-      <MomentText>
+      {this.renderSalesmanInfo(salesman)}
+      <DateText>
         {moment().format('ll')}
-      </MomentText>
+      </DateText>
     </UserSectionWrapper>
   );
 
@@ -237,11 +259,12 @@ class CloseCashierDialog extends Component<Props, State> {
       totalOutputCashier,
       totalInputCashier,
       totalProfit,
+      salesman,
     } = this.props;
 
     return (
       <DialogContent>
-        {this.renderUserSection()}
+        {this.renderSalesmanSection(salesman)}
         <ValuesContainer>
           {this.renderInitialCashier(initialMoneyInCashier)}
           <Divider />

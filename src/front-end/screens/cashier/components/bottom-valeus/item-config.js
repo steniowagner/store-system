@@ -34,31 +34,36 @@ export const CONFIGS_TYPES = {
 export const getBottomValueItemConfig = (item: string, value: number): Object => {
   const configs = {
     [CONFIGS_TYPES.TOTAL_INPUT]: {
-      message: `Total de Entrada no Caixa: R$ ${Number(value).toFixed(2)}`,
+      message: 'Total de Entrada no Caixa:',
+      value: `R$ ${Number(value).toFixed(2)}`,
       Icon: ArrowForwardIcon,
       color: 'success',
     },
 
     [CONFIGS_TYPES.TOTAL_OUTPUT]: {
-      message: `Total de Saída do Caixa: R$ ${Number(value).toFixed(2)}`,
+      message: 'Total de Saída do Caixa:',
+      value: `R$ ${Number(value).toFixed(2)}`,
       Icon: ArrowBackIcon,
       color: 'danger',
     },
 
     [CONFIGS_TYPES.TOTAL_PROFIT]: {
-      message: `Lucro: R$ ${Number(value).toFixed(2)}`,
+      message: 'Lucro:',
+      value: `R$ ${Number(value).toFixed(2)}`,
       Icon: MoneyIcon,
       color: 'affirmative',
     },
 
     [CONFIGS_TYPES.TOTAL_PROFIT_FINISH_CASHIER]: {
-      message: `Lucro Total: R$ ${Number(value).toFixed(2)}`,
+      message: 'Lucro Total:',
+      value: `R$ ${Number(value).toFixed(2)}`,
       Icon: MoneyIcon,
       color: 'affirmative',
     },
 
     [CONFIGS_TYPES.INITAL_MONEY]: {
-      message: `Valor Inicial em Caixa: R$ ${Number(value).toFixed(2)}`,
+      message: 'Valor Inicial em Caixa:',
+      value: `R$ ${Number(value).toFixed(2)}`,
       Icon: InitialMoneyIcon,
       color: 'warning',
     },

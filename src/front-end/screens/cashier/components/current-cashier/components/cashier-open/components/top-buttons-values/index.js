@@ -4,8 +4,8 @@ import React, { Component } from 'react';
 
 import styled from 'styled-components';
 
-import { BUTTON_TYPES, getButtonConfig } from './button-config';
 import { CASHIER_OPERATIONS, getDialogConfig } from './dialog-config';
+import { BUTTON_TYPES, getButtonConfig } from './button-config';
 
 import MoneyOperationDialog from './MoneyOperationDialog';
 import CashierButton from './CashierButton';
