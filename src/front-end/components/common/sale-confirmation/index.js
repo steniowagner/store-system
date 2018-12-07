@@ -1,6 +1,8 @@
 // @flow
 
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
+
+import { connect } from 'react-redux';
 
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -9,6 +11,7 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import Slide from '@material-ui/core/Slide';
 
+import CashierClosedAlert from './components/CashierClosedAlert';
 import FormPayment from './components/form-payment';
 import FooterValues from './components/FooterItems';
 import SaleValues from './components/SaleValues';
@@ -45,7 +48,7 @@ class SaleConfirmation extends Component<Props, State> {
     const { inDebit } = this.props;
 
     this.setState({
-      isInDebit: inDebit > 0,
+      isInDebit: (inDebit > 0),
     });
   }
 
@@ -233,8 +236,23 @@ class SaleConfirmation extends Component<Props, State> {
     );
   };
 
+  renderSaleConfirmationContent = (): Object => (
+    <Fragment>
+      {this.renderTitle()}
+      {this.renderContent()}
+      {this.renderActionButtons()}
+    </Fragment>
+  );
+
+  renderCashierClosedAlert = (onCloseDialog: Function): Object => (
+    <CashierClosedAlert
+      onCloseDialog={onCloseDialog}
+    />
+  );
+
   render() {
-    const { onCloseDialog, isOpen } = this.props;
+    const { onCloseDialog, cashier, isOpen } = this.props;
+    const { isCashierOpen } = cashier;
 
     return (
       <Dialog
@@ -247,12 +265,14 @@ class SaleConfirmation extends Component<Props, State> {
         maxWidth="sm"
         fullWidth
       >
-        {this.renderTitle()}
-        {this.renderContent()}
-        {this.renderActionButtons()}
+        {isCashierOpen ? this.renderSaleConfirmationContent() : this.renderCashierClosedAlert(onCloseDialog)}
       </Dialog>
     );
   }
 }
 
-export default SaleConfirmation;
+const mapStateToProps = state => ({
+  cashier: state.cashier,
+});
+
+export default connect(mapStateToProps)(SaleConfirmation);

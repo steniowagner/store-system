@@ -17,14 +17,14 @@ const Wrapper = styled.div`
 
 const BigText = styled.p`
   margin-bottom: 16px;
-  font-size: 42px;
+  font-size: 32px;
   font-weight: 800;
 `;
 
 const SmallText = styled.p`
   margin-bottom: 32px;
   text-align: center;
-  font-size: 32px;
+  font-size: 24px;
   font-weight: 500;
   color: ${({ theme }) => theme.colors.mediumGrayDisabled};
 `;

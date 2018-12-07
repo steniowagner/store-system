@@ -73,7 +73,10 @@ export function* editCashier(action) {
 }
 
 const getTotalProfit = (operations) => {
-  const saleOperations = operations.filter(operation => operation.type === CASHIER_OPERATIONS.SALE);
+  const saleOperations = operations.filter((operation) => {
+    return (operation.type === CASHIER_OPERATIONS.SALE || operation.type === CASHIER_OPERATIONS.CONSOLIDATE_BUDGET_PAYMENT);
+  });
+
   const totalProfit = calculateTotalProfit(saleOperations);
 
   return totalProfit;
@@ -103,14 +106,16 @@ export function* onEditSaleOperation(saleUpdated) {
   const { operations } = currentCashier;
 
   const saleParsedToTableView = parseSaleTableItem(saleUpdated);
+
   const operationsUpdated = operations.map((operation) => {
-    const isOperationSaleType = (operation.type === CASHIER_OPERATIONS.SALE
+    const isOperationTypeSale = (operation.type === CASHIER_OPERATIONS.SALE
       || operation.type === CASHIER_OPERATIONS.CONSOLIDATE_BUDGET_PAYMENT);
 
-    const isSaleUpdated = (isOperationSaleType && operation.id === saleUpdated.id);
+    const isSaleUpdated = (isOperationTypeSale && operation.id === saleUpdated.id);
 
     return (isSaleUpdated ? saleParsedToTableView : operation);
   });
+
   const totalProfit = getTotalProfit(operationsUpdated);
 
   const payload = {

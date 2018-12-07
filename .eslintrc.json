@@ -8,6 +8,7 @@
   "plugins": ["react", "jsx-a11y", "import", "flowtype"],
   "rules": {
     "no-underscore-dangle": 0,
+    "arrow-body-style": 0,
     "import/no-extraneous-dependencies": 0,
     "max-len": 0,
     "react/jsx-filename-extension": [

@@ -67,13 +67,14 @@ export const parseSaleTableItem = (sale: Object): Object => {
 };
 
 export const calculateTotalProfit = (sales: Array<Object>): number => {
-  let totalProfit = 0;
-
   const salesProducts = sales.map(sale => sale.products);
 
-  salesProducts.forEach((saleProducts) => {
-    totalProfit += saleProducts.reduce((current, product) => current + ((product.salePrice - product.costPrice) * product.quantity), 0);
-  });
+  const totalProfit = salesProducts.reduce((total, saleProducts) => {
+    return total + saleProducts.reduce((current, product) => {
+      const profit = product.salePrice - product.costPrice;
+      return current + (profit * product.quantity);
+    }, 0);
+  }, 0);
 
   return totalProfit;
 };

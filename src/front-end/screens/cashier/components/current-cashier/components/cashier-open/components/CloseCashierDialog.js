@@ -68,7 +68,7 @@ const ItemText = styled.span`
 `;
 
 const ValueText = styled.p`
-  margin-left: 6px;
+  margin: 0 0 2px 6px;
   font-size: 18px
   font-weight: 400;
   color: ${({ theme }) => theme.colors.darkText};
@@ -77,6 +77,7 @@ const ValueText = styled.p`
 const ItemTextWrapper = styled.div`
   display: flex;
   align-items: center;
+  justify-content: center;
 `;
 
 const UserSectionWrapper = styled.div`

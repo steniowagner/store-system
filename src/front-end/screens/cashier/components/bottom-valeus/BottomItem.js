@@ -27,12 +27,18 @@ const Title = styled.span`
 `;
 
 type ItemConfig = {
-  message: string,
-  color: string,
   Icon: Function,
+  message: string,
+  value: string,
+  color: string,
 };
 
-const BottomItem = ({ message, Icon, color }: ItemConfig): Object => (
+const BottomItem = ({
+  message,
+  value,
+  Icon,
+  color,
+}: ItemConfig): Object => (
   <ItemWrapper>
     <IconWrapper
       color={color}
@@ -40,7 +46,7 @@ const BottomItem = ({ message, Icon, color }: ItemConfig): Object => (
       <Icon />
     </IconWrapper>
     <Title>
-      {message}
+      {`${message} ${value}`}
     </Title>
   </ItemWrapper>
 );

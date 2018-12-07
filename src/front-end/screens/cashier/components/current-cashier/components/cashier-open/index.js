@@ -19,7 +19,6 @@ type Props = {
   onAddMoneyIntoCashier: Function,
   onCloseCashier: Function,
   currentCashier: Object,
-  initialMoneyInCashier: string,
 };
 
 type State = {
