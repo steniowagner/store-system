@@ -12,7 +12,7 @@ exports.create = async (args) => {
 
 exports.readAll = async () => {
   try {
-    return await Cashier.findAll({ raw: true });
+    return await Cashier.findAll({ raw: true, order: [['updatedAt', 'DESC']] });
   } catch (err) {
     return err;
   }

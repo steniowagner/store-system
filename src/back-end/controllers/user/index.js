@@ -12,7 +12,7 @@ exports.create = async (args) => {
 
 exports.getAll = async () => {
   try {
-    return await User.findAll({ raw: true });
+    return await User.findAll({ raw: true, order: [['updatedAt', 'DESC']] });
   } catch (err) {
     return err;
   }

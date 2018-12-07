@@ -13,6 +13,7 @@ exports.create = async (args) => {
 exports.getAll = async () => {
   try {
     return await Product.findAll({
+      order: [['updatedAt', 'DESC']],
       include: [Brand],
       raw: true,
     });

@@ -3,6 +3,7 @@ const { Product, Stock } = require('../../models');
 exports.getAll = async () => {
   try {
     return await Stock.findAll({
+      order: [['updatedAt', 'DESC']],
       include: [Product],
       raw: true,
     });
