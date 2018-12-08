@@ -98,24 +98,19 @@ const Pagination = ({
   const PageControlls = renderPageControlls(onPageChange, datasetLength, currentPage, rowsPerPage);
 
   return (
-    <PaginationWraper>
-      <TableFooter>
-        <TableRow>
-          <TablePagination
-            labelDisplayedRows={({ from, to, count }) => `${from}-${to} de ${count}`}
-            onChangeRowsPerPage={event => onChangeRowsPerPage(event.target.value)}
-            rowsPerPageOptions={[5, 10]}
-            ActionsComponent={() => PageControlls}
-            labelRowsPerPage="Itens por página"
-            rowsPerPage={rowsPerPage}
-            count={datasetLength}
-            page={currentPage}
-            onChangePage={() => {}}
-            colSpan={3}
-          />
-        </TableRow>
-      </TableFooter>
-    </PaginationWraper>
+    <TablePagination
+      labelDisplayedRows={({ from, to, count }) => `${from}-${to} de ${count}`}
+      onChangeRowsPerPage={event => onChangeRowsPerPage(event.target.value)}
+      rowsPerPageOptions={[5, 10]}
+      ActionsComponent={() => PageControlls}
+      labelRowsPerPage="Itens por página"
+      rowsPerPage={rowsPerPage}
+      count={datasetLength}
+      page={currentPage}
+      onChangePage={() => {}}
+      component="div"
+      colSpan={3}
+    />
   );
 };
 
