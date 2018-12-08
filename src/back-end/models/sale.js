@@ -15,6 +15,14 @@ const SaleModel = (sequelize, DataTypes) => {
       type: JSON,
     },
 
+    code: {
+      validate: {
+        notEmpty: true,
+      },
+      allowNull: false,
+      type: STRING,
+    },
+
     customer: {
       type: JSON,
     },

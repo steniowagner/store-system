@@ -8,6 +8,9 @@ const tabConfig = [{
   columnTitle: 'Cliente',
   dataField: 'customerName',
 }, {
+  columnTitle: 'Código',
+  dataField: 'code',
+}, {
   columnTitle: 'Vendedor',
   dataField: 'salesman',
 }, {

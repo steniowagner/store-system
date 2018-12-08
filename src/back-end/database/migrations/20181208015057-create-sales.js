@@ -24,6 +24,14 @@ const onMigrate = (queryInterface, DataTypes) => {
       type: JSON,
     },
 
+    code: {
+      validate: {
+        notEmpty: true,
+      },
+      allowNull: false,
+      type: STRING,
+    },
+
     customer: {
       type: JSON,
     },

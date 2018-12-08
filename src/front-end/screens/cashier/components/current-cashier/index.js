@@ -4,18 +4,21 @@ import React, { Component, Fragment } from 'react';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { Creators as CashierCreators } from '../../../../store/ducks/cashier';
+import { Creators as StockCreators } from '../../../../store/ducks/stock';
 
 import { CASHIER_OPERATIONS } from './components/cashier-open/components/top-buttons-values/dialog-config';
-import { Creators as CashierCreators } from '../../../../store/ducks/cashier';
 
 import CashierClosed from './components/cashier-closed';
 import CashierOpen from './components/cashier-open';
 
 type Props = {
   unsubscribeCashierEvents: Function,
+  requestSaleUpdate: Function,
   onCloseCashier: Function,
   createCashier: Function,
   editCashier: Function,
+  getStock: Function,
   cashier: Object,
 };
 
@@ -27,6 +30,12 @@ class CurrentCashier extends Component<Props, State> {
   state = {
     initialMoneyInCashier: '',
   };
+
+  componentDidMount() {
+    const { getStock } = this.props;
+
+    getStock();
+  }
 
   componentWillUnmount() {
     const { unsubscribeCashierEvents } = this.props;
@@ -129,8 +138,7 @@ class CurrentCashier extends Component<Props, State> {
   };
 
   renderCashierOpen = (): Object => {
-    const { initialMoneyInCashier } = this.state;
-    const { cashier } = this.props;
+    const { requestSaleUpdate, cashier } = this.props;
     const { currentCashier } = cashier;
 
     return (
@@ -138,7 +146,7 @@ class CurrentCashier extends Component<Props, State> {
         onEditInOutCashierOperation={this.onEditInOutCashierOperation}
         onTakeMoneyFromCashier={this.onTakeMoneyFromCashier}
         onAddMoneyIntoCashier={this.onAddMoneyIntoCashier}
-        initialMoneyInCashier={initialMoneyInCashier}
+        requestSaleUpdate={requestSaleUpdate}
         onCloseCashier={this.onCloseCashier}
         currentCashier={currentCashier}
       />
@@ -157,7 +165,8 @@ class CurrentCashier extends Component<Props, State> {
   }
 }
 
-const mapDispatchToProps = dispatch => bindActionCreators(CashierCreators, dispatch);
+const Creators = Object.assign({}, StockCreators, CashierCreators);
+const mapDispatchToProps = dispatch => bindActionCreators(Creators, dispatch);
 
 const mapStateToProps = state => ({
   cashier: state.cashier,

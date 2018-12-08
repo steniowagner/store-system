@@ -74,9 +74,9 @@ const renderLeftValues = (totalText: string, subtotalText: string, discount: Obj
     <Wrapper
       direction="left"
     >
-      {renderItem('SUB-TOTAL', totalText, false)}
+      {renderItem('SUB-TOTAL', subtotalText, false)}
       {renderItem('DESCONTO', discountText, true)}
-      {renderItem('TOTAL', subtotalText, true)}
+      {renderItem('TOTAL', totalText, true)}
     </Wrapper>
   );
 };

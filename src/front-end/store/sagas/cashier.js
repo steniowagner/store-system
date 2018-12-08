@@ -9,6 +9,7 @@ import { handleEventUnsubscription, handleEventSubscription } from './eventHandl
 import { OPERATION_REQUEST, CASHIER } from '../../../common/entitiesTypes';
 import { calculateTotalProfit, parseSaleTableItem } from '../../screens/cashier/cashier-utils';
 import { Creators as CashierCreators } from '../ducks/cashier';
+import { Creators as SaleCreators } from '../ducks/sale';
 
 const { ipcRenderer } = window.require('electron');
 

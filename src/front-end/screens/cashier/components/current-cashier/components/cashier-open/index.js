@@ -5,8 +5,8 @@ import React, { Component, Fragment } from 'react';
 import CloseCashierDialog from './components/CloseCashierDialog';
 import TopActionButtons from './components/top-buttons-values';
 import BottomValues from '../../../bottom-valeus';
-import SaleForm from './components/SaleFormHandler';
 
+import SaleDetailDialog from '../../../../../../components/common/sale-detail-dialog';
 import { CASHIER_OPERATIONS } from './components/top-buttons-values/dialog-config';
 import Table from '../../../../../../components/common/table';
 import config from './config';
@@ -29,8 +29,9 @@ type State = {
 
 class CashierOpen extends Component<Props, State> {
   state = {
-    contextOperationItem: undefined,
+    contextOperationItem: {},
     isCloseCashierDialogOpen: false,
+    isSaleDetailDialogOpen: false,
     currentTablePage: 0,
   };
 
@@ -55,7 +56,7 @@ class CashierOpen extends Component<Props, State> {
     const { contextOperationItem } = this.state;
 
     this.setState({
-      contextOperationItem: undefined,
+      contextOperationItem: {},
     }, () => onEditInOutCashierOperation(contextOperationItem, valueEdited, reasonEdited));
   };
 
@@ -67,21 +68,10 @@ class CashierOpen extends Component<Props, State> {
     }, () => onCloseCashier());
   };
 
-  onEditSaleOperation = (): void => {
-    this.setState({
-      contextOperationItem: undefined,
-    });
-  };
-
   onClickTableDetailIcon = (operation: Object): void => {
     this.setState({
       contextOperationItem: { ...operation, mode: 'detail' },
-    });
-  };
-
-  onClickTableEditIcon = (operation: Object): void => {
-    this.setState({
-      contextOperationItem: { ...operation, mode: 'edit' },
+      isSaleDetailDialogOpen: true,
     });
   };
 
@@ -96,12 +86,30 @@ class CashierOpen extends Component<Props, State> {
 
     this.setState({
       isCloseCashierDialogOpen: !isCloseCashierDialogOpen,
+      isSaleDetailDialogOpen: false,
     });
+  };
+
+  onToggleSaleDetailDialog = (): void => {
+    const { isSaleDetailDialogOpen } = this.state;
+
+    this.setState({
+      isSaleDetailDialogOpen: !isSaleDetailDialogOpen,
+    });
+  };
+
+  getPaymentInfoText = (contextOperationItem: Object): string => {
+    const { paymentInfo } = contextOperationItem;
+
+    const paidValueText = Object.entries(paymentInfo)
+      .reduce((total, value) => total + Number(value[1]), 0);
+
+    return `R$ ${paidValueText.toFixed(2)}`;
   };
 
   resetItemSelected = (): void => {
     this.setState({
-      contextOperationItem: undefined,
+      contextOperationItem: {},
     });
   };
 
@@ -111,7 +119,7 @@ class CashierOpen extends Component<Props, State> {
     const isOperationSaleType = (contextOperationItem && (contextOperationItem.type === CASHIER_OPERATIONS.SALE
       || contextOperationItem.type === CASHIER_OPERATIONS.CONSOLIDATE_BUDGET_PAYMENT));
 
-    const operationItem = (isOperationSaleType ? undefined : contextOperationItem);
+    const operationItem = (isOperationSaleType ? {} : contextOperationItem);
 
     return (
       <TopActionButtons
@@ -124,20 +132,20 @@ class CashierOpen extends Component<Props, State> {
     );
   };
 
-  renderSaleForm = (): Object => {
-    const { contextOperationItem } = this.state;
+  renderSaleDetail = (): Object => {
+    const { isSaleDetailDialogOpen, contextOperationItem } = this.state;
 
     const isSaleOperation = (contextOperationItem && (contextOperationItem.type === CASHIER_OPERATIONS.SALE
       || contextOperationItem.type === CASHIER_OPERATIONS.CONSOLIDATE_BUDGET_PAYMENT));
 
-    const shouldShowForm = (contextOperationItem && isSaleOperation);
+    const shouldShowSaleDetailDialog = (isSaleOperation && isSaleDetailDialogOpen);
+    const paidValueText = shouldShowSaleDetailDialog ? this.getPaymentInfoText(contextOperationItem) : '';
 
     return (
-      <SaleForm
-        onEditSaleOperation={this.onEditSaleOperation}
-        resetItemSelected={this.resetItemSelected}
-        item={contextOperationItem || {}}
-        isOpen={shouldShowForm}
+      <SaleDetailDialog
+        onToggleSaleDetailDialog={this.onToggleSaleDetailDialog}
+        isOpen={shouldShowSaleDetailDialog}
+        sale={{ ...contextOperationItem, paidValueText }}
       />
     );
   };
@@ -149,13 +157,10 @@ class CashierOpen extends Component<Props, State> {
     return (
       <Table
         onDetailIconClicked={this.onClickTableDetailIcon}
-        onEditIconClicked={this.onClickTableEditIcon}
         updatePageIndex={this.onTablePageChange}
         dataset={currentCashier.operations}
         currentPage={currentTablePage}
         tabConfig={config.tabConfig}
-        canBeRemoved={false}
-        canBeEdited
       />
     );
   };
@@ -196,7 +201,7 @@ class CashierOpen extends Component<Props, State> {
       <Fragment>
         {this.renderTopActioButtons()}
         {this.renderTable()}
-        {this.renderSaleForm()}
+        {this.renderSaleDetail()}
         {this.renderBottomValues()}
         {this.renderCloseCashierDialog()}
       </Fragment>

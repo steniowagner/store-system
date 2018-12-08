@@ -5,15 +5,20 @@ import { FILTER_TYPES } from '../../../utils/filter';
 const filterSalesWithDebit = (sales: Array<Object>): Array<Object> => sales.filter(sale => sale.inDebit > 0);
 
 const filterConfig = [{
-  placeholder: 'Informe o Nome de Usuáro Buscado',
+  placeholder: 'Informe o Nome do Vendedor',
   type: FILTER_TYPES.TEXT,
   filterTitle: 'Vendedor',
   dataField: 'salesman',
 }, {
-  placeholder: 'Informe o Nome do Cliente Buscado',
+  placeholder: 'Informe o Nome do Cliente',
   type: FILTER_TYPES.TEXT,
   filterTitle: 'Cliente',
   dataField: 'customerName',
+}, {
+  placeholder: 'Informe o Código da Venda',
+  type: FILTER_TYPES.TEXT,
+  filterTitle: 'Código',
+  dataField: 'code',
 }, {
   placeholder: 'Vendas que estão em Débito',
   type: FILTER_TYPES.FUNCTIONAL,

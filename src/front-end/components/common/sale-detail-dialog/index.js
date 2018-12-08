@@ -8,9 +8,9 @@ import Paper from '@material-ui/core/Paper';
 
 import styled from 'styled-components';
 
-import ProductList from '../../../components/common/product-sale-component/components/products-selected-list';
+import ProductList from '../product-sale-component/components/products-selected-list';
 import BottomContent from './BottomContent';
-import TopContent from './TopContent';
+import TopContent from '../../../screens/customer/components/TopContent';
 
 const MainContent = styled(Paper)`
   width: 100%;

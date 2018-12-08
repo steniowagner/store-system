@@ -8,7 +8,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Creators as CustomerDebitsCreators } from '../../../store/ducks/customerDebits';
 
-import SaleDetailDialog from './SaleWithDebitDetail';
+import SaleDetailDialog from '../../../components/common/sale-detail-dialog';
 import Dialog from '../../../components/common/Dialog';
 import Table from '../../../components/common/table';
 
@@ -28,8 +28,8 @@ const tabConfig = [{
   columnTitle: 'Vendedor',
   dataField: 'salesman',
 }, {
-  columnTitle: 'Sub-Total',
-  dataField: 'subtotalText',
+  columnTitle: 'Código',
+  dataField: 'code',
 }, {
   columnTitle: 'Total',
   dataField: 'totalText',
@@ -37,7 +37,7 @@ const tabConfig = [{
   columnTitle: 'Pago',
   dataField: 'paidValueText',
 }, {
-  columnTitle: 'Em Débito',
+  columnTitle: 'Débito',
   dataField: 'inDebitText',
 }];
 

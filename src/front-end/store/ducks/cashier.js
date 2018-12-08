@@ -109,6 +109,12 @@ const cashier = (state = INITIAL_STATE, { payload, type }) => {
         isCashierOpen: true,
       };
 
+    case Types.CREATE_FAILURE:
+      return {
+        ...state,
+        error: payload.error,
+      };
+
     case Types.READ_ALL_REQUEST:
       return {
         ...state,

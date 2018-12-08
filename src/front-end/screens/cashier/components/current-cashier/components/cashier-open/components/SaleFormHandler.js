@@ -8,6 +8,7 @@ import SaleForm from '../../../../../../sales/form';
 type Props = {
   onEditSaleOperation: Function,
   resetItemSelected: Function,
+  stock: Array<Object>,
   isOpen: boolean,
   item: Object,
 };
@@ -35,11 +36,11 @@ class SaleFormHandler extends Component<Props, State> {
   }
 
   onEditSale = (saleEdited: Object): void => {
-    const { onEditSaleOperation } = this.props;
+    const { onEditSaleOperation, item } = this.props;
 
     this.setState({
       isDialogOpen: false,
-    }, () => onEditSaleOperation(saleEdited));
+    }, () => onEditSaleOperation({ ...item, ...saleEdited }));
   };
 
   onToggleDialog = (): void => {
@@ -59,7 +60,7 @@ class SaleFormHandler extends Component<Props, State> {
 
   render() {
     const { isDialogOpen, mode } = this.state;
-    const { item } = this.props;
+    const { stock, item } = this.props;
 
     const title = (item.mode === 'edit' ? 'EDITAR VENDA' : 'VISUALIZAR VENDA');
 
@@ -73,6 +74,7 @@ class SaleFormHandler extends Component<Props, State> {
           onChageFormToEditMode={this.onChageFormToEditMode}
           onEditItem={this.onEditSale}
           onRemoveItem={() => {}}
+          stock={stock}
           mode={mode}
           item={item}
         />

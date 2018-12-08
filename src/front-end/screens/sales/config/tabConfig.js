@@ -5,6 +5,9 @@ const tabConfig = [{
   columnTitle: 'Data',
   dataField: 'dateToShow',
 }, {
+  columnTitle: 'Código',
+  dataField: 'code',
+}, {
   columnTitle: 'Vendedor',
   dataField: 'salesman',
 }, {
