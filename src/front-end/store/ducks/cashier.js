@@ -20,6 +20,7 @@ export const Types = {
   SET_CURRENT_CASHIER_TABLE_PAGE: 'cashier/SET_CURRENT_CASHIER_TABLE_PAGE',
 
   SET_PAST_CASHIER_TABLE_ITEMS_PER_PAGE: 'cashier/SET_PAST_CASHIER_TABLE_ITEMS_PER_PAGE',
+  SET_PAST_CASHIER_DATE_FILTER_VALUE: 'cashier/SET_PAST_CASHIER_DATE_FILTER_VALUE',
   SET_PAST_CASHIER_TABLE_PAGE: 'cashier/SET_PAST_CASHIER_TABLE_PAGE',
 
   SET_TAB_INDEX: 'cashier/SET_TAB_INDEX',
@@ -52,6 +53,7 @@ const INITIAL_STATE = Immutable({
     },
     pastCashiers: {
       currentTablePage: 0,
+      dateFilterValue: '',
       itemsPerPage: 5,
     },
   },
@@ -131,10 +133,16 @@ export const Creators = {
     payload: { itemsPerPage },
   }),
 
+  setPastCashierDateFilter: filterValue => ({
+    type: Types.SET_PAST_CASHIER_DATE_FILTER_VALUE,
+    payload: { filterValue },
+  }),
+
   setPastCashiersTablePage: currentPage => ({
     type: Types.SET_PAST_CASHIER_TABLE_PAGE,
     payload: { currentPage },
   }),
+
 
   onCloseCashier: () => ({
     type: Types.CLOSE_CASHIER,
@@ -264,7 +272,7 @@ const cashier = (state = INITIAL_STATE, { payload, type }) => {
           ...state.tabInfo,
           pastCashiers: {
             ...state.tabInfo.pastCashiers,
-            itemsPerPage: payload.itemsPerPage,
+            dateFilterValue: payload.filterValue,
           },
         },
       };
@@ -287,6 +295,18 @@ const cashier = (state = INITIAL_STATE, { payload, type }) => {
         tabInfo: {
           ...state.tabInfo,
           lastTabIndexSelected: payload.index,
+        },
+      };
+
+    case Types.SET_PAST_CASHIER_DATE_FILTER_VALUE:
+      return {
+        ...state,
+        tabInfo: {
+          ...state.tabInfo,
+          pastCashiers: {
+            ...state.tabInfo.pastCashiers,
+            dateFilterValue: payload.filterValue,
+          },
         },
       };
 

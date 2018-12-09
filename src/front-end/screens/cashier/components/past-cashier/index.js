@@ -17,6 +17,8 @@ import CashierDetailDialog from './components/CashierDetail';
 import DateFilter from './components/DateFilter';
 import Title from './components/Title';
 
+import { filterList, FILTER_TYPES } from '../../../../utils/filter';
+
 import config from './config';
 
 const Container = styled.div`
@@ -33,6 +35,7 @@ const HeaderWrapper = styled.div`
 
 type Props = {
   setPastCashiersTableItemsPerPage: Function,
+  setPastCashierDateFilter: Function,
   setPastCashiersTablePage: Function,
   getAllCashiers: Function,
   cashier: Object,
@@ -41,14 +44,12 @@ type Props = {
 type State = {
   isDetailCashierDialogOpen: boolean,
   cashierToDetail: Object,
-  dateFilterValue: string,
 }
 
 class PastCashiers extends Component<Props, State> {
   state = {
     isDetailCashierDialogOpen: false,
     cashierToDetail: {},
-    dateFilterValue: '',
   };
 
   componentDidMount() {
@@ -75,13 +76,33 @@ class PastCashiers extends Component<Props, State> {
   };
 
   onChooseDateToFilter = (event: Object): void => {
-    this.setState({
-      dateFilterValue: event.target.value,
-    });
+    const { setPastCashiersTablePage, setPastCashierDateFilter } = this.props;
+
+    setPastCashiersTablePage(0);
+    setPastCashierDateFilter(event.target.value);
   };
 
-  renderTitle = (): Object => {
-    const { dateFilterValue } = this.state;
+  getCashiersToShow = (cashier: Object): Array<Object> => {
+    const { pastCashiers, tabInfo } = cashier;
+    const { dateFilterValue } = tabInfo.pastCashiers;
+
+    if (!dateFilterValue) {
+      return pastCashiers;
+    }
+
+    const filterByDateConfig = {
+      filterSelected: FILTER_TYPES.DATE.WHEN.SAME,
+      value: moment(dateFilterValue),
+      type: FILTER_TYPES.DATE.ID,
+      dataset: pastCashiers,
+    };
+
+    const cashiersToShow = filterList(filterByDateConfig);
+
+    return cashiersToShow;
+  };
+
+  renderTitle = (dateFilterValue: string): Object => {
     const title = dateFilterValue && moment(dateFilterValue).format('LL');
 
     return (
@@ -91,30 +112,28 @@ class PastCashiers extends Component<Props, State> {
     );
   };
 
-  renderFilterInputFitler = (): Object => {
-    const { dateFilterValue } = this.state;
+  renderFilterInputFitler = (dateFilterValue: string): Object => (
+    <DateFilter
+      onChooseDateToFilter={this.onChooseDateToFilter}
+      dateFilterValue={dateFilterValue}
+    />
+  );
 
-    return (
-      <DateFilter
-        onChooseDateToFilter={this.onChooseDateToFilter}
-        dateFilterValue={dateFilterValue}
-      />
-    );
-  };
-
-  renderTable = (): Object => {
+  renderTable = (tabInfo: Object): Object => {
     const { setPastCashiersTableItemsPerPage, setPastCashiersTablePage, cashier } = this.props;
-    const { currentTablePage, itemsPerPage } = cashier.tabInfo.pastCashiers;
+    const { currentTablePage, itemsPerPage } = tabInfo.pastCashiers;
+
+    const pastCashiers = this.getCashiersToShow(cashier);
 
     return (
       <Table
         setItemsPerPage={setPastCashiersTableItemsPerPage}
         onDetailIconClicked={this.onClickTableDetailIcon}
         updatePageIndex={setPastCashiersTablePage}
-        dataset={cashier.pastCashiers}
         currentPage={currentTablePage}
         tabConfig={config.tabConfig}
         itemsPerPage={itemsPerPage}
+        dataset={pastCashiers}
       />
     );
   };
@@ -132,13 +151,17 @@ class PastCashiers extends Component<Props, State> {
   };
 
   render() {
+    const { cashier } = this.props;
+    const { tabInfo } = cashier;
+    const { dateFilterValue } = tabInfo.pastCashiers;
+
     return (
       <Container>
         <HeaderWrapper>
-          {this.renderTitle()}
-          {this.renderFilterInputFitler()}
+          {this.renderTitle(dateFilterValue)}
+          {this.renderFilterInputFitler(dateFilterValue)}
         </HeaderWrapper>
-        {this.renderTable()}
+        {this.renderTable(tabInfo)}
         {this.renderCashierDetail()}
       </Container>
     );
