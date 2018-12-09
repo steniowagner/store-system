@@ -16,6 +16,9 @@ export const Types = {
   CREATE_SALE: 'cashier/CREATE_SALE',
   EDIT_SALE: 'cashier/EDIT_SALE',
 
+  SET_CURRENT_CASHIER_TABLE_ITEMS_PER_PAGE: 'cashier/SET_CURRENT_CASHIER_TABLE_ITEMS_PER_PAGE',
+  SET_CURRENT_CASHIER_TABLE_PAGE: 'cashier/SET_CURRENT_CASHIER_TABLE_PAGE',
+
   SET_TAB_INDEX: 'cashier/SET_TAB_INDEX',
 
   UNSUBSCRIBE_EVENTS: 'cashier/UNSUBSCRIBE_EVENTS',
@@ -24,7 +27,6 @@ export const Types = {
 };
 
 const INITIAL_STATE = Immutable({
-  isCashierOpen: false,
   tabInfo: {
     lastTabIndexSelected: 0,
     currentCashier: {
@@ -34,9 +36,9 @@ const INITIAL_STATE = Immutable({
     pastCashiers: {
       currentTablePage: 0,
       itemsPerPage: 5,
-      data: [],
     },
   },
+  isCashierOpen: false,
   currentCashier: {},
   pastCashiers: [],
   message: null,
@@ -95,6 +97,16 @@ export const Creators = {
   onEditSale: saleEdited => ({
     type: Types.EDIT_SALE,
     payload: { saleEdited },
+  }),
+
+  setCurrentCashierTableItemsPerPage: itemsPerPage => ({
+    type: Types.SET_CURRENT_CASHIER_TABLE_ITEMS_PER_PAGE,
+    payload: { itemsPerPage },
+  }),
+
+  setCurrentCashierTablePage: currentPage => ({
+    type: Types.SET_CURRENT_CASHIER_TABLE_PAGE,
+    payload: { currentPage },
   }),
 
   onCloseCashier: () => ({
@@ -201,17 +213,41 @@ const cashier = (state = INITIAL_STATE, { payload, type }) => {
 
       /*
       tabInfo: {
-    lastTabIndexSelected: 0,
-    currentCashier: {
-      currentTablePage: 0,
-      itemsPerPage: 5,
-    },
-    pastCashiers: {
-      currentTablePage: 0,
-      itemsPerPage: 5,
-      data: [],
-    },
+        lastTabIndexSelected: 0,
+        currentCashier: {
+          currentTablePage: 0,
+          itemsPerPage: 5,
+        },
+        pastCashiers: {
+          currentTablePage: 0,
+          itemsPerPage: 5,
+          data: [],
+        },
   }, */
+
+    case Types.SET_CURRENT_CASHIER_TABLE_ITEMS_PER_PAGE:
+      return {
+        ...state,
+        tabInfo: {
+          ...state.tabInfo,
+          currentCashier: {
+            ...state.tabInfo.currentCashier,
+            itemsPerPage: payload.itemsPerPage,
+          },
+        },
+      };
+
+    case Types.SET_CURRENT_CASHIER_TABLE_PAGE:
+      return {
+        ...state,
+        tabInfo: {
+          ...state.tabInfo,
+          currentCashier: {
+            ...state.tabInfo.currentCashier,
+            currentTablePage: payload.currentPage,
+          },
+        },
+      };
 
     case Types.SET_TAB_INDEX:
       return {

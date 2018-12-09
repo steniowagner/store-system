@@ -53,14 +53,16 @@ const ActionButtonsWrapper = styled.div`
 `;
 
 type Props = {
-  onDetailIconClicked: Function,
   onRemoveIconClicked: ?Function,
+  onDetailIconClicked: Function,
   onEditIconClicked: ?Function,
+  setItemsPerPage: ?Function,
   updatePageIndex: Function,
-  canBeRemoved: boolean,
-  canBeEdited: boolean,
   tabConfig: Array<Object>,
   dataset: Array<any>,
+  canBeRemoved: boolean,
+  canBeEdited: boolean,
+  itemsPerPage: ?number,
   currentPage: number,
 };
 
@@ -73,9 +75,31 @@ class CustomTable extends Component<Props, State> {
     rowsPerPage: 5,
   };
 
+  componentDidMount() {
+    const { itemsPerPage } = this.props;
+
+    this.handleRowsPerPageValue(itemsPerPage);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { itemsPerPage } = nextProps;
+
+    this.handleRowsPerPageValue(itemsPerPage);
+  }
+
   onChangeRowsPerPage = (rowsPerPage: number): void => {
+    const { setItemsPerPage } = this.props;
+
     this.setState({
       rowsPerPage,
+    }, () => !!setItemsPerPage && setItemsPerPage(rowsPerPage));
+  };
+
+  handleRowsPerPageValue = (itemsPerPage: any): void => {
+    const { rowsPerPage } = this.state;
+
+    this.setState({
+      rowsPerPage: (itemsPerPage || rowsPerPage),
     });
   };
 

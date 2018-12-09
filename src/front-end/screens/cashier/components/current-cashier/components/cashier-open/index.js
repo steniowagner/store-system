@@ -21,24 +21,25 @@ const Wrapper = styled.div`
 
 type Props = {
   onEditInOutCashierOperation: Function,
+  setCurrentCashierTablePage: Function,
   onTakeMoneyFromCashier: Function,
   onAddMoneyIntoCashier: Function,
+  setTableItemsPerPage: Function,
   onCloseCashier: Function,
   currentCashier: Object,
+  tabInfo: Object,
 };
 
 type State = {
   isCloseCashierDialogOpen: boolean,
   contextOperationItem: any,
-  currentTablePage: number,
 };
 
 class CashierOpen extends Component<Props, State> {
   state = {
-    contextOperationItem: {},
     isCloseCashierDialogOpen: false,
     isSaleDetailDialogOpen: false,
-    currentTablePage: 0,
+    contextOperationItem: {},
   };
 
   onAddMoneyCashier = (value: string, reason: string): void => {
@@ -78,12 +79,6 @@ class CashierOpen extends Component<Props, State> {
     this.setState({
       contextOperationItem: { ...operation, mode: 'detail' },
       isSaleDetailDialogOpen: true,
-    });
-  };
-
-  onTablePageChange = (currentTablePage: number): void => {
-    this.setState({
-      currentTablePage,
     });
   };
 
@@ -157,16 +152,25 @@ class CashierOpen extends Component<Props, State> {
   };
 
   renderTable = (): Object => {
-    const { currentTablePage } = this.state;
-    const { currentCashier } = this.props;
+    const {
+      setCurrentCashierTablePage,
+      setTableItemsPerPage,
+      currentCashier,
+      tabInfo,
+    } = this.props;
+
+    const { currentTablePage, itemsPerPage } = tabInfo.currentCashier;
 
     return (
       <Table
+        updatePageIndex={(currentPageTable: number): void => setCurrentCashierTablePage(currentPageTable)}
+        setItemsPerPage={setTableItemsPerPage}
+
         onDetailIconClicked={this.onClickTableDetailIcon}
-        updatePageIndex={this.onTablePageChange}
         dataset={currentCashier.operations}
         currentPage={currentTablePage}
         tabConfig={config.tabConfig}
+        itemsPerPage={itemsPerPage}
       />
     );
   };

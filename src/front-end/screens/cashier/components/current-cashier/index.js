@@ -12,6 +12,8 @@ import CashierClosed from './components/cashier-closed';
 import CashierOpen from './components/cashier-open';
 
 type Props = {
+  setCurrentCashierTableItemsPerPage: Function,
+  setCurrentCashierTablePage: Function,
   unsubscribeCashierEvents: Function,
   requestSaleUpdate: Function,
   onCloseCashier: Function,
@@ -130,17 +132,27 @@ class CurrentCashier extends Component<Props, State> {
   };
 
   renderCashierOpen = (): Object => {
-    const { requestSaleUpdate, cashier } = this.props;
-    const { currentCashier } = cashier;
+    const {
+      setCurrentCashierTableItemsPerPage,
+      setCurrentCashierTablePage,
+      requestSaleUpdate,
+      cashier,
+    } = this.props;
+
+    const { currentCashier, tabInfo } = cashier;
 
     return (
       <CashierOpen
+        setTableItemsPerPage={(itemsPerPage: number): void => setCurrentCashierTableItemsPerPage(itemsPerPage)}
+        setCurrentCashierTablePage={setCurrentCashierTablePage}
+
         onEditInOutCashierOperation={this.onEditInOutCashierOperation}
         onTakeMoneyFromCashier={this.onTakeMoneyFromCashier}
         onAddMoneyIntoCashier={this.onAddMoneyIntoCashier}
         requestSaleUpdate={requestSaleUpdate}
         onCloseCashier={this.onCloseCashier}
         currentCashier={currentCashier}
+        tabInfo={tabInfo}
       />
     );
   };

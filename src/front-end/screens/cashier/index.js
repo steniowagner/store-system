@@ -44,7 +44,7 @@ const TabWrapper = styled.div`
 const renderTabs = (lastTabIndexSelected: number, setTabIndex: Function): Object => (
   <TabWrapper>
     <Tabs
-      onChange={(_, currentTabIndex: number) => setTabIndex(currentTabIndex)}
+      onChange={(_, currentTabIndex: number): void => setTabIndex(currentTabIndex)}
       value={lastTabIndexSelected}
       indicatorColor="primary"
       textColor="primary"
@@ -78,7 +78,7 @@ const renderPastCashiersTab = (): Object => (
 const renderTabsContent = (lastTabIndexSelected: number, setTabIndex: Function): Object => (
   <SwipeableViewsContainer>
     <SwipeableViews
-      onChangeIndex={(currentTabIndex: number) => setTabIndex(currentTabIndex)}
+      onChangeIndex={(currentTabIndex: number): void => setTabIndex(currentTabIndex)}
       index={lastTabIndexSelected}
       axis="x"
     >
