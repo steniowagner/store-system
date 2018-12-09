@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 
 import SwipeableViews from 'react-swipeable-views';
+import Paper from '@material-ui/core/Paper';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 
@@ -16,6 +17,11 @@ const Container = styled.div`
   height: 100%;
 `;
 
+const Wrapper = styled(Paper)`
+  margin-bottom: 24px;
+  padding: 16px 32px 0 32px;
+`;
+
 const SwipeableViewsContainer = styled.div`
   width: 100%;
   height: 100%;
@@ -25,6 +31,10 @@ const TabContainer = styled.div`
   width: 100%;
   height: 100%;
   padding: 32px 0;
+`;
+
+const TabWrapper = styled.div`
+  margin-left: 4px;
 `;
 
 class Cashier extends Component {
@@ -44,19 +54,21 @@ class Cashier extends Component {
     const { currentTabIndex } = this.state;
 
     return (
-      <Tabs
-        onChange={this.handleChangeTab}
-        indicatorColor="primary"
-        value={currentTabIndex}
-        textColor="primary"
-      >
-        <Tab
-          label="CAIXA ATUAL"
-        />
-        <Tab
-          label="CAIXAS ANTERIORES"
-        />
-      </Tabs>
+      <TabWrapper>
+        <Tabs
+          onChange={this.handleChangeTab}
+          indicatorColor="primary"
+          value={currentTabIndex}
+          textColor="primary"
+        >
+          <Tab
+            label="CAIXA ATUAL"
+          />
+          <Tab
+            label="CAIXAS ANTERIORES"
+          />
+        </Tabs>
+      </TabWrapper>
     );
   };
 
@@ -96,8 +108,10 @@ class Cashier extends Component {
   render() {
     return (
       <Container>
-        {this.renderTabs()}
-        {this.renderTabsContent()}
+        <Wrapper>
+          {this.renderTabs()}
+          {this.renderTabsContent()}
+        </Wrapper>
       </Container>
     );
   }

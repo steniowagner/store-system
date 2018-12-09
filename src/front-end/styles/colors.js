@@ -1,6 +1,7 @@
 export default {
   white: '#FFF',
   tableOddColor: '#f2f2f2',
+  containerColor: '#f4f4f4',
   darkText: '#rgba(0, 0, 0, 0.8)',
   affirmative: '#5977e2',
   customInactiveButton: '#abbbf4',

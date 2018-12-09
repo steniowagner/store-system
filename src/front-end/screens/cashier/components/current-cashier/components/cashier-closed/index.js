@@ -7,10 +7,15 @@ import styled from 'styled-components';
 import InitialMoneyCashDialog from './components/InitialMoneyCashDialog';
 import CashierClosedAlert from './components/CashierClosedAlert';
 
-const Wrapper = styled.div`
+const Container = styled.div`
+  display: flex;
   width: 100%;
   height: 100%;
+  justify-content: center;
+  align-items: center;
 `;
+
+const Wrapper = styled.div``;
 
 type Props = {
   onSetInitialMoneyInCashier: Function,
@@ -82,10 +87,12 @@ class CashierClosed extends Component<Props, State> {
 
   render() {
     return (
-      <Wrapper>
-        {this.renderCashierClosed()}
-        {this.renderInitialMoneyCashDialog()}
-      </Wrapper>
+      <Container>
+        <Wrapper>
+          {this.renderCashierClosed()}
+          {this.renderInitialMoneyCashDialog()}
+        </Wrapper>
+      </Container>
     );
   }
 }

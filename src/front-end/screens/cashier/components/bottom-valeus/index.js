@@ -13,7 +13,7 @@ const Container = styled.div`
   display: flex;
   justify-content: space-between;
   margin-top: 32px;
-  border-radius: 6px;
+  border-radius: 4px;
   background-color: ${({ theme }) => theme.colors.lightGray}
 `;
 

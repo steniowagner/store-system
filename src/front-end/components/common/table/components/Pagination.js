@@ -101,9 +101,9 @@ const Pagination = ({
     <TablePagination
       labelDisplayedRows={({ from, to, count }) => `${from}-${to} de ${count}`}
       onChangeRowsPerPage={event => onChangeRowsPerPage(event.target.value)}
-      rowsPerPageOptions={[5, 10]}
       ActionsComponent={() => PageControlls}
       labelRowsPerPage="Itens por página"
+      rowsPerPageOptions={[5, 10]}
       rowsPerPage={rowsPerPage}
       count={datasetLength}
       page={currentPage}

@@ -1,6 +1,8 @@
 // @flow
 
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
+
+import styled from 'styled-components';
 
 import CloseCashierDialog from './components/CloseCashierDialog';
 import TopActionButtons from './components/top-buttons-values';
@@ -12,6 +14,10 @@ import Table from '../../../../../../components/common/table';
 import config from './config';
 
 import { getNewCashierOperationData } from '../../../../cashier-utils';
+
+const Wrapper = styled.div`
+  margin: 0 4px;
+`;
 
 type Props = {
   onEditInOutCashierOperation: Function,
@@ -198,13 +204,13 @@ class CashierOpen extends Component<Props, State> {
 
   render() {
     return (
-      <Fragment>
+      <Wrapper>
         {this.renderTopActioButtons()}
         {this.renderTable()}
         {this.renderSaleDetail()}
         {this.renderBottomValues()}
         {this.renderCloseCashierDialog()}
-      </Fragment>
+      </Wrapper>
     );
   }
 }

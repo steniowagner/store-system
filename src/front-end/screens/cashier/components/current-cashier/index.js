@@ -5,7 +5,6 @@ import React, { Component, Fragment } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Creators as CashierCreators } from '../../../../store/ducks/cashier';
-import { Creators as StockCreators } from '../../../../store/ducks/stock';
 
 import { CASHIER_OPERATIONS } from './components/cashier-open/components/top-buttons-values/dialog-config';
 
@@ -18,7 +17,6 @@ type Props = {
   onCloseCashier: Function,
   createCashier: Function,
   editCashier: Function,
-  getStock: Function,
   cashier: Object,
 };
 
@@ -30,12 +28,6 @@ class CurrentCashier extends Component<Props, State> {
   state = {
     initialMoneyInCashier: '',
   };
-
-  componentDidMount() {
-    const { getStock } = this.props;
-
-    getStock();
-  }
 
   componentWillUnmount() {
     const { unsubscribeCashierEvents } = this.props;
@@ -165,8 +157,7 @@ class CurrentCashier extends Component<Props, State> {
   }
 }
 
-const Creators = Object.assign({}, StockCreators, CashierCreators);
-const mapDispatchToProps = dispatch => bindActionCreators(Creators, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators(CashierCreators, dispatch);
 
 const mapStateToProps = state => ({
   cashier: state.cashier,

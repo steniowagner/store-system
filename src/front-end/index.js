@@ -15,7 +15,7 @@ import Router from './Router';
 import store from './store';
 
 const Wrapper = styled.div`
-  background-color: ${({ theme }) => theme.colors.lightGray};
+  background-color: ${({ theme }) => theme.colors.containerColor};
 `;
 
 const theme = createMuiTheme({
