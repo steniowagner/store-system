@@ -62,6 +62,7 @@ import {
 
 import {
   unsubscribeCashierEvents,
+  getAllCashiers,
   createCashier,
   editCashier,
 } from './cashier';
@@ -122,6 +123,7 @@ export default function* rootSaga() {
     takeLatest(BudgetTypes.DELETE_REQUEST, deleteBudget),
 
     takeLatest(CashierTypes.UNSUBSCRIBE_EVENTS, unsubscribeCashierEvents),
+    takeLatest(CashierTypes.READ_ALL_REQUEST, getAllCashiers),
     takeLatest(CashierTypes.CREATE_REQUEST, createCashier),
     takeLatest(CashierTypes.EDIT_REQUEST, editCashier),
 

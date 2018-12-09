@@ -1,18 +1,18 @@
 const tabConfig = [{
   columnTitle: 'Data',
-  dataField: 'date',
+  dataField: 'dateToShow',
 }, {
   columnTitle: 'Valor Inicial em Caixa',
-  dataField: 'initalCashierValue',
+  dataField: 'initialMoneyCashierText',
 }, {
   columnTitle: 'Total de Entrada',
-  dataField: 'totalInputMoney',
+  dataField: 'totalIncomeText',
 }, {
   columnTitle: 'Total de Saída',
-  dataField: 'totalOutputMoney',
+  dataField: 'totalOutcomeText',
 }, {
   columnTitle: 'Lucro',
-  dataField: 'profit',
+  dataField: 'totalProfitText',
 }];
 
 export default tabConfig;

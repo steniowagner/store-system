@@ -19,11 +19,28 @@ export const Types = {
   SET_CURRENT_CASHIER_TABLE_ITEMS_PER_PAGE: 'cashier/SET_CURRENT_CASHIER_TABLE_ITEMS_PER_PAGE',
   SET_CURRENT_CASHIER_TABLE_PAGE: 'cashier/SET_CURRENT_CASHIER_TABLE_PAGE',
 
+  SET_PAST_CASHIER_TABLE_ITEMS_PER_PAGE: 'cashier/SET_PAST_CASHIER_TABLE_ITEMS_PER_PAGE',
+  SET_PAST_CASHIER_TABLE_PAGE: 'cashier/SET_PAST_CASHIER_TABLE_PAGE',
+
   SET_TAB_INDEX: 'cashier/SET_TAB_INDEX',
 
   UNSUBSCRIBE_EVENTS: 'cashier/UNSUBSCRIBE_EVENTS',
 
   CLOSE_CASHIER: 'cashier/CLOSE_CASHIER',
+};
+
+const handlePastCashiers = (allPastCashiers, currentCashier) => {
+  const cashiersExceptCurrent = allPastCashiers.filter(pastCashier => pastCashier.id !== (currentCashier && currentCashier.id));
+
+  const pastCashiers = cashiersExceptCurrent.map(cashier => ({
+    ...cashier,
+    initialMoneyCashierText: `R$ ${cashier.initialMoneyCashier.toFixed(2)}`,
+    totalOutcomeText: `R$ ${cashier.totalOutcome.toFixed(2)}`,
+    totalIncomeText: `R$ ${cashier.totalIncome.toFixed(2)}`,
+    totalProfitText: `R$ ${cashier.totalProfit.toFixed(2)}`,
+  }));
+
+  return pastCashiers;
 };
 
 const INITIAL_STATE = Immutable({
@@ -61,16 +78,16 @@ export const Creators = {
     payload: { error: 'Houve um erro ao Abrir o Caixa' },
   }),
 
-  readAllCashiers: () => ({
+  getAllCashiers: () => ({
     type: Types.READ_ALL_REQUEST,
   }),
 
-  readAllCashiersSuccess: cashiers => ({
+  getAllCashiersSuccess: cashiers => ({
     type: Types.READ_ALL_SUCCESS,
     payload: { cashiers },
   }),
 
-  readAllCashiersFailure: () => ({
+  getAllCashiersFailure: () => ({
     type: Types.READ_ALL_FAILURE,
     payload: { error: 'Houve um erro na leitura dos Caixas ' },
   }),
@@ -106,6 +123,16 @@ export const Creators = {
 
   setCurrentCashierTablePage: currentPage => ({
     type: Types.SET_CURRENT_CASHIER_TABLE_PAGE,
+    payload: { currentPage },
+  }),
+
+  setPastCashiersTableItemsPerPage: itemsPerPage => ({
+    type: Types.SET_PAST_CASHIER_TABLE_ITEMS_PER_PAGE,
+    payload: { itemsPerPage },
+  }),
+
+  setPastCashiersTablePage: currentPage => ({
+    type: Types.SET_PAST_CASHIER_TABLE_PAGE,
     payload: { currentPage },
   }),
 
@@ -156,7 +183,7 @@ const cashier = (state = INITIAL_STATE, { payload, type }) => {
     case Types.READ_ALL_SUCCESS:
       return {
         ...state,
-        pastCashiers: [...payload.cashiers],
+        pastCashiers: handlePastCashiers(payload.cashiers, state.currentCashier),
       };
 
     case Types.READ_ALL_FAILURE:
@@ -206,25 +233,6 @@ const cashier = (state = INITIAL_STATE, { payload, type }) => {
         },
       };
 
-    case Types.CLOSE_CASHIER:
-      return {
-        ...INITIAL_STATE,
-      };
-
-      /*
-      tabInfo: {
-        lastTabIndexSelected: 0,
-        currentCashier: {
-          currentTablePage: 0,
-          itemsPerPage: 5,
-        },
-        pastCashiers: {
-          currentTablePage: 0,
-          itemsPerPage: 5,
-          data: [],
-        },
-  }, */
-
     case Types.SET_CURRENT_CASHIER_TABLE_ITEMS_PER_PAGE:
       return {
         ...state,
@@ -249,6 +257,30 @@ const cashier = (state = INITIAL_STATE, { payload, type }) => {
         },
       };
 
+    case Types.SET_PAST_CASHIER_TABLE_ITEMS_PER_PAGE:
+      return {
+        ...state,
+        tabInfo: {
+          ...state.tabInfo,
+          pastCashiers: {
+            ...state.tabInfo.pastCashiers,
+            itemsPerPage: payload.itemsPerPage,
+          },
+        },
+      };
+
+    case Types.SET_PAST_CASHIER_TABLE_PAGE:
+      return {
+        ...state,
+        tabInfo: {
+          ...state.tabInfo,
+          pastCashiers: {
+            ...state.tabInfo.pastCashiers,
+            currentTablePage: payload.currentPage,
+          },
+        },
+      };
+
     case Types.SET_TAB_INDEX:
       return {
         ...state,
@@ -256,6 +288,12 @@ const cashier = (state = INITIAL_STATE, { payload, type }) => {
           ...state.tabInfo,
           lastTabIndexSelected: payload.index,
         },
+      };
+
+    case Types.CLOSE_CASHIER:
+      return {
+        ...state,
+        isCashierOpen: false,
       };
 
     case Types.UNSUBSCRIBE_EVENTS: {

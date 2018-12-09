@@ -143,9 +143,8 @@ class CurrentCashier extends Component<Props, State> {
 
     return (
       <CashierOpen
+        setCurrentCashierTablePage={(currentPageTable: number): void => setCurrentCashierTablePage(currentPageTable)}
         setTableItemsPerPage={(itemsPerPage: number): void => setCurrentCashierTableItemsPerPage(itemsPerPage)}
-        setCurrentCashierTablePage={setCurrentCashierTablePage}
-
         onEditInOutCashierOperation={this.onEditInOutCashierOperation}
         onTakeMoneyFromCashier={this.onTakeMoneyFromCashier}
         onAddMoneyIntoCashier={this.onAddMoneyIntoCashier}

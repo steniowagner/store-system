@@ -163,10 +163,9 @@ class CashierOpen extends Component<Props, State> {
 
     return (
       <Table
-        updatePageIndex={(currentPageTable: number): void => setCurrentCashierTablePage(currentPageTable)}
-        setItemsPerPage={setTableItemsPerPage}
-
         onDetailIconClicked={this.onClickTableDetailIcon}
+        updatePageIndex={setCurrentCashierTablePage}
+        setItemsPerPage={setTableItemsPerPage}
         dataset={currentCashier.operations}
         currentPage={currentTablePage}
         tabConfig={config.tabConfig}

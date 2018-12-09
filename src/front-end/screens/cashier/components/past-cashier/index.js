@@ -1,11 +1,15 @@
 // @flow
 
-import React, { Component, Fragment } from 'react';
-
-import styled from 'styled-components';
+import React, { Component } from 'react';
 
 import moment from 'moment';
 import 'moment/locale/pt-br';
+
+import styled from 'styled-components';
+
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { Creators as CashierCreators } from '../../../../store/ducks/cashier';
 
 import Table from '../../../../components/common/table';
 
@@ -15,6 +19,10 @@ import Title from './components/Title';
 
 import config from './config';
 
+const Container = styled.div`
+  margin: 0 4px;
+`;
+
 const HeaderWrapper = styled.div`
   width: 100%;
   display: flex;
@@ -23,16 +31,32 @@ const HeaderWrapper = styled.div`
   margin-bottom: 32px;
 `;
 
-class PastCashiers extends Component {
+type Props = {
+  setPastCashiersTableItemsPerPage: Function,
+  setPastCashiersTablePage: Function,
+  getAllCashiers: Function,
+  cashier: Object,
+};
+
+type State = {
+  isDetailCashierDialogOpen: boolean,
+  cashierToDetail: Object,
+  dateFilterValue: string,
+}
+
+class PastCashiers extends Component<Props, State> {
   state = {
     isDetailCashierDialogOpen: false,
     cashierToDetail: {},
     dateFilterValue: '',
-    currentPage: 0,
   };
 
   componentDidMount() {
+    const { getAllCashiers } = this.props;
+
     moment.locale('pt-br');
+
+    getAllCashiers();
   }
 
   onToggleCashierDialog = (): void => {
@@ -53,12 +77,6 @@ class PastCashiers extends Component {
   onChooseDateToFilter = (event: Object): void => {
     this.setState({
       dateFilterValue: event.target.value,
-    });
-  };
-
-  onTablePageChange = (newPage: number): void => {
-    this.setState({
-      currentPage: newPage,
     });
   };
 
@@ -85,21 +103,18 @@ class PastCashiers extends Component {
   };
 
   renderTable = (): Object => {
-    const { currentPage } = this.state;
+    const { setPastCashiersTableItemsPerPage, setPastCashiersTablePage, cashier } = this.props;
+    const { currentTablePage, itemsPerPage } = cashier.tabInfo.pastCashiers;
 
     return (
       <Table
-        onDetailIconClicked={this.onTableDetailIconClicked}
-        updatePageIndex={this.onTablePageChange}
-        currentPage={currentPage}
+        setItemsPerPage={setPastCashiersTableItemsPerPage}
+        onDetailIconClicked={this.onClickTableDetailIcon}
+        updatePageIndex={setPastCashiersTablePage}
+        dataset={cashier.pastCashiers}
+        currentPage={currentTablePage}
         tabConfig={config.tabConfig}
-        dataset={Array(10).fill({
-          date: '13 de novembro de 2018',
-          initalCashierValue: 'R$ 29.90',
-          totalInputMoney: 'R$ 50.50',
-          totalOutputMoney: 'R$ 25.41',
-          profit: 'R$ 21.90',
-        })}
+        itemsPerPage={itemsPerPage}
       />
     );
   };
@@ -118,16 +133,22 @@ class PastCashiers extends Component {
 
   render() {
     return (
-      <Fragment>
+      <Container>
         <HeaderWrapper>
           {this.renderTitle()}
           {this.renderFilterInputFitler()}
         </HeaderWrapper>
         {this.renderTable()}
         {this.renderCashierDetail()}
-      </Fragment>
+      </Container>
     );
   }
 }
 
-export default PastCashiers;
+const mapDispatchToProps = dispatch => bindActionCreators(CashierCreators, dispatch);
+
+const mapStateToProps = state => ({
+  cashier: state.cashier,
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(PastCashiers);

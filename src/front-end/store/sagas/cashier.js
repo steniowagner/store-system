@@ -4,19 +4,18 @@ import moment from 'moment';
 import 'moment/locale/pt-br';
 
 import { CASHIER_OPERATIONS } from '../../screens/cashier/components/current-cashier/components/cashier-open/components/top-buttons-values/dialog-config';
-import { CREATE_CASHIER, UPDATE_CASHIER, READ_CASHIER } from '../../../back-end/events-handlers/cashier/types';
+import { CREATE_CASHIER, UPDATE_CASHIER, READ_CASHIERS } from '../../../back-end/events-handlers/cashier/types';
 import { handleEventUnsubscription, handleEventSubscription } from './eventHandler';
 import { OPERATION_REQUEST, CASHIER } from '../../../common/entitiesTypes';
 import { calculateTotalProfit, parseSaleTableItem } from '../../screens/cashier/cashier-utils';
 import { Creators as CashierCreators } from '../ducks/cashier';
-import { Creators as SaleCreators } from '../ducks/sale';
 
 const { ipcRenderer } = window.require('electron');
 
 const EVENT_TAGS = {
+  READ_ALL_CASHIERS: 'CASHIERS_READ',
   CREATE_CASHIER: 'CASHIER_CREATE',
   UPDATE_CASHIER: 'CASHIER_UPDATE',
-  READ_CASHIERS: 'CASHIERS_READ',
 };
 
 export function* createCashier(action) {
@@ -52,6 +51,20 @@ export function* createCashier(action) {
   }
 }
 
+export function* getAllCashiers() {
+  try {
+    ipcRenderer.send(OPERATION_REQUEST, CASHIER, READ_CASHIERS, EVENT_TAGS.READ_ALL_CASHIERS);
+
+    const { result } = yield handleEventSubscription(EVENT_TAGS.READ_ALL_CASHIERS);
+
+    yield put(CashierCreators.getAllCashiersSuccess(result));
+
+    handleEventUnsubscription(EVENT_TAGS.READ_ALL_CASHIERS);
+  } catch (err) {
+    yield put(CashierCreators.getAllCashiersFailure());
+  }
+}
+
 export function* editCashier(action) {
   try {
     const { cashier } = action.payload;
@@ -67,6 +80,7 @@ export function* editCashier(action) {
     ipcRenderer.send(OPERATION_REQUEST, CASHIER, UPDATE_CASHIER, EVENT_TAGS.UPDATE_CASHIER, cashierUpdated);
 
     yield handleEventSubscription(EVENT_TAGS.UPDATE_CASHIER);
+
     yield put(CashierCreators.editCashierSuccess(cashierUpdated));
   } catch (err) {
     yield put(CashierCreators.editCashierFailure(err.message));
