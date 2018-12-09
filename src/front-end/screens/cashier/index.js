@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component } from 'react';
+import React from 'react';
 
 import SwipeableViews from 'react-swipeable-views';
 import Paper from '@material-ui/core/Paper';
@@ -8,6 +8,10 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 
 import styled from 'styled-components';
+
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { Creators as CashierCreators } from '../../store/ducks/cashier';
 
 import CurrentCashier from './components/current-cashier';
 import PastCashiers from './components/past-cashier';
@@ -37,84 +41,75 @@ const TabWrapper = styled.div`
   margin-left: 4px;
 `;
 
-class Cashier extends Component {
-  state = {
-    currentTabIndex: 0,
-  };
-
-  handleChangeTab = (_, currentTabIndex: number): void => {
-    this.setState({ currentTabIndex });
-  };
-
-  handleChangeTabIndex = (currentTabIndex: number): void => {
-    this.setState({ currentTabIndex });
-  };
-
-  renderTabs = (): Object => {
-    const { currentTabIndex } = this.state;
-
-    return (
-      <TabWrapper>
-        <Tabs
-          onChange={this.handleChangeTab}
-          indicatorColor="primary"
-          value={currentTabIndex}
-          textColor="primary"
-        >
-          <Tab
-            label="CAIXA ATUAL"
-          />
-          <Tab
-            label="CAIXAS ANTERIORES"
-          />
-        </Tabs>
-      </TabWrapper>
-    );
-  };
-
-  renderTabsContent = (): Object => {
-    const { currentTabIndex } = this.state;
-
-    return (
-      <SwipeableViewsContainer>
-        <SwipeableViews
-          onChangeIndex={this.handleChangeTabIndex}
-          index={currentTabIndex}
-          axis="x"
-        >
-          {this.renderCurrentCashierTab()}
-          {this.renderPastCashiersTab()}
-        </SwipeableViews>
-      </SwipeableViewsContainer>
-    );
-  };
-
-  renderCurrentCashierTab = (): Object => (
-    <TabContainer
-      dir="ltr"
+const renderTabs = (lastTabIndexSelected: number, setTabIndex: Function): Object => (
+  <TabWrapper>
+    <Tabs
+      onChange={(_, currentTabIndex: number) => setTabIndex(currentTabIndex)}
+      value={lastTabIndexSelected}
+      indicatorColor="primary"
+      textColor="primary"
     >
-      <CurrentCashier />
-    </TabContainer>
-  );
+      <Tab
+        label="CAIXA ATUAL"
+      />
+      <Tab
+        label="CAIXAS ANTERIORES"
+      />
+    </Tabs>
+  </TabWrapper>
+);
 
-  renderPastCashiersTab = (): Object => (
-    <TabContainer
-      dir="ltr"
+const renderCurrentCashierTab = (): Object => (
+  <TabContainer
+    dir="ltr"
+  >
+    <CurrentCashier />
+  </TabContainer>
+);
+
+const renderPastCashiersTab = (): Object => (
+  <TabContainer
+    dir="ltr"
+  >
+    <PastCashiers />
+  </TabContainer>
+);
+
+const renderTabsContent = (lastTabIndexSelected: number, setTabIndex: Function): Object => (
+  <SwipeableViewsContainer>
+    <SwipeableViews
+      onChangeIndex={(currentTabIndex: number) => setTabIndex(currentTabIndex)}
+      index={lastTabIndexSelected}
+      axis="x"
     >
-      <PastCashiers />
-    </TabContainer>
+      {renderCurrentCashierTab()}
+      {renderPastCashiersTab()}
+    </SwipeableViews>
+  </SwipeableViewsContainer>
+);
+
+type Props = {
+  setTabIndex: Function,
+  cashier: Object,
+};
+
+const Cashier = ({ setTabIndex, cashier }: Props): Object => {
+  const { lastTabIndexSelected } = cashier.tabInfo;
+
+  return (
+    <Container>
+      <Wrapper>
+        {renderTabs(lastTabIndexSelected, setTabIndex)}
+        {renderTabsContent(lastTabIndexSelected, setTabIndex)}
+      </Wrapper>
+    </Container>
   );
+};
 
-  render() {
-    return (
-      <Container>
-        <Wrapper>
-          {this.renderTabs()}
-          {this.renderTabsContent()}
-        </Wrapper>
-      </Container>
-    );
-  }
-}
+const mapDispatchToProps = dispatch => bindActionCreators(CashierCreators, dispatch);
 
-export default Cashier;
+const mapStateToProps = state => ({
+  cashier: state.cashier,
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Cashier);

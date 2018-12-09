@@ -16,6 +16,8 @@ export const Types = {
   CREATE_SALE: 'cashier/CREATE_SALE',
   EDIT_SALE: 'cashier/EDIT_SALE',
 
+  SET_TAB_INDEX: 'cashier/SET_TAB_INDEX',
+
   UNSUBSCRIBE_EVENTS: 'cashier/UNSUBSCRIBE_EVENTS',
 
   CLOSE_CASHIER: 'cashier/CLOSE_CASHIER',
@@ -23,6 +25,18 @@ export const Types = {
 
 const INITIAL_STATE = Immutable({
   isCashierOpen: false,
+  tabInfo: {
+    lastTabIndexSelected: 0,
+    currentCashier: {
+      currentTablePage: 0,
+      itemsPerPage: 5,
+    },
+    pastCashiers: {
+      currentTablePage: 0,
+      itemsPerPage: 5,
+      data: [],
+    },
+  },
   currentCashier: {},
   pastCashiers: [],
   message: null,
@@ -85,6 +99,11 @@ export const Creators = {
 
   onCloseCashier: () => ({
     type: Types.CLOSE_CASHIER,
+  }),
+
+  setTabIndex: index => ({
+    type: Types.SET_TAB_INDEX,
+    payload: { index },
   }),
 
   unsubscribeCashierEvents: () => ({
@@ -178,6 +197,29 @@ const cashier = (state = INITIAL_STATE, { payload, type }) => {
     case Types.CLOSE_CASHIER:
       return {
         ...INITIAL_STATE,
+      };
+
+      /*
+      tabInfo: {
+    lastTabIndexSelected: 0,
+    currentCashier: {
+      currentTablePage: 0,
+      itemsPerPage: 5,
+    },
+    pastCashiers: {
+      currentTablePage: 0,
+      itemsPerPage: 5,
+      data: [],
+    },
+  }, */
+
+    case Types.SET_TAB_INDEX:
+      return {
+        ...state,
+        tabInfo: {
+          ...state.tabInfo,
+          lastTabIndexSelected: payload.index,
+        },
       };
 
     case Types.UNSUBSCRIBE_EVENTS: {

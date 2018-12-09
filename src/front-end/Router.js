@@ -1,9 +1,9 @@
 // @flow
 
 import React from 'react';
-import { Route } from 'react-router-dom';
 
-import ContainerWrapper from './components/common/ContainerWrapper';
+import { Route } from 'react-router-dom';
+import styled from 'styled-components';
 
 import Customer from './screens/customer';
 import Provider from './screens/provider';
@@ -14,8 +14,14 @@ import Sales from './screens/sales';
 import Stock from './screens/stock';
 import User from './screens/user';
 
+const Container = styled.div`
+  height: 100%;
+  padding: 96px 28px 0 28px;
+  overflow: scroll;
+`;
+
 const ApplicationRouter = (): Object => (
-  <ContainerWrapper>
+  <Container>
     <Route
       component={Cashier}
       path="/cashier"
@@ -48,7 +54,7 @@ const ApplicationRouter = (): Object => (
       component={Sales}
       path="/sale"
     />
-  </ContainerWrapper>
+  </Container>
 );
 
 export default ApplicationRouter;
