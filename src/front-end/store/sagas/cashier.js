@@ -5,9 +5,9 @@ import 'moment/locale/pt-br';
 
 import { CASHIER_OPERATIONS } from '../../screens/cashier/components/current-cashier/components/cashier-open/components/top-buttons-values/dialog-config';
 import { CREATE_CASHIER, UPDATE_CASHIER, READ_CASHIERS } from '../../../back-end/events-handlers/cashier/types';
+import { calculateTotalProfit, parseSaleTableItem } from '../../screens/cashier/cashier-utils';
 import { handleEventUnsubscription, handleEventSubscription } from './eventHandler';
 import { OPERATION_REQUEST, CASHIER } from '../../../common/entitiesTypes';
-import { calculateTotalProfit, parseSaleTableItem } from '../../screens/cashier/cashier-utils';
 import { Creators as CashierCreators } from '../ducks/cashier';
 
 const { ipcRenderer } = window.require('electron');
@@ -36,14 +36,15 @@ export function* createCashier(action) {
     };
 
     ipcRenderer.send(OPERATION_REQUEST, CASHIER, CREATE_CASHIER, EVENT_TAGS.CREATE_CASHIER, initialCashier);
-
     const { result } = yield handleEventSubscription(EVENT_TAGS.CREATE_CASHIER);
+    handleEventUnsubscription(EVENT_TAGS.CREATE_CASHIER);
 
     const newCashier = {
       ...initialCashier,
       operations: [],
       id: result,
     };
+
 
     yield put(CashierCreators.createCashierSuccess(newCashier));
   } catch (err) {
@@ -54,12 +55,10 @@ export function* createCashier(action) {
 export function* getAllCashiers() {
   try {
     ipcRenderer.send(OPERATION_REQUEST, CASHIER, READ_CASHIERS, EVENT_TAGS.READ_ALL_CASHIERS);
-
     const { result } = yield handleEventSubscription(EVENT_TAGS.READ_ALL_CASHIERS);
+    handleEventUnsubscription(EVENT_TAGS.READ_ALL_CASHIERS);
 
     yield put(CashierCreators.getAllCashiersSuccess(result));
-
-    handleEventUnsubscription(EVENT_TAGS.READ_ALL_CASHIERS);
   } catch (err) {
     yield put(CashierCreators.getAllCashiersFailure());
   }
@@ -78,8 +77,8 @@ export function* editCashier(action) {
     };
 
     ipcRenderer.send(OPERATION_REQUEST, CASHIER, UPDATE_CASHIER, EVENT_TAGS.UPDATE_CASHIER, cashierUpdated);
-
     yield handleEventSubscription(EVENT_TAGS.UPDATE_CASHIER);
+    handleEventUnsubscription(EVENT_TAGS.UPDATE_CASHIER);
 
     yield put(CashierCreators.editCashierSuccess(cashierUpdated));
   } catch (err) {
@@ -143,5 +142,3 @@ export function* onEditSaleOperation(saleUpdated) {
 
   yield call(editCashier, { payload });
 }
-
-export const unsubscribeCashierEvents = () => handleEventUnsubscription(EVENT_TAGS);

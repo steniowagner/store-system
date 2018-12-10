@@ -25,8 +25,6 @@ export const Types = {
 
   SET_OUTDATED_ITEMS_REQUEST: 'budget/SET_OUTDATED_ITEMS_REQUEST',
   SET_OUTDATED_ITEMS_FAILURE: 'budget/SET_OUTDATED_ITEMS_FAILURE',
-
-  UNSUBSCRIBE_EVENTS: 'budget/UNSUBSCRIBE_EVENTS',
 };
 
 const INITIAL_STATE = Immutable({
@@ -118,10 +116,6 @@ export const Creators = {
     type: Types.SET_OUTDATED_ITEMS_FAILURE,
     payload: { error: 'Houve um erro ao tentar ao atualizar os Orçamentos Fora do Prazo' },
   }),
-
-  unsubscribeBudgetEvents: () => ({
-    type: Types.UNSUBSCRIBE_EVENTS,
-  }),
 };
 
 const budget = (state = INITIAL_STATE, { payload, type }) => {
@@ -199,11 +193,6 @@ const budget = (state = INITIAL_STATE, { payload, type }) => {
       return {
         ...state,
         error: payload.error,
-      };
-
-    case Types.UNSUBSCRIBE_EVENTS:
-      return {
-        ...INITIAL_STATE,
       };
 
     case Types.CONFIRM_BUDGET_SALE_REQUEST:

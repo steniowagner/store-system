@@ -19,8 +19,7 @@ export function* getAllBrands() {
     ipcRenderer.send(OPERATION_REQUEST, BRAND, READ_BRANDS, EVENT_TAGS.READ_ALL);
 
     const { result } = yield handleEventSubscription(EVENT_TAGS.READ_ALL);
-
-    handleEventUnsubscription(EVENT_TAGS);
+    handleEventUnsubscription(EVENT_TAGS.READ_ALL);
 
     yield put(BrandCreators.getAllBrandsSuccess(result));
   } catch (err) {
@@ -38,8 +37,7 @@ export function* createBrands(brandsCreated, brandSelected) {
     ipcRenderer.send(OPERATION_REQUEST, BRAND, CREATE_BRANDS, EVENT_TAGS.CREATE_BRANDS, params);
 
     const { result } = yield handleEventSubscription(EVENT_TAGS.CREATE_BRANDS);
-
-    handleEventUnsubscription(EVENT_TAGS);
+    handleEventUnsubscription(EVENT_TAGS.CREATE_BRANDS);
 
     return result;
   } catch (err) {

@@ -12,8 +12,6 @@ export const Types = {
   EDIT_REQUEST: 'sale/EDIT_REQUEST',
   EDIT_REQUEST_SUCCESS: 'sale/EDIT_REQUEST_SUCCESS',
   EDIT_REQUEST_FAILURE: 'sale/EDIT_REQUEST_FAILURE',
-
-  UNSUBSCRIBE_EVENTS: 'sale/UNSUBSCRIBE_EVENTS',
 };
 
 const INITIAL_STATE = Immutable({
@@ -80,10 +78,6 @@ export const Creators = {
   removeSaleFailure: () => ({
     type: Types.REMOVE_REQUEST_FAILURE,
     payload: { error: 'Houve um Erro ao Remover a Venda' },
-  }),
-
-  unsubscribeSaleEvents: () => ({
-    type: Types.UNSUBSCRIBE_EVENTS,
   }),
 };
 
@@ -166,11 +160,6 @@ const sale = (state = INITIAL_STATE, { payload, type }) => {
       return {
         ...state,
         error: payload.error,
-      };
-
-    case Types.UNSUBSCRIBE_EVENTS:
-      return {
-        ...INITIAL_STATE,
       };
 
     default:

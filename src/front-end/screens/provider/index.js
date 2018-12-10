@@ -11,7 +11,6 @@ import EntityComponent from '../../components/common/entity-component';
 import Snackbar from '../../components/common/Snackbar';
 
 type Props = {
-  unsubscribeProviderEvents: Function,
   getAllProviders: Function,
   removeProvider: Function,
   createProvider: Function,
@@ -42,12 +41,6 @@ class Provider extends Component<Props, State> {
         isSnackbarOpen: true,
       });
     }
-  }
-
-  componentWillUnmount() {
-    const { unsubscribeProviderEvents } = this.props;
-
-    unsubscribeProviderEvents();
   }
 
   onCreateProvider = (provider: Object): void => {

@@ -4,8 +4,6 @@ export const Types = {
   GET_ALL_REQUEST: 'brand/GET_ALL_REQUEST',
   GET_ALL_SUCCESS: 'brand/GET_ALL_SUCCESS',
   GET_ALL_FAILURE: 'brand/GET_ALL_FAILURE',
-
-  UNSUBSCRIBE_EVENTS: 'brand/UNSUBSCRIBE_EVENTS',
 };
 
 const INITIAL_STATE = Immutable({
@@ -27,10 +25,6 @@ export const Creators = {
     type: Types.GET_ALL_FAILURE,
     payload: { error },
   }),
-
-  unsubscribeBrandEvents: () => ({
-    type: Types.UNSUBSCRIBE_EVENTS,
-  }),
 };
 
 const brand = (state = INITIAL_STATE, { payload, type }) => {
@@ -42,7 +36,7 @@ const brand = (state = INITIAL_STATE, { payload, type }) => {
 
     case Types.GET_ALL_SUCCESS:
       return {
-        data: [...payload.brands],
+        data: payload.brands,
         error: null,
       };
 

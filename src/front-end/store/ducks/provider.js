@@ -16,8 +16,6 @@ export const Types = {
   REMOVE_REQUEST: 'provider/REMOVE_REQUEST',
   REMOVE_REQUEST_SUCCESS: 'provider/REMOVE_REQUEST_SUCCESS',
   REMOVE_REQUEST_FAILURE: 'provider/REMOVE_REQUEST_FAILURE',
-
-  UNSUBSCRIBE_EVENTS: 'provider/UNSUBSCRIBE_EVENTS',
 };
 
 const INITIAL_STATE = Immutable({
@@ -84,10 +82,6 @@ export const Creators = {
   removeProviderFailure: () => ({
     type: Types.REMOVE_REQUEST_FAILURE,
     payload: { error: 'Houve um erro ao Remover o Fornecedor' },
-  }),
-
-  unsubscribeProviderEvents: () => ({
-    type: Types.UNSUBSCRIBE_EVENTS,
   }),
 };
 
@@ -171,11 +165,6 @@ const provider = (state = INITIAL_STATE, { payload, type }) => {
       return {
         ...state,
         error: payload.error,
-      };
-
-    case Types.UNSUBSCRIBE_EVENTS:
-      return {
-        ...INITIAL_STATE,
       };
 
     default:

@@ -18,10 +18,8 @@ export function* getCustomerDebits(action) {
     const { id } = action.payload;
 
     ipcRenderer.send(OPERATION_REQUEST, SALE, READ_SALES, EVENT_TAGS.GET_ALL_DEBITS);
-
     const { result } = yield handleEventSubscription(EVENT_TAGS.GET_ALL_DEBITS);
-
-    handleEventUnsubscription(EVENT_TAGS);
+    handleEventUnsubscription(EVENT_TAGS.GET_ALL_DEBITS);
 
     const userSalesWithDebits = result.filter(sale => (sale.customer.id === id && sale.inDebit > 0));
 
@@ -41,10 +39,8 @@ export function* removeDebit(action) {
     };
 
     ipcRenderer.send(OPERATION_REQUEST, SALE, UPDATE_SALE, EVENT_TAGS.REMOVE_DEBIT, saleWithoutDebit);
-
     yield handleEventSubscription(EVENT_TAGS.REMOVE_DEBIT);
-
-    handleEventUnsubscription(EVENT_TAGS);
+    handleEventUnsubscription(EVENT_TAGS.REMOVE_DEBIT);
 
     yield put(CustomerDebitsCreators.removeDebitSuccess(sale.id));
   } catch (err) {

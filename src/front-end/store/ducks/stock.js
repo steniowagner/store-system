@@ -16,8 +16,6 @@ export const Types = {
   EDIT_REQUEST: 'stock/EDIT_REQUEST',
   EDIT_REQUEST_SUCCESS: 'stock/EDIT_REQUEST_SUCCESS',
   EDIT_REQUEST_FAILURE: 'stock/EDIT_REQUEST_FAILURE',
-
-  UNSUBSCRIBE_EVENTS: 'stock/UNSUBSCRIBE_EVENTS',
 };
 
 const INITIAL_STATE = Immutable({
@@ -85,10 +83,6 @@ export const Creators = {
     type: Types.EDIT_REQUEST_FAILURE,
     payload: { error },
   }),
-
-  unsubscribeStockEvents: () => ({
-    type: Types.UNSUBSCRIBE_EVENTS,
-  }),
 };
 
 const stock = (state = INITIAL_STATE, { payload, type }) => {
@@ -155,11 +149,6 @@ const stock = (state = INITIAL_STATE, { payload, type }) => {
       return {
         ...state,
         data: [...payload.stockUpdated],
-      };
-
-    case Types.UNSUBSCRIBE_EVENTS:
-      return {
-        ...state,
       };
 
     default:

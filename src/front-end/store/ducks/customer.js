@@ -16,8 +16,6 @@ export const Types = {
   REMOVE_REQUEST: 'customer/REMOVE_REQUEST',
   REMOVE_REQUEST_SUCCESS: 'customer/REMOVE_REQUEST_SUCCESS',
   REMOVE_REQUEST_FAILURE: 'customer/REMOVE_REQUEST_FAILURE',
-
-  UNSUBSCRIBE_EVENTS: 'customer/UNSUBSCRIBE_EVENTS',
 };
 
 const INITIAL_STATE = Immutable({
@@ -85,10 +83,6 @@ export const Creators = {
   removeCustomerFailure: () => ({
     type: Types.REMOVE_REQUEST_FAILURE,
     payload: { error: 'Houve um erro ao Remover o Cliente' },
-  }),
-
-  unsubscribeCustomerEvents: () => ({
-    type: Types.UNSUBSCRIBE_EVENTS,
   }),
 };
 
@@ -173,11 +167,6 @@ const customer = (state = INITIAL_STATE, { payload, type }) => {
       return {
         ...state,
         error: payload.error,
-      };
-
-    case Types.UNSUBSCRIBE_EVENTS:
-      return {
-        ...state,
       };
 
     default:

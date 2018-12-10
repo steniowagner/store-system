@@ -16,8 +16,6 @@ export const Types = {
   REMOVE_REQUEST: 'product/REMOVE_REQUEST',
   REMOVE_REQUEST_SUCCESS: 'product/REMOVE_REQUEST_SUCCESS',
   REMOVE_REQUEST_FAILURE: 'product/REMOVE_REQUEST_FAILURE',
-
-  UNSUBSCRIBE_EVENTS: 'product/UNSUBSCRIBE_EVENTS',
 };
 
 const INITIAL_STATE = Immutable({
@@ -84,10 +82,6 @@ export const Creators = {
   removeProductFailure: () => ({
     type: Types.REMOVE_REQUEST_FAILURE,
     payload: { error: 'Houve um erro ao Remover o Produto' },
-  }),
-
-  unsubscribeProductEvents: () => ({
-    type: Types.UNSUBSCRIBE_EVENTS,
   }),
 };
 
@@ -170,11 +164,6 @@ const product = (state = INITIAL_STATE, { payload, type }) => {
       return {
         ...state,
         error: payload.error,
-      };
-
-    case Types.UNSUBSCRIBE_EVENTS:
-      return {
-        ...INITIAL_STATE,
       };
 
     default:

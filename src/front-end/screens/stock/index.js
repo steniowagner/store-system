@@ -11,7 +11,6 @@ import EntityComponent from '../../components/common/entity-component';
 import Snackbar from '../../components/common/Snackbar';
 
 type Props = {
-  unsubscribeStockEvents: Function,
   editStock: Function,
   getStock: Function,
   stock: Array<Object>,
@@ -40,12 +39,6 @@ class Stock extends Component<Props, State> {
         isSnackbarOpen: true,
       });
     }
-  }
-
-  componentWillUnmount() {
-    const { unsubscribeStockEvents } = this.props;
-
-    unsubscribeStockEvents();
   }
 
   onEditStockItem = (itemToEdit: Object): void => {

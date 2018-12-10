@@ -13,7 +13,6 @@ import config from './config';
 import Form from './form';
 
 type Props = {
-  unsubscribeCustomerEvents: Function,
   getAllCustomers: Function,
   createCustomer: Function,
   removeCustomer: Function,
@@ -40,12 +39,6 @@ class Customer extends Component<Props, {}> {
         isSnackbarOpen: true,
       });
     }
-  }
-
-  componentWillUnmount() {
-    const { unsubscribeCustomerEvents } = this.props;
-
-    unsubscribeCustomerEvents();
   }
 
   onCreateCustomer = (customer: Object): void => {

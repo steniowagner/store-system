@@ -25,8 +25,6 @@ export const Types = {
 
   SET_TAB_INDEX: 'cashier/SET_TAB_INDEX',
 
-  UNSUBSCRIBE_EVENTS: 'cashier/UNSUBSCRIBE_EVENTS',
-
   CLOSE_CASHIER: 'cashier/CLOSE_CASHIER',
 };
 
@@ -158,10 +156,6 @@ export const Creators = {
   setTabIndex: index => ({
     type: Types.SET_TAB_INDEX,
     payload: { index },
-  }),
-
-  unsubscribeCashierEvents: () => ({
-    type: Types.UNSUBSCRIBE_EVENTS,
   }),
 };
 
@@ -322,12 +316,6 @@ const cashier = (state = INITIAL_STATE, { payload, type }) => {
         isCashierOpen: false,
         message: payload.message,
       };
-
-    case Types.UNSUBSCRIBE_EVENTS: {
-      return {
-        ...state,
-      };
-    }
 
     default:
       return state;

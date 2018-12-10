@@ -14,7 +14,6 @@ import CashierOpen from './components/cashier-open';
 type Props = {
   setCurrentCashierTableItemsPerPage: Function,
   setCurrentCashierTablePage: Function,
-  unsubscribeCashierEvents: Function,
   requestSaleUpdate: Function,
   onCloseCashier: Function,
   createCashier: Function,
@@ -30,12 +29,6 @@ class CurrentCashier extends Component<Props, State> {
   state = {
     initialMoneyInCashier: '',
   };
-
-  componentWillUnmount() {
-    const { unsubscribeCashierEvents } = this.props;
-
-    unsubscribeCashierEvents();
-  }
 
   onSetInitialMoneyInCashier = (initialMoneyInCashier: string): void => {
     const { createCashier } = this.props;

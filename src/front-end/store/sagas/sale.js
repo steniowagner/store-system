@@ -46,8 +46,8 @@ export function* createSale(action) {
     };
 
     ipcRenderer.send(OPERATION_REQUEST, SALE, CREATE_SALE, EVENT_TAGS.SALE_CREATE, params);
-
     const { result } = yield handleEventSubscription(EVENT_TAGS.SALE_CREATE);
+    handleEventUnsubscription(EVENT_TAGS.SALE_CREATE);
 
     const newSale = {
       ...parseSaleToTableView(params),
@@ -74,8 +74,8 @@ export function* getAllSales() {
     moment.locale('pt-br');
 
     ipcRenderer.send(OPERATION_REQUEST, SALE, READ_SALES, EVENT_TAGS.SALES_GET_ALL);
-
     const { result } = yield handleEventSubscription(EVENT_TAGS.SALES_GET_ALL);
+    handleEventUnsubscription(EVENT_TAGS.SALES_GET_ALL);
 
     const allSales = result.map(sale => ({
       ...parseSaleToTableView(sale),
@@ -105,6 +105,7 @@ export function* editSale(action) {
 
     ipcRenderer.send(OPERATION_REQUEST, SALE, UPDATE_SALE, EVENT_TAGS.EDIT_SALE, params);
     yield handleEventSubscription(EVENT_TAGS.EDIT_SALE);
+    handleEventUnsubscription(EVENT_TAGS.EDIT_SALE);
 
     const { subtotal, total } = sale;
 
@@ -121,5 +122,3 @@ export function* editSale(action) {
     yield put(SaleCreators.editSaleFailure(err.message));
   }
 }
-
-export const unsubscribeSaleEvents = () => handleEventUnsubscription(EVENT_TAGS);

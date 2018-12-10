@@ -16,8 +16,6 @@ export const handleEventSubscription = (eventTag: string): Object => {
   return handler;
 };
 
-export const handleEventUnsubscription = (EVENT_TAGS: Object): void => {
-  const tags = Object.entries(EVENT_TAGS);
-
-  tags.forEach(tagItem => ipcRenderer.removeAllListeners(`${OPERATION_RESPONSE}_${tagItem[1]}`));
+export const handleEventUnsubscription = (eventTag: string): void => {
+  ipcRenderer.removeAllListeners(`${OPERATION_RESPONSE}_${eventTag}`);
 };

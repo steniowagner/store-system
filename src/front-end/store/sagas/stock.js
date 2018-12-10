@@ -17,18 +17,18 @@ import { OPERATION_REQUEST, STOCK } from '../../../common/entitiesTypes';
 const { ipcRenderer } = window.require('electron');
 
 const EVENT_TAGS = {
-  INSERT_PRODUCT_STOCK: 'STOCK_INSERT_PRODUCT',
-  STOCK_GET: 'GET_STOCK',
   EDIT_SINGLE_PRODUCT_STOCK: 'STOCK_EDIT_SINGLE_PRODUCT',
+  INSERT_PRODUCT_STOCK: 'STOCK_INSERT_PRODUCT',
   EDIT_PRODUCTS_STOCK: 'STOCK_EDIT_PRODUCTS',
   REMOVE_STOCK: 'STOCK_REMOVE',
+  STOCK_GET: 'GET_STOCK',
 };
 
 export function* getStock() {
   try {
     ipcRenderer.send(OPERATION_REQUEST, STOCK, READ_STOCK, EVENT_TAGS.STOCK_GET);
-
     const { result } = yield handleEventSubscription(EVENT_TAGS.STOCK_GET);
+    handleEventUnsubscription(EVENT_TAGS.STOCK_GET);
 
     const stockProducts = result.map(product => ({
       ...product,
@@ -45,8 +45,8 @@ export function* insertProduct(action) {
   try {
     const { args } = action;
     ipcRenderer.send(OPERATION_REQUEST, STOCK, INSERT, EVENT_TAGS.INSERT_PRODUCT_STOCK, args);
-
     const { result } = yield handleEventSubscription(EVENT_TAGS.INSERT_PRODUCT_STOCK);
+    handleEventUnsubscription(EVENT_TAGS.INSERT_PRODUCT_STOCK);
 
     const productInfo = {
       ...args,
@@ -70,8 +70,9 @@ export function* editProductInStock(action) {
     };
 
     ipcRenderer.send(OPERATION_REQUEST, STOCK, UPDATE_PRODUCT_STOCK, EVENT_TAGS.EDIT_SINGLE_PRODUCT_STOCK, productEdited);
-
     const { result } = yield handleEventSubscription(EVENT_TAGS.EDIT_SINGLE_PRODUCT_STOCK);
+    handleEventUnsubscription(EVENT_TAGS.EDIT_SINGLE_PRODUCT_STOCK);
+
     const { stockItemEdited, index } = result;
 
     const productInStockEdited = {
@@ -94,7 +95,7 @@ const findItemInStock = (stock, productId) => {
   return stock[index];
 };
 
-const calculateDiffBetweenProductsQuantities = (datasetUpdatedProducts, pastDatasetProducts, stock) => {
+const calculateDiffQuantities = (datasetUpdatedProducts, pastDatasetProducts, stock) => {
   const stockUpdated = datasetUpdatedProducts.map((datasetUpdatedProduct, index) => {
     const datasetUpdatedProductQuantity = parseInt(datasetUpdatedProduct.quantity, 10);
     const pastDatasetProductQuantity = parseInt(pastDatasetProducts[index].quantity, 10);
@@ -179,11 +180,11 @@ const handleStockEdit = (datasetUpdated, pastDataset, stock) => {
   const firstOperation = getDifferenceBetweenDatasets(pastDataset, datasetUpdated);
   const secondOperation = getDifferenceBetweenDatasets(datasetUpdated, pastDataset);
 
-  const diffBetweenRemainedProductsQuantities = calculateDiffBetweenProductsQuantities(secondOperation.productsRemained, firstOperation.productsRemained, stock);
+  const diffRemainedProducts = calculateDiffQuantities(secondOperation.productsRemained, firstOperation.productsRemained, stock);
   const stockUpdtedAfterReturnProductsToStock = returnProductsToStock(firstOperation.productsRemovedOrCreated, stock);
   const stockUpdtedAfterInsertProducts = takeAwayProductsFromStock(secondOperation.productsRemovedOrCreated, stock);
 
-  return [...diffBetweenRemainedProductsQuantities, ...stockUpdtedAfterReturnProductsToStock, ...stockUpdtedAfterInsertProducts];
+  return [...diffRemainedProducts, ...stockUpdtedAfterReturnProductsToStock, ...stockUpdtedAfterInsertProducts];
 };
 
 export function* editStockProducts(data, dataset, operationType) {
@@ -208,6 +209,7 @@ export function* editStockProducts(data, dataset, operationType) {
 
     ipcRenderer.send(OPERATION_REQUEST, STOCK, UPDATE_PRODUCTS_STOCK, EVENT_TAGS.EDIT_PRODUCTS_STOCK, stockUpdatedAfterOperation);
     yield handleEventSubscription(EVENT_TAGS.EDIT_PRODUCTS_STOCK);
+    handleEventUnsubscription(EVENT_TAGS.EDIT_PRODUCTS_STOCK);
 
     const stockUpdated = stock.map((stockItem) => {
       const stockItemUpdatedIndex = stockUpdatedAfterOperation.findIndex(stockItemUpdated => stockItemUpdated.id === stockItem.id);
@@ -225,5 +227,3 @@ export function* editStockProducts(data, dataset, operationType) {
     yield put(StockCreators.editStockInBatchFailure(err));
   }
 }
-
-export const unsubscribeStockEvents = () => handleEventUnsubscription(EVENT_TAGS);

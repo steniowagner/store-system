@@ -15,10 +15,10 @@ import { OPERATION_REQUEST, USER } from '../../../common/entitiesTypes';
 const { ipcRenderer } = window.require('electron');
 
 const EVENT_TAGS = {
-  CREATE_USER: 'USER_CREATE',
   GET_ALL_USERS: 'USERS_GET_ALL',
-  EDIT_USER: 'USER_EDIT',
+  CREATE_USER: 'USER_CREATE',
   REMOVE_USER: 'USER_REMOVE',
+  EDIT_USER: 'USER_EDIT',
 };
 
 export function* createUser(action) {
@@ -26,8 +26,8 @@ export function* createUser(action) {
     const { args } = action;
 
     ipcRenderer.send(OPERATION_REQUEST, USER, CREATE, EVENT_TAGS.CREATE_USER, args);
-
     const { result } = yield handleEventSubscription(EVENT_TAGS.CREATE_USER);
+    handleEventUnsubscription(EVENT_TAGS.CREATE_USER);
 
     const newUser = {
       ...args,
@@ -43,8 +43,8 @@ export function* createUser(action) {
 export function* getAllUsers() {
   try {
     ipcRenderer.send(OPERATION_REQUEST, USER, READ, EVENT_TAGS.GET_ALL_USERS);
-
     const { result } = yield handleEventSubscription(EVENT_TAGS.GET_ALL_USERS);
+    handleEventUnsubscription(EVENT_TAGS.GET_ALL_USERS);
 
     yield put(UserCreators.getAllUsersSuccess(result));
   } catch (err) {
@@ -57,8 +57,8 @@ export function* editUser(action) {
     const { user } = action.payload;
 
     ipcRenderer.send(OPERATION_REQUEST, USER, UPDATE, EVENT_TAGS.EDIT_USER, user);
-
     const { result } = yield handleEventSubscription(EVENT_TAGS.EDIT_USER);
+    handleEventUnsubscription(EVENT_TAGS.EDIT_USER);
 
     yield put(UserCreators.editUserSuccess(result));
   } catch (err) {
@@ -71,13 +71,11 @@ export function* removeUser(action) {
     const { id } = action.payload;
 
     ipcRenderer.send(OPERATION_REQUEST, USER, DELETE, EVENT_TAGS.REMOVE_USER, id);
-
     yield handleEventSubscription(EVENT_TAGS.REMOVE_USER);
+    handleEventUnsubscription(EVENT_TAGS.REMOVE_USER);
 
     yield put(UserCreators.removeUserSuccess(id));
   } catch (err) {
     yield put(UserCreators.removeUserFailure());
   }
 }
-
-export const unsubscribeUserEvents = () => handleEventUnsubscription(EVENT_TAGS);

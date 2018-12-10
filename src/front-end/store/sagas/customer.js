@@ -26,8 +26,8 @@ export function* createCustomer(action) {
     const { args } = action;
 
     ipcRenderer.send(OPERATION_REQUEST, CUSTOMER, CREATE, EVENT_TAGS.CREATE_CUSTOMER, args);
-
     const { result } = yield handleEventSubscription(EVENT_TAGS.CREATE_CUSTOMER);
+    handleEventUnsubscription(EVENT_TAGS.CREATE_CUSTOMER);
 
     const newCustomer = {
       ...args,
@@ -43,8 +43,8 @@ export function* createCustomer(action) {
 export function* getAllCustomers() {
   try {
     ipcRenderer.send(OPERATION_REQUEST, CUSTOMER, READ, EVENT_TAGS.READ_ALL);
-
     const { result } = yield handleEventSubscription(EVENT_TAGS.READ_ALL);
+    handleEventUnsubscription(EVENT_TAGS.READ_ALL);
 
     yield put(CustomerCreators.getAllCustomersSuccess(result));
   } catch (err) {
@@ -57,8 +57,8 @@ export function* editCustomer(action) {
     const { customer } = action.payload;
 
     ipcRenderer.send(OPERATION_REQUEST, CUSTOMER, UPDATE, EVENT_TAGS.UPDATE_CUSTOMER, customer);
-
     const { result } = yield handleEventSubscription(EVENT_TAGS.UPDATE_CUSTOMER);
+    handleEventUnsubscription(EVENT_TAGS.UPDATE_CUSTOMER);
 
     yield put(CustomerCreators.editCustomerSuccess(result));
   } catch (err) {
@@ -71,13 +71,11 @@ export function* removeCustomer(action) {
     const { id } = action.payload;
 
     ipcRenderer.send(OPERATION_REQUEST, CUSTOMER, DELETE, EVENT_TAGS.REMOVE_CUSTOMER, id);
-
     yield handleEventSubscription(EVENT_TAGS.REMOVE_CUSTOMER);
+    handleEventUnsubscription(EVENT_TAGS.REMOVE_CUSTOMER);
 
     yield put(CustomerCreators.removeCustomerSuccess(id));
   } catch (err) {
     yield put(CustomerCreators.removeCustomerFailure(err.message));
   }
 }
-
-export const unsubscribeCustomerEvents = () => handleEventUnsubscription(EVENT_TAGS);

@@ -11,7 +11,6 @@ import config from './config';
 import UserForm from './form';
 
 type Props = {
-  unsubscribeUserEvents: Function,
   getAllUsers: Function,
   createUser: Function,
   removeUser: Function,
@@ -44,12 +43,6 @@ class User extends Component<Props, State> {
         isSnackbarOpen: true,
       });
     }
-  }
-
-  componentWillUnmount() {
-    const { unsubscribeUserEvents } = this.props;
-
-    unsubscribeUserEvents();
   }
 
   onCreateUser = async (user: Object): void => {
