@@ -32,6 +32,7 @@ type Props = {
 
 type State = {
   isCloseCashierDialogOpen: boolean,
+  isSaleDetailDialogOpen: boolean,
   contextOperationItem: any,
 };
 
@@ -105,15 +106,6 @@ class CashierOpen extends Component<Props, State> {
     });
   };
 
-  getPaymentInfoText = (contextOperationItem: Object): string => {
-    const { paymentInfo } = contextOperationItem;
-
-    const paidValueText = Object.entries(paymentInfo)
-      .reduce((total, value) => total + Number(value[1]), 0);
-
-    return `R$ ${paidValueText.toFixed(2)}`;
-  };
-
   restartContextOperationItem = (): void => {
     this.setState({
       contextOperationItem: undefined,
@@ -150,13 +142,12 @@ class CashierOpen extends Component<Props, State> {
     const isSaleOperation = this.checkIsOperationSaleType(contextOperationItem);
 
     const shouldShowSaleDetailDialog = (isSaleOperation && isSaleDetailDialogOpen);
-    const paidValueText = (shouldShowSaleDetailDialog ? this.getPaymentInfoText(contextOperationItem) : '');
 
     return (
       <SaleDetailDialog
         onToggleSaleDetailDialog={this.onToggleSaleDetailDialog}
         isOpen={shouldShowSaleDetailDialog}
-        sale={{ ...contextOperationItem, paidValueText }}
+        sale={contextOperationItem}
       />
     );
   };

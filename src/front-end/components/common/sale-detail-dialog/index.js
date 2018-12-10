@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react';
+import React, { Fragment } from 'react';
 
 import DialogContent from '@material-ui/core/DialogContent';
 import Dialog from '@material-ui/core/Dialog';
@@ -21,6 +21,33 @@ const MainContent = styled(Paper)`
   border-bottom-left-radius: 0px;
 `;
 
+const renderContent = (onToggleSaleDetailDialog: Function, sale: Object): Object => {
+  const { dateToShow, salesman, products } = sale;
+
+  return (
+    <DialogContent>
+      <TopContent
+        onClickBackButton={onToggleSaleDetailDialog}
+        dateToShow={dateToShow}
+        salesman={salesman}
+      />
+      <MainContent>
+        <ProductList
+          onEditProductQuantity={() => {}}
+          onRemoveProduct={() => {}}
+          products={products}
+          mode="detail"
+          stock={[]}
+          error=""
+        />
+        <BottomContent
+          {...sale}
+        />
+      </MainContent>
+    </DialogContent>
+  );
+};
+
 type Props = {
   onToggleSaleDetailDialog: Function,
   isOpen: boolean,
@@ -32,8 +59,6 @@ const SaleDetailDialog = ({
   isOpen,
   sale,
 }: Props): Object => {
-  const { dateToShow, salesman, products } = sale;
-
   return (
     <Dialog
       aria-describedby="alert-SaleDetailDialog-slide-description"
@@ -44,26 +69,9 @@ const SaleDetailDialog = ({
       maxWidth="lg"
       fullWidth
     >
-      <DialogContent>
-        <TopContent
-          onClickBackButton={onToggleSaleDetailDialog}
-          dateToShow={dateToShow}
-          salesman={salesman}
-        />
-        <MainContent>
-          <ProductList
-            onEditProductQuantity={() => {}}
-            onRemoveProduct={() => {}}
-            products={products}
-            mode="detail"
-            stock={[]}
-            error=""
-          />
-          <BottomContent
-            {...sale}
-          />
-        </MainContent>
-      </DialogContent>
+      <Fragment>
+        {sale && renderContent(onToggleSaleDetailDialog, sale)}
+      </Fragment>
     </Dialog>
   );
 };

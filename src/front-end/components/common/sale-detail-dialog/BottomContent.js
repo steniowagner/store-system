@@ -42,6 +42,14 @@ const Item = styled.div`
   margin-top: ${({ withMargin }) => (withMargin ? 24 : 0)}px;
 `;
 
+
+const getPaymentInfoText = (paymentInfo: Object): string => {
+  const paidValueText = Object.entries(paymentInfo)
+    .reduce((total, value) => total + Number(value[1]), 0);
+
+  return `R$ ${paidValueText.toFixed(2)}`;
+};
+
 const getDiscountText = (discount: Object): string => {
   const { value, type } = discount;
 
@@ -81,20 +89,25 @@ const renderLeftValues = (totalText: string, subtotalText: string, discount: Obj
   );
 };
 
-const renderRightValues = (paidValueText: string, inDebitText: string): Object => (
-  <Wrapper
-    direction="right"
-  >
-    {renderItem('VALOR PAGO', paidValueText, false)}
-    {renderItem('VALOR EM DÉBITO', inDebitText, true)}
-  </Wrapper>
-);
+const renderRightValues = (paymentInfo: Object, inDebitText: string): Object => {
+  const paidValueText = getPaymentInfoText(paymentInfo);
+
+  return (
+    <Wrapper
+      direction="right"
+    >
+      {renderItem('VALOR PAGO', paidValueText, false)}
+      {renderItem('VALOR EM DÉBITO', inDebitText, true)}
+    </Wrapper>
+  );
+};
 
 type Props = {
   paidValueText: string,
   subtotalText: string,
   inDebitText: string,
   totalText: string,
+  paymentInfo: Object,
   discount: Object,
 };
 
@@ -102,12 +115,13 @@ const BottomContent = ({
   paidValueText,
   subtotalText,
   inDebitText,
+  paymentInfo,
   totalText,
   discount,
 }: Props): Object => (
   <Container>
     {renderLeftValues(totalText, subtotalText, discount)}
-    {renderRightValues(paidValueText, inDebitText)}
+    {renderRightValues(paymentInfo, inDebitText)}
   </Container>
 );
 
