@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react';
+import React, { Component } from 'react';
 
 import SwipeableViews from 'react-swipeable-views';
 import Paper from '@material-ui/core/Paper';
@@ -14,6 +14,7 @@ import { connect } from 'react-redux';
 import { Creators as CashierCreators } from '../../store/ducks/cashier';
 
 import CurrentCashier from './components/current-cashier';
+import Snackbar from '../../components/common/Snackbar';
 import PastCashiers from './components/past-cashier';
 
 const Container = styled.div`
@@ -41,74 +42,119 @@ const TabWrapper = styled.div`
   margin-left: 4px;
 `;
 
-const renderTabs = (lastTabIndexSelected: number, setTabIndex: Function, getAllCashiers: Function): Object => (
-  <TabWrapper>
-    <Tabs
-      onChange={(_, currentTabIndex: number): void => {
-        setTabIndex(currentTabIndex);
-        getAllCashiers();
-      }}
-      value={lastTabIndexSelected}
-      indicatorColor="primary"
-      textColor="primary"
-    >
-      <Tab
-        label="CAIXA ATUAL"
-      />
-      <Tab
-        label="CAIXAS ANTERIORES"
-      />
-    </Tabs>
-  </TabWrapper>
-);
-
-const renderCurrentCashierTab = (): Object => (
-  <TabContainer
-    dir="ltr"
-  >
-    <CurrentCashier />
-  </TabContainer>
-);
-
-const renderPastCashiersTab = (): Object => (
-  <TabContainer
-    dir="ltr"
-  >
-    <PastCashiers />
-  </TabContainer>
-);
-
-const renderTabsContent = (lastTabIndexSelected: number, setTabIndex: Function): Object => (
-  <SwipeableViewsContainer>
-    <SwipeableViews
-      onChangeIndex={(currentTabIndex: number): void => setTabIndex(currentTabIndex)}
-      index={lastTabIndexSelected}
-      axis="x"
-    >
-      {renderCurrentCashierTab()}
-      {renderPastCashiersTab()}
-    </SwipeableViews>
-  </SwipeableViewsContainer>
-);
-
 type Props = {
   getAllCashiers: Function,
   setTabIndex: Function,
   cashier: Object,
 };
 
-const Cashier = ({ setTabIndex, cashier, getAllCashiers }: Props): Object => {
-  const { lastTabIndexSelected } = cashier.tabInfo;
-
-  return (
-    <Container>
-      <Wrapper>
-        {renderTabs(lastTabIndexSelected, setTabIndex, getAllCashiers)}
-        {renderTabsContent(lastTabIndexSelected, setTabIndex)}
-      </Wrapper>
-    </Container>
-  );
+type State = {
+  isSnackbarOpen: boolean,
 };
+
+class Cashier extends Component<Props, State> {
+  state = {
+    isSnackbarOpen: false,
+  };
+
+  componentWillReceiveProps(nextProps) {
+    const { message, error } = nextProps.cashier;
+
+    if (message || error) {
+      this.setState({
+        isSnackbarOpen: true,
+      });
+    }
+  }
+
+  renderTabs = (): Object => {
+    const { cashier, setTabIndex, getAllCashiers } = this.props;
+    const { tabInfo } = cashier;
+
+    return (
+      <TabWrapper>
+        <Tabs
+          onChange={(_, currentTabIndex: number): void => {
+            setTabIndex(currentTabIndex);
+            getAllCashiers();
+          }}
+          value={tabInfo.lastTabIndexSelected}
+          indicatorColor="primary"
+          textColor="primary"
+        >
+          <Tab
+            label="CAIXA ATUAL"
+          />
+          <Tab
+            label="CAIXAS ANTERIORES"
+          />
+        </Tabs>
+      </TabWrapper>
+    );
+  };
+
+  renderCurrentCashierTab = (): Object => (
+    <TabContainer
+      dir="ltr"
+    >
+      <CurrentCashier />
+    </TabContainer>
+  );
+
+  renderPastCashiersTab = (): Object => (
+    <TabContainer
+      dir="ltr"
+    >
+      <PastCashiers />
+    </TabContainer>
+  );
+
+  renderTabsContent = (): Object => {
+    const { cashier, setTabIndex } = this.props;
+    const { lastTabIndexSelected } = cashier.tabInfo;
+
+    return (
+      <SwipeableViewsContainer>
+        <SwipeableViews
+          onChangeIndex={(currentTabIndex: number): void => setTabIndex(currentTabIndex)}
+          index={lastTabIndexSelected}
+          axis="x"
+        >
+          {this.renderCurrentCashierTab()}
+          {this.renderPastCashiersTab()}
+        </SwipeableViews>
+      </SwipeableViewsContainer>
+    );
+  };
+
+  renderSnackbar = (): Object => {
+    const { isSnackbarOpen } = this.state;
+    const { cashier } = this.props;
+
+    const { message, error } = cashier;
+
+    return (
+      <Snackbar
+        onCloseSnackbar={() => this.setState({ isSnackbarOpen: false })}
+        isOpen={isSnackbarOpen}
+        message={message}
+        error={error}
+      />
+    );
+  };
+
+  render() {
+    return (
+      <Container>
+        <Wrapper>
+          {this.renderTabs()}
+          {this.renderTabsContent()}
+        </Wrapper>
+        {this.renderSnackbar()}
+      </Container>
+    );
+  }
+}
 
 const mapDispatchToProps = dispatch => bindActionCreators(CashierCreators, dispatch);
 

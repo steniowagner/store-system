@@ -79,7 +79,7 @@ export const Creators = {
 
   createCashierSuccess: currentCashier => ({
     type: Types.CREATE_SUCCESS,
-    payload: { message: 'Caixa Aberto com Sucesso', currentCashier },
+    payload: { message: 'Todas as Operação de Caixa estão liberadas', currentCashier },
   }),
 
   createCashierFailure: () => ({
@@ -150,9 +150,9 @@ export const Creators = {
     payload: { currentPage },
   }),
 
-
   onCloseCashier: () => ({
     type: Types.CLOSE_CASHIER,
+    payload: { message: 'Caixa Fechado com Sucesso' },
   }),
 
   setTabIndex: index => ({
@@ -221,7 +221,6 @@ const cashier = (state = INITIAL_STATE, { payload, type }) => {
           ...payload.cashierUpdated,
           operations: JSON.parse(payload.cashierUpdated.operations),
         },
-        message: payload.message,
       };
 
     case Types.EDIT_REQUEST_FAILURE:
@@ -321,6 +320,7 @@ const cashier = (state = INITIAL_STATE, { payload, type }) => {
       return {
         ...state,
         isCashierOpen: false,
+        message: payload.message,
       };
 
     case Types.UNSUBSCRIBE_EVENTS: {
