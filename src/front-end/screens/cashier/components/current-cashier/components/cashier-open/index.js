@@ -81,6 +81,13 @@ class CashierOpen extends Component<Props, State> {
     }, () => onCloseCashier());
   };
 
+  onClickTableEditIcon = (operation: Object): void => {
+    this.setState({
+      contextOperationItem: { ...operation, mode: 'edit' },
+      isSaleDetailDialogOpen: true,
+    });
+  };
+
   onClickTableDetailIcon = (operation: Object): void => {
     this.setState({
       contextOperationItem: { ...operation, mode: 'detail' },
@@ -162,16 +169,22 @@ class CashierOpen extends Component<Props, State> {
 
     const { currentTablePage, itemsPerPage } = tabInfo.currentCashier;
 
+    const dataset = currentCashier.operations.map((operation) => {
+      const isOperationSaleType = this.checkIsOperationSaleType(operation);
+
+      return (isOperationSaleType ? operation : { ...operation, canEditSingleItem: true });
+    });
+
     return (
       <Table
         onDetailIconClicked={this.onClickTableDetailIcon}
+        onEditIconClicked={this.onClickTableEditIcon}
         updatePageIndex={setCurrentCashierTablePage}
         setItemsPerPage={setTableItemsPerPage}
-        dataset={currentCashier.operations}
         currentPage={currentTablePage}
         tabConfig={config.tabConfig}
         itemsPerPage={itemsPerPage}
-        canBeEdited
+        dataset={dataset}
       />
     );
   };

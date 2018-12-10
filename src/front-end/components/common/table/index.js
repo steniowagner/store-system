@@ -112,11 +112,13 @@ class CustomTable extends Component<Props, State> {
       canBeEdited,
     } = this.props;
 
+    const { canEditSingleItem } = item;
+
     const { rowsPerPage } = this.state;
 
     return (
       <ActionButtonsWrapper>
-        {canBeEdited && (
+        {(canBeEdited || canEditSingleItem) && (
           <IconButton
             onClick={() => onEditIconClicked({ ...item, index })}
             aria-label="Edit"
