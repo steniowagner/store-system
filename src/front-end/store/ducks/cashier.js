@@ -16,12 +16,12 @@ export const Types = {
   CREATE_SALE: 'cashier/CREATE_SALE',
   EDIT_SALE: 'cashier/EDIT_SALE',
 
-  SET_CURRENT_CASHIER_TABLE_ITEMS_PER_PAGE: 'cashier/SET_CURRENT_CASHIER_TABLE_ITEMS_PER_PAGE',
-  SET_CURRENT_CASHIER_TABLE_PAGE: 'cashier/SET_CURRENT_CASHIER_TABLE_PAGE',
-
   SET_PAST_CASHIER_TABLE_ITEMS_PER_PAGE: 'cashier/SET_PAST_CASHIER_TABLE_ITEMS_PER_PAGE',
   SET_PAST_CASHIER_DATE_FILTER_VALUE: 'cashier/SET_PAST_CASHIER_DATE_FILTER_VALUE',
   SET_PAST_CASHIER_TABLE_PAGE: 'cashier/SET_PAST_CASHIER_TABLE_PAGE',
+
+  SET_CURRENT_CASHIER_TABLE_ITEMS_PER_PAGE: 'cashier/SET_CURRENT_CASHIER_TABLE_ITEMS_PER_PAGE',
+  SET_CURRENT_CASHIER_TABLE_PAGE: 'cashier/SET_CURRENT_CASHIER_TABLE_PAGE',
 
   SET_TAB_INDEX: 'cashier/SET_TAB_INDEX',
 
@@ -30,8 +30,15 @@ export const Types = {
   CLOSE_CASHIER: 'cashier/CLOSE_CASHIER',
 };
 
-const handlePastCashiers = (allPastCashiers, currentCashier) => {
-  const cashiersExceptCurrent = allPastCashiers.filter(pastCashier => pastCashier.id !== (currentCashier && currentCashier.id));
+const handlePastCashiers = (allPastCashiers, state) => {
+  const { currentCashier, isCashierOpen } = state;
+
+  const cashiersExceptCurrent = allPastCashiers.filter((pastCashier) => {
+    const isCheckingCurrentCashier = (pastCashier.id === currentCashier.id);
+    const isCurrentCashierAlreadyClosed = (isCheckingCurrentCashier && !isCashierOpen);
+
+    return (!isCheckingCurrentCashier || isCurrentCashierAlreadyClosed);
+  });
 
   const pastCashiers = cashiersExceptCurrent.map(cashier => ({
     ...cashier,
@@ -191,7 +198,7 @@ const cashier = (state = INITIAL_STATE, { payload, type }) => {
     case Types.READ_ALL_SUCCESS:
       return {
         ...state,
-        pastCashiers: handlePastCashiers(payload.cashiers, state.currentCashier),
+        pastCashiers: handlePastCashiers(payload.cashiers, state),
       };
 
     case Types.READ_ALL_FAILURE:

@@ -82,6 +82,13 @@ class PastCashiers extends Component<Props, State> {
     setPastCashierDateFilter(event.target.value);
   };
 
+  onClickDetailTableIcon = (cashier: Object): void => {
+    this.setState({
+      isDetailCashierDialogOpen: true,
+      cashierToDetail: cashier,
+    });
+  };
+
   getCashiersToShow = (cashier: Object): Array<Object> => {
     const { pastCashiers, tabInfo } = cashier;
     const { dateFilterValue } = tabInfo.pastCashiers;
@@ -128,7 +135,7 @@ class PastCashiers extends Component<Props, State> {
     return (
       <Table
         setItemsPerPage={setPastCashiersTableItemsPerPage}
-        onDetailIconClicked={this.onClickTableDetailIcon}
+        onDetailIconClicked={this.onClickDetailTableIcon}
         updatePageIndex={setPastCashiersTablePage}
         currentPage={currentTablePage}
         tabConfig={config.tabConfig}

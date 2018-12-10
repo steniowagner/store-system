@@ -41,10 +41,13 @@ const TabWrapper = styled.div`
   margin-left: 4px;
 `;
 
-const renderTabs = (lastTabIndexSelected: number, setTabIndex: Function): Object => (
+const renderTabs = (lastTabIndexSelected: number, setTabIndex: Function, getAllCashiers: Function): Object => (
   <TabWrapper>
     <Tabs
-      onChange={(_, currentTabIndex: number): void => setTabIndex(currentTabIndex)}
+      onChange={(_, currentTabIndex: number): void => {
+        setTabIndex(currentTabIndex);
+        getAllCashiers();
+      }}
       value={lastTabIndexSelected}
       indicatorColor="primary"
       textColor="primary"
@@ -89,17 +92,18 @@ const renderTabsContent = (lastTabIndexSelected: number, setTabIndex: Function):
 );
 
 type Props = {
+  getAllCashiers: Function,
   setTabIndex: Function,
   cashier: Object,
 };
 
-const Cashier = ({ setTabIndex, cashier }: Props): Object => {
+const Cashier = ({ setTabIndex, cashier, getAllCashiers }: Props): Object => {
   const { lastTabIndexSelected } = cashier.tabInfo;
 
   return (
     <Container>
       <Wrapper>
-        {renderTabs(lastTabIndexSelected, setTabIndex)}
+        {renderTabs(lastTabIndexSelected, setTabIndex, getAllCashiers)}
         {renderTabsContent(lastTabIndexSelected, setTabIndex)}
       </Wrapper>
     </Container>

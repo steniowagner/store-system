@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import { CASHIER_OPERATIONS, getDialogConfig } from './dialog-config';
 import { BUTTON_TYPES, getButtonConfig } from './button-config';
 
-import MoneyOperationDialog from './MoneyOperationDialog';
+import MoneyOperationDialog from '../../../../../MoneyOperationDialog';
 import CashierButton from './CashierButton';
 
 const Container = styled.div`
@@ -16,6 +16,7 @@ const Container = styled.div`
 `;
 
 type Props = {
+  restartContextOperationItem: Function,
   onClickCloseCashierButton: Function,
   onTakeAwaytMoneyCashier: Function,
   onAddMoneyCashier: Function,
@@ -54,11 +55,12 @@ class TopActionButtons extends Component<Props, State> {
   }
 
   onToggleMoneyDialog = (): void => {
+    const { restartContextOperationItem } = this.props;
     const { isDialogOpen } = this.state;
 
     this.setState({
       isDialogOpen: !isDialogOpen,
-    });
+    }, () => restartContextOperationItem());
   };
 
   onClickAddMoneyButton = (): void => {

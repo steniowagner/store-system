@@ -4,111 +4,17 @@ import React, { Component } from 'react';
 
 import styled from 'styled-components';
 
+import { getDialogConfig, CASHIER_OPERATIONS } from '../../current-cashier/components/cashier-open/components/top-buttons-values/dialog-config';
+import tabConfig from '../../current-cashier/components/cashier-open/config/tabConfig';
+import SaleDetailDialgog from '../../../../../components/common/sale-detail-dialog';
 import FullScreenDialog from '../../../../../components/common/FullScreenDialog';
+import MoneyOperationDialog from '../../MoneyOperationDialog';
 import Table from '../../../../../components/common/table';
 import BottomValues from '../../bottom-valeus';
-import SaleDetailDialog from './SaleDetailDialog';
 
 const TitleWrapper = styled.div`
   margin: 32px 0;
 `;
-
-const sales = [{
-  timestamp: 'Hoje às 15:30',
-  customer: {
-    cpf: '123',
-    rg: '123',
-    id: '123',
-    name: 'Ana Eridan Pereira de Freitas',
-  },
-  username: 'swmyself',
-  discount: {
-    type: 'percentage',
-    value: 10,
-  },
-  isInDebit: false,
-  observation: 'observation',
-  paymentInfo: {
-    checkValue: '',
-    creditCardValue: '9.16',
-    debitCardValue: '',
-    moneyValue: '50',
-  },
-  shouldPrintReceipt: true,
-  subtotal: '65.73',
-  total: '59.16',
-  products: [{
-    barCode: '123',
-    brand: 'Samsung',
-    description: 'Mouse',
-    id: 0.14423952784441352,
-    quantity: 3,
-    salePrice: 21.91,
-    costPrice: 20,
-  }],
-}, {
-  timestamp: 'Hoje às 15:30',
-  customer: {
-    cpf: '123',
-    rg: '123',
-    id: '123',
-    name: 'Ana Eridan Pereira de Freitas',
-  },
-  username: 'swmyself',
-  discount: {
-    type: 'percentage',
-    value: 10,
-  },
-  isInDebit: false,
-  observation: 'observation',
-  paymentInfo: {
-    checkValue: '',
-    creditCardValue: '9',
-    debitCardValue: '',
-    moneyValue: '50.16',
-  },
-  shouldPrintReceipt: true,
-  subtotal: '65.73',
-  total: '59.16',
-  products: [{
-    barCode: '123',
-    brand: 'Samsung',
-    description: 'Mouse',
-    id: 0.14423952784441352,
-    quantity: 3,
-    salePrice: 21.91,
-    costPrice: 20,
-  }],
-}];
-
-const tabConfig = [{
-  columnTitle: 'Horário',
-  dataField: 'timestamp',
-}, {
-  columnTitle: 'Operação',
-  dataField: 'type',
-}, {
-  columnTitle: 'Cliente',
-  dataField: 'customerName',
-}, {
-  columnTitle: 'Vendedor',
-  dataField: 'username',
-}, {
-  columnTitle: 'Valor',
-  dataField: 'valueText',
-}, {
-  columnTitle: 'Desconto',
-  dataField: 'discountText',
-}, {
-  columnTitle: 'Total',
-  dataField: 'totalText',
-}, {
-  columnTitle: 'Pago',
-  dataField: 'valuePaid',
-}, {
-  columnTitle: 'Pendente',
-  dataField: 'pending',
-}];
 
 type Props = {
   onClose: Function,
@@ -122,65 +28,116 @@ type State = {
 
 class CashieDetail extends Component<Props, State> {
   state = {
-    isSaleFormDialogOpen: false,
-    saleContextItem: {},
-    saleFormMode: '',
+    isInOutCashierOperationDialogOpen: false,
+    isSaleDetailDialogOpen: false,
+    operationToDetail: {},
+    currentPage: 0,
   };
 
   onToggleSaleDetailDialog = (): void => {
-    const { isSaleFormDialogOpen } = this.state;
+    const { isSaleDetailDialogOpen } = this.state;
 
     this.setState({
-      isSaleFormDialogOpen: !isSaleFormDialogOpen,
+      isSaleDetailDialogOpen: !isSaleDetailDialogOpen,
     });
   };
 
-  onClickTableEditIcon = (sale: Object): void => {
+  onToggleInOutCashierOperationDialog = (): void => {
+    const { isInOutCashierOperationDialogOpen } = this.state;
+
     this.setState({
-      isSaleFormDialogOpen: true,
-      saleContextItem: sale,
-      saleFormMode: 'edit',
+      isInOutCashierOperationDialogOpen: !isInOutCashierOperationDialogOpen,
     });
   };
 
-  onClickTableDetailIcon = (sale: Object): void => {
+  onClickTableDetailIcon = (operation: Object): void => {
+    const { type } = operation;
+
+    const isOperationSaleType = (type === CASHIER_OPERATIONS.SALE || type === CASHIER_OPERATIONS.CONSOLIDATE_BUDGET_PAYMENT);
+    const stateRef = (isOperationSaleType ? 'isSaleDetailDialogOpen' : 'isInOutCashierOperationDialogOpen');
+
     this.setState({
-      isSaleFormDialogOpen: true,
-      saleContextItem: sale,
-      saleFormMode: 'detail',
+      operationToDetail: operation,
+      [stateRef]: true,
+    });
+  };
+
+  onChangeTablePage = (currentPage: number): void => {
+    this.setState({
+      currentPage,
     });
   };
 
   renderSaleDetailDialog = (): Object => {
-    const { isSaleFormDialogOpen } = this.state;
+    const { isSaleDetailDialogOpen, operationToDetail } = this.state;
 
     return (
-      <SaleDetailDialog
+      <SaleDetailDialgog
         onToggleSaleDetailDialog={this.onToggleSaleDetailDialog}
-        isOpen={isSaleFormDialogOpen}
+        isOpen={isSaleDetailDialogOpen}
+        sale={operationToDetail}
       />
     );
   };
 
-  renderDate = (): Object => (
+  renderInOutCashierOperationDetail = (): Object => {
+    const { isInOutCashierOperationDialogOpen, operationToDetail } = this.state;
+    const { type } = operationToDetail;
+
+    const config = getDialogConfig(type, this.onToggleInOutCashierOperationDialog, true);
+
+    return (
+      <MoneyOperationDialog
+        onToggleMoneyDialog={this.onToggleInOutCashierOperationDialog}
+        isOpen={isInOutCashierOperationDialogOpen}
+        {...operationToDetail}
+        mode="detail"
+        {...config}
+      />
+    );
+  };
+
+  renderDate = (date: string): Object => (
     <TitleWrapper>
       <h2>
-        13 de novembro de 2018
+        {date}
       </h2>
     </TitleWrapper>
   );
 
-  renderTable = (): Object => (
-    <Table
-      onDetailIconClicked={this.onClickTableDetailIcon}
-      onEditIconClicked={this.onClickTableEditIcon}
-      updatePageIndex={() => {}}
-      tabConfig={tabConfig}
-      currentPage={0}
-      dataset={sales}
-      canBeEdited
-    />
-  );
+  renderTable = (operations: string): Object => {
+    const { currentPage } = this.state;
+
+    const dataset = (operations ? JSON.parse(operations) : []);
+
+    return (
+      <Table
+        onDetailIconClicked={this.onClickTableDetailIcon}
+        updatePageIndex={this.onChangeTablePage}
+        currentPage={currentPage}
+        tabConfig={tabConfig}
+        dataset={dataset}
+      />
+    );
+  };
+
+  renderBottomValues = (cashier: Object): Object => {
+    const {
+      initialMoneyCashier,
+      totalOutcome,
+      totalIncome,
+      totalProfit,
+    } = cashier;
+
+    return (
+      <BottomValues
+        initialMoneyCashier={initialMoneyCashier}
+        totalOutputCashier={totalOutcome}
+        totalInputCashier={totalIncome}
+        totalProfit={totalProfit}
+      />
+    );
+  };
 
   render() {
     const { onClose, cashier, isOpen } = this.props;
@@ -191,15 +148,11 @@ class CashieDetail extends Component<Props, State> {
         onClose={onClose}
         isOpen={isOpen}
       >
-        {this.renderDate()}
-        {this.renderTable()}
-        <BottomValues
-          initialMoneyInCashier="3"
-          totalOutputCashier="3"
-          totalInputCashier="3"
-          totalProfit="3"
-        />
+        {this.renderDate(cashier.dateToShow)}
+        {this.renderTable(cashier.operations)}
+        {this.renderBottomValues(cashier)}
         {this.renderSaleDetailDialog()}
+        {this.renderInOutCashierOperationDetail()}
       </FullScreenDialog>
     );
   }

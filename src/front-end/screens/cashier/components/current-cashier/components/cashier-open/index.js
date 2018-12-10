@@ -38,8 +38,8 @@ type State = {
 class CashierOpen extends Component<Props, State> {
   state = {
     isCloseCashierDialogOpen: false,
+    contextOperationItem: undefined,
     isSaleDetailDialogOpen: false,
-    contextOperationItem: {},
   };
 
   onAddMoneyCashier = (value: string, reason: string): void => {
@@ -48,6 +48,8 @@ class CashierOpen extends Component<Props, State> {
     const addMoneyCashierOperation = getNewCashierOperationData(value, reason, CASHIER_OPERATIONS.ADD_MONEY);
 
     onAddMoneyIntoCashier(addMoneyCashierOperation);
+
+    this.restartContextOperationItem();
   };
 
   onTakeAwaytMoneyCashier = (value: string, reason: string): void => {
@@ -56,6 +58,8 @@ class CashierOpen extends Component<Props, State> {
     const takeAwaytMoneyCashierOperation = getNewCashierOperationData(value, reason, CASHIER_OPERATIONS.TAKE_AWAY_MONEY);
 
     onTakeMoneyFromCashier(takeAwaytMoneyCashierOperation);
+
+    this.restartContextOperationItem();
   };
 
   onEditCashierOperation = (valueEdited: string, reasonEdited: string): void => {
@@ -63,7 +67,7 @@ class CashierOpen extends Component<Props, State> {
     const { contextOperationItem } = this.state;
 
     this.setState({
-      contextOperationItem: {},
+      contextOperationItem: undefined,
     }, () => onEditInOutCashierOperation(contextOperationItem, valueEdited, reasonEdited));
   };
 
@@ -72,6 +76,7 @@ class CashierOpen extends Component<Props, State> {
 
     this.setState({
       isCloseCashierDialogOpen: false,
+      contextOperationItem: undefined,
     }, () => onCloseCashier());
   };
 
@@ -96,6 +101,7 @@ class CashierOpen extends Component<Props, State> {
 
     this.setState({
       isSaleDetailDialogOpen: !isSaleDetailDialogOpen,
+      contextOperationItem: undefined,
     });
   };
 
@@ -108,22 +114,27 @@ class CashierOpen extends Component<Props, State> {
     return `R$ ${paidValueText.toFixed(2)}`;
   };
 
-  resetItemSelected = (): void => {
+  restartContextOperationItem = (): void => {
     this.setState({
-      contextOperationItem: {},
+      contextOperationItem: undefined,
     });
+  };
+
+  checkIsOperationSaleType = (contextOperationItem: any): boolean => {
+    return !!contextOperationItem && (contextOperationItem.type === CASHIER_OPERATIONS.SALE
+      || contextOperationItem.type === CASHIER_OPERATIONS.CONSOLIDATE_BUDGET_PAYMENT);
   };
 
   renderTopActioButtons = (): Object => {
     const { contextOperationItem } = this.state;
 
-    const isOperationSaleType = (contextOperationItem && (contextOperationItem.type === CASHIER_OPERATIONS.SALE
-      || contextOperationItem.type === CASHIER_OPERATIONS.CONSOLIDATE_BUDGET_PAYMENT));
+    const isOperationSaleType = this.checkIsOperationSaleType(contextOperationItem);
 
-    const operationItem = (isOperationSaleType ? {} : contextOperationItem);
+    const operationItem = (isOperationSaleType ? undefined : contextOperationItem);
 
     return (
       <TopActionButtons
+        restartContextOperationItem={this.restartContextOperationItem}
         onClickCloseCashierButton={this.onToggleCloseCashierDialog}
         onTakeAwaytMoneyCashier={this.onTakeAwaytMoneyCashier}
         onAddMoneyCashier={this.onAddMoneyCashier}
@@ -136,11 +147,10 @@ class CashierOpen extends Component<Props, State> {
   renderSaleDetail = (): Object => {
     const { isSaleDetailDialogOpen, contextOperationItem } = this.state;
 
-    const isSaleOperation = (contextOperationItem && (contextOperationItem.type === CASHIER_OPERATIONS.SALE
-      || contextOperationItem.type === CASHIER_OPERATIONS.CONSOLIDATE_BUDGET_PAYMENT));
+    const isSaleOperation = this.checkIsOperationSaleType(contextOperationItem);
 
     const shouldShowSaleDetailDialog = (isSaleOperation && isSaleDetailDialogOpen);
-    const paidValueText = shouldShowSaleDetailDialog ? this.getPaymentInfoText(contextOperationItem) : '';
+    const paidValueText = (shouldShowSaleDetailDialog ? this.getPaymentInfoText(contextOperationItem) : '');
 
     return (
       <SaleDetailDialog
@@ -170,6 +180,7 @@ class CashierOpen extends Component<Props, State> {
         currentPage={currentTablePage}
         tabConfig={config.tabConfig}
         itemsPerPage={itemsPerPage}
+        canBeEdited
       />
     );
   };

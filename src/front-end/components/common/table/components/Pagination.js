@@ -9,8 +9,6 @@ import LastPageIcon from '@material-ui/icons/LastPage';
 import IconButton from '@material-ui/core/IconButton';
 
 import TablePagination from '@material-ui/core/TablePagination';
-import TableFooter from '@material-ui/core/TableFooter';
-import TableRow from '@material-ui/core/TableRow';
 
 import styled from 'styled-components';
 
@@ -98,19 +96,21 @@ const Pagination = ({
   const PageControlls = renderPageControlls(onPageChange, datasetLength, currentPage, rowsPerPage);
 
   return (
-    <TablePagination
-      labelDisplayedRows={({ from, to, count }) => `${from}-${to} de ${count}`}
-      onChangeRowsPerPage={event => onChangeRowsPerPage(event.target.value)}
-      ActionsComponent={() => PageControlls}
-      labelRowsPerPage="Itens por página"
-      rowsPerPageOptions={[5, 10]}
-      rowsPerPage={rowsPerPage}
-      count={datasetLength}
-      page={currentPage}
-      onChangePage={() => {}}
-      component="div"
-      colSpan={3}
-    />
+    <PaginationWraper>
+      <TablePagination
+        labelDisplayedRows={({ from, to, count }) => `${from}-${to} de ${count}`}
+        onChangeRowsPerPage={event => onChangeRowsPerPage(event.target.value)}
+        ActionsComponent={() => PageControlls}
+        labelRowsPerPage="Itens por página"
+        rowsPerPageOptions={[5, 10]}
+        rowsPerPage={rowsPerPage}
+        count={datasetLength}
+        page={currentPage}
+        onChangePage={() => {}}
+        component="div"
+        colSpan={3}
+      />
+    </PaginationWraper>
   );
 };
 

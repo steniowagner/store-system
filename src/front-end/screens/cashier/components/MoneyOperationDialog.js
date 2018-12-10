@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -12,7 +12,8 @@ import Slide from '@material-ui/core/Slide';
 
 import styled from 'styled-components';
 
-import Input from '../../../../../../../../components/common/CustomInput';
+import { CASHIER_OPERATIONS } from './current-cashier/components/cashier-open/components/top-buttons-values/dialog-config';
+import Input from '../../../components/common/CustomInput';
 
 const ContentWrapper = styled.div`
   display: flex;
@@ -48,6 +49,7 @@ type Props = {
   reason: string,
   value: string,
   mode: string,
+  type: ?string,
 };
 
 type State = {
@@ -94,7 +96,6 @@ class MoneyOperationDialog extends Component<Props, State> {
       moneyInputValue: '',
     }, () => onToggleMoneyDialog());
   };
-
 
   onTypeReasonInputValue = (reasonInputValue: string): void => {
     this.setState({
@@ -199,17 +200,20 @@ class MoneyOperationDialog extends Component<Props, State> {
 
   renderButtonsActions = (): Object => {
     const { moneyInputValue, reasonInputValue } = this.state;
+    const { mode } = this.props;
 
     const isOkButtonDisabled = !(moneyInputValue && reasonInputValue);
 
     return (
       <DialogActions>
-        <Button
-          onClick={this.onClickCancelButton}
-          color="primary"
-        >
-          Cancelar
-        </Button>
+        {(mode !== 'detail') && (
+          <Button
+            onClick={this.onClickCancelButton}
+            color="primary"
+          >
+            Cancelar
+          </Button>
+        )}
         <Button
           onClick={this.onClickOkButton}
           disabled={isOkButtonDisabled}
@@ -221,8 +225,21 @@ class MoneyOperationDialog extends Component<Props, State> {
     );
   };
 
+  renderContent = (): Object => (
+    <Fragment>
+      {this.renderTitle()}
+      <DialogContent>
+        {this.renderInputMoneySection()}
+        {this.renderInputReasonSection()}
+      </DialogContent>
+      {this.renderButtonsActions()}
+    </Fragment>
+  );
+
   render() {
-    const { onToggleMoneyDialog, isOpen } = this.props;
+    const { onToggleMoneyDialog, isOpen, type } = this.props;
+
+    const shouldShowContent = (type === CASHIER_OPERATIONS.ADD_MONEY || type === CASHIER_OPERATIONS.TAKE_AWAY_MONEY);
 
     return (
       <Dialog
@@ -236,12 +253,7 @@ class MoneyOperationDialog extends Component<Props, State> {
         maxWidth="xs"
         fullWidth
       >
-        {this.renderTitle()}
-        <DialogContent>
-          {this.renderInputMoneySection()}
-          {this.renderInputReasonSection()}
-        </DialogContent>
-        {this.renderButtonsActions()}
+        {shouldShowContent && this.renderContent()}
       </Dialog>
     );
   }
