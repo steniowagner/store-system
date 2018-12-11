@@ -6,6 +6,9 @@ import Popper from '@material-ui/core/Popper';
 import Paper from '@material-ui/core/Paper';
 import List from '@material-ui/core/List';
 
+import MenuItem from '@material-ui/core/MenuItem';
+import MenuList from '@material-ui/core/MenuList';
+
 import styled from 'styled-components';
 
 import { bindActionCreators } from 'redux';
@@ -37,6 +40,8 @@ const ListContainer = styled(({ ...props }) => (
   margin-top: 8px;
   margin-left: 250px;
 `;
+
+const ListItem = styled.div``;
 
 type Props = {
   onSelectProduct: Function,
@@ -159,46 +164,41 @@ class ProductFilter extends Component<Props, {}> {
     const { productsFiltered } = this.state;
 
     return (
-      <Popper
-        disablePortal
-        transition
-        open
-      >
-        <ListContainer>
-          <List
-            component="div"
-          >
-            {productsFiltered.map((product, index) => {
-              const {
-                description,
-                salePrice,
-                brand,
-                id,
-              } = product;
+      <ListContainer>
+        <MenuList>
+          {productsFiltered.map((product, index) => {
+            const {
+              description,
+              salePrice,
+              brand,
+              id,
+            } = product;
 
-              const salePriceItem = {
-                title: 'Preço',
-                value: `R$ ${salePrice.toFixed(2)}`,
-              };
+            const salePriceItem = {
+              title: 'Preço',
+              value: `R$ ${salePrice.toFixed(2)}`,
+            };
 
-              const brandItem = {
-                title: 'Marca',
-                value: brand.name,
-              };
+            const brandItem = {
+              title: 'Marca',
+              value: brand.name,
+            };
 
-              return (
+            return (
+              <ListItem
+                key={id}
+              >
                 <ItemFiltered
                   onSelectItem={() => this.onClickListItem(product)}
-                  isLast={(index === productsFiltered.length - 1)}
+                  isLast={(index === (productsFiltered.length - 1))}
                   secondariesItems={[salePriceItem, brandItem]}
                   primaryItem={description}
-                  key={id}
                 />
-              );
-            })}
-          </List>
-        </ListContainer>
-      </Popper>
+              </ListItem>
+            );
+          })}
+        </MenuList>
+      </ListContainer>
     );
   }
 

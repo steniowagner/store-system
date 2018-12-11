@@ -155,7 +155,7 @@ class CustomFilter extends Component<Props, State> {
         </FilteWrapper>
       </FilterSelector>
     );
-  }
+  };
 
   render() {
     const {

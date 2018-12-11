@@ -370,6 +370,7 @@ class Filter extends Component<Props, State> {
     <Popper
       anchorEl={this.anchorEl}
       open={isFilterOpen}
+      placement="bottom"
       disablePortal
       transition
     >
