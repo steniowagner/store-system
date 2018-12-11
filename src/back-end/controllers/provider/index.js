@@ -20,21 +20,13 @@ exports.getAll = async () => {
 
 exports.edit = async (providerUpdated) => {
   try {
-    await Provider.update({
+    return await Provider.update({
       ...providerUpdated,
     }, {
       where: {
         id: providerUpdated.id,
       },
     });
-
-    const providers = await Provider.findAll({ raw: true });
-    const providerEditedIndex = providers.findIndex(provider => provider.id === providerUpdated.id);
-
-    return {
-      providerEdited: providers[providerEditedIndex],
-      index: providerEditedIndex,
-    };
   } catch (err) {
     return err;
   }

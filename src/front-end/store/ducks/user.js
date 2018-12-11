@@ -59,9 +59,9 @@ export const Creators = {
     payload: { user },
   }),
 
-  editUserSuccess: ({ userEdited, index }) => ({
+  editUserSuccess: userEdited => ({
     type: Types.EDIT_REQUEST_SUCCESS,
-    payload: { message: 'Usuário Editado com Sucesso', userEdited, index },
+    payload: { message: 'Usuário Editado com Sucesso', userEdited },
   }),
 
   editUserFailure: () => ({
@@ -137,7 +137,7 @@ const user = (state = INITIAL_STATE, { payload, type }) => {
       return {
         ...state,
         message: payload.message,
-        data: Object.assign([], state.data, { [payload.index]: payload.userEdited }),
+        data: state.data.map(item => (item.id === payload.userEdited.id ? payload.userEdited : item)),
       };
 
     case Types.EDIT_REQUEST_FAILURE:

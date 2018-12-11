@@ -58,10 +58,10 @@ export function* editProvider(action) {
     const { provider } = action.payload;
 
     ipcRenderer.send(OPERATION_REQUEST, PROVIDER, UPDATE, EVENT_TAGS.EDIT_PROVIDER, provider);
-    const { result } = yield handleEventSubscription(EVENT_TAGS.EDIT_PROVIDER);
+    yield handleEventSubscription(EVENT_TAGS.EDIT_PROVIDER);
     handleEventUnsubscription(EVENT_TAGS.EDIT_PROVIDER);
 
-    yield put(ProviderCreators.editProviderSuccess(result));
+    yield put(ProviderCreators.editProviderSuccess(provider));
   } catch (err) {
     yield put(ProviderCreators.editProviderFailure(err));
   }

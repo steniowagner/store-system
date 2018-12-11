@@ -59,9 +59,9 @@ export const Creators = {
     payload: { provider },
   }),
 
-  editProviderSuccess: ({ providerEdited, index }) => ({
+  editProviderSuccess: providerEdited => ({
     type: Types.EDIT_REQUEST_SUCCESS,
-    payload: { message: 'Fornecedor Editado com Sucesso', providerEdited, index },
+    payload: { message: 'Fornecedor Editado com Sucesso', providerEdited },
   }),
 
   editProviderFailure: () => ({
@@ -138,7 +138,7 @@ const provider = (state = INITIAL_STATE, { payload, type }) => {
       return {
         ...state,
         message: payload.message,
-        data: Object.assign([], state.data, { [payload.index]: payload.providerEdited }),
+        data: state.data.map(item => (item.id === payload.providerEdited.id ? payload.providerEdited : item)),
       };
 
     case Types.EDIT_REQUEST_FAILURE:

@@ -51,6 +51,8 @@ class BudgetForm extends Component<Props, State> {
       mode,
     } = this.props;
 
+    const formMode = (values.status === BUDGET_STATUS.APPROVED ? 'detail' : mode);
+
     return (
       <Section>
         <ProductSale
@@ -61,10 +63,10 @@ class BudgetForm extends Component<Props, State> {
               {...this.props}
             />)}
           withExtraComponent
+          mode={formMode}
           values={values}
           errors={errors}
           stock={stock}
-          mode={mode}
         />
       </Section>
     );

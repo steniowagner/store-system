@@ -57,10 +57,10 @@ export function* editUser(action) {
     const { user } = action.payload;
 
     ipcRenderer.send(OPERATION_REQUEST, USER, UPDATE, EVENT_TAGS.EDIT_USER, user);
-    const { result } = yield handleEventSubscription(EVENT_TAGS.EDIT_USER);
+    yield handleEventSubscription(EVENT_TAGS.EDIT_USER);
     handleEventUnsubscription(EVENT_TAGS.EDIT_USER);
 
-    yield put(UserCreators.editUserSuccess(result));
+    yield put(UserCreators.editUserSuccess(user));
   } catch (err) {
     yield put(UserCreators.editUserFailure(err));
   }
