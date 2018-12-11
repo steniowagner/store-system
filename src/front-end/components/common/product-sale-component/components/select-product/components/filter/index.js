@@ -36,9 +36,10 @@ const ListContainer = styled(({ ...props }) => (
   />
 ))`
   overflow-y: scroll;
+  max-width: 400px;
   max-height: 400px;
   margin-top: 8px;
-  margin-left: 250px;
+  margin-left: 230px;
 `;
 
 const ListItem = styled.div``;
@@ -51,7 +52,14 @@ type Props = {
   mode: string,
 };
 
-class ProductFilter extends Component<Props, {}> {
+type State = {
+  productsFiltered: Array<Object>,
+  optionSelected: Object,
+  isListOpen: boolean,
+  filterValue: string,
+};
+
+class ProductFilter extends Component<Props, State> {
   state = {
     productsFiltered: [],
     optionSelected: {

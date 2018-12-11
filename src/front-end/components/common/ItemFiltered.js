@@ -9,8 +9,11 @@ import styled from 'styled-components';
 
 const Wrapper = styled.div`
   width: 100%;
-  display: flex;
-  flex-direction: column;
+`;
+
+const PrimaryItemTextWrapper = styled.div`
+  width: 100%;
+  word-wrap: break-word;
 `;
 
 const PrimaryItemText = styled.p`
@@ -50,10 +53,9 @@ const ItemListWrapper = styled(({ ...props }) => (
     button
   />
 ))`
-  width: 100%;
   display: flex;
-  align-items: center;
-`;
+  flex-wrap: wrap;
+  align-items: center;`;
 
 type Props = {
   secondariesItems: ?Array<Object>,
@@ -63,9 +65,11 @@ type Props = {
 };
 
 const renderPrimaryItem = (primaryItem: string): Object => (
-  <PrimaryItemText>
-    {primaryItem}
-  </PrimaryItemText>
+  <PrimaryItemTextWrapper>
+    <PrimaryItemText>
+      {primaryItem}
+    </PrimaryItemText>
+  </PrimaryItemTextWrapper>
 );
 
 const renderSecondariesItems = (secondariesItems: Array<Object>): Object => (
