@@ -70,20 +70,10 @@ export function* editProductInStock(action) {
     };
 
     ipcRenderer.send(OPERATION_REQUEST, STOCK, UPDATE_PRODUCT_STOCK, EVENT_TAGS.EDIT_SINGLE_PRODUCT_STOCK, productEdited);
-    const { result } = yield handleEventSubscription(EVENT_TAGS.EDIT_SINGLE_PRODUCT_STOCK);
+    yield handleEventSubscription(EVENT_TAGS.EDIT_SINGLE_PRODUCT_STOCK);
     handleEventUnsubscription(EVENT_TAGS.EDIT_SINGLE_PRODUCT_STOCK);
 
-    const { stockItemEdited, index } = result;
-
-    const productInStockEdited = {
-      stockItemEdited: {
-        ...stockItemEdited,
-        description: stockItemEdited['Product.description'],
-      },
-      index,
-    };
-
-    yield put(StockCreators.editStockSuccess(productInStockEdited));
+    yield put(StockCreators.editStockSuccess(productInfo));
   } catch (err) {
     yield put(StockCreators.editStockFailure(err));
   }

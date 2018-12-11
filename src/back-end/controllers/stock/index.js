@@ -40,24 +40,13 @@ exports.editInBatch = async (stockUpdated) => {
 
 exports.edit = async (productInfoUpdated) => {
   try {
-    await Stock.update({
+    return await Stock.update({
       ...productInfoUpdated,
     }, {
       where: {
         id: productInfoUpdated.id,
       },
     });
-
-    const stock = await Stock.findAll({
-      include: [Product],
-      raw: true,
-    });
-    const stockItemEditedIndex = stock.findIndex(productInfo => productInfo.id === productInfoUpdated.id);
-
-    return {
-      stockItemEdited: stock[stockItemEditedIndex],
-      index: stockItemEditedIndex,
-    };
   } catch (err) {
     return err;
   }

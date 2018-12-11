@@ -59,9 +59,9 @@ export const Creators = {
     payload: { product },
   }),
 
-  editProductSuccess: ({ productEdited, index }) => ({
+  editProductSuccess: productEdited => ({
     type: Types.EDIT_REQUEST_SUCCESS,
-    payload: { message: 'Produto Editado com Sucesso', productEdited, index },
+    payload: { message: 'Produto Editado com Sucesso', productEdited },
   }),
 
   editProductFailure: () => ({
@@ -137,7 +137,7 @@ const product = (state = INITIAL_STATE, { payload, type }) => {
       return {
         ...state,
         message: payload.message,
-        data: Object.assign([], state.data, { [payload.index]: payload.productEdited }),
+        data: state.data.map(productItem => (productItem.id === payload.productEdited.id ? payload.productEdited : productItem)),
       };
 
     case Types.EDIT_REQUEST_FAILURE:

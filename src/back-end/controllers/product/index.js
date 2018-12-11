@@ -24,25 +24,13 @@ exports.getAll = async () => {
 
 exports.edit = async (productUpdated) => {
   try {
-    await Product.update({
+    return await Product.update({
       ...productUpdated,
     }, {
       where: {
         id: productUpdated.id,
       },
     });
-
-    const products = await Product.findAll({
-      include: [Brand],
-      raw: true,
-    });
-
-    const productEditedIndex = products.findIndex(product => product.id === productUpdated.id);
-
-    return {
-      productEdited: products[productEditedIndex],
-      index: productEditedIndex,
-    };
   } catch (err) {
     return err;
   }

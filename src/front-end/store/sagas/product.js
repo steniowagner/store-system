@@ -113,13 +113,10 @@ export function* editProduct(action) {
     };
 
     ipcRenderer.send(OPERATION_REQUEST, PRODUCT, UPDATE_PRODUCT, EVENT_TAGS.EDIT_PRODUCT, productEdited);
-    const { result } = yield handleEventSubscription(EVENT_TAGS.EDIT_PRODUCT);
+    yield handleEventSubscription(EVENT_TAGS.EDIT_PRODUCT);
     handleEventUnsubscription(EVENT_TAGS.EDIT_PRODUCT);
 
-    yield put(ProductCreators.editProductSuccess({
-      productEdited: parseProduct(result.productEdited),
-      index: result.index,
-    }));
+    yield put(ProductCreators.editProductSuccess(product));
   } catch (err) {
     yield put(ProductCreators.editProductFailure(err.message));
   }

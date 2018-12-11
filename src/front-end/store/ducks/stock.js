@@ -59,9 +59,9 @@ export const Creators = {
     payload: { productInfo },
   }),
 
-  editStockSuccess: ({ stockItemEdited, index }) => ({
+  editStockSuccess: stockItemEdited => ({
     type: Types.EDIT_REQUEST_SUCCESS,
-    payload: { message: 'Estoque Editado com Sucesso', stockItemEdited, index },
+    payload: { message: 'Estoque Editado com Sucesso', stockItemEdited },
   }),
 
   editStockFailure: error => ({
@@ -136,7 +136,7 @@ const stock = (state = INITIAL_STATE, { payload, type }) => {
       return {
         ...state,
         message: payload.message,
-        data: Object.assign([], state.data, { [payload.index]: payload.stockItemEdited }),
+        data: state.data.map(stockProduct => (stockProduct.id === payload.stockItemEdited.id ? payload.stockItemEdited : stockProduct)),
       };
 
     case Types.EDIT_REQUEST_FAILURE:
