@@ -272,7 +272,7 @@ const cashier = (state = INITIAL_STATE, { payload, type }) => {
           ...state.tabInfo,
           pastCashiers: {
             ...state.tabInfo.pastCashiers,
-            dateFilterValue: payload.filterValue,
+            itemsPerPage: payload.itemsPerPage,
           },
         },
       };
