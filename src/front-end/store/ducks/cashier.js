@@ -211,10 +211,14 @@ const cashier = (state = INITIAL_STATE, { payload, type }) => {
     case Types.EDIT_REQUEST_SUCCESS:
       return {
         ...state,
-        currentCashier: {
-          ...payload.cashierUpdated,
-          operations: JSON.parse(payload.cashierUpdated.operations),
-        },
+        currentCashier:
+          (payload.cashierUpdated.id === state.currentCashier.id
+            ? ({
+              ...payload.cashierUpdated,
+              operations: JSON.parse(payload.cashierUpdated.operations),
+            })
+            : state.currentCashier
+          ),
       };
 
     case Types.EDIT_REQUEST_FAILURE:

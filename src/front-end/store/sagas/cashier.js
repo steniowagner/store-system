@@ -45,7 +45,6 @@ export function* createCashier(action) {
       id: result,
     };
 
-
     yield put(CashierCreators.createCashierSuccess(newCashier));
   } catch (err) {
     yield put(CashierCreators.createCashierFailure(err.message));
@@ -86,10 +85,10 @@ export function* editCashier(action) {
   }
 }
 
+const checkIsOperationTypeSale = ({ type }) => (type === CASHIER_OPERATIONS.SALE || type === CASHIER_OPERATIONS.CONSOLIDATE_BUDGET_PAYMENT);
+
 const getTotalProfit = (operations) => {
-  const saleOperations = operations.filter((operation) => {
-    return (operation.type === CASHIER_OPERATIONS.SALE || operation.type === CASHIER_OPERATIONS.CONSOLIDATE_BUDGET_PAYMENT);
-  });
+  const saleOperations = operations.filter(operation => checkIsOperationTypeSale(operation));
 
   const totalProfit = calculateTotalProfit(saleOperations);
 
@@ -115,27 +114,47 @@ export function* onAddSaleOperation(newSale) {
   yield call(editCashier, { payload });
 }
 
+const getCashierOperations = (operations) => {
+  let cashierOperations = [];
+
+  if (typeof operations === 'string' && !!operations) {
+    cashierOperations = JSON.parse(operations);
+  }
+
+  if (Array.isArray(operations)) {
+    cashierOperations = operations;
+  }
+
+  return cashierOperations;
+};
+
+const checkIsSaleBelongsToCashier = (cashier, sale) => {
+  const { operations } = cashier;
+
+  const cashierOperations = getCashierOperations(operations);
+
+  return cashierOperations.some(saleOperation => checkIsOperationTypeSale(saleOperation) && (saleOperation.id === sale.id));
+};
+
 export function* onEditSaleOperation(saleUpdated) {
-  const { currentCashier } = yield select(state => state.cashier);
-  const { operations } = currentCashier;
+  const { currentCashier, pastCashiers } = yield select(state => state.cashier);
 
-  const saleParsedToTableView = parseSaleTableItem(saleUpdated);
+  const cashiers = [currentCashier, ...pastCashiers];
+  const cashierOwnerSale = cashiers.find(cashier => checkIsSaleBelongsToCashier(cashier, saleUpdated));
+  const cashierOwnerSaleOperations = getCashierOperations(cashierOwnerSale.operations);
 
-  const operationsUpdated = operations.map((operation) => {
-    const isOperationTypeSale = (operation.type === CASHIER_OPERATIONS.SALE
-      || operation.type === CASHIER_OPERATIONS.CONSOLIDATE_BUDGET_PAYMENT);
+  const cashierOwnerOperationsUpdated = cashierOwnerSaleOperations.map((operation) => {
+    const isSaleUpdated = checkIsOperationTypeSale(operation) && (operation.id === saleUpdated.id);
 
-    const isSaleUpdated = (isOperationTypeSale && operation.id === saleUpdated.id);
-
-    return (isSaleUpdated ? saleParsedToTableView : operation);
+    return (isSaleUpdated ? parseSaleTableItem(saleUpdated) : operation);
   });
 
-  const totalProfit = getTotalProfit(operationsUpdated);
+  const totalProfit = getTotalProfit(getCashierOperations(cashierOwnerOperationsUpdated));
 
   const payload = {
     cashier: {
-      ...currentCashier,
-      operations: operationsUpdated,
+      ...cashierOwnerSale,
+      operations: cashierOwnerOperationsUpdated,
       totalProfit,
     },
   };
