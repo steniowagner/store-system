@@ -48,11 +48,9 @@ class Product extends Component<Props, {}> {
   }
 
   onCreateProduct = (productCreated: Object): void => {
-    const { getAllBrands, createProduct } = this.props;
+    const { createProduct } = this.props;
 
     createProduct(productCreated);
-
-    getAllBrands();
   };
 
   onEditProduct = (productEdited: Object): void => {

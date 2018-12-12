@@ -1,6 +1,7 @@
 import { call, put } from 'redux-saga/effects';
 
 import { Creators as ProductCreators } from '../ducks/product';
+import { Creators as BrandCreators } from '../ducks/brand';
 
 import {
   CREATE_PRODUCT,
@@ -69,6 +70,7 @@ export function* createProduct(action) {
     };
 
     yield put(ProductCreators.createProductSuccess(newProduct));
+    yield put(BrandCreators.getAllBrands());
   } catch (err) {
     yield put(ProductCreators.createProductFailure(err.message));
   }
@@ -117,6 +119,7 @@ export function* editProduct(action) {
     handleEventUnsubscription(EVENT_TAGS.EDIT_PRODUCT);
 
     yield put(ProductCreators.editProductSuccess(product));
+    yield put(BrandCreators.getAllBrands());
   } catch (err) {
     yield put(ProductCreators.editProductFailure(err.message));
   }

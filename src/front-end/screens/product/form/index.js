@@ -34,7 +34,6 @@ type Props = {
 
 class ProductForm extends Component<Props, {}> {
   state = {
-    manufacturersCreated: [],
     brandsCreated: [],
   };
 

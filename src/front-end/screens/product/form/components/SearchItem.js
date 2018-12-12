@@ -89,13 +89,13 @@ class SearchInput extends Component<Props, State> {
     );
   };
 
-  renderMenuList = (dataset: Array<Object>, itemSelected: string): Object => {
+  renderMenuList = (dataset: Array<Object>, itemSelected: Object): Object => {
     const { options, entity } = this.props;
 
     const renderDefaultOptions = options.map((option, index) => (
       <MenuItem
         onClick={() => this.onSelectMenuItem(index)}
-        selected={option === itemSelected}
+        selected={option.name === itemSelected.name}
         key={option.name}
       >
         {option.name}
