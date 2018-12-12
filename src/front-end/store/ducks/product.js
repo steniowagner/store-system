@@ -49,9 +49,9 @@ export const Creators = {
     payload: { products },
   }),
 
-  getAllProductsFailure: error => ({
+  getAllProductsFailure: () => ({
     type: Types.GET_ALL_FAILURE,
-    payload: { error },
+    payload: { error: 'Houve um erro na leitura dos Produtos' },
   }),
 
   editProduct: product => ({

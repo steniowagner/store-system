@@ -18,9 +18,24 @@ const ButtonWrapper = styled.div`
   padding-left: 20px;
   padding-right: 20px;
   border-radius: 6px;
-  background-color: ${({ withCustomInactiveColor, isDisabled, theme }) => {
+  background-color: ${({
+    withCustomInactiveColor,
+    withCustomColor,
+    customColor,
+    isDisabled,
+    theme,
+  }) => {
+    let color = theme.colors.affirmative;
+
     const disabledColor = (withCustomInactiveColor ? theme.colors.customInactiveButton : theme.colors.lightGray);
-    const color = (isDisabled ? disabledColor : theme.colors.affirmative);
+
+    if (isDisabled) {
+      color = disabledColor;
+    }
+
+    if (withCustomColor) {
+      color = customColor;
+    }
 
     return color;
   }};
@@ -35,6 +50,10 @@ const Title = styled.h2`
 
 type Props = {
   withCustomInactiveColor: ?boolean,
+  withCustomColor: ?boolean,
+  withCustomIcon: ?boolean,
+  customColor: ?string,
+  CustomIcon: ?Object,
   disabled: boolean,
   withIcon: boolean,
   action: Function,
@@ -43,6 +62,10 @@ type Props = {
 
 const ActionButton = ({
   withCustomInactiveColor,
+  withCustomIcon,
+  withCustomColor,
+  customColor,
+  CustomIcon,
   withIcon,
   disabled,
   action,
@@ -54,10 +77,21 @@ const ActionButton = ({
   >
     <ButtonWrapper
       withCustomInactiveColor={withCustomInactiveColor}
+      withCustomColor={withCustomColor}
+      customColor={customColor}
       isDisabled={disabled}
     >
       {withIcon && (
         <AddCircleOutline
+          style={{
+            color: '#fff',
+            marginRight: 18,
+            fontSize: 28,
+          }}
+        />
+      )}
+      {withCustomIcon && (
+        <CustomIcon
           style={{
             color: '#fff',
             marginRight: 18,

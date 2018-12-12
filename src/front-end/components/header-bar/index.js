@@ -67,7 +67,7 @@ class HeaderBar extends Component {
                 <StoreIcon />
               </IconButton>
               <Title>
-                MY-STORE
+                EUNICE LIVROS
               </Title>
             </LeftSideContainer>
 

@@ -16,7 +16,7 @@ import User from './screens/user';
 
 const Container = styled.div`
   height: 100%;
-  padding: 150px 28px 28px 28px;
+  padding: 164px 28px 28px 28px;
   overflow-y: scroll;
 `;
 

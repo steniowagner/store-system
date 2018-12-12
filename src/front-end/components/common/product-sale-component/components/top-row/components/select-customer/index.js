@@ -6,12 +6,13 @@ import styled from 'styled-components';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Creators as CustomerCreators } from '../../../../../store/ducks/customer';
+import { Creators as CustomerDebitsCreators } from '../../../../../../../store/ducks/customerDebits';
+import { Creators as CustomerCreators } from '../../../../../../../store/ducks/customer';
 
 import SelectUserDialog from './components/SelectUserDialog';
 
-import ActionButton from '../../../ActionButton';
-import Input from '../../../CustomInput';
+import ActionButton from '../../../../../ActionButton';
+import Input from '../../../../../CustomInput';
 
 const Wrapper = styled.div`
   display: flex;
@@ -32,7 +33,9 @@ const InputButtonWrapper = styled.div`
 type Props = {
   getAllCustomers: Function,
   customerSelected: Object,
+  customers: Array<Object>,
   setFieldValue: Function,
+  getDebits: Function,
   error: Object,
   mode: string,
 };
@@ -61,9 +64,11 @@ class SelectCustomer extends Component<Props, State> {
   };
 
   onSelectCustomer = (customer: Object): void => {
-    const { setFieldValue } = this.props;
+    const { setFieldValue, getDebits } = this.props;
 
     setFieldValue('customer', customer);
+
+    getDebits(customer.id);
   };
 
   renderInputField = (): Object => {
@@ -134,7 +139,9 @@ class SelectCustomer extends Component<Props, State> {
   }
 }
 
-const mapDispatchToProps = dispatch => bindActionCreators(CustomerCreators, dispatch);
+const Creators = Object.assign({}, CustomerDebitsCreators, CustomerCreators);
+
+const mapDispatchToProps = dispatch => bindActionCreators(Creators, dispatch);
 
 const mapStateToProps = state => ({
   customers: state.customer.data,

@@ -10,7 +10,7 @@ import { calculateSubtotalValue, calculateTotalValue } from './calculateValues';
 import ProductsSelectedList from './components/products-selected-list';
 import SelectProduct from './components/select-product';
 import FooterValues from './components/footer-values';
-import TopRow from './components/TopRow';
+import TopRow from './components/top-row';
 
 const Container = styled.div`
   width: 100%;

@@ -6,11 +6,11 @@ import List from '@material-ui/core/List';
 
 import styled from 'styled-components';
 
-import Filter from '../../../../Filter';
-import { FILTER_TYPES } from '../../../../../../utils/filter';
-import { RowItem, Row } from '../../../../FormUtils';
-import ItemFiltered from '../../../../ItemFiltered';
-import Input from '../../../../CustomInput';
+import Filter from '../../../../../../Filter';
+import { FILTER_TYPES } from '../../../../../../../../utils/filter';
+import { RowItem, Row } from '../../../../../../FormUtils';
+import ItemFiltered from '../../../../../../ItemFiltered';
+import Input from '../../../../../../CustomInput';
 
 const Wrapper = styled.div`
   width: 100%:
