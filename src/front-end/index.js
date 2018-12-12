@@ -10,6 +10,7 @@ import './config/reactotron';
 import './styles/global';
 
 import NavigationMenu from './components/navigation-menu';
+import HeaderBar from './components/header-bar';
 import AppTheme from './styles';
 import Router from './Router';
 import store from './store';
@@ -38,6 +39,7 @@ const Root = (): Object => (
         >
           <ApplicationRouter>
             <Fragment>
+              <HeaderBar />
               <NavigationMenu />
               <Router />
             </Fragment>

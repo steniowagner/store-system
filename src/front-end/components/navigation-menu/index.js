@@ -24,7 +24,7 @@ class NavigationMenu extends Component {
 
     return (
       <AppBar
-        style={{ position: 'fixed' }}
+        style={{ position: 'fixed', marginTop: 64 }}
         position="static"
         color="secondary"
       >

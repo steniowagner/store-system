@@ -2,12 +2,8 @@
 
 import React, { Component } from 'react';
 
-import Popper from '@material-ui/core/Popper';
-import Paper from '@material-ui/core/Paper';
-import List from '@material-ui/core/List';
-
-import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
+import Paper from '@material-ui/core/Paper';
 
 import styled from 'styled-components';
 

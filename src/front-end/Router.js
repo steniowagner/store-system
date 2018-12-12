@@ -16,8 +16,8 @@ import User from './screens/user';
 
 const Container = styled.div`
   height: 100%;
-  padding: 96px 28px 0 28px;
-  overflow: scroll;
+  padding: 150px 28px 28px 28px;
+  overflow-y: scroll;
 `;
 
 const ApplicationRouter = (): Object => (
