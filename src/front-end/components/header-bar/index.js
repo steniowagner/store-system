@@ -7,12 +7,13 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Button from '@material-ui/core/Button';
 import AppBar from '@material-ui/core/AppBar';
 
-import NotificationsIcon from '@material-ui/icons/Notifications';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import CloudIcon from '@material-ui/icons/Cloud';
 import StoreIcon from '@material-ui/icons/Store';
 
 import styled from 'styled-components';
+
+import BellAlert from './components/BellAlerts';
 
 const Container = styled.div`
   width: 100%;
@@ -57,7 +58,9 @@ class HeaderBar extends Component {
         style={{ position: 'fixed' }}
         position="static"
       >
-        <Toolbar>
+        <Toolbar
+          variant="dense"
+        >
           <Container>
             <LeftSideContainer>
               <IconButton
@@ -82,15 +85,7 @@ class HeaderBar extends Component {
                 <CloudIcon />
               </IconButton>
 
-              <IconButton
-                color="inherit"
-                aria-label="Icon"
-                style={{
-                  marginRight: 8,
-                }}
-              >
-                <NotificationsIcon />
-              </IconButton>
+              <BellAlert />
 
               <Button>
                 <UserIcon />

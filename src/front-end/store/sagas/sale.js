@@ -12,6 +12,7 @@ import { CREATE_SALE, UPDATE_SALE, READ_SALES } from '../../../back-end/events-h
 import { handleEventUnsubscription, handleEventSubscription } from './eventHandler';
 import { OPERATION_REQUEST, SALE } from '../../../common/entitiesTypes';
 import { onAddSaleOperation, onEditSaleOperation } from './cashier';
+import { getNumberCustomersInDebit, getNumberStockUnderMin } from './alerts';
 import { editStockProducts } from './stock';
 
 const { ipcRenderer } = window.require('electron');
@@ -56,7 +57,8 @@ export function* createSale(action) {
 
     yield put(SaleCreators.createSaleSuccess(newSale));
     yield call(onAddSaleOperation, newSale);
-
+    yield call(getNumberCustomersInDebit);
+    yield call(getNumberStockUnderMin);
     const { createdFromBudget } = args;
 
     if (!createdFromBudget) {
@@ -118,6 +120,7 @@ export function* editSale(action) {
 
     yield put(SaleCreators.editSaleSuccess(saleUpdated));
     yield call(onEditSaleOperation, saleUpdated);
+    yield call(getNumberCustomersInDebit);
   } catch (err) {
     yield put(SaleCreators.editSaleFailure(err.message));
   }

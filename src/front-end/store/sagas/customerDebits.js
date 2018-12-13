@@ -1,10 +1,11 @@
 
-import { put } from 'redux-saga/effects';
+import { call, put } from 'redux-saga/effects';
 import { Creators as CustomerDebitsCreators } from '../ducks/customerDebits';
 
 import { handleEventUnsubscription, handleEventSubscription } from './eventHandler';
 import { READ_SALES, UPDATE_SALE } from '../../../back-end/events-handlers/sale/types';
 import { OPERATION_REQUEST, SALE } from '../../../common/entitiesTypes';
+import { getNumberCustomersInDebit } from './alerts';
 
 const { ipcRenderer } = window.require('electron');
 
@@ -43,6 +44,7 @@ export function* removeDebit(action) {
     handleEventUnsubscription(EVENT_TAGS.REMOVE_DEBIT);
 
     yield put(CustomerDebitsCreators.removeDebitSuccess(sale.id));
+    yield call(getNumberCustomersInDebit);
   } catch (err) {
     yield put(CustomerDebitsCreators.removeDebitFailure(err.message));
   }

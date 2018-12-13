@@ -68,7 +68,7 @@ const ItemText = styled.span`
 `;
 
 const ValueText = styled.p`
-  margin: 0 0 2px 6px;
+  margin: 2px 0 2px 6px;
   font-size: 18px
   font-weight: 400;
   color: ${({ theme }) => theme.colors.darkText};

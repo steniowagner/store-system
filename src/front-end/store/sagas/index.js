@@ -4,6 +4,7 @@ import { Types as CustomerDebitsTypes } from '../ducks/customerDebits';
 import { Types as CustomerTypes } from '../ducks/customer';
 import { Types as ProviderTypes } from '../ducks/provider';
 import { Types as ProductTypes } from '../ducks/product';
+import { Types as AlertsTypes } from '../ducks/alerts';
 import { Types as CashierTypes } from '../ducks/cashier';
 import { Types as BudgetTypes } from '../ducks/budget';
 import { Types as StockTypes } from '../ducks/stock';
@@ -47,6 +48,8 @@ import {
   editBudget,
   deleteBudget,
 } from './budget';
+
+import { getNumberBudgetsOutOfDate, getNumberCustomersInDebit, getNumberStockUnderMin } from './alerts';
 
 import { editProductInStock, insertProduct, getStock } from './stock';
 
@@ -94,6 +97,10 @@ export default function* rootSaga() {
     takeLatest(BudgetTypes.READ_ALL_REQUEST, getAllBudgets),
     takeLatest(BudgetTypes.EDIT_REQUEST, editBudget),
     takeLatest(BudgetTypes.DELETE_REQUEST, deleteBudget),
+
+    takeLatest(AlertsTypes.GET_ALL_BUDGETS_OUT_OF_DATE_REQUEST, getNumberBudgetsOutOfDate),
+    takeLatest(AlertsTypes.GET_ALL_CUSTOMERS_WITH_DEBIT_REQUEST, getNumberCustomersInDebit),
+    takeLatest(AlertsTypes.GET_ALL_STOCK_UNDER_MIN_REQUEST, getNumberStockUnderMin),
 
     takeLatest(CashierTypes.READ_ALL_REQUEST, getAllCashiers),
     takeLatest(CashierTypes.CREATE_REQUEST, createCashier),

@@ -2,14 +2,14 @@
 
 import React, { Component, Fragment } from 'react';
 
-import { connect } from 'react-redux';
-
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import Slide from '@material-ui/core/Slide';
+
+import { connect } from 'react-redux';
 
 import CashierClosedAlert from './components/CashierClosedAlert';
 import FormPayment from './components/form-payment';
@@ -207,12 +207,6 @@ class SaleConfirmation extends Component<Props, State> {
 
     const shouldDisableOkButton = (isSubmitting || isTotalPaymentBelow);
 
-    const onClickOk = () => {
-      this.setDebit();
-      this.setIfShouldPrintReceipt();
-      handleSubmit();
-    };
-
     return (
       <DialogActions>
         <Button
@@ -227,7 +221,11 @@ class SaleConfirmation extends Component<Props, State> {
         </Button>
         <Button
           disabled={shouldDisableOkButton}
-          onClick={onClickOk}
+          onClick={() => {
+            this.setDebit();
+            this.setIfShouldPrintReceipt();
+            handleSubmit();
+          }}
           color="primary"
         >
           OK

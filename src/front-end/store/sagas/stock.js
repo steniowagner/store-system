@@ -1,4 +1,4 @@
-import { select, put } from 'redux-saga/effects';
+import { select, call, put } from 'redux-saga/effects';
 
 import { Creators as StockCreators } from '../ducks/stock';
 
@@ -13,6 +13,7 @@ import {
 
 import { handleEventUnsubscription, handleEventSubscription } from './eventHandler';
 import { OPERATION_REQUEST, STOCK } from '../../../common/entitiesTypes';
+import { getNumberStockUnderMin } from './alerts';
 
 const { ipcRenderer } = window.require('electron');
 
@@ -54,6 +55,7 @@ export function* insertProduct(action) {
     };
 
     yield put(StockCreators.insertProductSuccess(productInfo));
+    yield call(getNumberStockUnderMin);
   } catch (err) {
     yield put(StockCreators.insertProductFailure(err.message));
   }
@@ -74,6 +76,7 @@ export function* editProductInStock(action) {
     handleEventUnsubscription(EVENT_TAGS.EDIT_SINGLE_PRODUCT_STOCK);
 
     yield put(StockCreators.editStockSuccess(productInfo));
+    yield call(getNumberStockUnderMin);
   } catch (err) {
     yield put(StockCreators.editStockFailure(err));
   }
@@ -213,6 +216,7 @@ export function* editStockProducts(data, dataset, operationType) {
     });
 
     yield put(StockCreators.editStockInBatchSuccess(stockUpdated));
+    yield call(getNumberStockUnderMin);
   } catch (err) {
     yield put(StockCreators.editStockInBatchFailure(err));
   }

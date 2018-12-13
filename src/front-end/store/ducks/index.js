@@ -5,6 +5,7 @@ import customer from './customer';
 import provider from './provider';
 import cashier from './cashier';
 import product from './product';
+import alerts from './alerts';
 import budget from './budget';
 import stock from './stock';
 import brand from './brand';
@@ -16,6 +17,7 @@ export default combineReducers({
   provider,
   cashier,
   product,
+  alerts,
   budget,
   debits,
   brand,

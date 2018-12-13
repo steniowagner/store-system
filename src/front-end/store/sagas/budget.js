@@ -17,6 +17,8 @@ import { TAKE_AWAY_PRODUCTS_STOCK, UPDATE_PRODUCTS_STOCK, RETURN_PRODUTS_STOCK }
 import { BUDGET_STATUS } from '../../screens/budget/components/BudgetStatus';
 import { OPERATION_REQUEST, BUDGET } from '../../../common/entitiesTypes';
 import { handleEventSubscription, handleEventUnsubscription } from './eventHandler';
+
+import { getNumberBudgetsOutOfDate } from './alerts';
 import { editStockProducts } from './stock';
 import { createSale } from './sale';
 
@@ -127,6 +129,7 @@ export function* deleteBudget(action) {
     handleEventUnsubscription(EVENT_TAGS.REMOVE_BUDGET);
 
     yield put(BudgetCreators.deleteBudgetSuccess(id));
+    yield call(getNumberBudgetsOutOfDate);
   } catch (err) {
     yield put(BudgetCreators.deleteBudgetFailure());
   }
@@ -155,6 +158,7 @@ export function* confirmBudgetPayment(action) {
 
     yield handleEventSubscription(EVENT_TAGS.CONFIRM_PAYMENT_BUDGET);
     yield put(BudgetCreators.confirmBudgetPaymentSuccess(budget.id));
+    yield call(getNumberBudgetsOutOfDate);
   } catch (err) {
     yield put(BudgetCreators.confirmBudgetPaymentFailure());
   }
