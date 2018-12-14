@@ -1,13 +1,5 @@
 const { Provider } = require('../../models');
 
-exports.importFromBackupFile = async (data) => {
-  try {
-    return await Promise.all(data.map(async provider => Provider.create(provider)));
-  } catch (err) {
-    return err;
-  }
-};
-
 exports.create = async (args) => {
   try {
     const provider = await Provider.create(args);

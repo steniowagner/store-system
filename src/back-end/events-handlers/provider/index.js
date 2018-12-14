@@ -3,8 +3,6 @@ const PROVIDER_OPERATION_TYPES = require('./types');
 
 const handleProviderEvent = (operation, args) => {
   switch (operation) {
-    case PROVIDER_OPERATION_TYPES.IMPORT_PROVIDERS: return providerController.importFromBackupFile(args);
-
     case PROVIDER_OPERATION_TYPES.CREATE_PROVIDER: return providerController.create(args);
 
     case PROVIDER_OPERATION_TYPES.READ_PROVIDERS: return providerController.getAll();

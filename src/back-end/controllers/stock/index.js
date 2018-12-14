@@ -1,13 +1,5 @@
 const { Product, Stock } = require('../../models');
 
-exports.importFromBackupFile = async (data) => {
-  try {
-    return await Promise.all(data.map(async stockProduct => Stock.create(stockProduct)));
-  } catch (err) {
-    return err;
-  }
-};
-
 exports.getAll = async () => {
   try {
     return await Stock.findAll({

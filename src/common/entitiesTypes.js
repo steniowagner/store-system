@@ -6,6 +6,7 @@ const entities = {
   CASHIER: 'CASHIER',
   PRODUCT: 'PRODUCT',
   BUDGET: 'BUDGET',
+  BACKUP: 'BACKUP',
   STOCK: 'STOCK',
   BRAND: 'BRAND',
   USER: 'USER',

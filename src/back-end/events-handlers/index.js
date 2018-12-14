@@ -1,5 +1,6 @@
 const ENTITIES = require('../../common/entitiesTypes');
 
+const handlerBackupEvents = require('./backup');
 const handleCustomerEvents = require('./customer');
 const handleProviderEvents = require('./provider');
 const handleCashierEvents = require('./cashier');
@@ -21,6 +22,8 @@ const eventHandler = (entitie, operation, args) => {
     case ENTITIES.PRODUCT: return handleProductEvents(operation, args);
 
     case ENTITIES.BUDGET: return handleBudgetEvents(operation, args);
+
+    case ENTITIES.BACKUP: return handlerBackupEvents(operation, args);
 
     case ENTITIES.STOCK: return handlerStockEvents(operation, args);
 

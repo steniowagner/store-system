@@ -3,8 +3,6 @@ const USER_OPERATION_TYPES = require('./types');
 
 const handleUserEvent = (operation, args) => {
   switch (operation) {
-    case USER_OPERATION_TYPES.IMPORT_USERS: return userController.importFromBackupFile(args);
-
     case USER_OPERATION_TYPES.CREATE_USER: return userController.create(args);
 
     case USER_OPERATION_TYPES.READ_USERS: return userController.getAll();

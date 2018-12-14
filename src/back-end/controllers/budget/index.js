@@ -1,13 +1,5 @@
 const { Budget } = require('../../models');
 
-exports.importFromBackupFile = async (data) => {
-  try {
-    return await Promise.all(data.map(async budget => Budget.create(budget)));
-  } catch (err) {
-    return err;
-  }
-};
-
 exports.create = async (args) => {
   try {
     const budget = await Budget.create(args);
