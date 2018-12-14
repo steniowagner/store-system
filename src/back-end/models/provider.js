@@ -8,14 +8,9 @@ const ProviderModel = (sequelize, DataTypes) => {
       },
       allowNull: false,
       type: STRING,
-      unique: true,
     },
 
     address: {
-      validate: {
-        notEmpty: true,
-      },
-      allowNull: false,
       type: STRING,
     },
 
@@ -32,10 +27,6 @@ const ProviderModel = (sequelize, DataTypes) => {
     },
 
     phone1: {
-      validate: {
-        notEmpty: true,
-      },
-      allowNull: false,
       type: STRING,
     },
 

@@ -3,6 +3,7 @@ import { all, takeLatest } from 'redux-saga/effects';
 import { Types as CustomerDebitsTypes } from '../ducks/customerDebits';
 import { Types as CustomerTypes } from '../ducks/customer';
 import { Types as ProviderTypes } from '../ducks/provider';
+import { Types as BackupTypes } from '../ducks/backup';
 import { Types as ProductTypes } from '../ducks/product';
 import { Types as AlertsTypes } from '../ducks/alerts';
 import { Types as CashierTypes } from '../ducks/cashier';
@@ -59,6 +60,8 @@ import { getCustomerDebits, removeDebit } from './customerDebits';
 
 import { getAllSales, createSale, editSale } from './sale';
 
+import { importBackupFile, startBackup } from './backup';
+
 import { getAllBrands } from './brand';
 
 export default function* rootSaga() {
@@ -108,6 +111,9 @@ export default function* rootSaga() {
 
     takeLatest(CustomerDebitsTypes.GET_DEBITS_REQUEST, getCustomerDebits),
     takeLatest(CustomerDebitsTypes.REMOVE_DEBITS_REQUEST, removeDebit),
+
+    takeLatest(BackupTypes.IMPORT_BACKUP_FILE_REQUEST, importBackupFile),
+    takeLatest(BackupTypes.BACKUP_REQUEST, startBackup),
 
     takeLatest(BrandTypes.GET_ALL_REQUEST, getAllBrands),
   ]);

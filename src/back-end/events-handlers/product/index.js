@@ -3,9 +3,11 @@ const PRODUCT_OPERATION = require('./types');
 
 const handleProductEvent = (operation, args) => {
   switch (operation) {
+    case PRODUCT_OPERATION.IMPORT_PRODUCTS: return productController.importFromBackupFile(args);
+
     case PRODUCT_OPERATION.CREATE_PRODUCT: return productController.create(args);
 
-    case PRODUCT_OPERATION.READ_PRODUCT: return productController.getAll();
+    case PRODUCT_OPERATION.READ_PRODUCTS: return productController.getAll();
 
     case PRODUCT_OPERATION.UPDATE_PRODUCT: return productController.edit(args);
 

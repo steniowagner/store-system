@@ -17,7 +17,6 @@ const EVENT_TAGS = {
 export function* getAllBrands() {
   try {
     ipcRenderer.send(OPERATION_REQUEST, BRAND, READ_BRANDS, EVENT_TAGS.READ_ALL);
-
     const { result } = yield handleEventSubscription(EVENT_TAGS.READ_ALL);
     handleEventUnsubscription(EVENT_TAGS.READ_ALL);
 
@@ -35,7 +34,6 @@ export function* createBrands(brandsCreated, brandSelected) {
     };
 
     ipcRenderer.send(OPERATION_REQUEST, BRAND, CREATE_BRANDS, EVENT_TAGS.CREATE_BRANDS, params);
-
     const { result } = yield handleEventSubscription(EVENT_TAGS.CREATE_BRANDS);
     handleEventUnsubscription(EVENT_TAGS.CREATE_BRANDS);
 

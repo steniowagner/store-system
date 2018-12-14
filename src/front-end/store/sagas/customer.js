@@ -3,10 +3,10 @@ import { put } from 'redux-saga/effects';
 import { Creators as CustomerCreators } from '../ducks/customer';
 
 import {
-  CREATE,
-  READ,
-  UPDATE,
-  DELETE,
+  CREATE_CUSTOMER,
+  READ_CUSTOMERS,
+  UPDATE_CUSTOMER,
+  DELETE_CUSTOMER,
 } from '../../../back-end/events-handlers/customer/types';
 
 import { handleEventUnsubscription, handleEventSubscription } from './eventHandler';
@@ -25,7 +25,7 @@ export function* createCustomer(action) {
   try {
     const { args } = action;
 
-    ipcRenderer.send(OPERATION_REQUEST, CUSTOMER, CREATE, EVENT_TAGS.CREATE_CUSTOMER, args);
+    ipcRenderer.send(OPERATION_REQUEST, CUSTOMER, CREATE_CUSTOMER, EVENT_TAGS.CREATE_CUSTOMER, args);
     const { result } = yield handleEventSubscription(EVENT_TAGS.CREATE_CUSTOMER);
     handleEventUnsubscription(EVENT_TAGS.CREATE_CUSTOMER);
 
@@ -42,7 +42,7 @@ export function* createCustomer(action) {
 
 export function* getAllCustomers() {
   try {
-    ipcRenderer.send(OPERATION_REQUEST, CUSTOMER, READ, EVENT_TAGS.READ_ALL);
+    ipcRenderer.send(OPERATION_REQUEST, CUSTOMER, READ_CUSTOMERS, EVENT_TAGS.READ_ALL);
     const { result } = yield handleEventSubscription(EVENT_TAGS.READ_ALL);
     handleEventUnsubscription(EVENT_TAGS.READ_ALL);
 
@@ -56,7 +56,7 @@ export function* editCustomer(action) {
   try {
     const { customer } = action.payload;
 
-    ipcRenderer.send(OPERATION_REQUEST, CUSTOMER, UPDATE, EVENT_TAGS.UPDATE_CUSTOMER, customer);
+    ipcRenderer.send(OPERATION_REQUEST, CUSTOMER, UPDATE_CUSTOMER, EVENT_TAGS.UPDATE_CUSTOMER, customer);
     const { result } = yield handleEventSubscription(EVENT_TAGS.UPDATE_CUSTOMER);
     handleEventUnsubscription(EVENT_TAGS.UPDATE_CUSTOMER);
 
@@ -70,7 +70,7 @@ export function* removeCustomer(action) {
   try {
     const { id } = action.payload;
 
-    ipcRenderer.send(OPERATION_REQUEST, CUSTOMER, DELETE, EVENT_TAGS.REMOVE_CUSTOMER, id);
+    ipcRenderer.send(OPERATION_REQUEST, CUSTOMER, DELETE_CUSTOMER, EVENT_TAGS.REMOVE_CUSTOMER, id);
     yield handleEventSubscription(EVENT_TAGS.REMOVE_CUSTOMER);
     handleEventUnsubscription(EVENT_TAGS.REMOVE_CUSTOMER);
 

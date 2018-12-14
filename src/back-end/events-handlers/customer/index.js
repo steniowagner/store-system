@@ -3,13 +3,15 @@ const CUSTOMER_OPERATION_TYPES = require('./types');
 
 const handleProviderEvent = (operation, args) => {
   switch (operation) {
-    case CUSTOMER_OPERATION_TYPES.CREATE: return customerController.create(args);
+    case CUSTOMER_OPERATION_TYPES.IMPORT_CUSTOMERS: return customerController.importFromBackupFile(args);
 
-    case CUSTOMER_OPERATION_TYPES.READ: return customerController.getAll();
+    case CUSTOMER_OPERATION_TYPES.CREATE_CUSTOMER: return customerController.create(args);
 
-    case CUSTOMER_OPERATION_TYPES.UPDATE: return customerController.edit(args);
+    case CUSTOMER_OPERATION_TYPES.READ_CUSTOMERS: return customerController.getAll();
 
-    case CUSTOMER_OPERATION_TYPES.DELETE: return customerController.remove(args);
+    case CUSTOMER_OPERATION_TYPES.UPDATE_CUSTOMER: return customerController.edit(args);
+
+    case CUSTOMER_OPERATION_TYPES.DELETE_CUSTOMER: return customerController.remove(args);
 
     default: return {};
   }

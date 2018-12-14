@@ -104,9 +104,6 @@ const CustomForm = withFormik({
       })
       .required('O Nome é obrigatório.'),
 
-    phone1: Yup.string()
-      .required('Ao menos um Telefone deve ser Informado.'),
-
     email: Yup.string()
       .email('E-mail inválido.'),
   })),

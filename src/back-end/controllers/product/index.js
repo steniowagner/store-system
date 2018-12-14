@@ -1,5 +1,13 @@
 const { Product, Brand } = require('../../models');
 
+exports.importFromBackupFile = async (data) => {
+  try {
+    return await Promise.all(data.map(async product => Product.create(product)));
+  } catch (err) {
+    return err;
+  }
+};
+
 exports.create = async (args) => {
   try {
     const product = await Product.create(args);

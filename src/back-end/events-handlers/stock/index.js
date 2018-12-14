@@ -3,6 +3,8 @@ const STOCK_OPERATIONS_TYPES = require('./types');
 
 const handleStockEvent = (operation, args) => {
   switch (operation) {
+    case STOCK_OPERATIONS_TYPES.IMPORT_STOCK: return stockController.importFromBackupFile(args);
+
     case STOCK_OPERATIONS_TYPES.UPDATE_PRODUCTS_STOCK: return stockController.editInBatch(args);
 
     case STOCK_OPERATIONS_TYPES.INSERT_PRODUCT_STOCK: return stockController.insert(args);

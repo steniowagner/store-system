@@ -1,5 +1,13 @@
 const { Cashier } = require('../../models');
 
+exports.importFromBackupFile = async (data) => {
+  try {
+    return await Promise.all(data.map(async cashier => Cashier.create(cashier)));
+  } catch (err) {
+    return err;
+  }
+};
+
 exports.create = async (args) => {
   try {
     const { id } = await Cashier.create(args);

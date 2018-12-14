@@ -15,14 +15,9 @@ const onMigrate = (queryInterface, DataTypes) => {
       },
       allowNull: false,
       type: STRING,
-      unique: true,
     },
 
     address: {
-      validate: {
-        notEmpty: true,
-      },
-      allowNull: false,
       type: STRING,
     },
 
@@ -39,10 +34,6 @@ const onMigrate = (queryInterface, DataTypes) => {
     },
 
     phone1: {
-      validate: {
-        notEmpty: true,
-      },
-      allowNull: false,
       type: STRING,
     },
 

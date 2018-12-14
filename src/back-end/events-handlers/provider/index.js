@@ -3,13 +3,15 @@ const PROVIDER_OPERATION_TYPES = require('./types');
 
 const handleProviderEvent = (operation, args) => {
   switch (operation) {
-    case PROVIDER_OPERATION_TYPES.CREATE: return providerController.create(args);
+    case PROVIDER_OPERATION_TYPES.IMPORT_PROVIDERS: return providerController.importFromBackupFile(args);
 
-    case PROVIDER_OPERATION_TYPES.READ: return providerController.getAll();
+    case PROVIDER_OPERATION_TYPES.CREATE_PROVIDER: return providerController.create(args);
 
-    case PROVIDER_OPERATION_TYPES.UPDATE: return providerController.edit(args);
+    case PROVIDER_OPERATION_TYPES.READ_PROVIDERS: return providerController.getAll();
 
-    case PROVIDER_OPERATION_TYPES.DELETE: return providerController.remove(args);
+    case PROVIDER_OPERATION_TYPES.UPDATE_PROVIDER: return providerController.edit(args);
+
+    case PROVIDER_OPERATION_TYPES.DELETE_PROVIDER: return providerController.remove(args);
 
     default: return {};
   }

@@ -3,10 +3,10 @@ import { put } from 'redux-saga/effects';
 import { Creators as ProviderCreators } from '../ducks/provider';
 
 import {
-  CREATE,
-  READ,
-  UPDATE,
-  DELETE,
+  CREATE_PROVIDER,
+  READ_PROVIDERS,
+  UPDATE_PROVIDER,
+  DELETE_PROVIDER,
 } from '../../../back-end/events-handlers/provider/types';
 
 import { handleEventUnsubscription, handleEventSubscription } from './eventHandler';
@@ -26,7 +26,7 @@ export function* createProvider(action) {
   try {
     const { args } = action;
 
-    ipcRenderer.send(OPERATION_REQUEST, PROVIDER, CREATE, EVENT_TAGS.PROVIDER_CREATE, args);
+    ipcRenderer.send(OPERATION_REQUEST, PROVIDER, CREATE_PROVIDER, EVENT_TAGS.PROVIDER_CREATE, args);
     const { result } = yield handleEventSubscription(EVENT_TAGS.PROVIDER_CREATE);
     handleEventUnsubscription(EVENT_TAGS.PROVIDER_CREATE);
 
@@ -43,7 +43,7 @@ export function* createProvider(action) {
 
 export function* getAllProviders() {
   try {
-    ipcRenderer.send(OPERATION_REQUEST, PROVIDER, READ, EVENT_TAGS.PROVIDERS_GET_ALL);
+    ipcRenderer.send(OPERATION_REQUEST, PROVIDER, READ_PROVIDERS, EVENT_TAGS.PROVIDERS_GET_ALL);
     const { result } = yield handleEventSubscription(EVENT_TAGS.PROVIDERS_GET_ALL);
     handleEventUnsubscription(EVENT_TAGS.EDIT_PROVIDER);
 
@@ -57,7 +57,7 @@ export function* editProvider(action) {
   try {
     const { provider } = action.payload;
 
-    ipcRenderer.send(OPERATION_REQUEST, PROVIDER, UPDATE, EVENT_TAGS.EDIT_PROVIDER, provider);
+    ipcRenderer.send(OPERATION_REQUEST, PROVIDER, UPDATE_PROVIDER, EVENT_TAGS.EDIT_PROVIDER, provider);
     yield handleEventSubscription(EVENT_TAGS.EDIT_PROVIDER);
     handleEventUnsubscription(EVENT_TAGS.EDIT_PROVIDER);
 
@@ -71,7 +71,7 @@ export function* removeProvider(action) {
   try {
     const { id } = action.payload;
 
-    ipcRenderer.send(OPERATION_REQUEST, PROVIDER, DELETE, EVENT_TAGS.REMOVE_PROVIDER, id);
+    ipcRenderer.send(OPERATION_REQUEST, PROVIDER, DELETE_PROVIDER, EVENT_TAGS.REMOVE_PROVIDER, id);
     yield handleEventSubscription(EVENT_TAGS.REMOVE_PROVIDER);
     handleEventUnsubscription(EVENT_TAGS.REMOVE_PROVIDER);
 

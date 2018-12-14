@@ -63,12 +63,10 @@ const onMigrate = (queryInterface, DataTypes) => {
 
     rg: {
       type: STRING,
-      unique: true,
     },
 
     email: {
       type: STRING,
-      unique: true,
     },
 
     createdAt: {

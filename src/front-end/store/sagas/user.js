@@ -3,10 +3,10 @@ import { put } from 'redux-saga/effects';
 import { Creators as UserCreators } from '../ducks/user';
 
 import {
-  CREATE,
-  READ,
-  UPDATE,
-  DELETE,
+  CREATE_USER,
+  READ_USERS,
+  UPDATE_USER,
+  DELETE_USER,
 } from '../../../back-end/events-handlers/user/types';
 
 import { handleEventUnsubscription, handleEventSubscription } from './eventHandler';
@@ -25,7 +25,7 @@ export function* createUser(action) {
   try {
     const { args } = action;
 
-    ipcRenderer.send(OPERATION_REQUEST, USER, CREATE, EVENT_TAGS.CREATE_USER, args);
+    ipcRenderer.send(OPERATION_REQUEST, USER, CREATE_USER, EVENT_TAGS.CREATE_USER, args);
     const { result } = yield handleEventSubscription(EVENT_TAGS.CREATE_USER);
     handleEventUnsubscription(EVENT_TAGS.CREATE_USER);
 
@@ -42,7 +42,7 @@ export function* createUser(action) {
 
 export function* getAllUsers() {
   try {
-    ipcRenderer.send(OPERATION_REQUEST, USER, READ, EVENT_TAGS.GET_ALL_USERS);
+    ipcRenderer.send(OPERATION_REQUEST, USER, READ_USERS, EVENT_TAGS.GET_ALL_USERS);
     const { result } = yield handleEventSubscription(EVENT_TAGS.GET_ALL_USERS);
     handleEventUnsubscription(EVENT_TAGS.GET_ALL_USERS);
 
@@ -56,7 +56,7 @@ export function* editUser(action) {
   try {
     const { user } = action.payload;
 
-    ipcRenderer.send(OPERATION_REQUEST, USER, UPDATE, EVENT_TAGS.EDIT_USER, user);
+    ipcRenderer.send(OPERATION_REQUEST, USER, UPDATE_USER, EVENT_TAGS.EDIT_USER, user);
     yield handleEventSubscription(EVENT_TAGS.EDIT_USER);
     handleEventUnsubscription(EVENT_TAGS.EDIT_USER);
 
@@ -70,7 +70,7 @@ export function* removeUser(action) {
   try {
     const { id } = action.payload;
 
-    ipcRenderer.send(OPERATION_REQUEST, USER, DELETE, EVENT_TAGS.REMOVE_USER, id);
+    ipcRenderer.send(OPERATION_REQUEST, USER, DELETE_USER, EVENT_TAGS.REMOVE_USER, id);
     yield handleEventSubscription(EVENT_TAGS.REMOVE_USER);
     handleEventUnsubscription(EVENT_TAGS.REMOVE_USER);
 

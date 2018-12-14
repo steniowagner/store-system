@@ -3,6 +3,8 @@ const BUDGET_OPERATIONS = require('./types');
 
 const handleBudgetEvent = (operation, args) => {
   switch (operation) {
+    case BUDGET_OPERATIONS.IMPORT_BUDGET: return budgetController.importFromBackupFile(args);
+
     case BUDGET_OPERATIONS.CREATE_BUDGET: return budgetController.create(args);
 
     case BUDGET_OPERATIONS.READ_BUDGETS: return budgetController.readAll();

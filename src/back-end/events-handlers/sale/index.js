@@ -3,6 +3,8 @@ const SALES_OPERATION_TYPES = require('./types');
 
 const handleSaleEvent = (operation, args) => {
   switch (operation) {
+    case SALES_OPERATION_TYPES.IMPORT_SALES: return saleController.importFromBackupFile(args);
+
     case SALES_OPERATION_TYPES.CREATE_SALE: return saleController.create(args);
 
     case SALES_OPERATION_TYPES.READ_SALES: return saleController.getAll();

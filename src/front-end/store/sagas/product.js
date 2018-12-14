@@ -5,7 +5,7 @@ import { Creators as BrandCreators } from '../ducks/brand';
 
 import {
   CREATE_PRODUCT,
-  READ_PRODUCT,
+  READ_PRODUCTS,
   UPDATE_PRODUCT,
   DELETE_PRODUCT,
 } from '../../../back-end/events-handlers/product/types';
@@ -90,7 +90,7 @@ const parseProduct = (product: Object): Object => ({
 
 export function* getAllProducts() {
   try {
-    ipcRenderer.send(OPERATION_REQUEST, PRODUCT, READ_PRODUCT, EVENT_TAGS.GET_ALL_PRODUCTS);
+    ipcRenderer.send(OPERATION_REQUEST, PRODUCT, READ_PRODUCTS, EVENT_TAGS.GET_ALL_PRODUCTS);
     const { result } = yield handleEventSubscription(EVENT_TAGS.GET_ALL_PRODUCTS);
     handleEventUnsubscription(EVENT_TAGS.GET_ALL_PRODUCTS);
 
