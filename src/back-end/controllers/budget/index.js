@@ -14,7 +14,7 @@ exports.readAll = async () => {
   try {
     return await Budget.findAll({ raw: true, order: [['updatedAt', 'DESC']] });
   } catch (err) {
-    return err;
+    return [];
   }
 };
 

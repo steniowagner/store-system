@@ -4,7 +4,7 @@ exports.getAllBrands = async () => {
   try {
     return await Brand.findAll({ raw: true });
   } catch (err) {
-    return err;
+    return [];
   }
 };
 

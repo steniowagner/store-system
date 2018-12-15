@@ -18,7 +18,7 @@ exports.getAll = async () => {
       raw: true,
     });
   } catch (err) {
-    return err;
+    return [];
   }
 };
 

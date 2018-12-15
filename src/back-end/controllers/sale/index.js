@@ -14,7 +14,7 @@ exports.getAll = async () => {
   try {
     return await Sale.findAll({ raw: true, order: [['updatedAt', 'DESC']] });
   } catch (err) {
-    return err;
+    return [];
   }
 };
 
