@@ -50,9 +50,9 @@ export function* editCustomer(action) {
   try {
     const { customer } = action.payload;
 
-    const result = yield call(execRequest, CUSTOMER, UPDATE_CUSTOMER, EVENT_TAGS.UPDATE_CUSTOMER, customer);
+    yield call(execRequest, CUSTOMER, UPDATE_CUSTOMER, EVENT_TAGS.UPDATE_CUSTOMER, customer);
 
-    yield put(CustomerCreators.editCustomerSuccess(result));
+    yield put(CustomerCreators.editCustomerSuccess(customer));
   } catch (err) {
     yield put(CustomerCreators.editCustomerFailure(err.message));
   }

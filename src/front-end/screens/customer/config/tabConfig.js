@@ -3,10 +3,10 @@ const tabConfig = [{
   dataField: 'name',
 }, {
   columnTitle: 'CPF',
-  dataField: 'cpf',
+  dataField: 'cpfText',
 }, {
   columnTitle: 'RG',
-  dataField: 'rg',
+  dataField: 'rgText',
 }];
 
 export default tabConfig;

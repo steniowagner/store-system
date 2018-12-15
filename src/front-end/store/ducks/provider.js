@@ -85,6 +85,9 @@ export const Creators = {
   }),
 };
 
+const parseProvider = provider => ({ ...provider, addressText: provider.address || '-' });
+const parseProvidersToTableView = providers => providers.map(provider => parseProvider(provider));
+
 const provider = (state = INITIAL_STATE, { payload, type }) => {
   switch (type) {
     case Types.CREATE_REQUEST:
@@ -97,8 +100,8 @@ const provider = (state = INITIAL_STATE, { payload, type }) => {
     case Types.CREATE_SUCCESS:
       return {
         ...state,
+        data: parseProvidersToTableView([payload.provider, ...state.data]),
         message: payload.message,
-        data: [payload.provider, ...state.data],
       };
 
     case Types.CREATE_FAILURE:
@@ -117,8 +120,8 @@ const provider = (state = INITIAL_STATE, { payload, type }) => {
     case Types.GET_ALL_SUCCESS:
       return {
         ...state,
+        data: parseProvidersToTableView(payload.providers),
         message: payload.message,
-        data: [...payload.providers],
       };
 
     case Types.GET_ALL_FAILURE:
@@ -138,7 +141,7 @@ const provider = (state = INITIAL_STATE, { payload, type }) => {
       return {
         ...state,
         message: payload.message,
-        data: state.data.map(item => (item.id === payload.providerEdited.id ? payload.providerEdited : item)),
+        data: state.data.map(providerItem => (providerItem.id === payload.providerEdited.id ? parseProvider(payload.providerEdited) : providerItem)),
       };
 
     case Types.EDIT_REQUEST_FAILURE:

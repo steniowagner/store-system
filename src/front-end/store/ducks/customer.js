@@ -60,9 +60,9 @@ export const Creators = {
     payload: { customer },
   }),
 
-  editCustomerSuccess: ({ customerEdited, index }) => ({
+  editCustomerSuccess: customerEdited => ({
     type: Types.EDIT_REQUEST_SUCCESS,
-    payload: { message: 'Cliente Editado com Sucesso', customerEdited, index },
+    payload: { message: 'Cliente Editado com Sucesso', customerEdited },
   }),
 
   editCustomerFailure: () => ({
@@ -86,6 +86,14 @@ export const Creators = {
   }),
 };
 
+const parseCustomer = customer => ({
+  ...customer,
+  cpfText: customer.cpf || '-',
+  rgText: customer.rg || '-',
+});
+
+const parseCustomersToTableView = customers => customers.map(customer => parseCustomer(customer));
+
 const customer = (state = INITIAL_STATE, { payload, type }) => {
   switch (type) {
     case Types.CREATE_REQUEST:
@@ -98,8 +106,8 @@ const customer = (state = INITIAL_STATE, { payload, type }) => {
     case Types.CREATE_SUCCESS:
       return {
         ...state,
+        data: parseCustomersToTableView([payload.customer, ...state.data]),
         message: payload.message,
-        data: [payload.customer, ...state.data],
         error: null,
       };
 
@@ -119,7 +127,7 @@ const customer = (state = INITIAL_STATE, { payload, type }) => {
     case Types.GET_ALL_SUCCESS:
       return {
         ...state,
-        data: [...payload.customers],
+        data: parseCustomersToTableView([...payload.customers]),
         error: null,
       };
 
@@ -140,7 +148,7 @@ const customer = (state = INITIAL_STATE, { payload, type }) => {
       return {
         ...state,
         message: payload.message,
-        data: Object.assign([], state.data, { [payload.index]: payload.customerEdited }),
+        data: state.data.map(customerItem => (customerItem.id === payload.customerEdited.id ? parseCustomer(payload.customerEdited) : customerItem)),
       };
 
     case Types.EDIT_REQUEST_FAILURE:

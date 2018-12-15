@@ -3,7 +3,7 @@ const tabConfig = [{
   dataField: 'name',
 }, {
   columnTitle: 'Endereço',
-  dataField: 'address',
+  dataField: 'addressText',
 }];
 
 export default tabConfig;
