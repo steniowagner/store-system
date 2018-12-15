@@ -11,12 +11,9 @@ import {
 } from '../../../back-end/events-handlers/product/types';
 
 import { INSERT_PRODUCT_STOCK } from '../../../back-end/events-handlers/stock/types';
-
-import { handleEventUnsubscription, handleEventSubscription } from './eventHandler';
-import { OPERATION_REQUEST, PRODUCT, STOCK } from '../../../common/entitiesTypes';
+import { PRODUCT, STOCK } from '../../../common/entitiesTypes';
+import execRequest from './execRequest';
 import { createBrands } from './brand';
-
-const { ipcRenderer } = window.require('electron');
 
 const EVENT_TAGS = {
   INSERT_PRODUCT_IN_STOCK_PRODUCT: 'PRODUCT_INSERT_PRODUCT_IN_STOCK',
@@ -32,16 +29,15 @@ function* handleCreateBrand({ brandsCreated, brand }) {
   return id;
 }
 
-const handleInsertProductStock = ({ minStockQuantity, stockQuantity }, ProductId) => {
+function* handleInsertProductStock({ minStockQuantity, stockQuantity }, ProductId) {
   const productInfo = {
     minStockQuantity,
     stockQuantity,
     ProductId,
   };
 
-  ipcRenderer.send(OPERATION_REQUEST, STOCK, INSERT_PRODUCT_STOCK, EVENT_TAGS.INSERT_PRODUCT_IN_STOCK_PRODUCT, productInfo);
-  handleEventUnsubscription(EVENT_TAGS.INSERT_PRODUCT_IN_STOCK_PRODUCT);
-};
+  yield call(execRequest, STOCK, INSERT_PRODUCT_STOCK, EVENT_TAGS.INSERT_PRODUCT_IN_STOCK_PRODUCT, productInfo);
+}
 
 export function* createProduct(action) {
   try {
@@ -58,9 +54,7 @@ export function* createProduct(action) {
       BrandId,
     };
 
-    ipcRenderer.send(OPERATION_REQUEST, PRODUCT, CREATE_PRODUCT, EVENT_TAGS.PRODUCT_CREATE, newProductData);
-    const { result } = yield handleEventSubscription(EVENT_TAGS.PRODUCT_CREATE);
-    handleEventUnsubscription(EVENT_TAGS.PRODUCT_CREATE);
+    const result = yield call(execRequest, PRODUCT, CREATE_PRODUCT, EVENT_TAGS.PRODUCT_CREATE, newProductData);
 
     yield call(handleInsertProductStock, args, result);
 
@@ -90,9 +84,7 @@ const parseProduct = (product: Object): Object => ({
 
 export function* getAllProducts() {
   try {
-    ipcRenderer.send(OPERATION_REQUEST, PRODUCT, READ_PRODUCTS, EVENT_TAGS.GET_ALL_PRODUCTS);
-    const { result } = yield handleEventSubscription(EVENT_TAGS.GET_ALL_PRODUCTS);
-    handleEventUnsubscription(EVENT_TAGS.GET_ALL_PRODUCTS);
+    const result = yield call(execRequest, PRODUCT, READ_PRODUCTS, EVENT_TAGS.GET_ALL_PRODUCTS);
 
     const allProducts = result.map(product => parseProduct(product));
 
@@ -114,9 +106,7 @@ export function* editProduct(action) {
       BrandId,
     };
 
-    ipcRenderer.send(OPERATION_REQUEST, PRODUCT, UPDATE_PRODUCT, EVENT_TAGS.EDIT_PRODUCT, productEdited);
-    yield handleEventSubscription(EVENT_TAGS.EDIT_PRODUCT);
-    handleEventUnsubscription(EVENT_TAGS.EDIT_PRODUCT);
+    yield call(execRequest, PRODUCT, UPDATE_PRODUCT, EVENT_TAGS.EDIT_PRODUCT, productEdited);
 
     yield put(ProductCreators.editProductSuccess(product));
     yield put(BrandCreators.getAllBrands());
@@ -129,10 +119,7 @@ export function* removeProduct(action) {
   try {
     const { id } = action.payload;
 
-    ipcRenderer.send(OPERATION_REQUEST, PRODUCT, DELETE_PRODUCT, EVENT_TAGS.REMOVE_PRODUCT, id);
-    yield handleEventSubscription(EVENT_TAGS.REMOVE_PRODUCT);
-    handleEventUnsubscription(EVENT_TAGS.REMOVE_PRODUCT);
-
+    yield call(execRequest, PRODUCT, DELETE_PRODUCT, EVENT_TAGS.REMOVE_PRODUCT, id);
     yield put(ProductCreators.removeProductSuccess(id));
   } catch (err) {
     yield put(ProductCreators.removeProductFailure(err.message));

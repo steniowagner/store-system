@@ -1,8 +1,7 @@
-import { put } from 'redux-saga/effects';
+import { call, put } from 'redux-saga/effects';
 
 import { Creators as AlertCreators } from '../ducks/alerts';
 import {
-  OPERATION_REQUEST,
   CUSTOMER,
   BUDGET,
   STOCK,
@@ -14,10 +13,8 @@ import { READ_STOCK } from '../../../back-end/events-handlers/stock/types';
 import { READ_SALES } from '../../../back-end/events-handlers/sale/types';
 import { READ } from '../../../back-end/events-handlers/customer/types';
 
-import { handleEventSubscription, handleEventUnsubscription } from './eventHandler';
 import { BUDGET_STATUS } from '../../screens/budget/components/BudgetStatus';
-
-const { ipcRenderer } = window.require('electron');
+import execRequest from './execRequest';
 
 const EVENT_TAGS = {
   READ_ALL_BUDGETS_OUTDATED: 'ALERTS_READ_ALL_BUDGETS_OUTDATED',
@@ -26,17 +23,9 @@ const EVENT_TAGS = {
   READ_ALL_SALES: 'ALERTS_READ_ALL_SALES',
 };
 
-function* getItems(entity, action, tag) {
-  ipcRenderer.send(OPERATION_REQUEST, entity, action, tag);
-  const { result } = yield handleEventSubscription(tag);
-  handleEventUnsubscription(tag);
-
-  return result;
-}
-
 export function* getNumberBudgetsOutOfDate() {
   try {
-    const budgets = yield getItems(BUDGET, READ_BUDGETS, EVENT_TAGS.READ_ALL_BUDGETS_OUTDATED);
+    const budgets = yield call(execRequest, BUDGET, READ_BUDGETS, EVENT_TAGS.READ_ALL_BUDGETS_OUTDATED);
     const numberBudgetsOutOfDate = budgets.reduce((total, { status }) => total + (status === BUDGET_STATUS.OUT_OF_TIME ? 1 : 0), 0);
 
     yield put(AlertCreators.getNumberBudgetsOutOfDateSuccess(numberBudgetsOutOfDate));
@@ -47,8 +36,8 @@ export function* getNumberBudgetsOutOfDate() {
 
 export function* getNumberCustomersInDebit() {
   try {
-    const customers = yield getItems(CUSTOMER, READ, EVENT_TAGS.READ_ALL_CUSTOMERS);
-    const sales = yield getItems(SALE, READ_SALES, EVENT_TAGS.READ_ALL_SALES);
+    const customers = yield call(execRequest, CUSTOMER, READ, EVENT_TAGS.READ_ALL_CUSTOMERS);
+    const sales = yield call(execRequest, SALE, READ_SALES, EVENT_TAGS.READ_ALL_SALES);
 
     let numberCustomersInDebit = 0;
 
@@ -67,7 +56,7 @@ export function* getNumberCustomersInDebit() {
 
 export function* getNumberStockUnderMin() {
   try {
-    const productsInStock = yield getItems(STOCK, READ_STOCK, EVENT_TAGS.READ_ALL_STOCK_UNDER_MIN);
+    const productsInStock = yield call(execRequest, STOCK, READ_STOCK, EVENT_TAGS.READ_ALL_STOCK_UNDER_MIN);
     const numberStockUnderMin = productsInStock.reduce((total, { minStockQuantity, stockQuantity }) => total + (stockQuantity < minStockQuantity ? 1 : 0), 0);
 
     yield put(AlertCreators.getNumberStockUnderMinSuccess(numberStockUnderMin));

@@ -1,4 +1,4 @@
-import { put } from 'redux-saga/effects';
+import { call, put } from 'redux-saga/effects';
 
 import { Creators as CustomerCreators } from '../ducks/customer';
 
@@ -9,10 +9,8 @@ import {
   DELETE_CUSTOMER,
 } from '../../../back-end/events-handlers/customer/types';
 
-import { handleEventUnsubscription, handleEventSubscription } from './eventHandler';
-import { OPERATION_REQUEST, CUSTOMER } from '../../../common/entitiesTypes';
-
-const { ipcRenderer } = window.require('electron');
+import { CUSTOMER } from '../../../common/entitiesTypes';
+import execRequest from './execRequest';
 
 const EVENT_TAGS = {
   READ_ALL: 'CUSTOMERS_READ_ALL',
@@ -25,9 +23,7 @@ export function* createCustomer(action) {
   try {
     const { args } = action;
 
-    ipcRenderer.send(OPERATION_REQUEST, CUSTOMER, CREATE_CUSTOMER, EVENT_TAGS.CREATE_CUSTOMER, args);
-    const { result } = yield handleEventSubscription(EVENT_TAGS.CREATE_CUSTOMER);
-    handleEventUnsubscription(EVENT_TAGS.CREATE_CUSTOMER);
+    const result = yield call(execRequest, CUSTOMER, CREATE_CUSTOMER, EVENT_TAGS.CREATE_CUSTOMER, args);
 
     const newCustomer = {
       ...args,
@@ -42,9 +38,7 @@ export function* createCustomer(action) {
 
 export function* getAllCustomers() {
   try {
-    ipcRenderer.send(OPERATION_REQUEST, CUSTOMER, READ_CUSTOMERS, EVENT_TAGS.READ_ALL);
-    const { result } = yield handleEventSubscription(EVENT_TAGS.READ_ALL);
-    handleEventUnsubscription(EVENT_TAGS.READ_ALL);
+    const result = yield call(execRequest, CUSTOMER, READ_CUSTOMERS, EVENT_TAGS.READ_ALL);
 
     yield put(CustomerCreators.getAllCustomersSuccess(result));
   } catch (err) {
@@ -56,9 +50,7 @@ export function* editCustomer(action) {
   try {
     const { customer } = action.payload;
 
-    ipcRenderer.send(OPERATION_REQUEST, CUSTOMER, UPDATE_CUSTOMER, EVENT_TAGS.UPDATE_CUSTOMER, customer);
-    const { result } = yield handleEventSubscription(EVENT_TAGS.UPDATE_CUSTOMER);
-    handleEventUnsubscription(EVENT_TAGS.UPDATE_CUSTOMER);
+    const result = yield call(execRequest, CUSTOMER, UPDATE_CUSTOMER, EVENT_TAGS.UPDATE_CUSTOMER, customer);
 
     yield put(CustomerCreators.editCustomerSuccess(result));
   } catch (err) {
@@ -70,10 +62,7 @@ export function* removeCustomer(action) {
   try {
     const { id } = action.payload;
 
-    ipcRenderer.send(OPERATION_REQUEST, CUSTOMER, DELETE_CUSTOMER, EVENT_TAGS.REMOVE_CUSTOMER, id);
-    yield handleEventSubscription(EVENT_TAGS.REMOVE_CUSTOMER);
-    handleEventUnsubscription(EVENT_TAGS.REMOVE_CUSTOMER);
-
+    yield call(execRequest, CUSTOMER, DELETE_CUSTOMER, EVENT_TAGS.REMOVE_CUSTOMER, id);
     yield put(CustomerCreators.removeCustomerSuccess(id));
   } catch (err) {
     yield put(CustomerCreators.removeCustomerFailure(err.message));

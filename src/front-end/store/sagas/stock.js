@@ -11,11 +11,9 @@ import {
   INSERT,
 } from '../../../back-end/events-handlers/stock/types';
 
-import { handleEventUnsubscription, handleEventSubscription } from './eventHandler';
-import { OPERATION_REQUEST, STOCK } from '../../../common/entitiesTypes';
+import { STOCK } from '../../../common/entitiesTypes';
 import { getNumberStockUnderMin } from './alerts';
-
-const { ipcRenderer } = window.require('electron');
+import execRequest from './execRequest';
 
 const EVENT_TAGS = {
   EDIT_SINGLE_PRODUCT_STOCK: 'STOCK_EDIT_SINGLE_PRODUCT',
@@ -27,9 +25,7 @@ const EVENT_TAGS = {
 
 export function* getStock() {
   try {
-    ipcRenderer.send(OPERATION_REQUEST, STOCK, READ_STOCK, EVENT_TAGS.STOCK_GET);
-    const { result } = yield handleEventSubscription(EVENT_TAGS.STOCK_GET);
-    handleEventUnsubscription(EVENT_TAGS.STOCK_GET);
+    const result = yield call(execRequest, STOCK, READ_STOCK, EVENT_TAGS.STOCK_GET);
 
     const stockProducts = result.map(product => ({
       ...product,
@@ -45,9 +41,7 @@ export function* getStock() {
 export function* insertProduct(action) {
   try {
     const { args } = action;
-    ipcRenderer.send(OPERATION_REQUEST, STOCK, INSERT, EVENT_TAGS.INSERT_PRODUCT_STOCK, args);
-    const { result } = yield handleEventSubscription(EVENT_TAGS.INSERT_PRODUCT_STOCK);
-    handleEventUnsubscription(EVENT_TAGS.INSERT_PRODUCT_STOCK);
+    const result = yield call(execRequest, STOCK, INSERT, EVENT_TAGS.INSERT_PRODUCT_STOCK, args);
 
     const productInfo = {
       ...args,
@@ -71,9 +65,7 @@ export function* editProductInStock(action) {
       id: productInfo.id,
     };
 
-    ipcRenderer.send(OPERATION_REQUEST, STOCK, UPDATE_PRODUCT_STOCK, EVENT_TAGS.EDIT_SINGLE_PRODUCT_STOCK, productEdited);
-    yield handleEventSubscription(EVENT_TAGS.EDIT_SINGLE_PRODUCT_STOCK);
-    handleEventUnsubscription(EVENT_TAGS.EDIT_SINGLE_PRODUCT_STOCK);
+    yield call(execRequest, STOCK, UPDATE_PRODUCT_STOCK, EVENT_TAGS.EDIT_SINGLE_PRODUCT_STOCK, productEdited);
 
     yield put(StockCreators.editStockSuccess(productInfo));
     yield call(getNumberStockUnderMin);
@@ -200,9 +192,7 @@ export function* editStockProducts(data, dataset, operationType) {
       stockUpdatedAfterOperation = [...stockWithoutDatasetProducts, ...returnProductsToStock(data.products, stock)];
     }
 
-    ipcRenderer.send(OPERATION_REQUEST, STOCK, UPDATE_PRODUCTS_STOCK, EVENT_TAGS.EDIT_PRODUCTS_STOCK, stockUpdatedAfterOperation);
-    yield handleEventSubscription(EVENT_TAGS.EDIT_PRODUCTS_STOCK);
-    handleEventUnsubscription(EVENT_TAGS.EDIT_PRODUCTS_STOCK);
+    yield call(execRequest, STOCK, UPDATE_PRODUCTS_STOCK, EVENT_TAGS.EDIT_PRODUCTS_STOCK, stockUpdatedAfterOperation);
 
     const stockUpdated = stock.map((stockItem) => {
       const stockItemUpdatedIndex = stockUpdatedAfterOperation.findIndex(stockItemUpdated => stockItemUpdated.id === stockItem.id);

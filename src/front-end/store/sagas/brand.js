@@ -1,13 +1,10 @@
-import { put } from 'redux-saga/effects';
+import { call, put } from 'redux-saga/effects';
 
 import { Creators as BrandCreators } from '../ducks/brand';
 
 import { READ_BRANDS, CREATE_BRANDS } from '../../../back-end/events-handlers/brand/types';
-
-import { handleEventUnsubscription, handleEventSubscription } from './eventHandler';
-import { OPERATION_REQUEST, BRAND } from '../../../common/entitiesTypes';
-
-const { ipcRenderer } = window.require('electron');
+import { BRAND } from '../../../common/entitiesTypes';
+import execRequest from './execRequest';
 
 const EVENT_TAGS = {
   CREATE_BRANDS: 'BRANDS_CREATE',
@@ -16,9 +13,7 @@ const EVENT_TAGS = {
 
 export function* getAllBrands() {
   try {
-    ipcRenderer.send(OPERATION_REQUEST, BRAND, READ_BRANDS, EVENT_TAGS.READ_ALL);
-    const { result } = yield handleEventSubscription(EVENT_TAGS.READ_ALL);
-    handleEventUnsubscription(EVENT_TAGS.READ_ALL);
+    const result = yield call(execRequest, BRAND, READ_BRANDS, EVENT_TAGS.READ_ALL);
 
     yield put(BrandCreators.getAllBrandsSuccess(result));
   } catch (err) {
@@ -33,9 +28,7 @@ export function* createBrands(brandsCreated, brandSelected) {
       brandsCreated,
     };
 
-    ipcRenderer.send(OPERATION_REQUEST, BRAND, CREATE_BRANDS, EVENT_TAGS.CREATE_BRANDS, params);
-    const { result } = yield handleEventSubscription(EVENT_TAGS.CREATE_BRANDS);
-    handleEventUnsubscription(EVENT_TAGS.CREATE_BRANDS);
+    const result = yield call(execRequest, BRAND, CREATE_BRANDS, EVENT_TAGS.CREATE_BRANDS, params);
 
     return result;
   } catch (err) {

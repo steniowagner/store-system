@@ -2,12 +2,10 @@
 import { call, put } from 'redux-saga/effects';
 import { Creators as CustomerDebitsCreators } from '../ducks/customerDebits';
 
-import { handleEventUnsubscription, handleEventSubscription } from './eventHandler';
 import { READ_SALES, UPDATE_SALE } from '../../../back-end/events-handlers/sale/types';
-import { OPERATION_REQUEST, SALE } from '../../../common/entitiesTypes';
+import { SALE } from '../../../common/entitiesTypes';
 import { getNumberCustomersInDebit } from './alerts';
-
-const { ipcRenderer } = window.require('electron');
+import execRequest from './execRequest';
 
 const EVENT_TAGS = {
   GET_ALL_DEBITS: 'CUSTOMER_GET_ALL_DEBITS',
@@ -18,10 +16,7 @@ export function* getCustomerDebits(action) {
   try {
     const { id } = action.payload;
 
-    ipcRenderer.send(OPERATION_REQUEST, SALE, READ_SALES, EVENT_TAGS.GET_ALL_DEBITS);
-    const { result } = yield handleEventSubscription(EVENT_TAGS.GET_ALL_DEBITS);
-    handleEventUnsubscription(EVENT_TAGS.GET_ALL_DEBITS);
-
+    const result = yield call(execRequest, SALE, READ_SALES, EVENT_TAGS.GET_ALL_DEBITS);
     const userSalesWithDebits = result.filter(sale => (sale.customer.id === id && sale.inDebit > 0));
 
     yield put(CustomerDebitsCreators.getDebitsSuccess(userSalesWithDebits));
@@ -39,10 +34,7 @@ export function* removeDebit(action) {
       inDebit: 0,
     };
 
-    ipcRenderer.send(OPERATION_REQUEST, SALE, UPDATE_SALE, EVENT_TAGS.REMOVE_DEBIT, saleWithoutDebit);
-    yield handleEventSubscription(EVENT_TAGS.REMOVE_DEBIT);
-    handleEventUnsubscription(EVENT_TAGS.REMOVE_DEBIT);
-
+    yield call(execRequest, SALE, UPDATE_SALE, EVENT_TAGS.REMOVE_DEBIT, saleWithoutDebit);
     yield put(CustomerDebitsCreators.removeDebitSuccess(sale.id));
     yield call(getNumberCustomersInDebit);
   } catch (err) {

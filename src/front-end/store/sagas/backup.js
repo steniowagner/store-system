@@ -14,26 +14,16 @@ import { Creators as SaleCreators } from '../ducks/sale';
 import { Creators as UserCreators } from '../ducks/user';
 
 import { IMPORT_DATA, EXPORT_DATA } from '../../../back-end/events-handlers/backup/types';
-import { handleEventUnsubscription, handleEventSubscription } from './eventHandler';
-import { OPERATION_REQUEST, BACKUP } from '../../../common/entitiesTypes';
+import { BACKUP } from '../../../common/entitiesTypes';
+import execRequest from './execRequest';
 
-const { ipcRenderer, remote } = window.require('electron');
-const { dialog } = remote;
-
+const { dialog } = window.require('electron').remote;
 const fs = window.require('fs');
 
 const EVENT_TAGS = {
   EXPORT_DATA: 'EXPORT_DATA',
   IMPORT_DATA: 'IMPORT_DATA',
 };
-
-function* execRequest(entity, action, tag, args) {
-  ipcRenderer.send(OPERATION_REQUEST, entity, action, tag, args);
-  const { result } = yield handleEventSubscription(tag);
-  handleEventUnsubscription(tag);
-
-  return result;
-}
 
 function* updateStore() {
   yield put(BrandCreators.getAllBrands());
@@ -80,7 +70,7 @@ export function* startBackup() {
   try {
     const pathToFile = yield call(getPathToWriteFile);
 
-    yield put(BackupCreators.backupStart());
+    yield put(BackupCreators.exportBackupFile());
 
     const fileContent = yield call(execRequest, BACKUP, EXPORT_DATA, EVENT_TAGS.EXPORT_DATA);
 
@@ -88,9 +78,9 @@ export function* startBackup() {
 
     yield delay(1500); // To make the thing more realistic, :D
 
-    yield put(BackupCreators.backupSuccess());
+    yield put(BackupCreators.exportBackupSuccess());
   } catch (err) {
-    yield put(BackupCreators.backupFailure());
+    yield put(BackupCreators.exportBackupFailure());
   }
 }
 

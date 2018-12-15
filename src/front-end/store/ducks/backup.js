@@ -25,17 +25,17 @@ export const Creators = {
     type: Types.BACKUP_REQUEST,
   }),
 
-  backupStart: () => ({
+  exportBackupFileStart: () => ({
     type: Types.BACKUP_START,
     payload: { message: 'Backup em andamento...' },
   }),
 
-  backupSuccess: () => ({
+  exportBackupSuccess: () => ({
     type: Types.BACKUP_SUCCESS,
     payload: { message: 'Backup Realizado com Sucesso.' },
   }),
 
-  backupFailure: () => ({
+  exportBackupFailure: () => ({
     type: Types.BACKUP_FAILURE,
     payload: { error: 'Houve um erro ao realizar o Backup.' },
   }),

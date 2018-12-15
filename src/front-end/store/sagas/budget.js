@@ -15,22 +15,20 @@ import {
 import { TAKE_AWAY_PRODUCTS_STOCK, UPDATE_PRODUCTS_STOCK, RETURN_PRODUTS_STOCK } from '../../../back-end/events-handlers/stock/types';
 
 import { BUDGET_STATUS } from '../../screens/budget/components/BudgetStatus';
-import { OPERATION_REQUEST, BUDGET } from '../../../common/entitiesTypes';
-import { handleEventSubscription, handleEventUnsubscription } from './eventHandler';
+import { BUDGET } from '../../../common/entitiesTypes';
 
 import { getNumberBudgetsOutOfDate } from './alerts';
 import { editStockProducts } from './stock';
+import execRequest from './execRequest';
 import { createSale } from './sale';
-
-const { ipcRenderer } = window.require('electron');
 
 const EVENT_TAGS = {
   CONFIRM_PAYMENT_BUDGET: 'BUDGET_CONFIRM_PAYMENT',
   SET_OUTDATED_BUDGET: 'BUDGET_SET_OUTDATED',
-  READ_ALL: 'BUDGET_READ_ALL',
   CREATE_BUDGET: 'BUDGET_CREATE',
   UPDATE_BUDGET: 'BUDGET_UPDATE',
   REMOVE_BUDGET: 'BUDGET_REMOVE',
+  READ_ALL: 'BUDGET_READ_ALL',
 };
 
 const parseBudgetToTableView = (budget: Object): Object => ({
@@ -55,9 +53,7 @@ export function* createBudget(action) {
       salesman: 'steniowagner',
     };
 
-    ipcRenderer.send(OPERATION_REQUEST, BUDGET, CREATE_BUDGET, EVENT_TAGS.CREATE_BUDGET, params);
-    const { result } = yield handleEventSubscription(EVENT_TAGS.CREATE_BUDGET);
-    handleEventUnsubscription(EVENT_TAGS.CREATE_BUDGET);
+    const result = yield call(execRequest, BUDGET, CREATE_BUDGET, EVENT_TAGS.CREATE_BUDGET, params);
 
     const newBudget = {
       ...parseBudgetToTableView(params),
@@ -76,9 +72,7 @@ export function* getAllBudgets() {
   try {
     moment.locale('pt-br');
 
-    ipcRenderer.send(OPERATION_REQUEST, BUDGET, READ_BUDGETS, EVENT_TAGS.READ_ALL);
-    const { result } = yield handleEventSubscription(EVENT_TAGS.READ_ALL);
-    handleEventUnsubscription(EVENT_TAGS.READ_ALL);
+    const result = yield call(execRequest, BUDGET, READ_BUDGETS, EVENT_TAGS.READ_ALL);
 
     const allBudgets = result.map(budget => ({
       ...parseBudgetToTableView(budget),
@@ -105,11 +99,10 @@ export function* editBudget(action) {
       total: parseFloat(budget.total),
     };
 
-    ipcRenderer.send(OPERATION_REQUEST, BUDGET, UPDATE_BUDGET, EVENT_TAGS.UPDATE_BUDGET, params);
-    yield handleEventSubscription(EVENT_TAGS.UPDATE_BUDGET);
-    handleEventUnsubscription(EVENT_TAGS.UPDATE_BUDGET);
+    yield call(execRequest, BUDGET, UPDATE_BUDGET, EVENT_TAGS.UPDATE_BUDGET, params);
 
     const budgetUpdated = parseBudgetToTableView(budget);
+
     yield put(BudgetCreators.editBudgetSuccess(budgetUpdated));
   } catch (err) {
     yield put(BudgetCreators.editBudgetFailure());
@@ -122,11 +115,9 @@ export function* deleteBudget(action) {
 
     const allBudgets = yield select(state => state.budget.data);
     const budgetRemoved = allBudgets.filter(budget => budget.id === id)[0];
-    yield call(editStockProducts, budgetRemoved, [], RETURN_PRODUTS_STOCK);
 
-    ipcRenderer.send(OPERATION_REQUEST, BUDGET, DELETE_BUDGET, EVENT_TAGS.REMOVE_BUDGET, id);
-    yield handleEventSubscription(EVENT_TAGS.REMOVE_BUDGET);
-    handleEventUnsubscription(EVENT_TAGS.REMOVE_BUDGET);
+    yield call(editStockProducts, budgetRemoved, [], RETURN_PRODUTS_STOCK);
+    yield call(execRequest, BUDGET, DELETE_BUDGET, EVENT_TAGS.REMOVE_BUDGET, id);
 
     yield put(BudgetCreators.deleteBudgetSuccess(id));
     yield call(getNumberBudgetsOutOfDate);
@@ -153,10 +144,7 @@ export function* confirmBudgetPayment(action) {
       total: parseFloat(budget.total),
     };
 
-    ipcRenderer.send(OPERATION_REQUEST, BUDGET, UPDATE_BUDGET, EVENT_TAGS.CONFIRM_PAYMENT_BUDGET, params);
-    handleEventUnsubscription(EVENT_TAGS.CONFIRM_PAYMENT_BUDGET);
-
-    yield handleEventSubscription(EVENT_TAGS.CONFIRM_PAYMENT_BUDGET);
+    yield call(execRequest, BUDGET, UPDATE_BUDGET, EVENT_TAGS.CONFIRM_PAYMENT_BUDGET, params);
     yield put(BudgetCreators.confirmBudgetPaymentSuccess(budget.id));
     yield call(getNumberBudgetsOutOfDate);
   } catch (err) {
@@ -181,19 +169,17 @@ const getOutdatedBudgets = (budgets) => {
 
 export function* setOutdatedBudgets() {
   try {
-    ipcRenderer.send(OPERATION_REQUEST, BUDGET, READ_BUDGETS, EVENT_TAGS.SET_OUTDATED_BUDGET);
-    const { result } = yield handleEventSubscription(EVENT_TAGS.SET_OUTDATED_BUDGET);
-    handleEventUnsubscription(EVENT_TAGS.SET_OUTDATED_BUDGET);
+    const result = yield call(execRequest, BUDGET, READ_BUDGETS, EVENT_TAGS.SET_OUTDATED_BUDGET);
 
     const outdatedBudgets = getOutdatedBudgets(result);
 
-    outdatedBudgets.forEach((outdatedBudget) => {
+    outdatedBudgets.forEach(function* setOutdated(outdatedBudget) {
       const budgetOutdated = {
         ...outdatedBudget,
         status: BUDGET_STATUS.OUT_OF_TIME,
       };
 
-      ipcRenderer.send(OPERATION_REQUEST, BUDGET, UPDATE_BUDGET, EVENT_TAGS.UPDATE_BUDGET, budgetOutdated);
+      yield call(execRequest, BUDGET, UPDATE_BUDGET, EVENT_TAGS.UPDATE_BUDGET, budgetOutdated);
     });
   } catch (err) {
     yield put(BudgetCreators.setOutdatedBudgetsFailure());

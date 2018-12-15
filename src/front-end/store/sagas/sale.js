@@ -9,13 +9,11 @@ import { Creators as SaleCreators } from '../ducks/sale';
 
 import { UPDATE_PRODUCTS_STOCK, TAKE_AWAY_PRODUCTS_STOCK } from '../../../back-end/events-handlers/stock/types';
 import { CREATE_SALE, UPDATE_SALE, READ_SALES } from '../../../back-end/events-handlers/sale/types';
-import { handleEventUnsubscription, handleEventSubscription } from './eventHandler';
-import { OPERATION_REQUEST, SALE } from '../../../common/entitiesTypes';
-import { onAddSaleOperation, onEditSaleOperation } from './cashier';
 import { getNumberCustomersInDebit, getNumberStockUnderMin } from './alerts';
+import { onAddSaleOperation, onEditSaleOperation } from './cashier';
+import { SALE } from '../../../common/entitiesTypes';
 import { editStockProducts } from './stock';
-
-const { ipcRenderer } = window.require('electron');
+import execRequest from './execRequest';
 
 const parseSaleToTableView = (sale: Object): Object => ({
   ...sale,
@@ -46,9 +44,7 @@ export function* createSale(action) {
       salesman: 'steniowagner',
     };
 
-    ipcRenderer.send(OPERATION_REQUEST, SALE, CREATE_SALE, EVENT_TAGS.SALE_CREATE, params);
-    const { result } = yield handleEventSubscription(EVENT_TAGS.SALE_CREATE);
-    handleEventUnsubscription(EVENT_TAGS.SALE_CREATE);
+    const result = yield call(execRequest, SALE, CREATE_SALE, EVENT_TAGS.SALE_CREATE, params);
 
     const newSale = {
       ...parseSaleToTableView(params),
@@ -59,6 +55,7 @@ export function* createSale(action) {
     yield call(onAddSaleOperation, newSale);
     yield call(getNumberCustomersInDebit);
     yield call(getNumberStockUnderMin);
+
     const { createdFromBudget } = args;
 
     if (!createdFromBudget) {
@@ -75,9 +72,7 @@ export function* getAllSales() {
   try {
     moment.locale('pt-br');
 
-    ipcRenderer.send(OPERATION_REQUEST, SALE, READ_SALES, EVENT_TAGS.SALES_GET_ALL);
-    const { result } = yield handleEventSubscription(EVENT_TAGS.SALES_GET_ALL);
-    handleEventUnsubscription(EVENT_TAGS.SALES_GET_ALL);
+    const result = yield execRequest(SALE, READ_SALES, EVENT_TAGS.SALES_GET_ALL);
 
     const allSales = result.map(sale => ({
       ...parseSaleToTableView(sale),
@@ -105,9 +100,7 @@ export function* editSale(action) {
       salesman: 'steniowagner',
     };
 
-    ipcRenderer.send(OPERATION_REQUEST, SALE, UPDATE_SALE, EVENT_TAGS.EDIT_SALE, params);
-    yield handleEventSubscription(EVENT_TAGS.EDIT_SALE);
-    handleEventUnsubscription(EVENT_TAGS.EDIT_SALE);
+    yield call(execRequest, SALE, UPDATE_SALE, EVENT_TAGS.EDIT_SALE, params);
 
     const { subtotal, total } = sale;
 
