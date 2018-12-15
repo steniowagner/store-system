@@ -108,7 +108,16 @@ class CashieDetail extends Component<Props, State> {
   renderTable = (operations: string): Object => {
     const { currentPage } = this.state;
 
-    const dataset = (operations ? JSON.parse(operations) : []);
+    const parsedOperations = (operations ? JSON.parse(operations) : []);
+
+    const dataset = parsedOperations.map((operation) => {
+      const splittedOperation = operation.dateToShow.split(' ');
+
+      return {
+        ...operation,
+        timestampText: splittedOperation[splittedOperation.length - 1],
+      };
+    });
 
     return (
       <Table
