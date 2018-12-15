@@ -1,4 +1,5 @@
 import { call, put } from 'redux-saga/effects';
+import { delay } from 'redux-saga';
 
 import { Creators as CustomerCreators } from '../ducks/customer';
 import { Creators as ProviderCreators } from '../ducks/provider';
@@ -34,36 +35,6 @@ function* execRequest(entity, action, tag, args) {
   return result;
 }
 
-const saveFile = (backupFile) => {
-  dialog.showSaveDialog((fileName) => {
-    if (!fileName) {
-      return;
-    }
-
-    fs.writeFile(fileName, JSON.stringify({ backupFile }), err => console.log(err));
-  });
-};
-
-const importFile = () => {
-  const readFilehandler = new Promise((resolve, reject) => {
-    dialog.showOpenDialog((fileNames) => {
-      if (!fileNames) {
-        return;
-      }
-
-      fs.readFile(fileNames[0], 'utf-8', (err, data) => {
-        if (err) {
-          reject(err);
-        }
-
-        resolve(data);
-      });
-    });
-  });
-
-  return readFilehandler;
-};
-
 function* updateStore() {
   yield put(BrandCreators.getAllBrands());
   yield put(ProductCreators.getAllProducts());
@@ -79,23 +50,93 @@ function* updateStore() {
   yield put(AlertsCreators.getNumberStockUnderMin());
 }
 
+const getPathToWriteFile = () => {
+  const pathToWrite = new Promise((resolve) => {
+    dialog.showSaveDialog((fileName) => {
+      if (!fileName) {
+        return;
+      }
+
+      resolve(fileName);
+    });
+  });
+
+  return pathToWrite;
+};
+
+const writeFile = (pathToFile, fileContent) => {
+  return new Promise((resolve, reject) => {
+    fs.writeFile(pathToFile, JSON.stringify({ backupFile: fileContent }), (err) => {
+      if (err) {
+        reject(err);
+      }
+
+      resolve();
+    });
+  });
+};
+
 export function* startBackup() {
   try {
-    const backupFile = yield call(execRequest, BACKUP, EXPORT_DATA, EVENT_TAGS.EXPORT_DATA);
-    saveFile(backupFile);
+    const pathToFile = yield call(getPathToWriteFile);
+
+    yield put(BackupCreators.backupStart());
+
+    const fileContent = yield call(execRequest, BACKUP, EXPORT_DATA, EVENT_TAGS.EXPORT_DATA);
+
+    yield call(writeFile, pathToFile, fileContent);
+
+    yield delay(1500); // To make the thing more realistic, :D
+
+    yield put(BackupCreators.backupSuccess());
   } catch (err) {
     yield put(BackupCreators.backupFailure());
   }
 }
 
+const getPathToReadFile = () => {
+  const pathToRead = new Promise((resolve) => {
+    dialog.showOpenDialog((fileNames) => {
+      if (!fileNames) {
+        return;
+      }
+
+      resolve(fileNames[0]);
+    });
+  });
+
+  return pathToRead;
+};
+
+const readFile = (pathToFile) => {
+  const fileContent = new Promise((resolve, reject) => {
+    fs.readFile(pathToFile, 'utf-8', (err, data) => {
+      if (err) {
+        reject(err);
+      }
+
+      resolve(data);
+    });
+  });
+
+  return fileContent;
+};
+
 export function* importBackupFile() {
   try {
-    const fileContent = yield importFile();
+    const pathToFile = yield call(getPathToReadFile);
+
+    yield put(BackupCreators.importBackupFileStart());
+
+    const fileContent = yield call(readFile, pathToFile);
 
     const { backupFile } = JSON.parse(fileContent);
 
     yield call(execRequest, BACKUP, IMPORT_DATA, EVENT_TAGS.IMPORT_DATA, backupFile);
     yield call(updateStore);
+
+    yield delay(1500); // To make the thing more realistic, :D
+    yield put(BackupCreators.importBackupFileSuccess());
   } catch (err) {
     yield put(BackupCreators.importBackupFileFailure());
   }

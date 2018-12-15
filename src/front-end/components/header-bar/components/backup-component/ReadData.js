@@ -31,7 +31,7 @@ class ReadData extends Component {
         color="primary"
       >
         <AttachFileIcon />
-        Ler os dados de um arquivo backup
+        Importar os dados de um arquivo backup
       </Button>
     );
   }
