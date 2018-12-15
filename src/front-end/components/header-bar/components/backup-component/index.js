@@ -5,6 +5,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
+import ErrorOutline from '@material-ui/icons/ErrorOutline';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import IconButton from '@material-ui/core/IconButton';
 import CloudIcon from '@material-ui/icons/Backup';
@@ -18,15 +19,8 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Creators as BackupCreators } from '../../../../store/ducks/backup';
 
-import SaveData from './SaveData';
-import ReadData from './ReadData';
-
-const FilePathButtonWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  margin-top: 24px;
-  margin-right: 16px;
-`;
+import { TYPES, CONFIG } from './buttons-config';
+import ButtonAction from './ButtonAction';
 
 const MessageWrapper = styled.div`
   width: 100%;
@@ -51,7 +45,19 @@ const CheckCircleOutlineIcon = styled(({ ...props }) => (
   />
 ))`
   color: ${({ theme }) => theme.colors.success};
-  margin-left: 18px;
+  margin-left: -12px;
+`;
+
+const ErrorOutlineIcon = styled(({ ...props }) => (
+  <ErrorOutline
+    {...props}
+    style={{
+      fontSize: 36,
+    }}
+  />
+))`
+  color: ${({ theme }) => theme.colors.danger};
+  margin-left: -12px;
 `;
 
 class Backup extends Component {
@@ -91,28 +97,38 @@ class Backup extends Component {
   );
 
   renderSaveDataButton = (): Object => {
+    const { exportBackupFile, backup } = this.props;
+    const config = CONFIG[TYPES.EXPORT];
+
     return (
-      <FilePathButtonWrapper>
-        <SaveData />
-      </FilePathButtonWrapper>
+      <ButtonAction
+        isDisabled={backup.loading}
+        action={exportBackupFile}
+        {...config}
+      />
     );
   };
 
   renderReadDataButton = (): Object => {
+    const { importBackupFile, backup } = this.props;
+    const config = CONFIG[TYPES.IMPORT];
+
     return (
-      <FilePathButtonWrapper>
-        <ReadData />
-        <CheckCircleOutlineIcon />
-      </FilePathButtonWrapper>
+      <ButtonAction
+        isDisabled={backup.loading}
+        action={importBackupFile}
+        {...config}
+      />
     );
   };
 
   renderActionButtons = (): Object => {
-    const { resetState } = this.props;
+    const { resetState, backup } = this.props;
 
     return (
       <DialogActions>
         <Button
+          disabled={backup.loading}
           onClick={() => {
             this.onToggleBackupDialog();
             resetState();
@@ -129,12 +145,17 @@ class Backup extends Component {
     const { backup } = this.props;
     const { loading, message, error } = backup;
 
+    const isOperationSuccessful = (!loading && !!message && !error);
+    const messageContent = (error || message);
+
     return (
       <MessageWrapper>
         <Message>
-          {message}
+          {messageContent}
         </Message>
         {loading && <CircularProgress />}
+        {error && <ErrorOutlineIcon />}
+        {isOperationSuccessful && <CheckCircleOutlineIcon />}
       </MessageWrapper>
     );
   }

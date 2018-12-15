@@ -21,7 +21,7 @@ const INITIAL_STATE = Immutable({
 });
 
 export const Creators = {
-  backupRequest: () => ({
+  exportBackupFile: () => ({
     type: Types.BACKUP_REQUEST,
   }),
 
@@ -69,7 +69,7 @@ const backup = (state = INITIAL_STATE, { payload, type }) => {
   switch (type) {
     case Types.BACKUP_REQUEST:
       return {
-        ...state,
+        ...INITIAL_STATE,
       };
 
     case Types.BACKUP_START:
@@ -88,14 +88,14 @@ const backup = (state = INITIAL_STATE, { payload, type }) => {
 
     case Types.BACKUP_FAILURE:
       return {
-        ...state,
         error: payload.error,
         loading: false,
+        message: '',
       };
 
     case Types.IMPORT_BACKUP_FILE_REQUEST:
       return {
-        ...state,
+        ...INITIAL_STATE,
       };
 
     case Types.IMPORT_BACKUP_FILE_START:
@@ -103,7 +103,6 @@ const backup = (state = INITIAL_STATE, { payload, type }) => {
         ...state,
         message: payload.message,
         loading: true,
-        error: '',
       };
 
     case Types.IMPORT_BACKUP_FILE_SUCCESS:
@@ -115,9 +114,9 @@ const backup = (state = INITIAL_STATE, { payload, type }) => {
 
     case Types.IMPORT_BACKUP_FILE_FAILURE:
       return {
-        ...state,
         error: payload.error,
         loading: false,
+        message: '',
       };
 
     case Types.RESET_STATE:

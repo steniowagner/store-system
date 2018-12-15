@@ -129,7 +129,6 @@ export function* importBackupFile() {
     yield put(BackupCreators.importBackupFileStart());
 
     const fileContent = yield call(readFile, pathToFile);
-
     const { backupFile } = JSON.parse(fileContent);
 
     yield call(execRequest, BACKUP, IMPORT_DATA, EVENT_TAGS.IMPORT_DATA, backupFile);
