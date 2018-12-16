@@ -19,7 +19,8 @@ import ExpandLess from '@material-ui/icons/ExpandLess';
 
 import styled from 'styled-components';
 
-import { filterList, FILTER_TYPES } from '../../utils/filter';
+import { filterList, FILTER_TYPES } from '../../../utils/filter';
+import DateFilterDialog from './components/DateFilterDialog';
 
 const Container = styled.div`
   display: flex;
@@ -91,6 +92,7 @@ type Props = {
 };
 
 type State = {
+  isChooseDateDialogOpen: boolean,
   filterButtonLabel: string,
   filterSelected: string,
   filterValue: string,
@@ -100,6 +102,7 @@ type State = {
 class Filter extends Component<Props, State> {
   state = {
     filterButtonLabel: 'Adicionar Filtro',
+    isChooseDateDialogOpen: false,
     filterSelected: 'ADD_FILTER',
     isFunctionalFilter: false,
     isFilterOpen: false,
@@ -111,6 +114,14 @@ class Filter extends Component<Props, State> {
 
     this.setState({
       isFilterOpen: !isFilterOpen,
+    });
+  };
+
+  onToggleDateDialog = (): void => {
+    const { isChooseDateDialogOpen } = this.state;
+
+    this.setState({
+      isChooseDateDialogOpen: !isChooseDateDialogOpen,
     });
   };
 
@@ -140,6 +151,13 @@ class Filter extends Component<Props, State> {
     if (filterItem.type === FILTER_TYPES.FUNCTIONAL) {
       this.handleFunctionalFilter(filterItem);
       return;
+    }
+
+    if (filterItem.type === FILTER_TYPES.DATE.ID) {
+      this.setState({
+        isChooseDateDialogOpen: true,
+        isFilterOpen: false,
+      });
     }
 
     const isDifferentFilter = (filterSelected !== dataField);
@@ -219,7 +237,7 @@ class Filter extends Component<Props, State> {
       dataFiltered = this.handleTextFilter(filterSelected, filterValue);
     }
 
-    if (type === FILTER_TYPES.DATE.ID && (filterValue.length >= 10)) {
+    if (type === FILTER_TYPES.DATE.ID) {
       dataFiltered = this.handleDateFilter(filterSelected, filterValue);
     }
 
@@ -253,6 +271,19 @@ class Filter extends Component<Props, State> {
     }, () => onFilterData(data));
   };
 
+  handleDateFilter = (filterSelected: Object, filterValue: string): Array<Object> => {
+    const { dataset } = this.props;
+
+    const filterParams = {
+      type: FILTER_TYPES.DATE.ID,
+      value: filterValue,
+      filterSelected,
+      dataset,
+    };
+
+    return filterList(filterParams);
+  };
+
   handleNumericFilter = (filterSelected: string, filterConfig: Object, filterValue: string): Array<Object> => {
     const { dataset } = this.props;
 
@@ -261,19 +292,6 @@ class Filter extends Component<Props, State> {
       type: FILTER_TYPES.NUMERIC,
       filter: filterSelected,
       value: filterValue,
-      dataset,
-    };
-
-    return filterList(filterParams);
-  };
-
-  handleDateFilter = (filterSelected: Object, filterValue: string): Array<Object> => {
-    const { dataset } = this.props;
-
-    const filterParams = {
-      type: FILTER_TYPES.DATE.ID,
-      value: filterValue,
-      filterSelected,
       dataset,
     };
 
@@ -341,8 +359,8 @@ class Filter extends Component<Props, State> {
     );
   };
 
-  renderSelector = (isFilterOpen: boolean): Object => {
-    const { filterButtonLabel } = this.state;
+  renderSelector = (): Object => {
+    const { filterButtonLabel, isFilterOpen } = this.state;
 
     return (
       <FilterSelectorWrapper>
@@ -366,55 +384,90 @@ class Filter extends Component<Props, State> {
     );
   };
 
-  renderFilterMenu = (isFilterOpen: boolean): Object => (
-    <Popper
-      anchorEl={this.anchorEl}
-      open={isFilterOpen}
-      placement="bottom"
-      disablePortal
-      transition
-    >
-      {({ TransitionProps }) => (
-        <Grow
-          {...TransitionProps}
-          id="menu-list-grow"
-        >
-          <Paper>
-            <ClickAwayListener
-              onClickAway={this.onToggleFilter}
-            >
-              {this.renderMenuItems()}
-            </ClickAwayListener>
-          </Paper>
-        </Grow>
-      )}
-    </Popper>
-  );
-
-  render() {
-    const {
-      isFunctionalFilter,
-      filterSelected,
-      isFilterOpen,
-      filterValue,
-    } = this.state;
-
-    const isInputDisabled = (filterSelected === 'ADD_FILTER' || filterSelected === 'all' || isFunctionalFilter);
+  renderFilterMenu = (): Object => {
+    const { isFilterOpen } = this.state;
 
     return (
-      <Container>
-        {this.renderSelector(isFilterOpen)}
-        {this.renderFilterMenu(isFilterOpen)}
-        <TextBoxWrapper
+      <Popper
+        anchorEl={this.anchorEl}
+        open={isFilterOpen}
+        placement="bottom"
+        disablePortal
+        transition
+      >
+        {({ TransitionProps }) => (
+          <Grow
+            {...TransitionProps}
+            id="menu-list-grow"
+          >
+            <Paper>
+              <ClickAwayListener
+                onClickAway={this.onToggleFilter}
+              >
+                {this.renderMenuItems()}
+              </ClickAwayListener>
+            </Paper>
+          </Grow>
+        )}
+      </Popper>
+    );
+  };
+
+  renderFilterInput = (): Object => {
+    const { isFunctionalFilter, filterSelected, filterValue } = this.state;
+
+    const isFilterSelectedDateType = (
+      filterSelected === FILTER_TYPES.DATE.WHEN.BEFORE
+      || filterSelected === FILTER_TYPES.DATE.WHEN.AFTER
+      || filterSelected === FILTER_TYPES.DATE.WHEN.SAME
+    );
+
+    const isInputDisabled = (isFilterSelectedDateType || filterSelected === 'ADD_FILTER' || filterSelected === 'all' || isFunctionalFilter);
+
+    return (
+      <TextBoxWrapper
+        disabled={isInputDisabled}
+      >
+        <TextInput
+          onChange={event => this.onChangeFilterValue(event.target.value)}
+          placeholder={this.getTextInputPlaceholder()}
           disabled={isInputDisabled}
-        >
-          <TextInput
-            onChange={event => this.onChangeFilterValue(event.target.value)}
-            placeholder={this.getTextInputPlaceholder()}
-            disabled={isInputDisabled}
-            value={filterValue || ''}
-          />
-        </TextBoxWrapper>
+          value={filterValue || ''}
+        />
+      </TextBoxWrapper>
+    );
+  };
+
+  renderDateDialog = (): Object => {
+    const { isChooseDateDialogOpen } = this.state;
+    const { onFilterData } = this.props;
+
+    const onChooseDate = (date: string): void => {
+      this.setState({
+        isChooseDateDialogOpen: false,
+        filterValue: date,
+      }, () => {
+        const dataset = this.onFilter(date);
+        onFilterData(dataset);
+      });
+    };
+
+    return (
+      <DateFilterDialog
+        isChooseDateDialogOpen={isChooseDateDialogOpen}
+        onToggleDateDialog={this.onToggleDateDialog}
+        onChooseDate={date => onChooseDate(date)}
+      />
+    );
+  };
+
+  render() {
+    return (
+      <Container>
+        {this.renderSelector()}
+        {this.renderFilterMenu()}
+        {this.renderFilterInput()}
+        {this.renderDateDialog()}
       </Container>
     );
   }

@@ -6,7 +6,7 @@ import List from '@material-ui/core/List';
 
 import styled from 'styled-components';
 
-import Filter from '../../../../../../Filter';
+import Filter from '../../../../../../filter';
 import { FILTER_TYPES } from '../../../../../../../../utils/filter';
 import { RowItem, Row } from '../../../../../../FormUtils';
 import ItemFiltered from '../../../../../../ItemFiltered';

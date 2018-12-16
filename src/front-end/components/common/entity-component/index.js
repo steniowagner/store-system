@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import FullScreenDialog from '../FullScreenDialog';
 import ActionButton from '../ActionButton';
-import Filter from '../Filter';
+import Filter from '../filter';
 import Dialog from '../Dialog';
 import Table from '../table';
 
