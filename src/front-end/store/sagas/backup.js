@@ -41,8 +41,12 @@ function* updateStore() {
 }
 
 const getPathToWriteFile = () => {
+  const options = {
+    buttonLabel: 'Exportar Dados',
+  };
+
   const pathToWrite = new Promise((resolve) => {
-    dialog.showSaveDialog((fileName) => {
+    dialog.showSaveDialog(null, options, (fileName) => {
       if (!fileName) {
         return;
       }
@@ -85,8 +89,16 @@ export function* startBackup() {
 }
 
 const getPathToReadFile = () => {
+  const options = {
+    buttonLabel: 'Importar Arquivo',
+    properties: ['openFile'],
+    filters: [
+      { name: 'json', extensions: ['json'] },
+    ],
+  };
+
   const pathToRead = new Promise((resolve) => {
-    dialog.showOpenDialog((fileNames) => {
+    dialog.showOpenDialog(null, options, (fileNames) => {
       if (!fileNames) {
         return;
       }
