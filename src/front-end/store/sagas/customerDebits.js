@@ -17,9 +17,9 @@ export function* getCustomerDebits(action) {
     const { id } = action.payload;
 
     const result = yield call(execRequest, SALE, READ_SALES, EVENT_TAGS.GET_ALL_DEBITS);
-    const userSalesWithDebits = result.filter(sale => (sale.customer.id === id && sale.inDebit > 0));
+    const customerSalesWithDebits = result.filter(sale => (sale.customer.id === id && sale.inDebit > 0));
 
-    yield put(CustomerDebitsCreators.getDebitsSuccess(userSalesWithDebits));
+    yield put(CustomerDebitsCreators.getDebitsSuccess(customerSalesWithDebits));
   } catch (err) {
     yield put(CustomerDebitsCreators.getDebitsFailure(err.message));
   }

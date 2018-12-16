@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Creators as CustomerDebitsCreators } from '../../../store/ducks/customerDebits';
+import { Creators as CustomerCreators } from '../../../store/ducks/customer';
 
 import SaleDetailDialog from '../../../components/common/sale-detail-dialog';
 import Dialog from '../../../components/common/Dialog';
@@ -42,6 +43,7 @@ const tabConfig = [{
 }];
 
 type Props = {
+  getAllCustomers: Function,
   debits: Array<Object>,
   removeDebit: Function,
   getDebits: Function,
@@ -97,10 +99,11 @@ class Debits extends Component<Props, State> {
   };
 
   onRemoveDebit = () => {
-    const { removeDebit } = this.props;
+    const { removeDebit, getAllCustomers } = this.props;
     const { saleSelected } = this.state;
 
     removeDebit(saleSelected);
+    getAllCustomers();
   };
 
   renderSaleDetailDialog = (): Object => {
@@ -181,7 +184,9 @@ class Debits extends Component<Props, State> {
   }
 }
 
-const mapDispatchToProps = dispatch => bindActionCreators(CustomerDebitsCreators, dispatch);
+const Creators = Object.assign({}, CustomerCreators, CustomerDebitsCreators);
+
+const mapDispatchToProps = dispatch => bindActionCreators(Creators, dispatch);
 
 const mapStateToProps = state => ({
   debits: state.debits.data,

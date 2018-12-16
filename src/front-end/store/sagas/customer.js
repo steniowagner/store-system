@@ -10,10 +10,12 @@ import {
   DELETE_CUSTOMER,
 } from '../../../back-end/events-handlers/customer/types';
 
-import { CUSTOMER } from '../../../common/entitiesTypes';
+import { READ_SALES } from '../../../back-end/events-handlers/sale/types';
+import { CUSTOMER, SALE } from '../../../common/entitiesTypes';
 import execRequest from './execRequest';
 
 const EVENT_TAGS = {
+  GET_ALL_DEBITS: 'GET_ALL_DEBITS',
   READ_ALL: 'CUSTOMERS_READ_ALL',
   CREATE_CUSTOMER: 'CUSTOMER_CREATE',
   UPDATE_CUSTOMER: 'CUSTOMER_UPDATE',
@@ -33,17 +35,26 @@ export function* createCustomer(action) {
 
     yield put(CustomerCreators.createCustomerSuccess(newCustomer));
   } catch (err) {
-    yield put(CustomerCreators.createCustomerFailure(err.message));
+    yield put(CustomerCreators.createCustomerFailure());
   }
 }
 
+const isCustomerInDebit = (customer, sales) => {
+  const isCustomerWithDebit = sales.some(sale => (sale.customer.id === customer.id && sale.inDebit > 0));
+
+  return isCustomerWithDebit;
+};
+
 export function* getAllCustomers() {
   try {
-    const result = yield call(execRequest, CUSTOMER, READ_CUSTOMERS, EVENT_TAGS.READ_ALL);
+    const allCustomers = yield call(execRequest, CUSTOMER, READ_CUSTOMERS, EVENT_TAGS.READ_ALL);
+    const sales = yield call(execRequest, SALE, READ_SALES, EVENT_TAGS.GET_ALL_DEBITS);
 
-    yield put(CustomerCreators.getAllCustomersSuccess(result));
+    const customers = allCustomers.map(customer => ({ ...customer, isInDebit: isCustomerInDebit(customer, sales) }));
+
+    yield put(CustomerCreators.getAllCustomersSuccess(customers));
   } catch (err) {
-    yield put(CustomerCreators.getAllCustomersFailure(err.message));
+    yield put(CustomerCreators.getAllCustomersFailure());
   }
 }
 
@@ -55,7 +66,7 @@ export function* editCustomer(action) {
 
     yield put(CustomerCreators.editCustomerSuccess(customer));
   } catch (err) {
-    yield put(CustomerCreators.editCustomerFailure(err.message));
+    yield put(CustomerCreators.editCustomerFailure());
   }
 }
 
@@ -67,6 +78,6 @@ export function* removeCustomer(action) {
     yield put(CustomerCreators.removeCustomerSuccess(id));
     yield put(AlertsCreators.getNumberCustomersInDebit());
   } catch (err) {
-    yield put(CustomerCreators.removeCustomerFailure(err.message));
+    yield put(CustomerCreators.removeCustomerFailure());
   }
 }
