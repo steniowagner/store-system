@@ -8,10 +8,10 @@ import {
   SALE,
 } from '../../../common/entitiesTypes';
 
+import { READ_CUSTOMERS } from '../../../back-end/events-handlers/customer/types';
 import { READ_BUDGETS } from '../../../back-end/events-handlers/budget/types';
 import { READ_STOCK } from '../../../back-end/events-handlers/stock/types';
 import { READ_SALES } from '../../../back-end/events-handlers/sale/types';
-import { READ } from '../../../back-end/events-handlers/customer/types';
 
 import { BUDGET_STATUS } from '../../screens/budget/components/BudgetStatus';
 import execRequest from './execRequest';
@@ -36,7 +36,7 @@ export function* getNumberBudgetsOutOfDate() {
 
 export function* getNumberCustomersInDebit() {
   try {
-    const customers = yield call(execRequest, CUSTOMER, READ, EVENT_TAGS.READ_ALL_CUSTOMERS);
+    const customers = yield call(execRequest, CUSTOMER, READ_CUSTOMERS, EVENT_TAGS.READ_ALL_CUSTOMERS);
     const sales = yield call(execRequest, SALE, READ_SALES, EVENT_TAGS.READ_ALL_SALES);
 
     let numberCustomersInDebit = 0;

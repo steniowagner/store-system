@@ -1,6 +1,7 @@
 import { call, put } from 'redux-saga/effects';
 
 import { Creators as CustomerCreators } from '../ducks/customer';
+import { Creators as AlertsCreators } from '../ducks/alerts';
 
 import {
   CREATE_CUSTOMER,
@@ -64,6 +65,7 @@ export function* removeCustomer(action) {
 
     yield call(execRequest, CUSTOMER, DELETE_CUSTOMER, EVENT_TAGS.REMOVE_CUSTOMER, id);
     yield put(CustomerCreators.removeCustomerSuccess(id));
+    yield put(AlertsCreators.getNumberCustomersInDebit());
   } catch (err) {
     yield put(CustomerCreators.removeCustomerFailure(err.message));
   }
