@@ -110,6 +110,7 @@ const renderTopRow = (setFieldValue: Function, values: Object, errors: Object, m
       customerSelected={values.customer}
       setFieldValue={setFieldValue}
       error={errors.customer}
+      values={values}
       mode={mode}
     />
   );

@@ -1,9 +1,13 @@
 // @flow
 
 import React, { Component, Fragment } from 'react';
+
+import { connect } from 'react-redux';
+
 import styled from 'styled-components';
 
 import FullScreenDialog from '../FullScreenDialog';
+import PrintContent from '../../PrintContent';
 import ActionButton from '../ActionButton';
 import Filter from '../filter';
 import Dialog from '../Dialog';
@@ -41,6 +45,7 @@ type Props = {
   canBeRemoved: ?boolean,
   canBeCreated: ?boolean,
   canBeEdited: ?boolean,
+  print: Object,
   dataset: Array<Object>,
 };
 
@@ -322,6 +327,14 @@ class EntityComponent extends Component<Props, State> {
     );
   };
 
+  renderPrintContent = (): Object => {
+    const { print } = this.props;
+
+    return print.open && (
+      <PrintContent />
+    );
+  };
+
   render() {
     const { pluralEntityName } = this.props;
 
@@ -334,9 +347,14 @@ class EntityComponent extends Component<Props, State> {
         {this.renderTable()}
         {this.renderForm()}
         {this.renderRemoveDialog()}
+        {this.renderPrintContent()}
       </Fragment>
     );
   }
 }
 
-export default EntityComponent;
+const mapStateToProps = state => ({
+  print: state.print,
+});
+
+export default connect(mapStateToProps)(EntityComponent);

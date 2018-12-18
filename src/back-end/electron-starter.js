@@ -1,9 +1,22 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const {
+  BrowserWindow,
+  ipcMain,
+  shell,
+  app,
+} = require('electron');
+
 const path = require('path');
 const url = require('url');
+const fs = require('fs');
+const os = require('os');
 
+const {
+  OPERATION_REQUEST,
+  OPERATION_RESPONSE,
+  CLOSE_PRINT_WINDOW,
+  OPEN_PRINT_WINDOW,
+} = require('../common/entitiesTypes');
 const handleEvent = require('./events-handlers');
-const { OPERATION_REQUEST, OPERATION_RESPONSE } = require('../common/entitiesTypes');
 
 let mainWindow;
 
@@ -47,4 +60,34 @@ ipcMain.on(OPERATION_REQUEST, async (event, entitie, operation, tag, args) => {
   const result = await handleEvent(entitie, operation, args);
 
   event.sender.send(eventResponseId, result);
+});
+
+ipcMain.on(OPEN_PRINT_WINDOW, (event, fileName) => {
+  const pdfPath = path.join(os.tmpdir(), `${fileName}.pdf`);
+
+  const pdfOptions = {
+    printSelectionOnly: false,
+    printBackground: false,
+    landscape: false,
+    marginsType: 1,
+    pageSize: 'A4',
+  };
+
+  const window = BrowserWindow.fromWebContents(event.sender);
+
+  window.webContents.printToPDF(pdfOptions, (err, data) => {
+    if (err) {
+      throw err;
+    }
+
+    fs.writeFile(pdfPath, data, (writeError) => {
+      if (writeError) {
+        throw writeError;
+      }
+
+      shell.openExternal(`file://${pdfPath}`);
+
+      event.sender.send(CLOSE_PRINT_WINDOW);
+    });
+  });
 });

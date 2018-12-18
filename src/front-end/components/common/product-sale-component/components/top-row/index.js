@@ -3,9 +3,11 @@
 import React, { Component, Fragment } from 'react';
 
 import Print from '@material-ui/icons/Print';
-
 import styled from 'styled-components';
+
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { Creators as PrintCreators } from '../../../../../store/ducks/print';
 
 import SelectCustomer from './components/select-customer';
 import CustomerDebits from './components/CustomerDebits';
@@ -24,9 +26,11 @@ const ButtonWrapper = styled.div`
 
 type Props = {
   shouldRenderPrintReceiptButton: boolean,
+  prepareToPrint: Function,
   customerSelected: Object,
-  debits: Array<Object>,
   setFieldValue: Function,
+  debits: Array<Object>,
+  values: Object,
   error: string,
   mode: string,
 }
@@ -43,14 +47,19 @@ class TopRow extends Component<Props, {}> {
   }
 
   renderPrintReceptButton = (): Object => {
-    const { error } = this.props;
+    const {
+      prepareToPrint,
+      values,
+      error,
+      mode,
+    } = this.props;
 
-    return (
+    return (mode === 'detail') && (
       <ButtonWrapper
         hasError={!!error}
       >
         <ActionButton
-          action={() => {}}
+          action={() => prepareToPrint(values)}
           title="Imprimir Recibo"
           CustomIcon={Print}
           withIcon={false}
@@ -101,8 +110,10 @@ class TopRow extends Component<Props, {}> {
   }
 }
 
+const mapDispatchToProps = dispatch => bindActionCreators(PrintCreators, dispatch);
+
 const mapStateToProps = state => ({
   debits: state.debits.data,
 });
 
-export default connect(mapStateToProps)(TopRow);
+export default connect(mapStateToProps, mapDispatchToProps)(TopRow);

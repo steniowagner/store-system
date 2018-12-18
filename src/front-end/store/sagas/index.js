@@ -3,11 +3,12 @@ import { all, takeLatest } from 'redux-saga/effects';
 import { Types as CustomerDebitsTypes } from '../ducks/customerDebits';
 import { Types as CustomerTypes } from '../ducks/customer';
 import { Types as ProviderTypes } from '../ducks/provider';
-import { Types as BackupTypes } from '../ducks/backup';
 import { Types as ProductTypes } from '../ducks/product';
-import { Types as AlertsTypes } from '../ducks/alerts';
 import { Types as CashierTypes } from '../ducks/cashier';
+import { Types as BackupTypes } from '../ducks/backup';
+import { Types as AlertsTypes } from '../ducks/alerts';
 import { Types as BudgetTypes } from '../ducks/budget';
+import { Types as PrintTypes } from '../ducks/print';
 import { Types as StockTypes } from '../ducks/stock';
 import { Types as BrandTypes } from '../ducks/brand';
 import { Types as UserTypes } from '../ducks/user';
@@ -64,6 +65,8 @@ import { importBackupFile, startBackup } from './backup';
 
 import { getAllBrands } from './brand';
 
+import { handlePrint } from './print';
+
 export default function* rootSaga() {
   return yield all([
     takeLatest(UserTypes.CREATE_REQUEST, createUser),
@@ -114,6 +117,8 @@ export default function* rootSaga() {
 
     takeLatest(BackupTypes.IMPORT_BACKUP_FILE_REQUEST, importBackupFile),
     takeLatest(BackupTypes.BACKUP_REQUEST, startBackup),
+
+    takeLatest(PrintTypes.OPEN_PRINT_WINDOW, handlePrint),
 
     takeLatest(BrandTypes.GET_ALL_REQUEST, getAllBrands),
   ]);
