@@ -1,9 +1,9 @@
 import { select, call, put } from 'redux-saga/effects';
 
-import shorthash from 'shorthash';
-
 import moment from 'moment';
 import 'moment/locale/pt-br';
+
+import shorthash from 'shorthash';
 
 import { Creators as SaleCreators } from '../ducks/sale';
 

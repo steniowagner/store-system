@@ -70,7 +70,7 @@ const renderShouldPrintReceipt = (onToggleShouldPrintReceiptCheckbox: Function, 
           value="shouldPrintReceipt"
         />
         )}
-      label="Imprimir Recibo"
+      label="Imprimir Comprovante"
     />
   </Wrapper>
 );

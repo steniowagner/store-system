@@ -126,6 +126,7 @@ const CustomForm = withFormik({
     products: item.products || [],
     subtotal: item.subtotal || 0,
     total: item.total || 0,
+    code: item.code || '',
   }),
 
   validationSchema: _props => Yup.lazy(() => Yup.object().shape({

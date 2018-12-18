@@ -3,6 +3,8 @@ import { select, call, put } from 'redux-saga/effects';
 import moment from 'moment';
 import 'moment/locale/pt-br';
 
+import shorthash from 'shorthash';
+
 import { Creators as BudgetCreators } from '../ducks/budget';
 
 import {
@@ -46,6 +48,7 @@ export function* createBudget(action) {
 
     const params = {
       ...args,
+      code: shorthash.unique(moment().format()),
       products: JSON.stringify(args.products),
       subtotal: parseFloat(args.subtotal),
       dateToShow: moment().format('ll'),

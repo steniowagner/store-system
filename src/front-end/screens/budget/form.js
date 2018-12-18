@@ -143,6 +143,7 @@ const CustomForm = withFormik({
     isInDebit: item.isInDebit || false,
     subtotal: item.subtotal || 0,
     total: item.total || 0,
+    code: item.code || '',
     id: item.id || null,
   }),
 

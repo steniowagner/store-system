@@ -5,6 +5,7 @@ import React, { Component, Fragment } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Creators as StockCreators } from '../../store/ducks/stock';
+import { Creators as PrintCreators } from '../../store/ducks/print';
 import { Creators as SaleCreators } from '../../store/ducks/sale';
 
 import EntityComponent from '../../components/common/entity-component';
@@ -18,8 +19,9 @@ type Props = {
   createSale: Function,
   getStock: Function,
   editSale: Function,
-  stock: Arra<Object>,
-  sale: Arra<Object>,
+  startPrint: Function,
+  stock: Array<Object>,
+  sale: Array<Object>,
 };
 
 type State = {
@@ -49,7 +51,12 @@ class Sales extends Component<Props, State> {
   }
 
   onCreateSale = (sale: Object): void => {
-    const { createSale } = this.props;
+    const { shouldPrintReceipt } = sale;
+    const { createSale, startPrint } = this.props;
+
+    if (shouldPrintReceipt) {
+      startPrint(sale);
+    }
 
     createSale(sale);
   };
@@ -103,7 +110,7 @@ class Sales extends Component<Props, State> {
   }
 }
 
-const Creators = Object.assign({}, SaleCreators, StockCreators);
+const Creators = Object.assign({}, SaleCreators, StockCreators, PrintCreators);
 
 const mapDispatchToProps = dispatch => bindActionCreators(Creators, dispatch);
 

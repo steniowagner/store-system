@@ -118,7 +118,7 @@ export default function* rootSaga() {
     takeLatest(BackupTypes.IMPORT_BACKUP_FILE_REQUEST, importBackupFile),
     takeLatest(BackupTypes.BACKUP_REQUEST, startBackup),
 
-    takeLatest(PrintTypes.OPEN_PRINT_WINDOW, handlePrint),
+    takeLatest(PrintTypes.START_PRINT, handlePrint),
 
     takeLatest(BrandTypes.GET_ALL_REQUEST, getAllBrands),
   ]);

@@ -26,10 +26,10 @@ const ButtonWrapper = styled.div`
 
 type Props = {
   shouldRenderPrintReceiptButton: boolean,
-  prepareToPrint: Function,
   customerSelected: Object,
   setFieldValue: Function,
   debits: Array<Object>,
+  startPrint: Function,
   values: Object,
   error: string,
   mode: string,
@@ -48,7 +48,7 @@ class TopRow extends Component<Props, {}> {
 
   renderPrintReceptButton = (): Object => {
     const {
-      prepareToPrint,
+      startPrint,
       values,
       error,
       mode,
@@ -59,8 +59,8 @@ class TopRow extends Component<Props, {}> {
         hasError={!!error}
       >
         <ActionButton
-          action={() => prepareToPrint(values)}
-          title="Imprimir Recibo"
+          action={() => startPrint(values)}
+          title="Imprimir Comprovante"
           CustomIcon={Print}
           withIcon={false}
           withCustomIcon
