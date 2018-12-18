@@ -10,10 +10,10 @@ const filterApprovead = (budgets: Array<Object>): Array<Object> => budgets.filte
 const filterOutOfTime = (budgets: Array<Object>): Array<Object> => budgets.filter(budget => budget.status === BUDGET_STATUS.OUT_OF_TIME);
 
 const filterConfig = [{
-  placeholder: 'Informe o Nome do Vendedor',
+  placeholder: 'Informe o Código do Orçamento',
   type: FILTER_TYPES.TEXT,
-  filterTitle: 'Usuário',
-  dataField: 'salesman',
+  filterTitle: 'Código',
+  dataField: 'code',
 }, {
   placeholder: 'Estes são todos os Orçamentos Pendentes',
   type: FILTER_TYPES.FUNCTIONAL,

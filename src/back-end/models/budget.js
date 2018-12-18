@@ -11,6 +11,14 @@ const BudgetModel = (sequelize, DataTypes) => {
       type: JSON,
     },
 
+    code: {
+      validate: {
+        notEmpty: true,
+      },
+      allowNull: false,
+      type: STRING,
+    },
+
     dateToShow: {
       type: STRING,
     },

@@ -208,11 +208,23 @@ class PrintContent extends Component<Props, {}> {
     );
   };
 
+  getDiscountText = (discount: Object): string => {
+    const { type, value } = discount;
+
+    if (!value || !type) {
+      return '-';
+    }
+
+    const discountText = (type === 'percentage' ? `${value}%` : `R$ ${parseFloat(value).toFixed(2)}`);
+
+    return discountText;
+  };
+
   renderOperationValues = (): Object => {
     const { print } = this.props;
     const { subtotal, discount, total } = print.data;
 
-    const discountText = !!discount && (discount.type === 'percentage' ? `${discount.value}%` : `R$ ${parseFloat(discount.value).toFixed(2)}`);
+    const discountText = this.getDiscountText(discount);
 
     return (
       <BottomValuesWrapper>

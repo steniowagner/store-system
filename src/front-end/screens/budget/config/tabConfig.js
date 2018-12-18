@@ -1,4 +1,7 @@
 const tabConfig = [{
+  columnTitle: 'Código',
+  dataField: 'code',
+}, {
   columnTitle: 'Data do Pedido',
   dataField: 'dateToShow',
 }, {
@@ -10,9 +13,6 @@ const tabConfig = [{
 }, {
   columnTitle: 'Status',
   dataField: 'status',
-}, {
-  columnTitle: 'Vendedor',
-  dataField: 'salesman',
 }, {
   columnTitle: 'Sub-total',
   dataField: 'subtotalText',
