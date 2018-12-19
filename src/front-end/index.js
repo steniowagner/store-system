@@ -1,18 +1,17 @@
 // @flow
 
-import React, { Fragment } from 'react';
+import React from 'react';
+
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import { BrowserRouter as ApplicationRouter } from 'react-router-dom';
 import styled, { ThemeProvider } from 'styled-components';
 import { Provider } from 'react-redux';
 
 import './config/reactotron';
 import './styles/global';
 
-import NavigationMenu from './components/navigation-menu';
-import HeaderBar from './components/header-bar';
+import Root from './components/Root';
+
 import AppTheme from './styles';
-import Router from './Router';
 import store from './store';
 
 const Wrapper = styled.div`
@@ -26,7 +25,7 @@ const theme = createMuiTheme({
   },
 });
 
-const Root = (): Object => (
+const App = (): Object => (
   <MuiThemeProvider
     theme={theme}
   >
@@ -37,17 +36,11 @@ const Root = (): Object => (
         <Provider
           store={store}
         >
-          <ApplicationRouter>
-            <Fragment>
-              <HeaderBar />
-              <NavigationMenu />
-              <Router />
-            </Fragment>
-          </ApplicationRouter>
+          <Root />
         </Provider>
       </Wrapper>
     </ThemeProvider>
   </MuiThemeProvider>
 );
 
-export default Root;
+export default App;

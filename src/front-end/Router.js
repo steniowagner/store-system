@@ -24,35 +24,35 @@ const ApplicationRouter = (): Object => (
   <Container>
     <Route
       component={Cashier}
-      path="/cashier"
+      path="/dashboard/cashier"
     />
     <Route
       component={Product}
-      path="/product"
+      path="/dashboard/product"
     />
     <Route
       component={Budget}
-      path="/budget"
+      path="/dashboard/budget"
     />
     <Route
       component={Customer}
-      path="/customer"
+      path="/dashboard/customer"
     />
     <Route
       component={User}
-      path="/user"
+      path="/dashboard/user"
     />
     <Route
       component={Provider}
-      path="/provider"
+      path="/dashboard/provider"
     />
     <Route
       component={Stock}
-      path="/stock"
+      path="/dashboard/stock"
     />
     <Route
       component={Sales}
-      path="/sale"
+      path="/dashboard/sale"
     />
   </Container>
 );

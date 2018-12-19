@@ -1,6 +1,5 @@
 import { combineReducers } from 'redux';
 
-import print from './print';
 import debits from './customerDebits';
 import customer from './customer';
 import provider from './provider';
@@ -9,8 +8,10 @@ import product from './product';
 import alerts from './alerts';
 import backup from './backup';
 import budget from './budget';
+import print from './print';
 import stock from './stock';
 import brand from './brand';
+import auth from './auth';
 import user from './user';
 import sale from './sale';
 
@@ -26,6 +27,7 @@ export default combineReducers({
   brand,
   print,
   stock,
+  auth,
   sale,
   user,
 });

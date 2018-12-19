@@ -20,6 +20,7 @@ export function* createCashier(action) {
   try {
     moment.locale('pt-br');
 
+    const { username } = yield select(state => state.auth.user);
     const { args } = action;
 
     const initialCashier = {
@@ -29,7 +30,7 @@ export function* createCashier(action) {
       totalOutcome: parseFloat(0),
       totalIncome: parseFloat(0),
       totalProfit: parseFloat(0),
-      salesman: 'steniowagner',
+      salesman: username,
       operations: '',
     };
 

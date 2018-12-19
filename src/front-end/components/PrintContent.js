@@ -64,6 +64,7 @@ const HeaderTitleValue = styled.span`
 `;
 
 type Props = {
+  username: string,
   print: Object,
 };
 
@@ -79,6 +80,18 @@ class PrintContent extends Component<Props, {}> {
       isBudgetOperation: !!print.data.status,
     });
   }
+
+  getDiscountText = (discount: Object): string => {
+    const { type, value } = discount;
+
+    if (!value || !type) {
+      return '-';
+    }
+
+    const discountText = (type === 'percentage' ? `${value}%` : `R$ ${parseFloat(value).toFixed(2)}`);
+
+    return discountText;
+  };
 
   renderTextRow = (title: string, value: string): Object => (
     <HeaderTextWrapper>
@@ -138,7 +151,7 @@ class PrintContent extends Component<Props, {}> {
   };
 
   renderOperationInfo = (): Object => {
-    const { print } = this.props;
+    const { print, username } = this.props;
     const { customer, code } = print.data;
 
     const customerName = (customer.name || '-');
@@ -147,7 +160,7 @@ class PrintContent extends Component<Props, {}> {
       <RowWrapper>
         {this.renderTextRow('Código:', code)}
         {this.renderTextRow('Cliente:', customerName)}
-        {this.renderTextRow('Vendedor:', 'steniowagner')}
+        {this.renderTextRow('Vendedor:', username)}
       </RowWrapper>
     );
   };
@@ -208,18 +221,6 @@ class PrintContent extends Component<Props, {}> {
     );
   };
 
-  getDiscountText = (discount: Object): string => {
-    const { type, value } = discount;
-
-    if (!value || !type) {
-      return '-';
-    }
-
-    const discountText = (type === 'percentage' ? `${value}%` : `R$ ${parseFloat(value).toFixed(2)}`);
-
-    return discountText;
-  };
-
   renderOperationValues = (): Object => {
     const { print } = this.props;
     const { subtotal, discount, total } = print.data;
@@ -266,6 +267,7 @@ class PrintContent extends Component<Props, {}> {
 const mapDispatchToProps = dispatch => bindActionCreators(PrintCreators, dispatch);
 
 const mapStateToProps = state => ({
+  username: state.auth.user.username,
   print: state.print,
 });
 

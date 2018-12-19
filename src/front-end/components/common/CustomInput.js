@@ -85,7 +85,7 @@ const SingleLineInput = styled(({ ...props }) => {
   background-color: ${({ theme, disabled }) => (disabled ? theme.colors.lightGray : theme.colors.white)};
 `;
 
-const Label = styled.span`
+const Label = styled.p`
   margin-bottom: 4px;
   color: ${({ theme, error }) => error && theme.colors.danger}
 `;

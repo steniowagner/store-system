@@ -33,6 +33,7 @@ const EVENT_TAGS = {
 export function* createSale(action) {
   try {
     const { args } = action;
+    const { username } = yield select(state => state.auth.user);
 
     const params = {
       ...args,
@@ -41,7 +42,7 @@ export function* createSale(action) {
       subtotal: parseFloat(args.subtotal),
       dateToShow: moment().format('lll'),
       total: parseFloat(args.total),
-      salesman: 'steniowagner',
+      salesman: username,
     };
 
     const result = yield call(execRequest, SALE, CREATE_SALE, EVENT_TAGS.SALE_CREATE, params);
@@ -97,7 +98,6 @@ export function* editSale(action) {
       products: JSON.stringify(sale.products),
       subtotal: parseFloat(sale.subtotal),
       total: parseFloat(sale.total),
-      salesman: 'steniowagner',
     };
 
     yield call(execRequest, SALE, UPDATE_SALE, EVENT_TAGS.EDIT_SALE, params);

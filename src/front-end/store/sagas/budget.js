@@ -46,6 +46,8 @@ export function* createBudget(action) {
   try {
     const { args } = action;
 
+    const { username } = yield select(state => state.auth.user);
+
     const params = {
       ...args,
       code: shorthash.unique(moment().format()),
@@ -53,7 +55,7 @@ export function* createBudget(action) {
       subtotal: parseFloat(args.subtotal),
       dateToShow: moment().format('ll'),
       total: parseFloat(args.total),
-      salesman: 'steniowagner',
+      salesman: username,
     };
 
     const result = yield call(execRequest, BUDGET, CREATE_BUDGET, EVENT_TAGS.CREATE_BUDGET, params);
