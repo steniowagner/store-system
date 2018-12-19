@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 
 import MenuList from '@material-ui/core/MenuList';
+import MenuItem from '@material-ui/core/MenuItem';
 import Paper from '@material-ui/core/Paper';
 
 import styled from 'styled-components';
@@ -38,7 +39,9 @@ const ListContainer = styled(({ ...props }) => (
   margin-left: 230px;
 `;
 
-const ListItem = styled.div``;
+const ListItem = styled.div`
+  background-color: ${({ theme }) => theme.colors.white};
+`;
 
 type Props = {
   onSelectProduct: Function,
