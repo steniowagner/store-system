@@ -21,7 +21,7 @@ function* print(fileName) {
 }
 
 const getFilaName = (data, currentPage) => {
-  const customerName = data.customer.name.toLowerCase();
+  const customerName = ((data.customer.name && data.customer.name.toLowerCase()) || '');
   const type = (data.status ? 'orçamento' : 'venda');
   const date = moment().format('DD-MM-YYYY');
   const page = (currentPage > 0 ? `-(${currentPage})` : '');
