@@ -11,7 +11,8 @@ const textFilter = (filterConfig: Config): Array<Object> => {
 
   if (filter === 'all') return dataset;
 
-  const regexSubstring = new RegExp(value, 'i');
+  const stringToTest = value.replace(/\\/g, '\\\\');
+  const regexSubstring = new RegExp(stringToTest, 'i');
 
   const datasetFiltered = dataset.filter(item => regexSubstring.test(item[filter]));
 
