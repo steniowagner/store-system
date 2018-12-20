@@ -4,7 +4,7 @@ const filterConfig = [{
   placeholder: 'Informe o Código de Barras do Produto Buscado',
   type: FILTER_TYPES.TEXT,
   filterTitle: 'Código de Barras',
-  dataField: 'barCode',
+  dataField: 'barcode',
 }, {
   placeholder: 'Informe a Descrição do Produto Buscado',
   type: FILTER_TYPES.TEXT,

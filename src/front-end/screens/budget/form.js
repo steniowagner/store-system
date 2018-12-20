@@ -32,6 +32,7 @@ type State = {
 class BudgetForm extends Component<Props, State> {
   state = {
     isSaleConfirmationDialogOpen: false,
+    shouldBlockFormSubmit: false,
   };
 
   onToggleSaleConfirmationDialog = (): void => {
@@ -39,6 +40,12 @@ class BudgetForm extends Component<Props, State> {
 
     this.setState({
       isSaleConfirmationDialogOpen: !isSaleConfirmationDialogOpen,
+    });
+  };
+
+  handleBlockFormSubmit = (value: boolean): void => {
+    this.setState({
+      shouldBlockFormSubmit: value,
     });
   };
 
@@ -56,6 +63,7 @@ class BudgetForm extends Component<Props, State> {
     return (
       <Section>
         <ProductSale
+          handleBlockFormSubmit={this.handleBlockFormSubmit}
           setFieldValue={setFieldValue}
           ExtraComponent={() => (
             <BudgetExtraComponent
@@ -95,12 +103,18 @@ class BudgetForm extends Component<Props, State> {
       mode,
     } = this.props;
 
+    const { shouldBlockFormSubmit } = this.state;
+
     return (
       <ActionFormButton
         onChageFormToEditMode={onChageFormToEditMode}
         onRemoveItem={onRemoveItem}
-        onClick={handleSubmit}
         disabled={isSubmitting}
+        onClick={() => {
+          if (!shouldBlockFormSubmit) {
+            handleSubmit();
+          }
+        }}
         mode={mode}
       />
     );
@@ -113,9 +127,7 @@ class BudgetForm extends Component<Props, State> {
 
     return (
       <Wrapper>
-        <Form
-          {...this.staet}
-        >
+        <Form>
           {this.renderProductSale()}
           {shouldShowActionFormButton && this.renderActionFormButton()}
           {this.renderSaleConfirmation()}

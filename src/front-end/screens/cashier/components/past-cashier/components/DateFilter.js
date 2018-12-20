@@ -14,7 +14,7 @@ const Wrapper = styled.div`
 `;
 
 const InputWrapper = styled.div`
-  width: 55%;
+  width: 70%;
 `;
 
 const IconWrapper = styled.div`

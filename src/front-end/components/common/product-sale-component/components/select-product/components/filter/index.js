@@ -3,7 +3,6 @@
 import React, { Component } from 'react';
 
 import MenuList from '@material-ui/core/MenuList';
-import MenuItem from '@material-ui/core/MenuItem';
 import Paper from '@material-ui/core/Paper';
 
 import styled from 'styled-components';
@@ -44,6 +43,7 @@ const ListItem = styled.div`
 `;
 
 type Props = {
+  handleBlockFormSubmit: Function,
   onSelectProduct: Function,
   getAllProducts: Function,
   productSelected: Object,
@@ -75,14 +75,14 @@ class ProductFilter extends Component<Props, State> {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { productSelected } = nextProps;
+    const { handleBlockFormSubmit, productSelected } = nextProps;
 
     const isProductSelectedEmpty = !(Object.entries(productSelected)).length;
 
     if (isProductSelectedEmpty) {
       this.setState({
         filterValue: '',
-      });
+      }, () => handleBlockFormSubmit(false));
     }
   }
 
@@ -107,6 +107,10 @@ class ProductFilter extends Component<Props, State> {
   };
 
   onTypeFilterValue = (event: Object) => {
+    const { handleBlockFormSubmit } = this.props;
+
+    handleBlockFormSubmit(true);
+
     this.setState({
       filterValue: event.target.value,
     }, () => this.onFilterProducts());

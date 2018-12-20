@@ -116,9 +116,10 @@ const renderTopRow = (setFieldValue: Function, values: Object, errors: Object, m
   );
 };
 
-const renderSelectProduct = (setFieldValue: Function, values: Object, mode: string, stock: Array<Object>): Object => (
+const renderSelectProduct = (handleBlockFormSubmit: Function, setFieldValue: Function, values: Object, mode: string, stock: Array<Object>): Object => (
   <SelectProduct
     onAddProduct={(product, quantity) => onAddProduct(product, quantity, setFieldValue, values)}
+    handleBlockFormSubmit={handleBlockFormSubmit}
     values={values}
     stock={stock}
     mode={mode}
@@ -169,6 +170,7 @@ const renderFooterValues = (setFieldValue: Function, values: Object, mode: strin
 };
 
 type Props = {
+  handleBlockFormSubmit: Function,
   withExtraComponent: ?boolean,
   ExtraComponent: ?Object,
   setFieldValue: Function,
@@ -179,6 +181,7 @@ type Props = {
 };
 
 const ProductSale = ({
+  handleBlockFormSubmit,
   withExtraComponent,
   ExtraComponent,
   setFieldValue,
@@ -191,7 +194,7 @@ const ProductSale = ({
     {renderTopRow(setFieldValue, values, errors, mode)}
     {withExtraComponent && renderExtraComponent(ExtraComponent, setFieldValue, values, errors, mode)}
     <Paper>
-      {renderSelectProduct(setFieldValue, values, mode, stock)}
+      {renderSelectProduct(handleBlockFormSubmit, setFieldValue, values, mode, stock)}
       {renderProductsList(setFieldValue, values, errors, mode, stock)}
       {renderFooterValues(setFieldValue, values, mode)}
     </Paper>

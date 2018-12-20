@@ -16,6 +16,7 @@ import Input from '../../../../../CustomInput';
 
 const Wrapper = styled.div`
   display: flex;
+  align-items: center;
   flex: 1;
 `;
 

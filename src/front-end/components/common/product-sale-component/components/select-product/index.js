@@ -26,6 +26,7 @@ const ButtonWrapper = styled.div`
 `;
 
 type Props = {
+  handleBlockFormSubmit: Function,
   onAddProduct: Function,
   stock: Array<Object>,
   values: Object,
@@ -151,7 +152,7 @@ class SelectProduct extends Component<Props, State> {
 
   render() {
     const { productSelected, quantity } = this.state;
-    const { mode } = this.props;
+    const { handleBlockFormSubmit, mode } = this.props;
 
     const isSomeProductSelected = !!(Object.entries(productSelected)).length;
     const isSomeQuantitySelected = !!(quantity);
@@ -161,6 +162,7 @@ class SelectProduct extends Component<Props, State> {
     return (
       <Container>
         <ProductFilter
+          handleBlockFormSubmit={handleBlockFormSubmit}
           onSelectProduct={this.onSelectProduct}
           productSelected={productSelected}
           mode={mode}

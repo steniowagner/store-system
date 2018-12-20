@@ -29,6 +29,7 @@ type State = {
 class SalesForm extends Component<Props, State> {
   state = {
     isSaleConfirmationDialogOpen: false,
+    shouldBlockFormSubmit: false,
   };
 
   onToggleSaleConfirmationDialog = (): void => {
@@ -36,6 +37,12 @@ class SalesForm extends Component<Props, State> {
 
     this.setState({
       isSaleConfirmationDialogOpen: !isSaleConfirmationDialogOpen,
+    });
+  };
+
+  handleBlockFormSubmit = (value: boolean): void => {
+    this.setState({
+      shouldBlockFormSubmit: value,
     });
   };
 
@@ -51,6 +58,7 @@ class SalesForm extends Component<Props, State> {
     return (
       <Section>
         <ProductSale
+          handleBlockFormSubmit={this.handleBlockFormSubmit}
           setFieldValue={setFieldValue}
           values={values}
           errors={errors}
@@ -79,19 +87,22 @@ class SalesForm extends Component<Props, State> {
     const {
       onChageFormToEditMode,
       onRemoveItem,
-      values,
+      isSubmitting,
       mode,
     } = this.props;
 
-    const { products } = values;
-    const hasProducts = !!(products.length);
+    const { shouldBlockFormSubmit } = this.state;
 
     return (
       <ActionFormButton
-        onClick={this.onToggleSaleConfirmationDialog}
+        onClick={() => {
+          if (!shouldBlockFormSubmit) {
+            this.onToggleSaleConfirmationDialog();
+          }
+        }}
         onChageFormToEditMode={onChageFormToEditMode}
         onRemoveItem={onRemoveItem}
-        disabled={!hasProducts}
+        disabled={isSubmitting}
         mode={mode}
       />
     );

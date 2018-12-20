@@ -11,7 +11,6 @@ const Container = styled.div`
   width: 100%;
   height: 350px;
   overflow-y: scroll;
-  background-color: ${({ theme }) => theme.colors.white};
 `;
 
 const ErrorContainer = styled.div`
