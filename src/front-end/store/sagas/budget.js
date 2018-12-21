@@ -1,4 +1,9 @@
-import { select, call, put } from 'redux-saga/effects';
+import {
+  select,
+  call,
+  all,
+  put,
+} from 'redux-saga/effects';
 
 import moment from 'moment';
 import 'moment/locale/pt-br';
@@ -178,14 +183,14 @@ export function* setOutdatedBudgets() {
 
     const outdatedBudgets = getOutdatedBudgets(result);
 
-    outdatedBudgets.forEach(function* setOutdated(outdatedBudget) {
+    yield all(outdatedBudgets.map(function* setOutdated(outdatedBudget) {
       const budgetOutdated = {
         ...outdatedBudget,
         status: BUDGET_STATUS.OUT_OF_TIME,
       };
 
       yield call(execRequest, BUDGET, UPDATE_BUDGET, EVENT_TAGS.UPDATE_BUDGET, budgetOutdated);
-    });
+    }));
   } catch (err) {
     yield put(BudgetCreators.setOutdatedBudgetsFailure());
   }

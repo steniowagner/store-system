@@ -120,7 +120,6 @@ class Login extends Component<Props, State> {
 
   renderLoginForm = (users: Array<Object>): Object => (
     <LoginForm
-      setSnackbarMessage={this.setSnackbarMessage}
       setSnackbarError={this.setSnackbarError}
       users={users}
     />

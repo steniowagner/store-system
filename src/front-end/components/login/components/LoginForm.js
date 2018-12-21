@@ -6,13 +6,14 @@ import Button from '@material-ui/core/Button';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { Creators as BudgetCreators } from '../../../store/ducks/budget';
 import { Creators as AuthCreators } from '../../../store/ducks/auth';
 
 import { Wrapper, InputWrapper, ButtonWrapper } from './styles';
 import Input from '../../common/CustomInput';
 
 type Props = {
-  setSnackbarMessage: Function,
+  setOutdatedBudgets: Function,
   setSnackbarError: Function,
   users: Array<Object>,
   login: Function,
@@ -49,7 +50,9 @@ class LoginForm extends Component<Props, State> {
   };
 
   handleLogin = (user: Object): void => {
-    const { login } = this.props;
+    const { setOutdatedBudgets, login } = this.props;
+
+    setOutdatedBudgets();
 
     login(user);
   };
@@ -97,6 +100,8 @@ class LoginForm extends Component<Props, State> {
   }
 }
 
-const mapDispatchToProps = dispatch => bindActionCreators(AuthCreators, dispatch);
+const Creators = Object.assign({}, BudgetCreators, AuthCreators);
+
+const mapDispatchToProps = dispatch => bindActionCreators(Creators, dispatch);
 
 export default connect(null, mapDispatchToProps)(LoginForm);
