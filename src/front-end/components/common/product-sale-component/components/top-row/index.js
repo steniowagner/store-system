@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component, Fragment } from 'react';
+import React, { Fragment } from 'react';
 
 import Print from '@material-ui/icons/Print';
 import styled from 'styled-components';
@@ -33,82 +33,62 @@ type Props = {
   values: Object,
   error: string,
   mode: string,
-}
+};
 
-class TopRow extends Component<Props, {}> {
-  state = {
-    isUserWithDebits: false,
-  };
-
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      isUserWithDebits: (nextProps.debits.length > 0),
-    });
-  }
-
-  renderPrintReceptButton = (): Object => {
-    const {
-      startPrint,
-      values,
-      error,
-      mode,
-    } = this.props;
-
-    return (mode === 'detail') && (
-      <ButtonWrapper
-        hasError={!!error}
-      >
-        <ActionButton
-          action={() => startPrint(values)}
-          title="Imprimir Comprovante"
-          CustomIcon={Print}
-          withIcon={false}
-          withCustomIcon
-        />
-      </ButtonWrapper>
-    );
-  };
-
-  renderSelectCustomerContent = (): Object => {
-    const {
-      customerSelected,
-      setFieldValue,
-      error,
-      mode,
-    } = this.props;
-
-    return (
-      <SelectCustomer
-        customerSelected={customerSelected}
-        setFieldValue={setFieldValue}
-        error={error}
-        mode={mode}
+const renderPrintReceptButton = (startPrint: Function, values: Object, error: Object, mode: string): Object => (
+  (mode === 'detail') && (
+    <ButtonWrapper
+      hasError={!!error}
+    >
+      <ActionButton
+        action={() => startPrint(values)}
+        title="Imprimir Comprovante"
+        CustomIcon={Print}
+        withIcon={false}
+        withCustomIcon
       />
-    );
-  };
+    </ButtonWrapper>
+  )
+);
 
-  render() {
-    const { shouldRenderPrintReceiptButton, customerSelected } = this.props;
-    const { isUserWithDebits } = this.state;
+const renderSelectCustomerContent = (customerSelected: Object, setFieldValue: Function, error: Object, mode: string): Object => (
+  <SelectCustomer
+    customerSelected={customerSelected}
+    setFieldValue={setFieldValue}
+    error={error}
+    mode={mode}
+  />
+);
 
-    return (
-      <Fragment>
-        <span>
-          Cliente
-        </span>
-        <TopRowWrapper>
-          {this.renderSelectCustomerContent()}
-          {shouldRenderPrintReceiptButton && this.renderPrintReceptButton()}
-        </TopRowWrapper>
-        {isUserWithDebits && (
-          <CustomerDebits
-            customerId={customerSelected.id}
-          />
-        )}
-      </Fragment>
-    );
-  }
-}
+const TopRow = ({
+  shouldRenderPrintReceiptButton,
+  customerSelected,
+  setFieldValue,
+  startPrint,
+  debits,
+  values,
+  error,
+  mode,
+}: Props): Object => {
+  const isUserWithDebits = (!!customerSelected && debits.length > 0);
+
+  return (
+    <Fragment>
+      <span>
+        Cliente
+      </span>
+      <TopRowWrapper>
+        {renderSelectCustomerContent(customerSelected, setFieldValue, error, mode)}
+        {shouldRenderPrintReceiptButton && renderPrintReceptButton(startPrint, values, error, mode)}
+      </TopRowWrapper>
+      {isUserWithDebits && (
+        <CustomerDebits
+          customerId={customerSelected.id}
+        />
+      )}
+    </Fragment>
+  );
+};
 
 const mapDispatchToProps = dispatch => bindActionCreators(PrintCreators, dispatch);
 

@@ -45,7 +45,7 @@ class UserInfo extends Component<Props, State> {
 
     this.setState({
       anchorElement: null,
-    }, logout());
+    }, () => logout());
   }
 
   handleCloseMenu = () => {
