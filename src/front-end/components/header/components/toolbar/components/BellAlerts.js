@@ -2,7 +2,7 @@
 
 import React, { Component, Fragment } from 'react';
 
-import NotificationsIcon from '@material-ui/icons/Notifications';
+import Notifications from '@material-ui/icons/Notifications';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
@@ -16,7 +16,7 @@ import styled from 'styled-components';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Creators as BellAlertsCreators } from '../../../store/ducks/alerts';
+import { Creators as BellAlertsCreators } from '../../../../../store/ducks/alerts';
 
 const ContentContainer = styled.div`
   margin-top: 14px;
@@ -57,6 +57,10 @@ const ValueWrapper = styled.div`
 
 const Text = styled.p`
   font-size: 18px;
+`;
+
+const NotificationsIcon = styled(Notifications)`
+  color: ${({ theme }) => theme.colors.headerText};
 `;
 
 type Props = {
@@ -210,6 +214,7 @@ class BellAlert extends Component<Props, State> {
 
     const IconWithBadge = (
       <Badge
+        color="primary"
         badgeContent={(
           <span>
             {badgeText}

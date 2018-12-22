@@ -11,15 +11,15 @@ import styled from 'styled-components';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Creators as AuthCreators } from '../../../store/ducks/auth';
+import { Creators as AuthCreators } from '../../../../../store/ducks/auth';
 
 const UsernameText = styled.p`
-  color: ${({ theme }) => theme.colors.white};
+  color: ${({ theme }) => theme.colors.headerText};
 `;
 
 const UserIcon = styled(AccountCircle)`
   margin-right: 8px;
-  color: ${({ theme }) => theme.colors.white};
+  color: ${({ theme }) => theme.colors.headerText};
 `;
 
 type Props = {

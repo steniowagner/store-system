@@ -8,7 +8,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import ErrorOutline from '@material-ui/icons/ErrorOutline';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import IconButton from '@material-ui/core/IconButton';
-import CloudIcon from '@material-ui/icons/Backup';
+import Cloud from '@material-ui/icons/Backup';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import Slide from '@material-ui/core/Slide';
@@ -17,7 +17,7 @@ import styled from 'styled-components';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Creators as BackupCreators } from '../../../../store/ducks/backup';
+import { Creators as BackupCreators } from '../../../../../../store/ducks/backup';
 
 import { TYPES, CONFIG } from './buttons-config';
 import ButtonAction from './ButtonAction';
@@ -34,6 +34,10 @@ const Message = styled.p`
   font-size: 18px;
   font-weight: 500;
   font-color: ${({ theme }) => theme.colors.darkText};
+`;
+
+const CloudIcon = styled(Cloud)`
+  color: ${({ theme }) => theme.colors.headerText};
 `;
 
 const CheckCircleOutlineIcon = styled(({ ...props }) => (

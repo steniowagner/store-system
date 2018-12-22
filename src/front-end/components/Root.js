@@ -6,16 +6,14 @@ import { BrowserRouter as ApplicationRouter } from 'react-router-dom';
 
 import { connect } from 'react-redux';
 
-import NavigationMenu from './navigation-menu';
-import HeaderBar from './header-bar';
+import Header from './header';
 import Router from '../Router';
 import Login from './login';
 
 const renderDashboard = (): Object => (
   <ApplicationRouter>
     <Fragment>
-      <HeaderBar />
-      <NavigationMenu />
+      <Header />
       <Router />
     </Fragment>
   </ApplicationRouter>

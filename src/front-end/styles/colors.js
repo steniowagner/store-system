@@ -3,6 +3,7 @@ export default {
   tableOddColor: '#f2f2f2',
   containerColor: '#f4f4f4',
   darkText: '#rgba(0, 0, 0, 0.8)',
+  headerText: '#6F6F6F',
   affirmative: '#5977e2',
   customInactiveButton: '#abbbf4',
   lightGray: '#f2f2f2',
