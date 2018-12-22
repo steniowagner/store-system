@@ -48,6 +48,7 @@ type Props = {
   getAllProducts: Function,
   productSelected: Object,
   products: Array<Object>,
+  refFocus: string,
   mode: string,
 };
 
@@ -214,13 +215,8 @@ class ProductFilter extends Component<Props, State> {
   }
 
   render() {
-    const {
-      optionSelected,
-      filterValue,
-      isListOpen,
-    } = this.state;
-
-    const { mode } = this.props;
+    const { optionSelected, filterValue, isListOpen } = this.state;
+    const { refFocus, mode } = this.props;
 
     return (
       <FilterContainer>
@@ -234,6 +230,7 @@ class ProductFilter extends Component<Props, State> {
           onSelectOption={this.onSelectOption}
           optionSelected={optionSelected}
           filterValue={filterValue}
+          refFocus={refFocus}
           mode={mode}
         />
         {isListOpen && this.renderProductsFilteredList()}

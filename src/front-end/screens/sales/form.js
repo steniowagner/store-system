@@ -88,21 +88,24 @@ class SalesForm extends Component<Props, State> {
       onChageFormToEditMode,
       onRemoveItem,
       isSubmitting,
+      values,
       mode,
     } = this.props;
 
     const { shouldBlockFormSubmit } = this.state;
 
+    const hasProducts = (values.products.length > 0);
+
     return (
       <ActionFormButton
         onClick={() => {
-          if (!shouldBlockFormSubmit) {
+          if (!shouldBlockFormSubmit && hasProducts) {
             this.onToggleSaleConfirmationDialog();
           }
         }}
         onChageFormToEditMode={onChageFormToEditMode}
         onRemoveItem={onRemoveItem}
-        disabled={isSubmitting}
+        disabled={isSubmitting || !hasProducts}
         mode={mode}
       />
     );

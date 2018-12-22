@@ -19,15 +19,16 @@ const InputWrapper = styled.div`
 type Props = {
   onTypeQuantity: Function,
   salePrice: number,
+  refFocus: string,
   quantity: string,
   mode: string,
 };
 
 class SelectProductValues extends Component <Props, {}> {
   componentWillReceiveProps(nextProps) {
-    const { salePrice } = nextProps;
+    const { salePrice, refFocus } = nextProps;
 
-    if (salePrice) {
+    if (salePrice && (refFocus === 'quantity')) {
       this._inputQuantityRef.focus();
     }
   }

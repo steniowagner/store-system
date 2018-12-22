@@ -4,8 +4,8 @@ import React, { Component } from 'react';
 
 import styled from 'styled-components';
 
-import SelectProductsValues from './components/SelectProductsValues';
 import StockQuantityAlert, { ALERTS_TYPES } from './components/StockQuantityAlert';
+import SelectProductsValues from './components/SelectProductsValues';
 import ProductFilter from './components/filter';
 import ActionButtom from '../../../ActionButton';
 
@@ -41,6 +41,7 @@ type State = {
 class SelectProduct extends Component<Props, State> {
   state = {
     isAlertStockQuantityDialogOpen: false,
+    refFocus: 'filterInput',
     productSelected: {},
     alertConfig: {},
     quantity: '',
@@ -56,6 +57,7 @@ class SelectProduct extends Component<Props, State> {
 
   onSelectProduct = (productSelected: Object): void => {
     this.setState({
+      refFocus: 'quantity',
       productSelected,
     });
   };
@@ -88,6 +90,7 @@ class SelectProduct extends Component<Props, State> {
 
     this.setState({
       isAlertStockQuantityDialogOpen: false,
+      refFocus: 'filterInput',
       productSelected: {},
       quantity: '',
     }, () => onAddProduct(productSelected, quantity));
@@ -151,7 +154,7 @@ class SelectProduct extends Component<Props, State> {
   };
 
   render() {
-    const { productSelected, quantity } = this.state;
+    const { productSelected, refFocus, quantity } = this.state;
     const { handleBlockFormSubmit, mode } = this.props;
 
     const isSomeProductSelected = !!(Object.entries(productSelected)).length;
@@ -165,11 +168,13 @@ class SelectProduct extends Component<Props, State> {
           handleBlockFormSubmit={handleBlockFormSubmit}
           onSelectProduct={this.onSelectProduct}
           productSelected={productSelected}
+          refFocus={refFocus}
           mode={mode}
         />
         <SelectProductsValues
           salePrice={productSelected.salePrice || ''}
           onTypeQuantity={this.onTypeQuantity}
+          refFocus={refFocus}
           quantity={quantity}
           mode={mode}
         />

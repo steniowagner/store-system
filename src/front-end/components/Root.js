@@ -6,8 +6,8 @@ import { BrowserRouter as ApplicationRouter } from 'react-router-dom';
 
 import { connect } from 'react-redux';
 
-import Header from './header';
 import Router from '../Router';
+import Header from './header';
 import Login from './login';
 
 const renderDashboard = (): Object => (

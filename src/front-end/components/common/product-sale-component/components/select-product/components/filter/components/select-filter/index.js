@@ -91,6 +91,7 @@ type Props = {
   onSelectOption: Function,
   optionSelected: Object,
   filterValue: string,
+  refFocus: string,
   mode: string,
 };
 
@@ -104,9 +105,9 @@ class CustomFilter extends Component<Props, State> {
   };
 
   componentWillReceiveProps(nextProps) {
-    const { filterValue } = nextProps;
+    const { refFocus } = nextProps;
 
-    if (!filterValue) {
+    if (refFocus === 'filterInput') {
       this._inputRef.focus();
     }
   }
@@ -179,7 +180,6 @@ class CustomFilter extends Component<Props, State> {
             onChange={onTypeFilterValue}
             value={filterValue}
             disableUnderline
-            autoFocus
             fullWidth
           />
         </InputWrapper>
