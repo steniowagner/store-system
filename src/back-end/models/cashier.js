@@ -1,5 +1,5 @@
 const CashierModel = (sequelize, DataTypes) => {
-  const { STRING, FLOAT, TEXT } = DataTypes;
+  const { STRING, FLOAT, JSON } = DataTypes;
 
   const Model = sequelize.define('Cashier', {
     dateToShow: {
@@ -28,7 +28,7 @@ const CashierModel = (sequelize, DataTypes) => {
 
     operations: {
       allowNull: false,
-      type: TEXT,
+      type: JSON,
     },
 
     initialMoneyCashier: {

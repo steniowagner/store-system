@@ -56,8 +56,8 @@ export function* createBudget(action) {
     const params = {
       ...args,
       code: shorthash.unique(moment().format()),
-      products: JSON.stringify(args.products),
       subtotal: parseFloat(args.subtotal),
+      products: { data: args.products },
       dateToShow: moment().format('ll'),
       total: parseFloat(args.total),
       salesman: username,
@@ -67,7 +67,7 @@ export function* createBudget(action) {
 
     const newBudget = {
       ...parseBudgetToTableView(params),
-      products: JSON.parse(params.products),
+      products: params.products.data,
       id: result,
     };
 
@@ -86,7 +86,7 @@ export function* getAllBudgets() {
 
     const allBudgets = result.map(budget => ({
       ...parseBudgetToTableView(budget),
-      products: JSON.parse(budget.products),
+      products: budget.products.data,
     }));
 
     yield put(BudgetCreators.readAllBudgetsSuccess(allBudgets));
@@ -104,7 +104,7 @@ export function* editBudget(action) {
 
     const params = {
       ...budget,
-      products: JSON.stringify(budget.products),
+      products: { data: budget.products },
       subtotal: parseFloat(budget.subtotal),
       total: parseFloat(budget.total),
     };
@@ -149,7 +149,7 @@ export function* confirmBudgetPayment(action) {
 
     const params = {
       ...budget,
-      products: JSON.stringify(budget.products),
+      products: { data: budget.products },
       subtotal: parseFloat(budget.subtotal),
       total: parseFloat(budget.total),
     };

@@ -1,10 +1,5 @@
 const BudgetModel = (sequelize, DataTypes) => {
-  const {
-    STRING,
-    FLOAT,
-    JSON,
-    TEXT,
-  } = DataTypes;
+  const { STRING, FLOAT, JSON } = DataTypes;
 
   const Model = sequelize.define('Budget', {
     customer: {
@@ -29,7 +24,7 @@ const BudgetModel = (sequelize, DataTypes) => {
 
     products: {
       allowNull: false,
-      type: TEXT,
+      type: JSON,
     },
 
     subtotal: {

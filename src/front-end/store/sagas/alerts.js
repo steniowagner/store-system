@@ -42,7 +42,6 @@ export function* getNumberCustomersInDebit() {
     let numberCustomersInDebit = 0;
 
     const isUserInDebit = (customerId, sale) => (sale.customer.id === customerId) && Boolean(sale.inDebit);
-
     customers.forEach((customer) => {
       const isUserWithAtLeastOneDebit = sales.some(sale => isUserInDebit(customer.id, sale));
       numberCustomersInDebit += Number(isUserWithAtLeastOneDebit);

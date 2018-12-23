@@ -4,7 +4,7 @@ const onMigrate = (queryInterface, DataTypes) => {
     STRING,
     FLOAT,
     DATE,
-    TEXT,
+    JSON,
   } = DataTypes;
 
   queryInterface.createTable('Cashiers', {
@@ -41,7 +41,7 @@ const onMigrate = (queryInterface, DataTypes) => {
 
     operations: {
       allowNull: false,
-      type: TEXT,
+      type: JSON,
     },
 
     initialMoneyCashier: {

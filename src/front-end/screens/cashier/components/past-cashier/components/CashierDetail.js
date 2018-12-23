@@ -2,8 +2,8 @@
 
 import React, { Component } from 'react';
 
-import LockClosed from '@material-ui/icons/Lock';
 import LockOpen from '@material-ui/icons/LockOpen';
+import LockClosed from '@material-ui/icons/Lock';
 
 import styled from 'styled-components';
 
@@ -181,12 +181,11 @@ class CashieDetail extends Component<Props, State> {
     );
   };
 
-  renderTable = (operations: string): Object => {
+  renderTable = (cashier: Object): Object => {
     const { currentPage } = this.state;
+    const operations = (cashier.operations || []);
 
-    const parsedOperations = (operations ? JSON.parse(operations) : []);
-
-    const dataset = parsedOperations.map((operation) => {
+    const dataset = operations.map((operation) => {
       const splittedOperation = operation.dateToShow.split(' ');
 
       return {
@@ -234,7 +233,7 @@ class CashieDetail extends Component<Props, State> {
         isOpen={isOpen}
       >
         {this.renderHeader(cashier)}
-        {this.renderTable(cashier.operations)}
+        {this.renderTable(cashier)}
         {this.renderBottomValues(cashier)}
         {this.renderSaleDetailDialog()}
         {this.renderInOutCashierOperationDetail()}

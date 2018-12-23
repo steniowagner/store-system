@@ -221,7 +221,7 @@ const cashier = (state = INITIAL_STATE, { payload, type }) => {
           (payload.cashierUpdated.id === state.currentCashier.id
             ? ({
               ...payload.cashierUpdated,
-              operations: JSON.parse(payload.cashierUpdated.operations),
+              operations: payload.cashierUpdated.operations,
             })
             : state.currentCashier
           ),
@@ -247,7 +247,7 @@ const cashier = (state = INITIAL_STATE, { payload, type }) => {
         ...state,
         currentCashier: {
           ...payload.cashierUpdated,
-          operations: JSON.parse(payload.cashierUpdated.operations),
+          operations: payload.cashierUpdated.operations,
         },
       };
 

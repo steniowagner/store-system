@@ -112,7 +112,7 @@ const sale = (state = INITIAL_STATE, { payload, type }) => {
 
     case Types.GET_ALL_SUCCESS:
       return {
-        data: [...payload.sales],
+        data: payload.sales,
         error: null,
       };
 
@@ -133,7 +133,7 @@ const sale = (state = INITIAL_STATE, { payload, type }) => {
       return {
         ...state,
         message: payload.message,
-        data: Object.assign([], state.data, { [payload.salesUpdated.index]: payload.salesUpdated }),
+        data: state.data.map(item => (item.id === payload.salesUpdated.id ? payload.salesUpdated : item)),
       };
 
     case Types.EDIT_REQUEST_FAILURE:

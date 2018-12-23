@@ -7,6 +7,7 @@ import { CASHIER_OPERATIONS } from './components/current-cashier/components/cash
 export const getNewCashierOperationData = (value: string, reason: string, type: string): Object => ({
   valueText: `R$ ${parseFloat(value).toFixed(2)}`,
   timestampText: moment().calendar(),
+  dateToShow: moment().format('lll'),
   value: parseFloat(value),
   salesman: 'swmyself',
   id: Math.random(),

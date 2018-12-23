@@ -4,7 +4,6 @@ const onMigrate = (queryInterface, DataTypes) => {
     STRING,
     FLOAT,
     DATE,
-    TEXT,
     JSON,
   } = DataTypes;
 
@@ -42,7 +41,7 @@ const onMigrate = (queryInterface, DataTypes) => {
 
     products: {
       allowNull: false,
-      type: TEXT,
+      type: JSON,
     },
 
     subtotal: {

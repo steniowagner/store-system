@@ -20,7 +20,7 @@ const parseSaleToTableView = (sale: Object): Object => ({
   subtotalText: `R$ ${sale.subtotal.toFixed(2)}`,
   customerName: sale.customer.name || '-',
   totalText: `R$ ${sale.total.toFixed(2)}`,
-  products: JSON.parse(sale.products),
+  products: sale.products.data,
 });
 
 const EVENT_TAGS = {
@@ -38,7 +38,7 @@ export function* createSale(action) {
     const params = {
       ...args,
       code: shorthash.unique(moment().format()),
-      products: JSON.stringify(args.products),
+      products: { data: args.products },
       subtotal: parseFloat(args.subtotal),
       dateToShow: moment().format('lll'),
       total: parseFloat(args.total),
@@ -65,7 +65,7 @@ export function* createSale(action) {
       yield call(editStockProducts, args, allSales, TAKE_AWAY_PRODUCTS_STOCK);
     }
   } catch (err) {
-    yield put(SaleCreators.createSaleFailure(err.message));
+    yield put(SaleCreators.createSaleFailure());
   }
 }
 
@@ -95,8 +95,8 @@ export function* editSale(action) {
 
     const params = {
       ...sale,
-      products: JSON.stringify(sale.products),
       subtotal: parseFloat(sale.subtotal),
+      products: { data: sale.products },
       total: parseFloat(sale.total),
     };
 
@@ -115,6 +115,6 @@ export function* editSale(action) {
     yield call(onEditSaleOperation, saleUpdated);
     yield call(getNumberCustomersInDebit);
   } catch (err) {
-    yield put(SaleCreators.editSaleFailure(err.message));
+    yield put(SaleCreators.editSaleFailure());
   }
 }

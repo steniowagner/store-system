@@ -1,10 +1,5 @@
 const SaleModel = (sequelize, DataTypes) => {
-  const {
-    STRING,
-    FLOAT,
-    JSON,
-    TEXT,
-  } = DataTypes;
+  const { STRING, FLOAT, JSON } = DataTypes;
 
   const Model = sequelize.define('Sale', {
     paymentInfo: {
@@ -37,7 +32,7 @@ const SaleModel = (sequelize, DataTypes) => {
 
     products: {
       allowNull: false,
-      type: TEXT,
+      type: JSON,
     },
 
     subtotal: {

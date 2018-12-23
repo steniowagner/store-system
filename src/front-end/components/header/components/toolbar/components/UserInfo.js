@@ -2,7 +2,7 @@
 
 import React, { Component, Fragment } from 'react';
 
-import AccountCircle from '@material-ui/icons/AccountCircle';
+import AssignmentInd from '@material-ui/icons/AssignmentInd';
 import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
@@ -18,7 +18,7 @@ const UsernameText = styled.p`
   color: ${({ theme }) => theme.colors.headerText};
 `;
 
-const UserIcon = styled(AccountCircle)`
+const UserIcon = styled(AssignmentInd)`
   margin-right: 8px;
   color: ${({ theme }) => theme.colors.headerText};
 `;

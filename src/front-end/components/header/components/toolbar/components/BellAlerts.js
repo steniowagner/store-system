@@ -2,6 +2,7 @@
 
 import React, { Component, Fragment } from 'react';
 
+import DialogContentText from '@material-ui/core/DialogContentText';
 import Notifications from '@material-ui/icons/Notifications';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -186,7 +187,7 @@ class BellAlert extends Component<Props, State> {
   renderDialog = (): Object => {
     const { isAlertDialogOpen, totalAlerts } = this.state;
 
-    const shouldOpenDialog = (isAlertDialogOpen && (totalAlerts > 0));
+    const shouldShowEmptyContentMessage = (totalAlerts === 0);
 
     return (
       <Dialog
@@ -194,13 +195,20 @@ class BellAlert extends Component<Props, State> {
         aria-labelledby="alert-dialog-slide-title"
         TransitionComponent={this.renderSlide}
         onClose={this.onToggleAlertDialog}
-        open={shouldOpenDialog}
+        open={isAlertDialogOpen}
         disableBackdropClick
         maxWidth="sm"
       >
         {this.renderTitlte()}
         <DialogContent>
           {this.renderContent()}
+          {shouldShowEmptyContentMessage && (
+            <DialogContentText
+              id="alert-dialog-slide-description"
+            >
+              Nenhuma Mensagem
+            </DialogContentText>
+          )}
         </DialogContent>
         {this.renderActionButtons()}
       </Dialog>
