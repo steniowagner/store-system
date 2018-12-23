@@ -11,6 +11,7 @@ import styled from 'styled-components';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { Creators as CashierCreators } from '../../../../../store/ducks/cashier';
 import { Creators as AuthCreators } from '../../../../../store/ducks/auth';
 
 const UsernameText = styled.p`
@@ -23,6 +24,7 @@ const UserIcon = styled(AccountCircle)`
 `;
 
 type Props = {
+  resetMessages: Function,
   logout: Function,
   auth: Object,
 };
@@ -41,11 +43,14 @@ class UserInfo extends Component<Props, State> {
   };
 
   onClickMenuItem = () => {
-    const { logout } = this.props;
+    const { resetMessages, logout } = this.props;
 
     this.setState({
       anchorElement: null,
-    }, () => logout());
+    }, () => {
+      resetMessages();
+      logout();
+    });
   }
 
   handleCloseMenu = () => {
@@ -86,7 +91,9 @@ class UserInfo extends Component<Props, State> {
   }
 }
 
-const mapDispatchToProps = dispatch => bindActionCreators(AuthCreators, dispatch);
+const Creators = Object.assign({}, CashierCreators, AuthCreators);
+
+const mapDispatchToProps = dispatch => bindActionCreators(Creators, dispatch);
 
 const mapStateToProps = state => ({
   auth: state.auth,

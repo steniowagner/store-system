@@ -58,7 +58,7 @@ class RegisterUserForm extends Component<Props, State> {
     const isSamePassword = (password === repeatedPassword);
 
     if (!isSamePassword) {
-      setSnackbarError('As senhas não conferem');
+      setSnackbarError('As senhas digitadas não são as mesmas');
       return;
     }
 
@@ -88,7 +88,7 @@ class RegisterUserForm extends Component<Props, State> {
       name,
     } = this.state;
 
-    const typedPasswords = ((!!repeatedPassword && repeatedPassword.length > 6) && (!!password && password.length > 6));
+    const typedPasswords = ((!!repeatedPassword && repeatedPassword.length >= 6) && (!!password && password.length >= 6));
     const shouldDisableButton = !(!!name && !!username && typedPasswords);
 
     return (

@@ -30,7 +30,8 @@ export function* createCashier(action) {
       totalOutcome: parseFloat(0),
       totalIncome: parseFloat(0),
       totalProfit: parseFloat(0),
-      salesman: username,
+      openBy: username,
+      closedBy: '-',
       operations: '',
     };
 
@@ -75,6 +76,21 @@ export function* editCashier(action) {
   } catch (err) {
     yield put(CashierCreators.editCashierFailure(err.message));
   }
+}
+
+export function* closeCashier() {
+  const { cashier, auth } = yield select(state => state);
+
+  const data = {
+    payload: {
+      cashier: {
+        ...cashier.currentCashier,
+        closedBy: auth.user.username,
+      },
+    },
+  };
+
+  yield call(editCashier, data);
 }
 
 const checkIsOperationTypeSale = ({ type }) => (type === CASHIER_OPERATIONS.SALE || type === CASHIER_OPERATIONS.CONSOLIDATE_BUDGET_PAYMENT);

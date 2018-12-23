@@ -13,9 +13,6 @@ export const Types = {
   EDIT_REQUEST_SUCCESS: 'cashier/EDIT_REQUEST_SUCCESS',
   EDIT_REQUEST_FAILURE: 'cashier/EDIT_REQUEST_FAILURE',
 
-  CREATE_SALE: 'cashier/CREATE_SALE',
-  EDIT_SALE: 'cashier/EDIT_SALE',
-
   SET_PAST_CASHIER_TABLE_ITEMS_PER_PAGE: 'cashier/SET_PAST_CASHIER_TABLE_ITEMS_PER_PAGE',
   SET_PAST_CASHIER_DATE_FILTER_VALUE: 'cashier/SET_PAST_CASHIER_DATE_FILTER_VALUE',
   SET_PAST_CASHIER_TABLE_PAGE: 'cashier/SET_PAST_CASHIER_TABLE_PAGE',
@@ -23,9 +20,14 @@ export const Types = {
   SET_CURRENT_CASHIER_TABLE_ITEMS_PER_PAGE: 'cashier/SET_CURRENT_CASHIER_TABLE_ITEMS_PER_PAGE',
   SET_CURRENT_CASHIER_TABLE_PAGE: 'cashier/SET_CURRENT_CASHIER_TABLE_PAGE',
 
+  CREATE_SALE: 'cashier/CREATE_SALE',
+  EDIT_SALE: 'cashier/EDIT_SALE',
+
   SET_TAB_INDEX: 'cashier/SET_TAB_INDEX',
 
   CLOSE_CASHIER: 'cashier/CLOSE_CASHIER',
+
+  RESET_MESSAGES: 'cashier/RESET_MESSAGES',
 };
 
 const handlePastCashiers = (allPastCashiers, state) => {
@@ -156,6 +158,10 @@ export const Creators = {
   setTabIndex: index => ({
     type: Types.SET_TAB_INDEX,
     payload: { index },
+  }),
+
+  resetMessages: () => ({
+    type: Types.RESET_MESSAGES,
   }),
 };
 
@@ -319,6 +325,13 @@ const cashier = (state = INITIAL_STATE, { payload, type }) => {
         ...state,
         isCashierOpen: false,
         message: payload.message,
+      };
+
+    case Types.RESET_MESSAGES:
+      return {
+        ...state,
+        message: '',
+        error: '',
       };
 
     default:

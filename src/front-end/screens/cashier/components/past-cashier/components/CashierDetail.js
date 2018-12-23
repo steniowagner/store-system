@@ -2,6 +2,9 @@
 
 import React, { Component } from 'react';
 
+import LockClosed from '@material-ui/icons/Lock';
+import LockOpen from '@material-ui/icons/LockOpen';
+
 import styled from 'styled-components';
 
 import { getDialogConfig, CASHIER_OPERATIONS } from '../../current-cashier/components/cashier-open/components/top-buttons-values/dialog-config';
@@ -14,6 +17,47 @@ import BottomValues from '../../bottom-valeus';
 
 const TitleWrapper = styled.div`
   margin: 32px 0;
+`;
+
+const TopWrapper = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const OpenClosedText = styled.span`
+  weight: 700,
+`;
+
+const OpenClosedIconWrapper = styled.div`
+  width: 42px;
+  height: 42px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 12px;
+  border-radius: 21px;
+  background-color: ${({ theme }) => theme.colors.affirmative};
+`;
+
+const OpenClosedWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const OpenClosedItemWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+`;
+
+const LockClosedIcon = styled(LockClosed)`
+  color: ${({ theme }) => theme.colors.white};
+`;
+
+const LockOpenIcon = styled(LockOpen)`
+  color: ${({ theme }) => theme.colors.white};
 `;
 
 type Props = {
@@ -105,6 +149,38 @@ class CashieDetail extends Component<Props, State> {
     </TitleWrapper>
   );
 
+  renderOpenCloseCashierInfo = (openBy: string, closedBy: string): Object => {
+    return (
+      <OpenClosedWrapper>
+        <OpenClosedItemWrapper>
+          <OpenClosedIconWrapper>
+            <LockOpenIcon />
+          </OpenClosedIconWrapper>
+          <OpenClosedText>
+            {openBy}
+          </OpenClosedText>
+        </OpenClosedItemWrapper>
+        <OpenClosedItemWrapper>
+          <OpenClosedIconWrapper>
+            <LockClosedIcon />
+          </OpenClosedIconWrapper>
+          <OpenClosedText>
+            {closedBy}
+          </OpenClosedText>
+        </OpenClosedItemWrapper>
+      </OpenClosedWrapper>
+    );
+  };
+
+  renderHeader = (cashier: Object): Object => {
+    return (
+      <TopWrapper>
+        {this.renderDate(cashier.dateToShow)}
+        {this.renderOpenCloseCashierInfo(cashier.openBy, cashier.closedBy)}
+      </TopWrapper>
+    );
+  };
+
   renderTable = (operations: string): Object => {
     const { currentPage } = this.state;
 
@@ -157,7 +233,7 @@ class CashieDetail extends Component<Props, State> {
         onClose={onClose}
         isOpen={isOpen}
       >
-        {this.renderDate(cashier.dateToShow)}
+        {this.renderHeader(cashier)}
         {this.renderTable(cashier.operations)}
         {this.renderBottomValues(cashier)}
         {this.renderSaleDetailDialog()}

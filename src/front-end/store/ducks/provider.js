@@ -125,7 +125,6 @@ const provider = (state = INITIAL_STATE, { payload, type }) => {
       };
 
     case Types.GET_ALL_FAILURE:
-      console.log(state)
       return {
         ...state,
         error: payload.error,

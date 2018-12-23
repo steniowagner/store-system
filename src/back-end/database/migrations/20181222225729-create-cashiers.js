@@ -15,6 +15,22 @@ const onMigrate = (queryInterface, DataTypes) => {
       type: INTEGER,
     },
 
+    openBy: {
+      validate: {
+        notEmpty: true,
+      },
+      allowNull: false,
+      type: STRING,
+    },
+
+    closedBy: {
+      validate: {
+        notEmpty: true,
+      },
+      allowNull: false,
+      type: STRING,
+    },
+
     dateToShow: {
       type: STRING,
     },
@@ -58,14 +74,6 @@ const onMigrate = (queryInterface, DataTypes) => {
       },
       allowNull: false,
       type: FLOAT,
-    },
-
-    salesman: {
-      validate: {
-        notEmpty: true,
-      },
-      allowNull: false,
-      type: STRING,
     },
 
     createdAt: {

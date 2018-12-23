@@ -51,11 +51,16 @@ import {
   deleteBudget,
 } from './budget';
 
+import {
+  getAllCashiers,
+  createCashier,
+  closeCashier,
+  editCashier,
+} from './cashier';
+
 import { getNumberBudgetsOutOfDate, getNumberCustomersInDebit, getNumberStockUnderMin } from './alerts';
 
 import { editProductInStock, insertProduct, getStock } from './stock';
-
-import { getAllCashiers, createCashier, editCashier } from './cashier';
 
 import { getCustomerDebits, removeDebit } from './customerDebits';
 
@@ -111,6 +116,7 @@ export default function* rootSaga() {
     takeLatest(CashierTypes.READ_ALL_REQUEST, getAllCashiers),
     takeLatest(CashierTypes.CREATE_REQUEST, createCashier),
     takeLatest(CashierTypes.EDIT_REQUEST, editCashier),
+    takeLatest(CashierTypes.CLOSE_CASHIER, closeCashier),
 
     takeLatest(CustomerDebitsTypes.GET_DEBITS_REQUEST, getCustomerDebits),
     takeLatest(CustomerDebitsTypes.REMOVE_DEBITS_REQUEST, removeDebit),

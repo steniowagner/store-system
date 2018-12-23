@@ -10,6 +10,22 @@ const CashierModel = (sequelize, DataTypes) => {
       type: STRING,
     },
 
+    openBy: {
+      type: STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+    },
+
+    closedBy: {
+      type: STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+    },
+
     operations: {
       allowNull: false,
       type: TEXT,
@@ -45,14 +61,6 @@ const CashierModel = (sequelize, DataTypes) => {
       },
       allowNull: false,
       type: FLOAT,
-    },
-
-    salesman: {
-      validate: {
-        notEmpty: true,
-      },
-      allowNull: false,
-      type: STRING,
     },
   });
 
