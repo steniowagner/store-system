@@ -1,8 +1,21 @@
 {
   "name": "store-system",
   "version": "0.1.0",
+  "description": "Eunice Livros",
+  "author": "Stenio Wagner",
   "private": true,
-  "main": "src/back-end/electron-starter.js",
+  "main": "public/electron.js",
+  "homepage": "./",
+  "repository": "https://github.com/steniowagner/store-system",
+  "keywords": [
+    "Electron",
+    "store",
+    "React",
+    "Redux",
+    "Redux-Saga",
+    "MySQL",
+    "Sequelize"
+  ],
   "dependencies": {
     "@material-ui/core": "^3.0.3",
     "@material-ui/icons": "^3.0.1",
@@ -29,16 +42,34 @@
   "scripts": {
     "start": "BROWSER=none react-scripts start",
     "build": "react-scripts build",
+    "dist": "electron-builder",
+    "pack": "electron-builder --dir",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "electron-dev": "node src/back-end/electron-wait-react",
+    "electron-dev": "node public/back-end/electron-wait-react",
+    "postinstall": "electron-builder install-app-deps",
     "electron": "electron .",
     "flow": "flow"
+  },
+  "build": {
+    "appId": "com.github.steniowagner",
+    "files": [
+      "build/**/*",
+      "node_modules/**/*"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "productName": "Eunice Livros"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.6",
     "babel-plugin-module-resolver": "^3.1.1",
     "electron": "^2.0.5",
+    "electron-builder": "^20.38.4",
     "eslint": "^4.19.1",
     "eslint-config-airbnb": "^17.0.0",
     "eslint-import-resolver-babel-module": "^4.0.0",
