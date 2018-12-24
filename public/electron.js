@@ -31,7 +31,9 @@ const createWindow = () => {
     slashes: true,
   });
 
-  mainWindow.webContents.openDevTools();
+  if (process.env.MODE === 'development') {
+    mainWindow.webContents.openDevTools();
+  }
 
   mainWindow.loadURL(startUrl);
 

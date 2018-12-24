@@ -1,7 +1,7 @@
 {
   "name": "store-system",
   "version": "0.1.0",
-  "description": "Eunice Livros",
+  "description": "Store System",
   "author": "Stenio Wagner",
   "private": true,
   "main": "public/electron.js",
@@ -58,7 +58,7 @@
       "node_modules/**/*"
     ],
     "directories": {
-      "buildResources": "assets"
+      "buildResources": "resources"
     },
     "win": {
       "target": "nsis"
