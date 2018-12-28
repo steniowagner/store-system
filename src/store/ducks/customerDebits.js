@@ -12,6 +12,8 @@ export const Types = {
 
 const INITIAL_STATE = Immutable({
   data: [],
+  message: null,
+  error: null,
 });
 
 export const Creators = {

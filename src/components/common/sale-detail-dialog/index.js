@@ -35,7 +35,7 @@ const renderContent = (onToggleSaleDetailDialog: Function, sale: Object): Object
         <ProductList
           onEditProductQuantity={() => {}}
           onRemoveProduct={() => {}}
-          products={products.data}
+          products={products}
           mode="detail"
           stock={[]}
           error=""

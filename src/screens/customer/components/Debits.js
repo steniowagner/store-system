@@ -111,7 +111,7 @@ class Debits extends Component<Props, State> {
 
     const sale = {
       ...saleSelected,
-      products: (saleSelected.products || []),
+      products: (saleSelected.products ? saleSelected.products.data : []),
     };
 
     return (
