@@ -31,7 +31,7 @@ const createWindow = () => {
     slashes: true,
   });
 
-  if (process.env.MODE === 'development') {
+  if (process.env.NODE_ENV === 'development') {
     mainWindow.webContents.openDevTools();
   }
 

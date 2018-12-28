@@ -22,8 +22,8 @@ const Container = styled.div`
 type Props = {
   onChageFormToEditMode: Function,
   onRemoveItem: Function,
-  onClick: Function,
   canBeRemoved: boolean,
+  onClick: Function,
   disabled: boolean,
   entity: string,
   mode: string,

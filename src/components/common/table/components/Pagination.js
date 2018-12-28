@@ -24,11 +24,11 @@ const PaginationActionsWrapper = styled.div`
 `;
 
 type Props = {
+  onChangeRowsPerPage: Function,
+  onPageChange: Function,
   datasetLength: number,
   rowsPerPage: number,
   currentPage: number,
-  onChangeRowsPerPage: Function,
-  onPageChange: Function,
 };
 
 const onFirstPageClicked = (onPageChange: Function): void => {

@@ -11,9 +11,9 @@ import { UPDATE_PRODUCTS_STOCK, TAKE_AWAY_PRODUCTS_STOCK } from './event-handler
 import { CREATE_SALE, UPDATE_SALE, READ_SALES } from './event-handlers-types/sale';
 import { getNumberCustomersInDebit, getNumberStockUnderMin } from './alerts';
 import { onAddSaleOperation, onEditSaleOperation } from './cashier';
-import { SALE } from './entitiesTypes';
 import { editStockProducts } from './stock';
 import execRequest from './execRequest';
+import { SALE } from './entitiesTypes';
 
 const parseSaleToTableView = (sale: Object): Object => ({
   ...sale,

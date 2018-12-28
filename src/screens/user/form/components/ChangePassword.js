@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogActions from '@material-ui/core/DialogActions';

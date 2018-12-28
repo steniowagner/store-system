@@ -4,9 +4,9 @@ import React from 'react';
 
 import styled from 'styled-components';
 
+import BudgetStatus, { BUDGET_STATUS } from './BudgetStatus';
 import SelectLimitDate from './SelectLimitDate';
 import PayBudgetButton from './PayBudgetButton';
-import BudgetStatus, { BUDGET_STATUS } from './BudgetStatus';
 
 const Wrapper = styled.div`
   margin: 24px 0;

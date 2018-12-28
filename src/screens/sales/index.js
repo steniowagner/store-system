@@ -17,11 +17,11 @@ import Form from './form';
 type Props = {
   getAllSales: Function,
   createSale: Function,
-  getStock: Function,
-  editSale: Function,
   startPrint: Function,
   stock: Array<Object>,
   sale: Array<Object>,
+  getStock: Function,
+  editSale: Function,
 };
 
 type State = {

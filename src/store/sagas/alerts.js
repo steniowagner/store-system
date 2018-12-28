@@ -8,12 +8,11 @@ import {
   SALE,
 } from './entitiesTypes';
 
+import { BUDGET_STATUS } from '../../screens/budget/components/BudgetStatus';
 import { READ_CUSTOMERS } from './event-handlers-types/customer';
 import { READ_BUDGETS } from './event-handlers-types/budget';
 import { READ_STOCK } from './event-handlers-types/stock';
 import { READ_SALES } from './event-handlers-types/sale';
-
-import { BUDGET_STATUS } from '../../screens/budget/components/BudgetStatus';
 import execRequest from './execRequest';
 
 const EVENT_TAGS = {

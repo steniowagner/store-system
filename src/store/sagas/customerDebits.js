@@ -3,9 +3,9 @@ import { call, put } from 'redux-saga/effects';
 import { Creators as CustomerDebitsCreators } from '../ducks/customerDebits';
 
 import { READ_SALES, UPDATE_SALE } from './event-handlers-types/sale';
-import { SALE } from './entitiesTypes';
 import { getNumberCustomersInDebit } from './alerts';
 import execRequest from './execRequest';
+import { SALE } from './entitiesTypes';
 
 const EVENT_TAGS = {
   GET_ALL_DEBITS: 'CUSTOMER_GET_ALL_DEBITS',

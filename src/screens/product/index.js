@@ -17,10 +17,10 @@ import Form from './form';
 type Props = {
   getAllProducts: Function,
   createProduct: Function,
+  products: Array<Object>,
   removeProduct: Function,
   getAllBrands: Function,
   editProduct: Function,
-  products: Array<Object>,
   brands: Array<Object>,
 };
 

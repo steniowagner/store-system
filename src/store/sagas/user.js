@@ -9,8 +9,8 @@ import {
   DELETE_USER,
 } from './event-handlers-types/user';
 
-import { USER } from './entitiesTypes';
 import execRequest from './execRequest';
+import { USER } from './entitiesTypes';
 
 const EVENT_TAGS = {
   GET_ALL_USERS: 'USERS_GET_ALL',

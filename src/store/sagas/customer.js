@@ -10,8 +10,8 @@ import {
   DELETE_CUSTOMER,
 } from './event-handlers-types/customer';
 
-import { CUSTOMER, SALE } from './entitiesTypes';
 import { READ_SALES } from './event-handlers-types/sale';
+import { CUSTOMER, SALE } from './entitiesTypes';
 import execRequest from './execRequest';
 
 const EVENT_TAGS = {

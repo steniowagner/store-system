@@ -6,8 +6,8 @@ import styled from 'styled-components';
 
 import StockQuantityAlert, { ALERTS_TYPES } from './components/StockQuantityAlert';
 import SelectProductsValues from './components/SelectProductsValues';
-import ProductFilter from './components/filter';
 import ActionButtom from '../../../ActionButton';
+import ProductFilter from './components/filter';
 
 const Container = styled.div`
   width: 100%;

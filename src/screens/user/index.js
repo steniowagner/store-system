@@ -13,9 +13,9 @@ import UserForm from './form';
 type Props = {
   getAllUsers: Function,
   createUser: Function,
+  users: Array<Object>,
   removeUser: Function,
   editUser: Function,
-  users: Array<Object>,
 };
 
 type State = {

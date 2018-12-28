@@ -13,9 +13,8 @@ import {
   Row,
 } from '../../components/common/FormUtils';
 
-import Input from '../../components/common/CustomInput';
-
 import ActionFormButton from '../../components/common/ActionFormButton';
+import Input from '../../components/common/CustomInput';
 
 const renderProductDescriptionSection = (props: Object): Object => {
   const {

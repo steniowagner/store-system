@@ -19,10 +19,10 @@ type Props = {
   createBudget: Function,
   deleteBudget: Function,
   editBudget: Function,
-  getStock: Function,
   stock: Array<Object>,
-  budget: Object,
+  getStock: Function,
   message: string,
+  budget: Object,
   error: string,
 };
 

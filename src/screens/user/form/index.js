@@ -27,8 +27,8 @@ type Props = {
   onEditPassword: Function,
   handleSubmit: Function,
   onRemoveItem: Function,
-  item: Object,
   isSubmitting: boolean,
+  item: Object,
   mode: string,
 };
 

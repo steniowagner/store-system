@@ -11,8 +11,8 @@ import {
   INSERT,
 } from './event-handlers-types/stock';
 
-import { STOCK } from './entitiesTypes';
 import { getNumberStockUnderMin } from './alerts';
+import { STOCK } from './entitiesTypes';
 import execRequest from './execRequest';
 
 const EVENT_TAGS = {

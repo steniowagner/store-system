@@ -13,12 +13,12 @@ import SearchItem from './SearchItem';
 type Props = {
   onToggleDialog: Function,
   onCreateItem: Function,
-  onSetItem: Function,
   itemSelected: string,
-  entity: string,
-  mode: string,
+  onSetItem: Function,
   dataset: Array<any>,
   isOpen: boolean,
+  entity: string,
+  mode: string,
 };
 
 type State = {

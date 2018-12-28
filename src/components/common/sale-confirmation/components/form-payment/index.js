@@ -4,8 +4,8 @@ import React, { Component } from 'react';
 
 import styled from 'styled-components';
 
-import FormPaymentItem from './FormPaymentItem';
 import getItemConfig, { ITEMS_TYPES } from './items-config';
+import FormPaymentItem from './FormPaymentItem';
 
 const Container = styled.div`
   width: 100%;

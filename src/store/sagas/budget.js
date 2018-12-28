@@ -20,12 +20,10 @@ import {
 } from './event-handlers-types/budget';
 
 import { TAKE_AWAY_PRODUCTS_STOCK, UPDATE_PRODUCTS_STOCK, RETURN_PRODUTS_STOCK } from './event-handlers-types/stock';
-
 import { BUDGET_STATUS } from '../../screens/budget/components/BudgetStatus';
-import { BUDGET } from './entitiesTypes';
-
 import { getNumberBudgetsOutOfDate } from './alerts';
 import { editStockProducts } from './stock';
+import { BUDGET } from './entitiesTypes';
 import execRequest from './execRequest';
 import { createSale } from './sale';
 

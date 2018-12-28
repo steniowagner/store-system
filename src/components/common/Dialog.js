@@ -15,8 +15,8 @@ type Props = {
   positiveText: string,
   negativeText: string,
   description: string,
-  title: string,
   isOpen: boolean,
+  title: string,
 };
 
 const onActionButtonClicked = (action: Function, onCloseDialog: Function): Object => {

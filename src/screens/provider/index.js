@@ -14,8 +14,8 @@ type Props = {
   getAllProviders: Function,
   removeProvider: Function,
   createProvider: Function,
-  editProvider: Function,
   providers: Arra<Object>,
+  editProvider: Function,
 };
 
 type State = {
