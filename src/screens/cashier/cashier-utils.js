@@ -4,12 +4,12 @@ import moment from 'moment';
 
 import { CASHIER_OPERATIONS } from './components/current-cashier/components/cashier-open/components/top-buttons-values/dialog-config';
 
-export const getNewCashierOperationData = (value: string, reason: string, type: string): Object => ({
+export const getNewCashierOperationData = (value: string, reason: string, username: string, type: string): Object => ({
   valueText: `R$ ${parseFloat(value).toFixed(2)}`,
   timestampText: moment().calendar(),
   dateToShow: moment().format('lll'),
   value: parseFloat(value),
-  salesman: 'swmyself',
+  salesman: username,
   id: Math.random(),
   customerName: '-',
   discountText: '-',

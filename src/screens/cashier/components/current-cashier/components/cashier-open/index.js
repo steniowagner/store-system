@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 
 import styled from 'styled-components';
+import { connect } from 'react-redux';
 
 import CloseCashierDialog from './components/CloseCashierDialog';
 import TopActionButtons from './components/top-buttons-values';
@@ -27,6 +28,7 @@ type Props = {
   setTableItemsPerPage: Function,
   onCloseCashier: Function,
   currentCashier: Object,
+  username: string,
   tabInfo: Object,
 };
 
@@ -44,9 +46,9 @@ class CashierOpen extends Component<Props, State> {
   };
 
   onAddMoneyCashier = (value: string, reason: string): void => {
-    const { onAddMoneyIntoCashier } = this.props;
-
-    const addMoneyCashierOperation = getNewCashierOperationData(value, reason, CASHIER_OPERATIONS.ADD_MONEY);
+    const { onAddMoneyIntoCashier, username } = this.props;
+    console.log(username);
+    const addMoneyCashierOperation = getNewCashierOperationData(value, reason, username, CASHIER_OPERATIONS.ADD_MONEY);
 
     onAddMoneyIntoCashier(addMoneyCashierOperation);
 
@@ -54,9 +56,10 @@ class CashierOpen extends Component<Props, State> {
   };
 
   onTakeAwaytMoneyCashier = (value: string, reason: string): void => {
-    const { onTakeMoneyFromCashier } = this.props;
+    const { onTakeMoneyFromCashier, username } = this.props;
+    console.log(username);
 
-    const takeAwaytMoneyCashierOperation = getNewCashierOperationData(value, reason, CASHIER_OPERATIONS.TAKE_AWAY_MONEY);
+    const takeAwaytMoneyCashierOperation = getNewCashierOperationData(value, reason, username, CASHIER_OPERATIONS.TAKE_AWAY_MONEY);
 
     onTakeMoneyFromCashier(takeAwaytMoneyCashierOperation);
 
@@ -233,4 +236,8 @@ class CashierOpen extends Component<Props, State> {
   }
 }
 
-export default CashierOpen;
+const mapStateToProps = state => ({
+  username: state.auth.user.username,
+});
+
+export default connect(mapStateToProps)(CashierOpen);
