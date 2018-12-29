@@ -29,7 +29,6 @@ const RowWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  align-items: center;
   margin-bottom: 8px;
 `;
 
@@ -42,8 +41,14 @@ const StoreTitle = styled.p`
   font-weight: 600;
 `;
 
+const StoreIDTitle = styled.p`
+  margin-bottom: 10px;
+  font-size: 14px;
+  font-weight: 500;
+`;
+
 const DocumentTypeText = styled.p`
-  margin: 18px 0 12px 0;
+  margin-bottom: 4px;
   font-size: 14px;
   font-weight: 600;
 `;
@@ -61,6 +66,13 @@ const HeaderTitleText = styled.p`
 
 const HeaderTitleValue = styled.span`
   font-size: 14px;
+`;
+
+const OperationRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 16px 0px;
 `;
 
 type Props = {
@@ -109,6 +121,9 @@ class PrintContent extends Component<Props, {}> {
       <StoreTitle>
         Eunice Livros
       </StoreTitle>
+      <StoreIDTitle>
+        CNPJ: 12.981.210.0001.97
+      </StoreIDTitle>
       <RowWrapper>
         {this.renderTextRow('Endereço:', 'Rua Henrique Elery, 129')}
         {this.renderTextRow('Telefone:', '(85) 3283-6895')}
@@ -128,25 +143,29 @@ class PrintContent extends Component<Props, {}> {
     const { isBudgetOperation } = this.state;
     const { print } = this.props;
 
-    const { typeText, contextTitle, value } = (isBudgetOperation
-      ? {
-        typeText: 'Comprovante de Orçamento',
-        contextTitle: 'Vencimento:',
-        value: moment(print.data.validity).format('DD/MM/YYYY'),
-      }
-      : {
-        typeText: 'Comprovante de Venda',
-        contextTitle: 'Emissão:',
-        value: moment().format('lll'),
-      });
+    const BudgetInfo = (
+      <OperationRow>
+        <DocumentTypeText>
+          Comprovante de Orçamento
+        </DocumentTypeText>
+        {this.renderTextRow('Vencimento', moment(print.data.validity).format('DD/MM/YYYY'))}
+        {this.renderTextRow('Emissão', moment().format('lll'))}
+      </OperationRow>
+    );
+
+    const SaleInfo = (
+      <OperationRow>
+        <DocumentTypeText>
+          Comprovante de Venda
+        </DocumentTypeText>
+        {this.renderTextRow('Emissão', moment().format('lll'))}
+      </OperationRow>
+    );
 
     return (
-      <RowWrapper>
-        <DocumentTypeText>
-          {typeText}
-        </DocumentTypeText>
-        {this.renderTextRow(contextTitle, value)}
-      </RowWrapper>
+      <Fragment>
+        {isBudgetOperation ? BudgetInfo : SaleInfo}
+      </Fragment>
     );
   };
 

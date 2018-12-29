@@ -206,7 +206,7 @@ class CashierOpen extends Component<Props, State> {
   };
 
   renderCloseCashierDialog = (): Object => {
-    const { currentCashier } = this.props;
+    const { currentCashier, username } = this.props;
     const { isCloseCashierDialogOpen } = this.state;
 
     return (
@@ -217,8 +217,8 @@ class CashierOpen extends Component<Props, State> {
         totalInputCashier={currentCashier.totalIncome}
         totalProfit={currentCashier.totalProfit}
         onFinishCashier={this.onFinishCashier}
-        salesman={currentCashier.salesman}
         isOpen={isCloseCashierDialogOpen}
+        salesman={username}
       />
     );
   };
