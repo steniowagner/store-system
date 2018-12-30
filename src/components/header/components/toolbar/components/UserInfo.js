@@ -83,7 +83,7 @@ class UserInfo extends Component<Props, State> {
           <MenuItem
             onClick={this.onClickMenuItem}
           >
-            Mudar de Usuário
+            Change User
           </MenuItem>
         </Menu>
       </Fragment>

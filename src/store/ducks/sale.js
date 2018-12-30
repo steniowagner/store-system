@@ -28,12 +28,12 @@ export const Creators = {
 
   createSaleSuccess: sale => ({
     type: Types.CREATE_SUCCESS,
-    payload: { message: 'Venda Cadastrada com Sucesso', sale },
+    payload: { message: 'Sale Registered Successfully', sale },
   }),
 
   createSaleFailure: () => ({
     type: Types.CREATE_FAILURE,
-    payload: { error: 'Houve um Erro ao Cadastrar a Venda' },
+    payload: { error: 'There as a problem when trying to Register the Sale' },
   }),
 
   getAllSales: () => ({
@@ -47,7 +47,7 @@ export const Creators = {
 
   getAllSalesFailure: () => ({
     type: Types.GET_ALL_FAILURE,
-    payload: { error: 'Houve um Erro ao Ler as Vendas' },
+    payload: { error: 'There was a problem when trying to get Sales from Database' },
   }),
 
   editSale: sale => ({
@@ -57,12 +57,12 @@ export const Creators = {
 
   editSaleSuccess: salesUpdated => ({
     type: Types.EDIT_REQUEST_SUCCESS,
-    payload: { message: 'Venda Editada com Sucesso', salesUpdated },
+    payload: { message: 'Sale Edited Successfully', salesUpdated },
   }),
 
   editSaleFailure: () => ({
     type: Types.EDIT_REQUEST_FAILURE,
-    payload: { error: 'Houve um Erro ao Editar a Venda' },
+    payload: { error: 'There was a problem when trying to Edit Sale' },
   }),
 
   removeSale: id => ({
@@ -72,12 +72,12 @@ export const Creators = {
 
   removeSaleSuccess: id => ({
     type: Types.REMOVE_REQUEST_SUCCESS,
-    payload: { message: 'Venda Removida com Sucesso', id },
+    payload: { message: 'Sale Removed Successfully', id },
   }),
 
   removeSaleFailure: () => ({
     type: Types.REMOVE_REQUEST_FAILURE,
-    payload: { error: 'Houve um Erro ao Remover a Venda' },
+    payload: { error: 'There was a problem when trying to Remove Sale' },
   }),
 };
 

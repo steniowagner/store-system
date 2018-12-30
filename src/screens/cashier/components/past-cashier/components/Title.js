@@ -13,8 +13,8 @@ type Props = {
 };
 
 const Title = ({ children }: Props): Object => {
-  const textWithDateText = `Registros do dia ${children}`;
-  const defaultText = 'Estes são todos os Registros';
+  const textWithDateText = `Registers of the day ${children}`;
+  const defaultText = 'These are all Records';
 
   const textToShow = (children ? textWithDateText : defaultText);
 

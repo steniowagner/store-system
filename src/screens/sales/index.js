@@ -91,9 +91,8 @@ class Sales extends Component<Props, State> {
           onCreateItem={this.onCreateSale}
           tabConfig={config.tabConfig}
           onEditItem={this.onEditSale}
-          singularEntityName="Venda"
-          pluralEntityName="Vendas"
-          withOwnTitle="NOVA VENDA"
+          singularEntityName="Sale"
+          pluralEntityName="Sales"
           dataset={sale.data}
           canBeCreated
           canBeEdited

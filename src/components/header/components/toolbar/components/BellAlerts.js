@@ -121,7 +121,7 @@ class BellAlert extends Component<Props, State> {
     <DialogTitle
       id="alert-dialog-slide-title"
     >
-      Avisos
+      Alerts
     </DialogTitle>
   );
 
@@ -149,15 +149,15 @@ class BellAlert extends Component<Props, State> {
   };
 
   renderProductsStockUnderMin = (numberStockUnderMin: number): Object => {
-    return this.renderItem(numberStockUnderMin, `${(numberStockUnderMin === 1 ? 'Produto' : 'Produtos')} com Estoque Abaixo do Mínimo`);
+    return this.renderItem(numberStockUnderMin, `${(numberStockUnderMin === 1 ? 'Product' : 'Products')} with stock below minimum`);
   };
 
   renderBudgetsOutOfDate = (numberBudgetsOutOfDate: number): Object => {
-    return this.renderItem(numberBudgetsOutOfDate, `${(numberBudgetsOutOfDate === 1 ? 'Orçamento' : 'Orçamentos')} fora do Prazo`);
+    return this.renderItem(numberBudgetsOutOfDate, `${(numberBudgetsOutOfDate === 1 ? 'Budget' : 'Budgets')} out of Time`);
   };
 
   renderCustomersWithDebits = (numberCustomersInDebit: number): Object => {
-    return this.renderItem(numberCustomersInDebit, `${(numberCustomersInDebit === 1 ? 'Cliente' : 'Clientes')} em Débito`);
+    return this.renderItem(numberCustomersInDebit, `${(numberCustomersInDebit === 1 ? 'Customer' : 'Customers')} in Debit`);
   };
 
   renderContent = (): Object => {
@@ -206,7 +206,7 @@ class BellAlert extends Component<Props, State> {
             <DialogContentText
               id="alert-dialog-slide-description"
             >
-              Nenhuma Mensagem
+              No Messages to Show
             </DialogContentText>
           )}
         </DialogContent>

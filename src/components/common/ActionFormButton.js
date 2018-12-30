@@ -92,13 +92,13 @@ class ActionFormButton extends Component<Props, State> {
 
     const DeleteOption = {
       action: () => this.onToggleRemoveDialog(),
-      name: 'Remover',
+      name: 'Remove',
       icon: <DeleteIcon />,
     };
 
     const EditOption = {
       action: () => onChageFormToEditMode(),
-      name: 'Editar',
+      name: 'Edit',
       icon: <EditIcon />,
     };
 
@@ -136,15 +136,15 @@ class ActionFormButton extends Component<Props, State> {
 
     return (
       <Dialog
-        description={`Se executar esta ação, os dados deste ${entity} serão perdidos para sempre, e não poderão ser recuperados de forma alguma.`}
-        title={`Tem certeza que quer remover este ${entity}?`}
+        description={`If you perform this action, the data of this ${entity} will be lost, and wouldn't be recovered in any way.`}
+        title={`Are you sure to remove this ${entity}?`}
         positiveAction={() => onRemoveItem()}
         negativeAction={this.onToggleRemoveDialog}
         onCloseDialog={this.onToggleRemoveDialog}
         isOpen={isRemoveDialogOpen}
         disableBackdropClick
-        positiveText="SIM"
-        negativeText="NÃO"
+        positiveText="YES"
+        negativeText="NO"
       />
     );
   };

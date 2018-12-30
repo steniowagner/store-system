@@ -5,7 +5,7 @@ import moment from 'moment';
 import { CASHIER_OPERATIONS } from './components/current-cashier/components/cashier-open/components/top-buttons-values/dialog-config';
 
 export const getNewCashierOperationData = (value: string, reason: string, username: string, type: string): Object => ({
-  valueText: `R$ ${parseFloat(value).toFixed(2)}`,
+  valueText: `$ ${parseFloat(value).toFixed(2)}`,
   timestampText: moment().calendar(),
   dateToShow: moment().format('lll'),
   value: parseFloat(value),
@@ -35,7 +35,7 @@ const getDiscountText = ({ type, value }) => {
   }
 
   if (type === 'money') {
-    discountText = `R$ ${Number(value).toFixed(2)}`;
+    discountText = `$ ${Number(value).toFixed(2)}`;
   }
 
   return discountText;
@@ -57,11 +57,11 @@ export const parseSaleTableItem = (sale: Object): Object => {
 
   return {
     ...sale,
-    valueText: `R$ ${Number(subtotal).toFixed(2)}`,
+    valueText: `$ ${Number(subtotal).toFixed(2)}`,
     customerName: (customer ? customer.name : '-'),
-    inDebitText: `R$ ${Math.abs(inDebit).toFixed(2)}`,
-    totalText: `R$ ${Number(total).toFixed(2)}`,
-    valuePaid: `R$ ${valuePaid.toFixed(2)}`,
+    inDebitText: `$ ${Math.abs(inDebit).toFixed(2)}`,
+    totalText: `$ ${Number(total).toFixed(2)}`,
+    valuePaid: `$ ${valuePaid.toFixed(2)}`,
     timestampText: moment().calendar(),
     type: (createdFromBudget ? CASHIER_OPERATIONS.CONSOLIDATE_BUDGET_PAYMENT : CASHIER_OPERATIONS.SALE),
     discountText,

@@ -81,12 +81,12 @@ class EditQuantityDialog extends Component<Props, State> {
     const { stockQuantity, minStockQuantity } = stock.filter(productInStockInfo => productInStockInfo.ProductId === productSelected.id)[0];
 
     if (Number(quantity) > stockQuantity) {
-      return 'O estoque não possui a quantidade desejada do Produto. Ao prosseguir com esta operação, o estoque ficará negativo.';
+      return 'The Stock hasn\'s the desire quantity. By performing this operation, the Stock will be negative.';
     }
 
     const newQuantity = stockQuantity - Number(quantity);
     if (newQuantity < minStockQuantity) {
-      return 'Ao prosseguir com esta edição, o estoque deste Produto estará abaixo do mínimo permitido.';
+      return 'By performing this edition, the Stock of this Product will be below the minimium.';
     }
 
     return '';
@@ -103,7 +103,7 @@ class EditQuantityDialog extends Component<Props, State> {
     <DialogTitle
       id="alert-dialog-slide-title"
     >
-      Editar Quantidade
+      Edit Quantity
     </DialogTitle>
   );
 
@@ -131,7 +131,7 @@ class EditQuantityDialog extends Component<Props, State> {
     return !!productAvailabilityMessage && (
       <StockAlert>
         <WarningText>
-          Aviso
+          Warning
         </WarningText>
         <DialogContentText
           id="alert-dialog-slide-description"
@@ -155,7 +155,7 @@ class EditQuantityDialog extends Component<Props, State> {
           }}
           color="primary"
         >
-          CANCELAR
+          CANCEL
         </Button>
         <Button
           onClick={() => onEditQuantity(Math.abs(quantity))}

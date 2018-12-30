@@ -15,27 +15,27 @@ const filterByMinStockQuantityOnTheEdge = (products: Array<Object>): Array<Objec
 );
 
 const filterConfig = [{
-  placeholder: 'Informe o Nome do Produto Buscado',
+  placeholder: 'Enter the Description of the Product you are looking for',
   type: FILTER_TYPES.TEXT,
   dataField: 'description',
-  filterTitle: 'Produto',
+  filterTitle: 'Product',
 }, {
-  placeholder: 'Produtos que estão Acima da Quantidade Mínima',
+  placeholder: 'These are the Products that are above the min quantity',
   type: FILTER_TYPES.FUNCTIONAL,
   dataField: 'above',
-  filterTitle: 'Acima',
+  filterTitle: 'Above',
   behavior: filterByMinStockQuantityAboveLimit,
 }, {
-  placeholder: 'Informe o Nome de Usuáro Buscado',
+  placeholder: 'These are the Products that are on the limit of quantity',
   type: FILTER_TYPES.FUNCTIONAL,
   dataField: 'limit',
-  filterTitle: 'No Limite',
+  filterTitle: 'On the Limit',
   behavior: filterByMinStockQuantityOnTheEdge,
 }, {
-  placeholder: 'Informe o Nome de Usuáro Buscado',
+  placeholder: 'These are the Products that are under the min quantity',
   type: FILTER_TYPES.FUNCTIONAL,
   dataField: 'under',
-  filterTitle: 'Abaixo',
+  filterTitle: 'Under',
   behavior: filterByMinStockQuantityUnderLimit,
 }];
 

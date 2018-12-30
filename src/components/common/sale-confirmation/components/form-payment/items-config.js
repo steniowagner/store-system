@@ -51,7 +51,7 @@ export const ITEMS_TYPES = {
 const getItemConfig = (onType: Function, value: string, id: string): Object => {
   const configs = {
     [ITEMS_TYPES.MONEY]: {
-      title: 'Dinheiro',
+      title: 'Money',
       Icon: MoneyIcon,
       onType,
       value,
@@ -59,7 +59,7 @@ const getItemConfig = (onType: Function, value: string, id: string): Object => {
     },
 
     [ITEMS_TYPES.CREDIT_CARD]: {
-      title: 'Cartão de Crédito',
+      title: 'Credit Card',
       Icon: CreditCardIcon,
       onType,
       value,
@@ -67,7 +67,7 @@ const getItemConfig = (onType: Function, value: string, id: string): Object => {
     },
 
     [ITEMS_TYPES.DEBIT_CARD]: {
-      title: 'Cartão de Débito',
+      title: 'Debit Card',
       Icon: DebitCardIcon,
       onType,
       value,
@@ -75,7 +75,7 @@ const getItemConfig = (onType: Function, value: string, id: string): Object => {
     },
 
     [ITEMS_TYPES.CHECK]: {
-      title: 'Cheque',
+      title: 'Check',
       Icon: CheckIcon,
       onType,
       value,

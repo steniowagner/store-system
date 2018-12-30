@@ -1,8 +1,8 @@
 const tabConfig = [{
-  columnTitle: 'Nome',
+  columnTitle: 'Name',
   dataField: 'name',
 }, {
-  columnTitle: 'Usuário',
+  columnTitle: 'Username',
   dataField: 'username',
 }];
 

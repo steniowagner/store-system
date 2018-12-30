@@ -52,14 +52,14 @@ const renderValueRow = (valueTextColor: string, message: string, value: string):
     <ValueText
       color={valueTextColor}
     >
-      {`R$ ${value}`}
+      {`$ ${value}`}
     </ValueText>
   </SectionWrapper>
 );
 
 const renderSubtotal = (subtotal: string): Object => renderValueRow('danger', 'Sub-total', subtotal);
 
-const renderTotal = (total: string): Object => renderValueRow('darkText', 'Total à Pagar', total);
+const renderTotal = (total: string): Object => renderValueRow('darkText', 'Total to Pay', total);
 
 const renderDiscount = (discount: Object, subtotal: string): Object => {
   const { value, type } = discount;
@@ -76,16 +76,16 @@ const renderDiscount = (discount: Object, subtotal: string): Object => {
 
   if (type === 'money') {
     discountValue = Number(subtotal) - value;
-    discountText = `(R$ ${value.toFixed(2)})`;
+    discountText = `($ ${value.toFixed(2)})`;
   }
 
-  const subtotalWithDiscount = `R$ ${discountValue.toFixed(2)}`;
+  const subtotalWithDiscount = `$ ${discountValue.toFixed(2)}`;
 
   return (
     <Fragment>
       <SectionWrapper>
         <SectionTitle>
-          Desconto
+          Discount
         </SectionTitle>
         <DiscountValueWrapper>
           <DiscountValueText>

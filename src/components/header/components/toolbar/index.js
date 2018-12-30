@@ -51,7 +51,7 @@ const HeaderBar = (): Object => (
           <StoreIcon />
         </IconButton>
         <Title>
-          EUNICE LIVROS
+          MY STORE
         </Title>
       </LeftSideContainer>
       <RightSideContainer>

@@ -78,7 +78,7 @@ class SelectCustomer extends Component<Props, State> {
 
     return (
       <Input
-        placeholder="Selecione o Cliente"
+        placeholder="Select a Costumer"
         onChange={() => {}}
         onBlur={() => {}}
         error={error}
@@ -96,7 +96,7 @@ class SelectCustomer extends Component<Props, State> {
 
     const isCustomerValidString = (typeof customerSelected === 'string' && !!customerSelected);
     const hasCustomerSelected = (isCustomerValidString || !!customerSelected.name);
-    const actionButtonTitle = (hasCustomerSelected ? 'EDITAR' : 'SELECIONAR');
+    const actionButtonTitle = (hasCustomerSelected ? 'EDIT' : 'SELECT');
 
     return (
       <InputButtonWrapper

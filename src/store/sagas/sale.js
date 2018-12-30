@@ -17,9 +17,9 @@ import { SALE } from './entitiesTypes';
 
 const parseSaleToTableView = (sale: Object): Object => ({
   ...sale,
-  subtotalText: `R$ ${sale.subtotal.toFixed(2)}`,
+  subtotalText: `$ ${sale.subtotal.toFixed(2)}`,
   customerName: sale.customer.name || '-',
-  totalText: `R$ ${sale.total.toFixed(2)}`,
+  totalText: `$ ${sale.total.toFixed(2)}`,
   products: sale.products.data,
 });
 
@@ -106,8 +106,8 @@ export function* editSale(action) {
 
     const saleUpdated = {
       ...sale,
-      subtotalText: `R$ ${parseFloat(subtotal).toFixed(2)}`,
-      totalText: `R$ ${parseFloat(total).toFixed(2)}`,
+      subtotalText: `$ ${parseFloat(subtotal).toFixed(2)}`,
+      totalText: `$ ${parseFloat(total).toFixed(2)}`,
       customerName: sale.customer.name || '-',
     };
 

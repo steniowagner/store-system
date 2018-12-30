@@ -145,7 +145,7 @@ const CustomForm = withFormik({
 
   validationSchema: _props => Yup.lazy(() => Yup.object().shape({
     products: Yup.array()
-      .required('Ao menos um Produto deve ser Adicionado'),
+      .required('At least one Product should be selected'),
   })),
 
   handleSubmit(values, { setSubmitting, props }) {

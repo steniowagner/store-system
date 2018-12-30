@@ -10,26 +10,26 @@ const filterApprovead = (budgets: Array<Object>): Array<Object> => budgets.filte
 const filterOutOfTime = (budgets: Array<Object>): Array<Object> => budgets.filter(budget => budget.status === BUDGET_STATUS.OUT_OF_TIME);
 
 const filterConfig = [{
-  placeholder: 'Informe o Código do Orçamento',
+  placeholder: 'Enter the Code of the Budget',
   type: FILTER_TYPES.TEXT,
-  filterTitle: 'Código',
+  filterTitle: 'Code',
   dataField: 'code',
 }, {
-  placeholder: 'Estes são todos os Orçamentos Pendentes',
+  placeholder: 'These are All Pending Budgets',
   type: FILTER_TYPES.FUNCTIONAL,
-  filterTitle: 'Pendentes',
+  filterTitle: 'Pending',
   dataField: 'pending',
   behavior: filterPending,
 }, {
-  placeholder: 'Estes são todos os Orçamentos Aprovados',
+  placeholder: 'These are All Approved Budgets',
   type: FILTER_TYPES.FUNCTIONAL,
-  filterTitle: 'Aprovados',
+  filterTitle: 'Approved',
   dataField: 'approvead',
   behavior: filterApprovead,
 }, {
-  placeholder: 'Estes são todos os Orçamentos Fora do Prazo',
+  placeholder: 'These are All Out of Time Budgets',
   type: FILTER_TYPES.FUNCTIONAL,
-  filterTitle: 'Fora do Prazo',
+  filterTitle: 'Out of Time',
   dataField: 'outOfTime',
   behavior: filterOutOfTime,
 }];

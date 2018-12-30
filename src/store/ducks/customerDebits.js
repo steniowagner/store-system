@@ -62,10 +62,10 @@ const customerDebit = (state = INITIAL_STATE, { payload, type }) => {
         ...state,
         data: payload.sales.map(sale => ({
           ...sale,
-          paidValueText: `R$ ${(sale.total - sale.inDebit).toFixed(2)}`,
-          subtotalText: `R$ ${sale.subtotal.toFixed(2)}`,
-          inDebitText: `R$ ${sale.inDebit.toFixed(2)}`,
-          totalText: `R$ ${sale.total.toFixed(2)}`,
+          paidValueText: `$ ${(sale.total - sale.inDebit).toFixed(2)}`,
+          subtotalText: `$ ${sale.subtotal.toFixed(2)}`,
+          inDebitText: `$ ${sale.inDebit.toFixed(2)}`,
+          totalText: `$ ${sale.total.toFixed(2)}`,
         })),
       };
 

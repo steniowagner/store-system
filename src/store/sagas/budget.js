@@ -39,8 +39,8 @@ const EVENT_TAGS = {
 const parseBudgetToTableView = (budget: Object): Object => ({
   ...budget,
   validityDate: moment(budget.validity, 'YYYY-MM-DD').format('ll'),
-  subtotalText: `R$ ${parseFloat(budget.subtotal).toFixed(2)}`,
-  totalText: `R$ ${parseFloat(budget.total).toFixed(2)}`,
+  subtotalText: `$ ${parseFloat(budget.subtotal).toFixed(2)}`,
+  totalText: `$ ${parseFloat(budget.total).toFixed(2)}`,
   customerName: budget.customer.name || '-',
   dateToShow: moment().format('ll'),
 });

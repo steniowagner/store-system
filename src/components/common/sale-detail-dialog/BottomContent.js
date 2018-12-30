@@ -47,7 +47,7 @@ const getPaymentInfoText = (paymentInfo: Object): string => {
   const paidValueText = Object.entries(paymentInfo)
     .reduce((total, value) => total + Number(value[1]), 0);
 
-  return `R$ ${paidValueText.toFixed(2)}`;
+  return `$ ${paidValueText.toFixed(2)}`;
 };
 
 const getDiscountText = (discount: Object): string => {
@@ -57,7 +57,7 @@ const getDiscountText = (discount: Object): string => {
     return '-';
   }
 
-  const discountText = (type === 'money' ? `R$ ${value.toFixed(2)}` : `${value}%`);
+  const discountText = (type === 'money' ? `$ ${value.toFixed(2)}` : `${value}%`);
 
   return discountText;
 };
@@ -83,7 +83,7 @@ const renderLeftValues = (totalText: string, subtotalText: string, discount: Obj
       direction="left"
     >
       {renderItem('SUB-TOTAL', subtotalText, false)}
-      {renderItem('DESCONTO', discountText, true)}
+      {renderItem('DISCOUNT', discountText, true)}
       {renderItem('TOTAL', totalText, true)}
     </Wrapper>
   );
@@ -96,8 +96,8 @@ const renderRightValues = (paymentInfo: Object, inDebitText: string): Object => 
     <Wrapper
       direction="right"
     >
-      {renderItem('VALOR PAGO', paidValueText, false)}
-      {renderItem('VALOR EM DÉBITO', inDebitText, true)}
+      {renderItem('AMOUNT PAID', paidValueText, false)}
+      {renderItem('AMOUNT IN DEBIT', inDebitText, true)}
     </Wrapper>
   );
 };

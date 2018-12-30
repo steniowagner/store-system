@@ -211,7 +211,7 @@ class MoneyOperationDialog extends Component<Props, State> {
             onClick={this.onClickCancelButton}
             color="primary"
           >
-            Cancelar
+            Cancel
           </Button>
         )}
         <Button

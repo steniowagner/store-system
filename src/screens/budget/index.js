@@ -103,8 +103,8 @@ class Budget extends Component<Props, State> {
           onCreateItem={this.onCreateBudget}
           onEditItem={this.onEditBudget}
           onRemoveItem={this.onRemoveBudget}
-          singularEntityName="Orçamento"
-          pluralEntityName="Orçamentos"
+          singularEntityName="Budget"
+          pluralEntityName="Budgets"
           dataset={budget.data}
           canBeCreated
           canBeRemoved

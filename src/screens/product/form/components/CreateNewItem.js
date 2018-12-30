@@ -91,7 +91,7 @@ class CreateNewItem extends Component<Props, State> {
     const { entity } = this.props;
 
     const errors = {
-      brand: `A Marca '${newItem}' já foi Cadastrada`,
+      brand: `The Brand '${newItem}' has already been registered.`,
     };
 
     this.setState({
@@ -135,7 +135,7 @@ class CreateNewItem extends Component<Props, State> {
         <ActionButton
           action={this.onClickAddButton}
           disabled={!newItem}
-          title="ADICIONAR"
+          title="Add"
           withIcon
         />
       </NewItemButtonWrapper>

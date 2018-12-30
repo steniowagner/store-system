@@ -27,7 +27,7 @@ const renderProductDescriptionSection = (props: Object): Object => {
 
   return (
     <Section>
-      {renderSectionTitle('Produto')}
+      {renderSectionTitle('Product')}
       <Row>
         <RowItem>
           <Input
@@ -35,7 +35,7 @@ const renderProductDescriptionSection = (props: Object): Object => {
             value={values.description}
             onChange={handleChange}
             onBlur={handleBlur}
-            label="Descrição"
+            label="Description"
             id="description"
             placeholder=""
             type="text"
@@ -48,12 +48,12 @@ const renderProductDescriptionSection = (props: Object): Object => {
 };
 
 const renderAddressSection = (props: Object): Object => {
-  const minStockQuantityFieldData = getRowItemObject('Quantidade Mínima', 'Informe a Quantidade Mínima deste Produto em Estoque', 'text', 'minStockQuantity');
-  const stockQuantityData = getRowItemObject('Quantidade Atual', 'Informe a Quantidade Atual deste Produto em Estoque', 'text', 'stockQuantity');
+  const minStockQuantityFieldData = getRowItemObject('Min Quantity', 'Enter the Min Quantity of this Product in Stock', 'text', 'minStockQuantity');
+  const stockQuantityData = getRowItemObject('Current Quantity', 'Enter the Quantity of this Product in Stock', 'text', 'stockQuantity');
 
   return (
     <Section>
-      {renderSectionTitle('Informações do Produto no Estoque')}
+      {renderSectionTitle('Product Information in Stock')}
       {renderRowWithTwoItems(stockQuantityData, minStockQuantityFieldData, props)}
     </Section>
   );
@@ -78,7 +78,7 @@ const StockForm = (props: Object): Object => {
           onRemoveItem={onRemoveItem}
           disabled={isSubmitting}
           onClick={handleSubmit}
-          entity="Estoque"
+          entity="Stock"
           mode={mode}
         />
       </Form>
@@ -95,10 +95,10 @@ const CustomForm = withFormik({
 
   validationSchema: () => Yup.lazy(values => Yup.object().shape({
     description: Yup.string()
-      .required('A Descrição do Produto é Obrigatória.'),
+      .required('The Description is required.'),
 
     minStockQuantity: Yup.string()
-      .test('min-stock-quantity', 'Quantidade Mínima Maior que a Quantidade em Estoque.', () => {
+      .test('min-stock-quantity', 'Min Quantity is greater than the Current Quantity in Stock.', () => {
         const { minStockQuantity, stockQuantity } = values;
 
         const minStockQuantityValue = (minStockQuantity || 0);
@@ -106,10 +106,10 @@ const CustomForm = withFormik({
 
         return minStockQuantityValue <= stockQuantityValue;
       })
-      .required('A Quantidade Mínima em Estoque é Obrigatória.'),
+      .required('The Min Stock Quantity is required.'),
 
     stockQuantity: Yup.string()
-      .required('A Quantidade Atual em Estoque é Obrigatória.'),
+      .required('The Current Stock Quantity is required.'),
   })),
 
   handleSubmit(values, { setSubmitting, props }) {

@@ -226,9 +226,9 @@ class EntityComponent extends Component<Props, State> {
     const { singularEntityName, Form, withOwnTitle } = this.props;
 
     const mode = {
-      detail: 'VISUALIZAR',
-      create: 'CADASTRAR',
-      edit: 'EDITAR',
+      detail: 'DETAILS OF THE',
+      create: 'REGISTER',
+      edit: 'EDIT',
     };
 
     const isFormCreateMode = (formMode === 'create');
@@ -295,15 +295,15 @@ class EntityComponent extends Component<Props, State> {
 
     return (
       <Dialog
-        description={`Se executar esta ação, os dados deste ${singularEntityName} serão perdidos para sempre, e não poderão ser recuperados de forma alguma.`}
-        title={`Tem certeza que quer remover este ${singularEntityName}?`}
+        description={`If you perform this action, the data of this ${singularEntityName} will be lost, and wouldn't be recovered in any way.`}
+        title={`Are you sure to remove this ${singularEntityName}?`}
         positiveAction={this.removeItem}
         negativeAction={this.onToggleDialogRemove}
         onCloseDialog={this.onToggleDialogRemove}
         isOpen={isRemoveDialogOpen}
         disableBackdropClick
-        positiveText="SIM"
-        negativeText="NÃO"
+        positiveText="YES"
+        negativeText="NO"
       />
     );
   };

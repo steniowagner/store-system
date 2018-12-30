@@ -1,32 +1,32 @@
 const tabConfig = [{
-  columnTitle: 'Horário',
+  columnTitle: 'Time',
   dataField: 'timestampText',
 }, {
-  columnTitle: 'Operação',
+  columnTitle: 'Operation',
   dataField: 'type',
 }, {
-  columnTitle: 'Cliente',
+  columnTitle: 'Customer',
   dataField: 'customerName',
 }, {
-  columnTitle: 'Código',
+  columnTitle: 'Code',
   dataField: 'code',
 }, {
-  columnTitle: 'Vendedor',
+  columnTitle: 'Salesman',
   dataField: 'salesman',
 }, {
-  columnTitle: 'Valor',
+  columnTitle: 'Value',
   dataField: 'valueText',
 }, {
-  columnTitle: 'Desconto',
+  columnTitle: 'Discount',
   dataField: 'discountText',
 }, {
   columnTitle: 'Total',
   dataField: 'totalText',
 }, {
-  columnTitle: 'Pago',
+  columnTitle: 'Paid',
   dataField: 'valuePaid',
 }, {
-  columnTitle: 'Débito',
+  columnTitle: 'Debit',
   dataField: 'inDebitText',
 }];
 

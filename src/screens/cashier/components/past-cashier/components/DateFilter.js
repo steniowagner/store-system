@@ -40,14 +40,14 @@ type Props = {
 const renderInput = (onChooseDateToFilter: Function, dateFilterValue: string): Object => (
   <InputWrapper>
     <Input
-      placeholder="Selecione a Data"
+      placeholder="Select a Date"
       onChange={onChooseDateToFilter}
       onBlur={() => {}}
       error=""
       value={dateFilterValue}
       id="date-filter"
       type="date"
-      label="Filtrar por uma Data"
+      label="Filter by a Date"
     />
   </InputWrapper>
 );

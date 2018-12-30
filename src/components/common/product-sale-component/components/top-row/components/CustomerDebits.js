@@ -36,7 +36,7 @@ class CustomerDebits extends Component<Props, {}> {
       <FullScreenDialog
         onClose={this.onToggleUserDebitsDialog}
         isOpen={isUserDebitsDiaogOpen}
-        title="Débitos"
+        title="Debits"
       >
         <Debits
           id={customerId}
@@ -50,7 +50,7 @@ class CustomerDebits extends Component<Props, {}> {
       <ActionButton
         action={this.onToggleUserDebitsDialog}
         customColor={appStyles.colors.danger}
-        title="Cliente em Débito"
+        title="Customer in Debit"
         CustomIcon={ErrorOutline}
         withCustomColor
         withIcon={false}

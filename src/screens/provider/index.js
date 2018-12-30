@@ -86,8 +86,8 @@ class Provider extends Component<Props, State> {
           onRemoveItem={this.onRemoveProvider}
           onCreateItem={this.onCreateProvider}
           onEditItem={this.onEditProvider}
-          singularEntityName="Fornecedor"
-          pluralEntityName="Fornecedores"
+          singularEntityName="Provider"
+          pluralEntityName="Providers"
           filterConfig={config.filterConfig}
           tabConfig={config.tabConfig}
           dataset={providers.data}

@@ -85,8 +85,8 @@ class Customer extends Component<Props, {}> {
           onRemoveItem={this.onRemoveCustomer}
           onCreateItem={this.onCreateCustomer}
           onEditItem={this.onEditCustomer}
-          singularEntityName="Cliente"
-          pluralEntityName="Clientes"
+          singularEntityName="Customer"
+          pluralEntityName="Customers"
           filterConfig={config.filterConfig}
           tabConfig={config.tabConfig}
           dataset={customer.data}

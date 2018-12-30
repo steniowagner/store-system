@@ -183,7 +183,7 @@ class SelectProduct extends Component<Props, State> {
             action={this.onAddButtonClicked}
             disabled={shouldDisableButton}
             withCustomInactiveColor
-            title="Adicionar"
+            title="Add"
           />
         </ButtonWrapper>
         {this.renderAlertDialogQuantity()}

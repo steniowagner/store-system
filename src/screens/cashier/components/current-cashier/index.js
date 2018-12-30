@@ -59,7 +59,7 @@ class CurrentCashier extends Component<Props, State> {
 
     const operationEdited = {
       ...currentCashier.operations[index],
-      valueText: `R$ ${parseFloat(valueEdited).toFixed(2)}`,
+      valueText: `$ ${parseFloat(valueEdited).toFixed(2)}`,
       value: parseFloat(valueEdited),
       reason: reasonEdited,
     };

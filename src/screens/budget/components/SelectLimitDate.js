@@ -43,7 +43,7 @@ const SelectLimitDate = ({
         disabled={mode === 'detail'}
         value={values.validity}
         error={errors.validity}
-        label="Validade"
+        label="Validity"
         placeholder=""
         id="validity"
         type="date"

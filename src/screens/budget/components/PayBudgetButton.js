@@ -11,7 +11,7 @@ type Props = {
 const PayBudgetButton = ({ onToggleSaleConfirmationDialog }: Props): Object => (
   <ActionButton
     action={onToggleSaleConfirmationDialog}
-    title="Consolidar Pagamento"
+    title="Consolidate Payment"
   />
 );
 

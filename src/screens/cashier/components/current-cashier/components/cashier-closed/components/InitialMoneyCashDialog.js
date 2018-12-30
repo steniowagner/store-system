@@ -104,7 +104,7 @@ class InitialMoneyCashDialog extends Component<Props, State> {
 
   renderContentText = (): Object => (
     <DialogContentText>
-      Para iniciar as operações, informe a quantidade inicial de dinheiro em Caixa.
+      To start operations, report the amount of money in the Cashier.
     </DialogContentText>
   );
 
@@ -112,7 +112,7 @@ class InitialMoneyCashDialog extends Component<Props, State> {
     <DialogTitle
       id="alert-dialog-slide-title"
     >
-      Dinheiro em Caixa
+      Money in Cashier
     </DialogTitle>
   );
 
@@ -125,7 +125,7 @@ class InitialMoneyCashDialog extends Component<Props, State> {
           onClick={() => this.onClickButton('cancel')}
           color="primary"
         >
-          Cancelar
+          Cancel
         </Button>
         <Button
           onClick={() => this.onClickButton('ok')}

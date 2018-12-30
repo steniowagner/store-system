@@ -16,25 +16,25 @@ import {
 import ActionFormButton from '../../components/common/ActionFormButton';
 
 const renderNameSection = (props: Object): Object => {
-  const nameInputFieldData = getRowItemObject('Nome', 'Informe o Nome do Fornecedor', 'text', 'name');
+  const nameInputFieldData = getRowItemObject('Name', 'The Name is required.', 'text', 'name');
 
   return (
     <Section>
-      {renderSectionTitle('Sobre o Fornecedor')}
+      {renderSectionTitle('About Provider')}
       {rendeRowWithSingleItem(nameInputFieldData, props)}
     </Section>
   );
 };
 
 const renderAddressSection = (props: Object): Object => {
-  const neighboorhoodFieldData = getRowItemObject('Bairro', 'Informe o Bairro do Fornecedor', 'text', 'neighborhood');
-  const addressFieldData = getRowItemObject('Endereço', 'Informe o Endereço do Fornecedor', 'text', 'address');
-  const stateFieldData = getRowItemObject('Estado', 'Informe o Estado do Fornecedor', 'text', 'state');
-  const cityFieldData = getRowItemObject('Cidade', 'Informe a Cidade do Fornecedor', 'text', 'city');
+  const neighboorhoodFieldData = getRowItemObject('Neighborhood', 'Enter the Neighborhood', 'text', 'neighborhood');
+  const addressFieldData = getRowItemObject('Address', 'Enter the Address', 'text', 'address');
+  const stateFieldData = getRowItemObject('State', 'Enter the State', 'text', 'state');
+  const cityFieldData = getRowItemObject('City', 'Enter the City', 'text', 'city');
 
   return (
     <Section>
-      {renderSectionTitle('Localização')}
+      {renderSectionTitle('Location')}
       {renderRowWithTwoItems(addressFieldData, neighboorhoodFieldData, props)}
       {renderRowWithTwoItems(cityFieldData, stateFieldData, props)}
     </Section>
@@ -42,13 +42,13 @@ const renderAddressSection = (props: Object): Object => {
 };
 
 const renderContactSection = (props: Object): Object => {
-  const phone1FieldData = getRowItemObject('Telefone', 'Informe o Número de Telefone', 'number', 'phone1');
-  const phone2FieldData = getRowItemObject('Telefone', 'Informe um outro Número de Telefone', 'number', 'phone2');
-  const emailFieldData = getRowItemObject('E-mail', 'Informe o E-mail do Fornecedor', 'text', 'email');
+  const phone1FieldData = getRowItemObject('Phone 1', 'Enter the Phone', 'number', 'phone1');
+  const phone2FieldData = getRowItemObject('Phone 2', 'Enter with other Phone', 'number', 'phone2');
+  const emailFieldData = getRowItemObject('E-mail', 'Enter the E-mail', 'text', 'email');
 
   return (
     <Section>
-      {renderSectionTitle('Contato')}
+      {renderSectionTitle('Contact')}
       {renderRowWithTwoItems(phone1FieldData, phone2FieldData, props)}
       {rendeRowWithSingleItem(emailFieldData, props)}
     </Section>
@@ -75,7 +75,7 @@ const ProviderForm = (props: Object): Object => {
           onClick={handleSubmit}
           onRemoveItem={onRemoveItem}
           disabled={isSubmitting}
-          entity="Fornecedor"
+          entity="Provider"
           canBeRemoved
           mode={mode}
         />
@@ -98,14 +98,14 @@ const CustomForm = withFormik({
 
   validationSchema: ({ item, providersNames, mode }) => Yup.lazy(() => Yup.object().shape({
     name: Yup.string()
-      .test('name-repeated', 'Este Fornecedor já foi cadastrado', (value) => {
+      .test('name-repeated', 'This Provider has already been registered.', (value) => {
         const { name } = item;
         return handleRepeatedFormValues(providersNames, name, value, mode);
       })
-      .required('O Nome é obrigatório.'),
+      .required('The Name is required.'),
 
     email: Yup.string()
-      .email('E-mail inválido.'),
+      .email('E-mail is Invalid.'),
   })),
 
   handleSubmit(values, { setSubmitting, props }) {

@@ -80,10 +80,10 @@ const ExapandLessIcon = styled(ExpandLess)`
 
 const FILTER_OPTIONS = [{
   field: 'barcode',
-  title: 'Código de Barras',
+  title: 'Barcode',
 }, {
   field: 'description',
-  title: 'Descrição',
+  title: 'Description',
 }];
 
 type Props = {
@@ -175,7 +175,7 @@ class CustomFilter extends Component<Props, State> {
         >
           <Input
             inputRef={(input) => { this._inputRef = input; }}
-            placeholder="Selecione um Filtro"
+            placeholder="Select a Filter"
             disabled={!optionSelected.field}
             onChange={onTypeFilterValue}
             value={filterValue}

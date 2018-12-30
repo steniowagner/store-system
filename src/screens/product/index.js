@@ -71,7 +71,7 @@ class Product extends Component<Props, {}> {
     const productsToShow = products.data.map(product => ({
       ...product,
       brandName: product.brand.name,
-      salePriceText: `R$ ${product.salePrice.toFixed(2)}`,
+      salePriceText: `$ ${product.salePrice.toFixed(2)}`,
     }));
 
     return productsToShow;
@@ -107,8 +107,8 @@ class Product extends Component<Props, {}> {
           onRemoveItem={this.onRemoverProduct}
           onCreateItem={this.onCreateProduct}
           onEditItem={this.onEditProduct}
-          singularEntityName="Produto"
-          pluralEntityName="Produtos"
+          singularEntityName="Product"
+          pluralEntityName="Products"
           filterConfig={config.filterConfig}
           tabConfig={config.tabConfig}
           dataset={products}

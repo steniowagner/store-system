@@ -32,12 +32,12 @@ export const Creators = {
 
   createProviderSuccess: provider => ({
     type: Types.CREATE_SUCCESS,
-    payload: { message: 'Fornecedor Cadastrado com Suceso', provider },
+    payload: { message: 'Provider Created Sucessfully', provider },
   }),
 
   createProviderFailure: () => ({
     type: Types.CREATE_FAILURE,
-    payload: { error: 'Houve um Erro ao Cadastrar o Fornecedor' },
+    payload: { error: 'There was a problem when trying to Create Provider' },
   }),
 
   getAllProviders: () => ({
@@ -51,7 +51,7 @@ export const Creators = {
 
   getAllProvidersFailure: () => ({
     type: Types.GET_ALL_FAILURE,
-    payload: { error: 'Houve um Erro ao Ler os Fornecedores' },
+    payload: { error: 'There was a problem when trying to get the Providers from Database' },
   }),
 
   editProvider: provider => ({
@@ -61,12 +61,12 @@ export const Creators = {
 
   editProviderSuccess: providerEdited => ({
     type: Types.EDIT_REQUEST_SUCCESS,
-    payload: { message: 'Fornecedor Editado com Sucesso', providerEdited },
+    payload: { message: 'Provider Edited Successfully', providerEdited },
   }),
 
   editProviderFailure: () => ({
     type: Types.EDIT_REQUEST_FAILURE,
-    payload: { error: 'Houve um erro ao Editar o Fornecedor' },
+    payload: { error: 'There was a problem when trying to Edit Provider' },
   }),
 
   removeProvider: id => ({
@@ -76,12 +76,12 @@ export const Creators = {
 
   removeProviderSuccess: id => ({
     type: Types.REMOVE_REQUEST_SUCCESS,
-    payload: { message: 'Fornecedor Removido com Sucesso', id },
+    payload: { message: 'Provider Removed Successfully', id },
   }),
 
   removeProviderFailure: () => ({
     type: Types.REMOVE_REQUEST_FAILURE,
-    payload: { error: 'Houve um erro ao Remover o Fornecedor' },
+    payload: { error: 'There was a problem when trying to Remove Provider' },
   }),
 };
 

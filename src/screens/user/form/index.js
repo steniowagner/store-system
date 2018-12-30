@@ -58,12 +58,12 @@ class UserForm extends Component<Props, State> {
   };
 
   renderPasswordSection = (): Object => {
-    const passwordConfirmInputFieldData = getRowItemObject('Digite a Senha Novamente', 'Informe a Senha do Usuário Novamente', 'password', 'passwordConfirm');
-    const passwordInputFieldData = getRowItemObject('Digite a Senha', 'Informe a Senha do Usuário', 'password', 'password');
+    const passwordConfirmInputFieldData = getRowItemObject('Repeat the Password', 'Enter the Password again.', 'password', 'passwordConfirm');
+    const passwordInputFieldData = getRowItemObject('Password', 'Enter the Password', 'password', 'password');
 
     return (
       <Section>
-        {renderSectionTitle('Senha')}
+        {renderSectionTitle('Password')}
         {renderRowWithTwoItems(passwordInputFieldData, passwordConfirmInputFieldData, this.props)}
       </Section>
     );
@@ -78,18 +78,18 @@ class UserForm extends Component<Props, State> {
         variant="contained"
         size="large"
       >
-        Editar Senha
+        Edit Password
       </Button>
     </EditPasswordButtonWrapper>
   );
 
   renderUserInfoSection = (): Object => {
-    const nameInputFieldData = getRowItemObject('Nome', 'Informe o Nome do Usuário', 'text', 'name');
-    const usernameInputFieldData = getRowItemObject('Usuário', 'Informe o Nome de Usuário', 'text', 'username');
+    const nameInputFieldData = getRowItemObject('Name', 'Enter the Name', 'text', 'name');
+    const usernameInputFieldData = getRowItemObject('Username', 'Enter the Username', 'text', 'username');
 
     return (
       <Section>
-        {renderSectionTitle('Informações do Usuário')}
+        {renderSectionTitle('User Info')}
         {renderRowWithTwoItems(nameInputFieldData, usernameInputFieldData, this.props)}
       </Section>
     );
@@ -119,7 +119,7 @@ class UserForm extends Component<Props, State> {
               onRemoveItem={onRemoveItem}
               disabled={isSubmitting}
               onClick={handleSubmit}
-              entity="Usuário"
+              entity="User"
               mode={mode}
             />
           </Row>
@@ -139,12 +139,12 @@ const getPasswordValidation = (mode: string): Object => {
   if (mode === 'create') {
     return {
       password: Yup.string()
-        .min(6, 'A senha deve conter no mínimo 6 caracteres.')
-        .required('A senha é obrigatória.'),
+        .min(6, 'The Password might have at least 6 characters.')
+        .required('The Password is required.'),
 
       passwordConfirm: Yup.string()
-        .oneOf([Yup.ref('password'), null], 'Senhas diferentes')
-        .required('As senhas precisam ser iguais.'),
+        .oneOf([Yup.ref('password'), null], 'Passwords is not equal.')
+        .required('The Passwords might be equal.'),
     };
   }
 
@@ -161,14 +161,14 @@ const CustomForm = withFormik({
 
   validationSchema: ({ item, usernames, mode }) => Yup.lazy(() => Yup.object().shape({
     name: Yup.string()
-      .required('O Nome é obrigatório.'),
+      .required('The Name is required.'),
 
     username: Yup.string()
-      .test('username-repeated', 'Este Usuário já foi cadastrado', (value) => {
+      .test('username-repeated', 'This User has already been registered.', (value) => {
         const { username } = item;
         return handleRepeatedFormValues(usernames, username, value, mode);
       })
-      .required('O Nome de Usuário é obrigatório.'),
+      .required('The Username is requried.'),
 
     ...getPasswordValidation(mode),
   })),

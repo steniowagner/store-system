@@ -70,12 +70,12 @@ class SearchInput extends Component<Props, State> {
     const { itemSelected, entity } = this.props;
 
     const entities = {
-      brand: 'a Marca',
+      brand: 'a Brand',
     };
 
     const entityTitle = entities[entity];
 
-    const placeholder = `Selecione ${entityTitle}`;
+    const placeholder = `Select ${entityTitle}`;
 
     return (
       <Input
@@ -103,7 +103,7 @@ class SearchInput extends Component<Props, State> {
     ));
 
     const entities = {
-      brand: 'Marcas',
+      brand: 'Brands',
     };
 
     const emptyOptionEntity = entities[entity];
@@ -114,7 +114,7 @@ class SearchInput extends Component<Props, State> {
         key="empty"
         disabled
       >
-        {`Não existem ${emptyOptionEntity} cadastradas`}
+        {`There is no ${emptyOptionEntity} registered`}
       </MenuItem>
     );
 

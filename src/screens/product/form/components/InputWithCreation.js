@@ -77,7 +77,7 @@ class InputWithCreation extends Component<Props, State> {
     } = this.props;
 
     const isTitleEdit = (mode === 'edit' || values[field.id].name);
-    const buttonTitle = (isTitleEdit ? 'EDITAR' : 'ADICIONAR');
+    const buttonTitle = (isTitleEdit ? 'EDIT' : 'ADD');
 
     return (
       <InputWithButtonWrapper>

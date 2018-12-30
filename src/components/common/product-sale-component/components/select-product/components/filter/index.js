@@ -63,7 +63,7 @@ class ProductFilter extends Component<Props, State> {
   state = {
     productsFiltered: [],
     optionSelected: {
-      title: 'Filtrar',
+      title: 'Filter',
     },
     isListOpen: false,
     filterValue: '',
@@ -187,12 +187,12 @@ class ProductFilter extends Component<Props, State> {
             } = product;
 
             const salePriceItem = {
-              title: 'Preço',
-              value: `R$ ${salePrice.toFixed(2)}`,
+              title: 'Price',
+              value: `$ ${salePrice.toFixed(2)}`,
             };
 
             const brandItem = {
-              title: 'Marca',
+              title: 'Brand',
               value: brand.name,
             };
 
@@ -222,7 +222,7 @@ class ProductFilter extends Component<Props, State> {
       <FilterContainer>
         <LabelWrapper>
           <Label>
-            Produtos
+            Products
           </Label>
         </LabelWrapper>
         <SelectFilter

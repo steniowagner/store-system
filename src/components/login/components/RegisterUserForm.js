@@ -58,16 +58,16 @@ class RegisterUserForm extends Component<Props, State> {
     const isSamePassword = (password === repeatedPassword);
 
     if (!isSamePassword) {
-      setSnackbarError('As senhas digitadas não são as mesmas');
+      setSnackbarError('The passwords you entered are not the same');
       return;
     }
 
     if (isUsernameAlreadyRegistered) {
-      setSnackbarError('Este Usuário já foi Cadastrado');
+      setSnackbarError('This Username has already in use');
       return;
     }
 
-    setSnackbarMessage('Usuário Cadastrado com sucesso');
+    setSnackbarMessage('User Registered Successfully');
 
     createUser({ username, name, password });
   };
@@ -100,7 +100,7 @@ class RegisterUserForm extends Component<Props, State> {
             onBlur={() => {}}
             placeholder=""
             value={name}
-            label="Nome"
+            label="Name"
             type="text"
             id="name"
             error=""
@@ -111,7 +111,7 @@ class RegisterUserForm extends Component<Props, State> {
             onChange={(event: Object): void => this.onTypeInputValue('username', event.target.value)}
             onBlur={() => {}}
             value={username}
-            label="Usuário"
+            label="Username"
             placeholder=""
             id="username"
             type="text"
@@ -125,7 +125,7 @@ class RegisterUserForm extends Component<Props, State> {
             value={password}
             type="password"
             placeholder=""
-            label="Senha"
+            label="Password"
             id="password"
             error=""
           />
@@ -135,7 +135,7 @@ class RegisterUserForm extends Component<Props, State> {
             onChange={(event: Object): void => this.onTypeInputValue('repeatedPassword', event.target.value)}
             value={repeatedPassword}
             onBlur={() => {}}
-            label="Digite a Senha novamente"
+            label="Repeat the Password"
             id="repeatedPassword"
             placeholder=""
             type="password"
@@ -149,7 +149,7 @@ class RegisterUserForm extends Component<Props, State> {
             variant="outlined"
             color="primary"
           >
-            REGISTRAR
+            SIGN UP
           </Button>
         </ButtonWrapper>
       </Wrapper>

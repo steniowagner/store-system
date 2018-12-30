@@ -5,44 +5,26 @@ import { FILTER_TYPES } from '../../../utils/filter';
 const filterSalesWithDebit = (sales: Array<Object>): Array<Object> => sales.filter(sale => sale.inDebit > 0);
 
 const filterConfig = [{
-  placeholder: 'Informe o Nome do Vendedor',
+  placeholder: 'Enter the name of the Salesman',
   type: FILTER_TYPES.TEXT,
-  filterTitle: 'Vendedor',
+  filterTitle: 'Salesman',
   dataField: 'salesman',
 }, {
-  placeholder: 'Informe o Nome do Cliente',
+  placeholder: 'Enter the name of the Customer',
   type: FILTER_TYPES.TEXT,
-  filterTitle: 'Cliente',
+  filterTitle: 'Customer',
   dataField: 'customerName',
 }, {
-  placeholder: 'Informe o Código da Venda',
+  placeholder: 'Enter the Sale\'s Code',
   type: FILTER_TYPES.TEXT,
-  filterTitle: 'Código',
+  filterTitle: 'Code',
   dataField: 'code',
 }, {
-  placeholder: 'Vendas que estão em Débito',
+  placeholder: 'Sales with Debit',
   type: FILTER_TYPES.FUNCTIONAL,
-  filterTitle: 'Em Débito',
+  filterTitle: 'In Debit',
   dataField: 'debit',
   behavior: filterSalesWithDebit,
-}, {
-  placeholder: 'Informe a Data em questão',
-  type: FILTER_TYPES.DATE.ID,
-  filterTitle: 'Antes do Dia...',
-  dataField: FILTER_TYPES.DATE.WHEN.BEFORE,
-  field: 'createdAt',
-}, {
-  placeholder: 'Informe a Data em questão',
-  type: FILTER_TYPES.DATE.ID,
-  filterTitle: 'No Dia...',
-  dataField: FILTER_TYPES.DATE.WHEN.SAME,
-  field: 'createdAt',
-}, {
-  placeholder: 'Informe a Data em questão',
-  type: FILTER_TYPES.DATE.ID,
-  filterTitle: 'Depois do Dia...',
-  dataField: FILTER_TYPES.DATE.WHEN.AFTER,
-  field: 'createdAt',
 }];
 
 export default filterConfig;

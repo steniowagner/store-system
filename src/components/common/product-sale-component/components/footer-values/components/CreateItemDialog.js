@@ -107,7 +107,7 @@ class NewItemDialog extends Component<Props, State> {
           }}
           color="primary"
         >
-          CANCELAR
+          CANCEL
         </Button>
         <Button
           disabled={!value}
@@ -153,14 +153,14 @@ class NewItemDialog extends Component<Props, State> {
       isOpen,
     } = this.props;
 
-    const title = (isOnEditionMode ? `Editar ${entity}` : `Adicionar ${entity}`);
+    const title = (isOnEditionMode ? `Edit ${entity}` : `Add ${entity}`);
 
     return (
       <Dialog
         aria-describedby="alert-dialog-slide-description"
         aria-labelledby="alert-dialog-slide-title"
         TransitionComponent={this.renderSlide}
-        fullWidth={entity === 'Observação'}
+        fullWidth={entity === 'Observation'}
         onClose={onCloseDialog}
         keepMounted={false}
         open={isOpen}

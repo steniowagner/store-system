@@ -143,7 +143,7 @@ class Login extends Component<Props, State> {
               />
             </IconWrapper>
             <StoreTitle>
-              Eunice Livros
+              MY STORE
             </StoreTitle>
           </Wrapper>
           <ContentContainer>

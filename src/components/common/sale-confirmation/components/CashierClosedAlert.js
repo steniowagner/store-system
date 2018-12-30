@@ -17,12 +17,12 @@ const CashierClosedAlert = ({ onCloseDialog }: Props): Object => (
     <DialogTitle
       id="alert-dialog-slide-title"
     >
-      Caixa Fechado
+      Cashier Closed
     </DialogTitle>
     <DialogContent>
       <DialogContentText>
-        O Caixa encontra-se fechado. Por esse motivo, não é possível prosseguir com a ação desejada.
-        Para realizar esta operação, abra o Caixa.
+        The Cashier is Closed. By this reason, it's not possible to move forward with the desired action.
+        To perform this operation, open the Cashier.
       </DialogContentText>
     </DialogContent>
     <DialogActions>

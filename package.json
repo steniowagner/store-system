@@ -53,17 +53,13 @@
   },
   "build": {
     "appId": "com.github.steniowagner",
-    "files": [
-      "build/**/*",
-      "node_modules/**/*"
-    ],
     "directories": {
       "buildResources": "resources"
     },
     "win": {
       "target": "nsis"
     },
-    "productName": "Eunice Livros"
+    "productName": "Store System"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.6",

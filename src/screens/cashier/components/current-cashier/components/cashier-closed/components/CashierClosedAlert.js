@@ -45,14 +45,14 @@ const CashierClosedAlert = ({ onToggleInitialMoneyDialog }: Props): Object => (
   <Wrapper>
     <ContentWrapper>
       <BigText>
-        Caixa Fechado
+        Cashier Closed
       </BigText>
       <SmallText>
-        O Caixa encontra-se fechado. Para abrir o Caixa e iniciar as operações, clique no botão abaixo.
+        The Cashier is Closed. To Open the Cashier and start the operations, click on the button below.
       </SmallText>
       <ActionButton
         action={onToggleInitialMoneyDialog}
-        title="ABRIR CAIXA"
+        title="OPEN CASHIER"
       />
     </ContentWrapper>
   </Wrapper>

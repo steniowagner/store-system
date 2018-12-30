@@ -76,7 +76,7 @@ const renderValues = (quantity: number, salePrice: number, total: number): Objec
       {quantity}
     </DefaultText>
     <DefaultText>
-      {`x R$ ${salePrice} = R$ ${total}`}
+      {`x $ ${salePrice} = $ ${total}`}
     </DefaultText>
   </ProductValuesWrapper>
 );

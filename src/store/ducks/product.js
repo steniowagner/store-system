@@ -32,12 +32,12 @@ export const Creators = {
 
   createProductSuccess: product => ({
     type: Types.CREATE_SUCCESS,
-    payload: { message: 'Produto Cadastrado com Sucesso', product },
+    payload: { message: 'Product Created Successfully', product },
   }),
 
   createProductFailure: () => ({
     type: Types.CREATE_FAILURE,
-    payload: { error: 'Houve um erro ao Cadastrar o Produto' },
+    payload: { error: 'There was a problem when trying to Create Product' },
   }),
 
   getAllProducts: () => ({
@@ -51,7 +51,7 @@ export const Creators = {
 
   getAllProductsFailure: () => ({
     type: Types.GET_ALL_FAILURE,
-    payload: { error: 'Houve um erro na leitura dos Produtos' },
+    payload: { error: 'There was a problem when trying to get Products from Database' },
   }),
 
   editProduct: product => ({
@@ -61,12 +61,12 @@ export const Creators = {
 
   editProductSuccess: productEdited => ({
     type: Types.EDIT_REQUEST_SUCCESS,
-    payload: { message: 'Produto Editado com Sucesso', productEdited },
+    payload: { message: 'Product Edited Successfully', productEdited },
   }),
 
   editProductFailure: () => ({
     type: Types.EDIT_REQUEST_FAILURE,
-    payload: { error: 'Houve um erro ao Editar o Produto' },
+    payload: { error: 'There was a problem when trying to Edit Product' },
   }),
 
   removeProduct: id => ({
@@ -76,12 +76,12 @@ export const Creators = {
 
   removeProductSuccess: id => ({
     type: Types.REMOVE_REQUEST_SUCCESS,
-    payload: { message: 'Produto Removido com Sucesso', id },
+    payload: { message: 'Product Removed Successfully', id },
   }),
 
   removeProductFailure: () => ({
     type: Types.REMOVE_REQUEST_FAILURE,
-    payload: { error: 'Houve um erro ao Remover o Produto' },
+    payload: { error: 'There was a problem when trying to Remove Product' },
   }),
 };
 

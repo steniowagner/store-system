@@ -32,12 +32,12 @@ export const Creators = {
 
   createUserSuccess: user => ({
     type: Types.CREATE_SUCCESS,
-    payload: { message: 'Usuário Cadastrado com Sucesso', user },
+    payload: { message: 'User Created Successfully', user },
   }),
 
   createUserFailure: () => ({
     type: Types.CREATE_FAILURE,
-    payload: { error: 'Houve um Erro ao Cadastrar o Usuário' },
+    payload: { error: 'There was a problem when trying to Create User' },
   }),
 
   getAllUsers: () => ({
@@ -51,7 +51,7 @@ export const Creators = {
 
   getAllUsersFailure: () => ({
     type: Types.GET_ALL_FAILURE,
-    payload: { error: 'Houve um Erro ao Ler os Usuários' },
+    payload: { error: 'There was a problem when trying to get Users from Database' },
   }),
 
   editUser: user => ({
@@ -61,12 +61,12 @@ export const Creators = {
 
   editUserSuccess: userEdited => ({
     type: Types.EDIT_REQUEST_SUCCESS,
-    payload: { message: 'Usuário Editado com Sucesso', userEdited },
+    payload: { message: 'User Edited Successfully', userEdited },
   }),
 
   editUserFailure: () => ({
     type: Types.EDIT_REQUEST_FAILURE,
-    payload: { error: 'Houve um Erro ao Editar o Usuário' },
+    payload: { error: 'There was a problem when trying to Edit User' },
   }),
 
   removeUser: id => ({
@@ -76,12 +76,12 @@ export const Creators = {
 
   removeUserSuccess: id => ({
     type: Types.REMOVE_REQUEST_SUCCESS,
-    payload: { message: 'Usuário Removido com Sucesso', id },
+    payload: { message: 'User Removed Successfully', id },
   }),
 
   removeUserFailure: () => ({
     type: Types.REMOVE_REQUEST_FAILURE,
-    payload: { error: 'Houve um Erro ao Remover o Usuário' },
+    payload: { error: 'There was a problem when trying to Remove User' },
   }),
 };
 

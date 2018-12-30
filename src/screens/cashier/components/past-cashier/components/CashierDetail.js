@@ -228,7 +228,7 @@ class CashieDetail extends Component<Props, State> {
 
     return (
       <FullScreenDialog
-        title="DETALHES DO CAIXA"
+        title="CASHIER DETAILS"
         onClose={onClose}
         isOpen={isOpen}
       >

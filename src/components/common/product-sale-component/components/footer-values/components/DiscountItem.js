@@ -42,8 +42,8 @@ type State = {
 };
 
 const ERRORS = {
-  MAX_PERCENTAGE: 'O Desconto Máximo é de 100%',
-  MAX_MONEY: 'O Desconto Máximo é o valor Total',
+  MAX_PERCENTAGE: 'The Max Discount is 100%',
+  MAX_MONEY: 'The Max Discount is the Total Value',
 };
 
 class DiscountItem extends Component<Props, State> {
@@ -217,13 +217,13 @@ class DiscountItem extends Component<Props, State> {
   };
 
   renderPercentageRow = (): Object => {
-    const config = this.getRowConfig(this.onTypePercentageValue, 'percentageValue', 'Em Porcentagem', 'percentage');
+    const config = this.getRowConfig(this.onTypePercentageValue, 'percentageValue', 'As Percentage', 'percentage');
 
     return this.renderRow(config);
   };
 
   renderMoneyRow = (): Object => {
-    const config = this.getRowConfig(this.onTypeMoneyValue, 'moneyValue', 'Em Dinheiro', 'money');
+    const config = this.getRowConfig(this.onTypeMoneyValue, 'moneyValue', 'As Money', 'money');
 
     return this.renderRow(config);
   };

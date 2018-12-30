@@ -78,13 +78,13 @@ class SelectProductValues extends Component <Props, {}> {
   };
 
   renderQuantityInput = (onTypeQuantity: Function, quantity: string): Object => {
-    const inputConfig = this.getInputConfig(onTypeQuantity, quantity, 'Quantidade', 'quantity', 'number');
+    const inputConfig = this.getInputConfig(onTypeQuantity, quantity, 'Quantity', 'quantity', 'number');
 
     return this.renderInput(inputConfig);
   };
 
   renderPriceInput = (salePrice: number): Object => {
-    const inputConfig = this.getInputConfig(() => {}, salePrice, 'Preço', 'price', 'text');
+    const inputConfig = this.getInputConfig(() => {}, salePrice, 'Price', 'price', 'text');
 
     return this.renderInput(inputConfig);
   };

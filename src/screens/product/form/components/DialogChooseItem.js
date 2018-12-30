@@ -71,8 +71,8 @@ class DialogChooseItem extends Component<Props, State> {
 
     const titles = {
       brand: {
-        placeholder: 'Informe o Nome da nova Marca',
-        panelTitle: 'Cadastrar uma nova Marca',
+        placeholder: 'Enter the Name of the new Brand',
+        panelTitle: 'Register a new Brand',
       },
     };
 
@@ -111,7 +111,7 @@ class DialogChooseItem extends Component<Props, State> {
           onClick={onToggleDialog}
           color="primary"
         >
-          Cancelar
+          Cancel
         </Button>
         <Button
           onClick={() => onSetItem(itemSelected)}
@@ -133,10 +133,10 @@ class DialogChooseItem extends Component<Props, State> {
     } = this.props;
 
     const titles = {
-      brand: 'Marca',
+      brand: 'Brand',
     };
 
-    const actionTitle = (mode === 'edit' ? 'Editar' : 'Selecionar');
+    const actionTitle = (mode === 'edit' ? 'Edit' : 'Select');
     const entityTitle = titles[entity];
 
     return (

@@ -68,8 +68,8 @@ class Stock extends Component<Props, State> {
       <Fragment>
         <EntityComponent
           onEditItem={this.onEditStockItem}
-          singularEntityName="Estoque"
-          pluralEntityName="Estoque"
+          singularEntityName="Stock"
+          pluralEntityName="Stock"
           filterConfig={config.filterConfig}
           tabConfig={config.tabConfig}
           dataset={stock.data}

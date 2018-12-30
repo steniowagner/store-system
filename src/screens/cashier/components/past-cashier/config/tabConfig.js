@@ -1,17 +1,17 @@
 const tabConfig = [{
-  columnTitle: 'Data',
+  columnTitle: 'Date',
   dataField: 'dateToShow',
 }, {
-  columnTitle: 'Valor Inicial em Caixa',
+  columnTitle: 'Initial Amount in Cashier',
   dataField: 'initialMoneyCashierText',
 }, {
-  columnTitle: 'Total de Entrada',
+  columnTitle: 'Total Inserted',
   dataField: 'totalIncomeText',
 }, {
-  columnTitle: 'Total de Saída',
+  columnTitle: 'Total Withdrawn',
   dataField: 'totalOutcomeText',
 }, {
-  columnTitle: 'Lucro',
+  columnTitle: 'Profit',
   dataField: 'totalProfitText',
 }];
 

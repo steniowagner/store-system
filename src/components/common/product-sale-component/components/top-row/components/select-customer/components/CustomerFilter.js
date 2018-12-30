@@ -33,17 +33,17 @@ const DefaultText = styled.span`
 `;
 
 const filterConfig = [{
-  placeholder: 'Informe o nome do Cliente Buscado',
+  placeholder: 'Enter the Name of the Customer you are looking for',
   type: FILTER_TYPES.TEXT,
-  filterTitle: 'Nome',
+  filterTitle: 'Name',
   dataField: 'name',
 }, {
-  placeholder: 'Informe o CPF do Cliente Buscado',
+  placeholder: 'Enter the CPF of the Customer you are looking for',
   type: FILTER_TYPES.TEXT,
   filterTitle: 'CPF',
   dataField: 'cpf',
 }, {
-  placeholder: 'Informe o RG do Cliente Buscado',
+  placeholder: 'Enter the RG of the Customer you are looking for',
   type: FILTER_TYPES.TEXT,
   filterTitle: 'RG',
   dataField: 'rg',
@@ -158,8 +158,8 @@ class CustomerFilter extends Component<Props, State> {
         <RowItem>
           <Input
             value={customerSelected.name || ''}
-            placeholder="Selecione um Cliente"
-            label="Cliente Selecionado"
+            placeholder="Select a Customer"
+            label="Customer Selected"
             id="customerSelected"
             onChange={() => {}}
             onBlur={() => {}}

@@ -96,7 +96,7 @@ class Backup extends Component {
     <DialogContentText
       id="alert-dialog-slide-description"
     >
-      A funcionalidade de Backup ajuda a manter seus dados sempre salvos e portáveis.
+      The feature of Backup helps to keep your data always safe and portable.
     </DialogContentText>
   );
 
@@ -139,7 +139,7 @@ class Backup extends Component {
           }}
           color="primary"
         >
-          VOLTAR
+          BACK
         </Button>
       </DialogActions>
     );

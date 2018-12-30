@@ -122,7 +122,7 @@ class ProductsSelectedList extends Component<Props, State> {
   renderErrorMessage = (): Object => (
     <ErrorContainer>
       <ErrorMessage>
-        Ao Menos um Produto deve ser Cadastrado
+        At least one Product should be selected
       </ErrorMessage>
     </ErrorContainer>
   );

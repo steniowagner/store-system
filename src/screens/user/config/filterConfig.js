@@ -1,14 +1,14 @@
 import { FILTER_TYPES } from '../../../utils/filter';
 
 const filterConfig = [{
-  placeholder: 'Informe o Nome do Usuário Buscado',
+  placeholder: 'Enter the Name of the User you are looking for',
   type: FILTER_TYPES.TEXT,
-  filterTitle: 'Nome',
+  filterTitle: 'Name',
   dataField: 'name',
 }, {
-  placeholder: 'Informe o Nome de Usuário Buscado',
+  placeholder: 'Enter the Username of the User you are looking for',
   type: FILTER_TYPES.TEXT,
-  filterTitle: 'Usuário',
+  filterTitle: 'Username',
   dataField: 'username',
 }];
 

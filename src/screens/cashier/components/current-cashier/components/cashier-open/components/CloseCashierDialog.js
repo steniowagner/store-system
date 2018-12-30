@@ -141,7 +141,7 @@ class CloseCashierDialog extends Component<Props, State> {
     <DialogTitle
       id="alert-dialog-slide-title"
     >
-      Encerrar Caixa
+      Close Cashier
     </DialogTitle>
   );
 
@@ -151,7 +151,7 @@ class CloseCashierDialog extends Component<Props, State> {
         onClick={() => this.onClickButton('cancel')}
         color="primary"
       >
-        CANCELAR
+        CANCEL
       </Button>
       <Button
         onClick={() => this.onClickButton('ok')}

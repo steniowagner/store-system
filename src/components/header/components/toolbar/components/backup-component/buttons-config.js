@@ -18,12 +18,12 @@ export const TYPES = {
 
 export const CONFIG = {
   [TYPES.IMPORT]: {
-    message: 'Importar os dados de um arquivo backup',
+    message: 'Import Data from a Backup file',
     Icon: AttachFileIcon,
   },
 
   [TYPES.EXPORT]: {
-    message: 'Fazer o Backup dos meus Dados Atuais',
+    message: 'Make the Backup of my current Data',
     Icon: SaveIcon,
   },
 };

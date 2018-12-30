@@ -74,7 +74,7 @@ const renderTitle = (): Object => (
   <DialogTitle
     id="alert-dialog-slide-title"
   >
-    Aviso
+    Alert
   </DialogTitle>
 );
 
@@ -83,8 +83,8 @@ const renderContent = (product: Object, alertConfig: Object, quantity: number): 
   const { minStockQuantity, stockQuantity } = stockInfo;
 
   const message = (type === ALERTS_TYPES.STOCK_BELOW_MIN
-    ? 'O estoque não possui a quantidade desejada do Produto. Desejar prosseguir com a operação e deixar o Estoque em baixa?'
-    : 'Ao realizar esta ação, o estoque deste produto ficará abaixo do mínimo permitido.'
+    ? 'The Stock hasn\'t the quantity desired of this Product. Want to proceed with this operation and let the Stock in low?'
+    : 'By performing this action, the Stock of this Product will be under the min allowed.'
   );
 
   return (
@@ -94,10 +94,10 @@ const renderContent = (product: Object, alertConfig: Object, quantity: number): 
       >
         {message}
       </DialogContentText>
-      {renderProductAndStockInfo('Produto: ', product.description)}
-      {renderProductAndStockInfo('Quantidade Mínima em Estoque: ', minStockQuantity)}
-      {renderProductAndStockInfo('Quantidade em Estoque: ', stockQuantity)}
-      {renderProductAndStockInfo('Quantidade Requisitada: ', quantity)}
+      {renderProductAndStockInfo('Product: ', product.description)}
+      {renderProductAndStockInfo('Min Stock Quantity: ', minStockQuantity)}
+      {renderProductAndStockInfo('Quantity in Stock: ', stockQuantity)}
+      {renderProductAndStockInfo('Quantity Requested: ', quantity)}
     </DialogContent>
   );
 };
@@ -108,13 +108,13 @@ const renderActionButtons = (onClickConfirm: Function, onCloseDialog: Function, 
       onClick={onCloseDialog}
       color="primary"
     >
-      CANCELAR
+      CANCEL
     </Button>
     <Button
       onClick={onClickConfirm}
       color="primary"
     >
-      {alertType === ALERTS_TYPES.STOCK_BELOW_MIN ? 'PROSSEGUIR' : 'OK'}
+      {alertType === ALERTS_TYPES.STOCK_BELOW_MIN ? 'PROCEED' : 'OK'}
     </Button>
   </DialogActions>
 );

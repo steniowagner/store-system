@@ -92,8 +92,8 @@ class User extends Component<Props, State> {
         <EntityComponent
           onCreateItem={this.onCreateUser}
           onEditItem={this.onEditUser}
-          singularEntityName="Usuário"
-          pluralEntityName="Usuários"
+          singularEntityName="User"
+          pluralEntityName="Users"
           filterConfig={config.filterConfig}
           tabConfig={config.tabConfig}
           withOwnRemoveAction={this.onClickRemoveTableIcon}

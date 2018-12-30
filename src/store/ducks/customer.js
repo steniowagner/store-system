@@ -33,12 +33,12 @@ export const Creators = {
 
   createCustomerSuccess: customer => ({
     type: Types.CREATE_SUCCESS,
-    payload: { message: 'Cliente Criado com Sucesso', customer },
+    payload: { message: 'Customer Created Successfully', customer },
   }),
 
   createCustomerFailure: () => ({
     type: Types.CREATE_FAILURE,
-    payload: { error: 'Houve um erro ao Criar o Cliente' },
+    payload: { error: 'There was a problem when trying to Create Customer' },
   }),
 
   getAllCustomers: () => ({
@@ -52,7 +52,7 @@ export const Creators = {
 
   getAllCustomersFailure: () => ({
     type: Types.GET_ALL_FAILURE,
-    payload: { error: 'Houve um erro na leitura dos Orçamentos' },
+    payload: { error: 'There was a problem when trying to get Customers from Databse' },
   }),
 
   editCustomer: customer => ({
@@ -62,12 +62,12 @@ export const Creators = {
 
   editCustomerSuccess: customerEdited => ({
     type: Types.EDIT_REQUEST_SUCCESS,
-    payload: { message: 'Cliente Editado com Sucesso', customerEdited },
+    payload: { message: 'Customer Edited Successfully', customerEdited },
   }),
 
   editCustomerFailure: () => ({
     type: Types.EDIT_REQUEST_FAILURE,
-    payload: { error: 'Houve um erro ao Editar o Cliente' },
+    payload: { error: 'There was a problem when trying to Edit Customer' },
   }),
 
   removeCustomer: id => ({
@@ -77,12 +77,12 @@ export const Creators = {
 
   removeCustomerSuccess: id => ({
     type: Types.REMOVE_REQUEST_SUCCESS,
-    payload: { message: 'Cliente Removido com Sucesso', id },
+    payload: { message: 'Customer Removed Successfully', id },
   }),
 
   removeCustomerFailure: () => ({
     type: Types.REMOVE_REQUEST_FAILURE,
-    payload: { error: 'Houve um erro ao Remover o Cliente' },
+    payload: { error: 'There was a problem when trying to Remove Customer' },
   }),
 };
 

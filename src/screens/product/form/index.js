@@ -56,15 +56,15 @@ class ProductForm extends Component<Props, {}> {
   };
 
   renderBarcodeAndDescription = (): void => {
-    const barcodeInputFieldData = getRowItemObject('Código de Barras', 'Informe o Código de Barras do Produto', 'text', 'barcode');
-    const descriptionInputFieldData = getRowItemObject('Descrição', 'Informe a Descrição do Produto', 'text', 'description');
+    const barcodeInputFieldData = getRowItemObject('Barcode', 'Enter the Barcode', 'text', 'barcode');
+    const descriptionInputFieldData = getRowItemObject('Description', 'Enter the Description', 'text', 'description');
 
     return renderRowWithTwoItems(barcodeInputFieldData, descriptionInputFieldData, this.props);
   };
 
   renderPrices = () => {
-    const salePriceInputFieldData = getRowItemObject('Preço de Venda', 'Informe o Preço de Venda do Produto', 'number', 'salePrice');
-    const costPriceInputFieldData = getRowItemObject('Preço de Custo', 'Informe o Preço de Custo do Produto', 'number', 'costPrice');
+    const salePriceInputFieldData = getRowItemObject('Sale Price', 'Enter the Sale Price', 'number', 'salePrice');
+    const costPriceInputFieldData = getRowItemObject('Cost Price', 'Enter the Cost Price', 'number', 'costPrice');
 
     return renderRowWithTwoItems(salePriceInputFieldData, costPriceInputFieldData, this.props);
   };
@@ -104,7 +104,7 @@ class ProductForm extends Component<Props, {}> {
     const { brandsCreated } = this.state;
     const { brands } = this.props;
 
-    const brandInputFieldData = getRowItemObject('Marca', 'Informe a Marca do Produto', 'text', 'brand');
+    const brandInputFieldData = getRowItemObject('Brand', 'Enter the Brand', 'text', 'brand');
 
     const brandData = {
       datasetCreatedId: 'brandsCreated',
@@ -122,7 +122,7 @@ class ProductForm extends Component<Props, {}> {
 
   renderProductInfoSection = (): Object => (
     <Section>
-      {renderSectionTitle('Informações do Produto')}
+      {renderSectionTitle('Product Info')}
       {this.renderBarcodeAndDescription()}
       {this.renderPrices()}
       {this.renderBrandRow()}
@@ -130,15 +130,15 @@ class ProductForm extends Component<Props, {}> {
   );
 
   renderStockFields = () => {
-    const stockQuantityInputFieldData = getRowItemObject('Quantidade em Estoque', 'Informe a Quantidade em Estoque', 'number', 'stockQuantity');
-    const minQuantityStockInputFieldData = getRowItemObject('Quantidade Mínima em Estoque', 'Informe a Quantidade Mínima do Produto no Estoque', 'number', 'minStockQuantity');
+    const stockQuantityInputFieldData = getRowItemObject('Amount in Stock', 'Enter the Amount in Stock', 'number', 'stockQuantity');
+    const minQuantityStockInputFieldData = getRowItemObject('Min Amount in Stock', 'Enter the Amount in Stock', 'number', 'minStockQuantity');
 
     return renderRowWithTwoItems(stockQuantityInputFieldData, minQuantityStockInputFieldData, this.props);
   };
 
   renderStockSection = (): Object => (
     <Section>
-      {renderSectionTitle('Estoque')}
+      {renderSectionTitle('Stock')}
       {this.renderStockFields()}
     </Section>
   );
@@ -161,7 +161,7 @@ class ProductForm extends Component<Props, {}> {
             onClick={this.onSubmitForm}
             onRemoveItem={onRemoveItem}
             disabled={isSubmitting}
-            entity="Produto"
+            entity="Product"
             canBeRemoved
             mode={mode}
           />
@@ -194,7 +194,7 @@ const CustomForm = withFormik({
     isCreateMode: Yup.boolean(),
 
     minStockQuantity: Yup.string()
-      .test('min-stock-quantity', 'Quantidade Mínima Maior que a Quantidade em Estoque.', () => {
+      .test('min-stock-quantity', 'Min Quantity greater than Stock Quantity.', () => {
         const { minStockQuantity, stockQuantity } = values;
 
         if (mode === 'edit') {
@@ -208,24 +208,24 @@ const CustomForm = withFormik({
       })
       .when('isCreateMode', {
         is: true,
-        then: Yup.string().required('A Quantidade Mínima em Estoque é Obrigatória.'),
+        then: Yup.string().required('Min Stock Quantity is required.'),
       }),
 
     stockQuantity: Yup.string()
       .when('isCreateMode', {
         is: true,
-        then: Yup.string().required('A Quantidade em Estoque é Obrigatória.'),
+        then: Yup.string().required('Stock Quantity is required.'),
       }),
 
     barcode: Yup.string()
-      .test('barcode-repeated', 'Este Código já foi cadastrado.', (value) => {
+      .test('barcode-repeated', 'This Barcode has already been registered.', (value) => {
         const { barcode } = item;
         return handleRepeatedFormValues(barcodesRegistered, barcode, value, mode);
       })
-      .required('O Código de Barras é obrigatório.'),
+      .required('The Barcode is required.'),
 
     costPrice: Yup.string()
-      .test('cost-price', 'Preço de Custo Maior que Preço de Venda.', () => {
+      .test('cost-price', 'Cost Price is required.', () => {
         const { salePrice, costPrice } = values;
 
         if (mode === 'edit') {
@@ -237,20 +237,20 @@ const CustomForm = withFormik({
 
         return salePriceValue >= costPriceValue;
       })
-      .required('O Preço de Custo é obrigatório.'),
+      .required('Cost Price is required.'),
 
     salePrice: Yup.string()
-      .required('O Preço de Venda é obrigatório.'),
+      .required('Sale Price is required.'),
 
     description: Yup.string()
-      .test('description-repeated', 'Esta Descrição já foi cadastrada.', (value) => {
+      .test('description-repeated', 'This Description has alreadyEsta Descrição já foi cadastrada.', (value) => {
         const { description } = item;
         return handleRepeatedFormValues(descriptionsRegistered, description, value, mode);
       })
-      .required('A Descrição é obrigatória.'),
+      .required('The Description is required.'),
 
     brand: Yup.object()
-      .test('brand-undefined', 'A Marca é obrigatória.', (value) => {
+      .test('brand-undefined', 'The Brand is required.', (value) => {
         const { name } = value;
         return !!name;
       }),

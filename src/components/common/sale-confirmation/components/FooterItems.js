@@ -50,7 +50,7 @@ const renderDebitAndErrorRow = (onToggleInDebitCheckbox: Function, isInDebit: bo
           value="debit"
         />
         )}
-      label="Deixar em Débito"
+      label="Leave in Debit"
       disabled={!error}
     />
     <ErrorText>
@@ -70,7 +70,7 @@ const renderShouldPrintReceipt = (onToggleShouldPrintReceiptCheckbox: Function, 
           value="shouldPrintReceipt"
         />
         )}
-      label="Imprimir Comprovante"
+      label="Print Voucher"
     />
   </Wrapper>
 );

@@ -161,13 +161,13 @@ const CustomForm = withFormik({
 
   validationSchema: _props => Yup.lazy(() => Yup.object().shape({
     products: Yup.array()
-      .required('Ao menos um Produto deve ser Adicionado'),
+      .required('At least one Product should be selected'),
 
     customer: Yup.string()
-      .required('O Cliente é obrigatório'),
+      .required('The Customer is Mandatory'),
 
     validity: Yup.string()
-      .required('A Validade é obrigatória'),
+      .required('The Validty is Mandatory'),
   })),
 
   handleSubmit(values, { setSubmitting, props }) {

@@ -40,14 +40,14 @@ const renderActionButtons = (resetForm: Function, onClose: Function, handleSubmi
       }}
       color="primary"
     >
-      Cancelar
+      Cancel
     </Button>
     <Button
       disabled={isSubmitting}
       onClick={() => handleSubmit()}
       color="primary"
     >
-      Confirmar
+      Confirm
     </Button>
   </DialogActions>
 );
@@ -60,8 +60,8 @@ const renderNewPasswordSection = (touched: Object, errors: Object, handleChange:
           error={touched.newPassword && errors.newPassword}
           onChange={handleChange}
           onBlur={handleBlur}
-          placeholder="Informe a senha"
-          label="Nova Senha"
+          placeholder="Enter the new Password"
+          label="New Password"
           type="password"
           id="newPassword"
         />
@@ -71,8 +71,8 @@ const renderNewPasswordSection = (touched: Object, errors: Object, handleChange:
           error={touched.newPasswordConfirm && errors.newPasswordConfirm}
           onChange={handleChange}
           onBlur={handleBlur}
-          placeholder="Informe a senha novamente"
-          label="Digite a nova senha novamente"
+          placeholder="Repeat the Password"
+          label="Enter the Password again"
           type="password"
           id="newPasswordConfirm"
         />
@@ -112,11 +112,11 @@ const ChangePassword = ({
     open={isOpen}
   >
     <DialogTitle id="form-dialog-title">
-      Trocar Senhar
+      Change Password
     </DialogTitle>
     <DialogContent>
       <DialogContentText>
-        Para trocar a senha, você precisa informar sua senha atual para então criar uma nova senha.
+        To change password, you need to enter with your current password to create a new password.
       </DialogContentText>
       <Form>
         <Section>
@@ -125,8 +125,8 @@ const ChangePassword = ({
               error={touched.currentPassword && errors.currentPassword}
               onChange={handleChange}
               onBlur={handleBlur}
-              placeholder="Informe a senha atual"
-              label="Senha atual"
+              placeholder="Enter the current Password"
+              label="Current Password"
               type="password"
               id="currentPassword"
             />
@@ -150,15 +150,15 @@ const ChangePasswordForm = withFormik({
   validationSchema: Yup.object().shape({
     currentPassword: Yup.string()
       .oneOf([Yup.ref('realPassword'), null], 'Senha incoreta')
-      .required('A senha atual é obrigatória.'),
+      .required('The current Password is required.'),
 
     newPassword: Yup.string()
-      .min(6, 'A senha deve conter no mínimo 6 caracteres.')
-      .required('A senha é obrigatória.'),
+      .min(6, 'The Password might have at least 6 characters.')
+      .required('The Password is required.'),
 
     newPasswordConfirm: Yup.string()
-      .oneOf([Yup.ref('newPassword'), null], 'Senhas diferentes')
-      .required('As senhas precisam ser iguais.'),
+      .oneOf([Yup.ref('newPassword'), null], 'Passwords are different')
+      .required('The Passwords might be equal.'),
   }),
 
   handleSubmit(values, { setSubmitting, props }) {

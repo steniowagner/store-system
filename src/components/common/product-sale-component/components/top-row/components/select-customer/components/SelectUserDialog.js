@@ -88,7 +88,7 @@ class SelectCustomerDialog extends Component<Props, State> {
             onClick={onToggle}
             color="primary"
           >
-            Cancelar
+            Cancel
           </Button>
           <Button
             onClick={() => this.onOkPressed()}

@@ -1,11 +1,11 @@
 const tabConfig = [{
-  columnTitle: 'Produto',
+  columnTitle: 'Product',
   dataField: 'description',
 }, {
-  columnTitle: 'Quantidade Atual em Estoque',
+  columnTitle: 'Current Quantity',
   dataField: 'stockQuantity',
 }, {
-  columnTitle: 'Quantidade Mínima em Estoque',
+  columnTitle: 'Min Quantity',
   dataField: 'minStockQuantity',
 }];
 

@@ -61,7 +61,7 @@ export const Creators = {
 
   editStockSuccess: stockItemEdited => ({
     type: Types.EDIT_REQUEST_SUCCESS,
-    payload: { message: 'Estoque Editado com Sucesso', stockItemEdited },
+    payload: { message: 'Stock Edited Successfully', stockItemEdited },
   }),
 
   editStockFailure: error => ({

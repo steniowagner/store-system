@@ -1,10 +1,10 @@
 // @flow
 
 export const CASHIER_OPERATIONS = {
-  CONSOLIDATE_BUDGET_PAYMENT: 'Pgto. de Orçamento',
-  TAKE_AWAY_MONEY: 'Retirada',
-  ADD_MONEY: 'Inserção',
-  SALE: 'Venda',
+  CONSOLIDATE_BUDGET_PAYMENT: 'Budget Payment',
+  TAKE_AWAY_MONEY: 'Withdraw',
+  ADD_MONEY: 'Insert',
+  SALE: 'Sale',
 };
 
 export const getDialogConfig = (type: string, action: Function, isDisabled = false): Object => {
@@ -12,19 +12,19 @@ export const getDialogConfig = (type: string, action: Function, isDisabled = fal
     [CASHIER_OPERATIONS.ADD_MONEY]: {
       type: CASHIER_OPERATIONS.ADD_MONEY,
       title: {
-        create: 'Adicionar Dinheiro',
-        edit: 'Editar Entrada de Dinheiro',
-        detail: 'Entrada no Caixa',
+        create: 'Insert Money',
+        edit: 'Edit Money Inserted',
+        detail: 'Cashier Entry',
       },
       valueTitle: {
-        create: 'Informe a quantidade que será adicionada ao Caixa',
-        edit: 'Editar valor adicionada ao Caixa',
-        detail: 'Valor Adicionado',
+        create: 'Report the amount that will be insert',
+        edit: 'Edit Amount inserted',
+        detail: 'Amount inserted',
       },
       reasonTitle: {
-        create: 'Informe o motivo pelo qual esta quantia está sendo adicionada ao Caixa',
-        edit: 'Editar o motivo do valor ter sido adicionada ao Caixa',
-        detail: 'Motivo',
+        create: 'Report the reason of why this amount is been inserted',
+        edit: 'Edit the reason of why the amount was inserted',
+        detail: 'Reason',
       },
       isDisabled,
       action,
@@ -33,19 +33,19 @@ export const getDialogConfig = (type: string, action: Function, isDisabled = fal
     [CASHIER_OPERATIONS.TAKE_AWAY_MONEY]: {
       type: CASHIER_OPERATIONS.TAKE_AWAY_MONEY,
       title: {
-        create: 'Retirar Dinheiro',
-        edit: 'Editar Retirada de Dinheiro',
-        detail: 'Retirada no Caixa',
+        create: 'Withdraw Money',
+        edit: 'Edit Withdrawn Money',
+        detail: 'Withdrawn Money',
       },
       valueTitle: {
-        create: 'Informe a quantidade que será retirada do Caixa',
-        edit: 'Editar valor retirado do Caixa',
-        detail: 'Valor Retirado',
+        create: 'Report the amount that will be withdrawn',
+        edit: 'Edit the amount withdrawn',
+        detail: 'Withdrawn Money',
       },
       reasonTitle: {
-        create: 'Informe o motivo pelo qual esta quantia está sendo retirada do Caixa',
-        edit: 'Editar o motivo do valor ter sido retirado do Caixa',
-        detail: 'Motivo',
+        create: 'Report the reason of why this amount was withdrawn',
+        edit: 'Edit the reason of why this amount was withdrawn',
+        detail: 'Reason',
       },
       isDisabled,
       action,

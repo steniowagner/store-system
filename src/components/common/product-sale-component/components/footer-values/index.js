@@ -130,7 +130,7 @@ class FooterValues extends Component<Props, State> {
       ChildrenComponent: DiscountItem,
       onCreateItem: (value, type) => this.onSetDiscount(value, type),
       onRemoveItem: () => this.onRemoveDiscount(),
-      entity: 'Desconto',
+      entity: 'Discount',
       isOnEditionMode,
       item: discount,
       total,
@@ -152,7 +152,7 @@ class FooterValues extends Component<Props, State> {
       ChildrenComponent: ObservationItem,
       onCreateItem: value => this.onSetObservation(value),
       onRemoveItem: () => this.onRemoveObservation(),
-      entity: 'Observação',
+      entity: 'Observation',
       isOnEditionMode,
       item: observation,
     };
@@ -163,12 +163,12 @@ class FooterValues extends Component<Props, State> {
     });
   };
 
-  getDiscountByMoneyText = (value: number): string => `Desconto: R$ ${value.toFixed(2)}`;
+  getDiscountByMoneyText = (value: number): string => `Discount: $ ${value.toFixed(2)}`;
 
   getDiscountByPercentageText = (subtotal: number, value: number): string => {
     const subtotalInPercentage = getDiscountByPercentage(subtotal, value);
 
-    return `Desconto (${value}%): R$ ${subtotalInPercentage.toFixed(2)}`;
+    return `Discount (${value}%): $ ${subtotalInPercentage.toFixed(2)}`;
   };
 
   renderDiscount = (): Object => {
@@ -201,14 +201,14 @@ class FooterValues extends Component<Props, State> {
       <DefaultText
         color="mediumGray"
       >
-        {`Sub-total: R$ ${subtotal.toFixed(2)}`}
+        {`Sub-total: $ ${subtotal.toFixed(2)}`}
       </DefaultText>
     );
   };
 
   renderTotal = (total: number): Object => (
     <TotalText>
-      {`Total: R$ ${total.toFixed(2)}`}
+      {`Total: $ ${total.toFixed(2)}`}
     </TotalText>
   );
 
@@ -224,8 +224,8 @@ class FooterValues extends Component<Props, State> {
     const isOnEditMode = (mode === 'edit');
 
     const title = {
-      observation: (((isOnEditMode && !!observation) || !!observation) ? 'Editar Observação' : 'Adicionar Observação'),
-      discount: (((isOnEditMode && !!discount.type) || !!discount.type) ? 'Editar Desconto' : 'Adicionar Desconto'),
+      observation: (((isOnEditMode && !!observation) || !!observation) ? 'Edit Observation' : 'Add Observation'),
+      discount: (((isOnEditMode && !!discount.type) || !!discount.type) ? 'Edit Discount' : 'Add Discount'),
     };
 
     return (

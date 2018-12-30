@@ -42,21 +42,21 @@ export const getButtonConfig = (type: string, action: Function): Object => {
   const CONFIGS = {
     [BUTTON_TYPES.ADD_MONEY]: {
       color: 'success',
-      label: 'ADICIONAR DINHEIRO',
+      label: 'INSERT MONEY',
       Icon: AddIcon,
       action,
     },
 
     [BUTTON_TYPES.TAKE_MONEY_OUT]: {
       color: 'danger',
-      label: 'RETIRAR DINHEIRO',
+      label: 'WITHDRAW MONEY',
       Icon: TakeMoneyOutIcon,
       action,
     },
 
     [BUTTON_TYPES.CLOSE_CASHIER]: {
       color: 'warning',
-      label: 'FECHAR CAIXA',
+      label: 'CLOSE CASHIER',
       Icon: CloseCashierIcon,
       action,
     },

@@ -101,7 +101,7 @@ type State = {
 
 class Filter extends Component<Props, State> {
   state = {
-    filterButtonLabel: 'Adicionar Filtro',
+    filterButtonLabel: 'Add Filter',
     isChooseDateDialogOpen: false,
     filterSelected: 'ADD_FILTER',
     isFunctionalFilter: false,
@@ -198,12 +198,12 @@ class Filter extends Component<Props, State> {
 
     const isAllFilterSelected = (filterSelected === 'all');
     if (isAllFilterSelected) {
-      return 'ESTES SÃO TODOS OS REGISTROS CADASTRADOS';
+      return 'THIS IS ALL RECORDS';
     }
 
     const isInitialPlaceholder = (filterSelected === 'ADD_FILTER');
     if (isInitialPlaceholder) {
-      return 'ESCOLHA UM FILTRO PARA BUSCAR A INFORMAÇÃO DESEJADA';
+      return 'CHOOSE A FILTER TO SEARCH THE DESIRED INFORMATION';
     }
 
     const filterSelectedConfig = this.getFilterSelectedConfig();
@@ -316,10 +316,10 @@ class Filter extends Component<Props, State> {
     const { filterConfig } = this.props;
 
     const extraFilter = [{
-      filterTitle: 'Mostrar todos',
+      filterTitle: 'Show All',
       dataField: 'all',
     }, {
-      filterTitle: 'FILTRAR POR',
+      filterTitle: 'FILTER BY',
       dataField: '$',
     }];
 
@@ -334,7 +334,7 @@ class Filter extends Component<Props, State> {
           <FilterIcon />
         </ListItemIcon>
         <ListItemText
-          primary="FILTRAR POR"
+          primary="FILTER BY"
           inset
         />
       </MenuItem>

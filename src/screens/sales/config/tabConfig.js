@@ -1,14 +1,14 @@
 const tabConfig = [{
-  columnTitle: 'Cliente',
-  dataField: 'customerName',
-}, {
-  columnTitle: 'Data',
-  dataField: 'dateToShow',
-}, {
-  columnTitle: 'Código',
+  columnTitle: 'Code',
   dataField: 'code',
 }, {
-  columnTitle: 'Vendedor',
+  columnTitle: 'Customer',
+  dataField: 'customerName',
+}, {
+  columnTitle: 'Date',
+  dataField: 'dateToShow',
+}, {
+  columnTitle: 'Salesman',
   dataField: 'salesman',
 }, {
   columnTitle: 'Sub-total',

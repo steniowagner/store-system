@@ -83,10 +83,10 @@ class Cashier extends Component<Props, State> {
           textColor="primary"
         >
           <Tab
-            label="CAIXA ATUAL"
+            label="CURRENT CASHIER"
           />
           <Tab
-            label="CAIXAS ANTERIORES"
+            label="PAST CASHIERS"
           />
         </Tabs>
       </TabWrapper>

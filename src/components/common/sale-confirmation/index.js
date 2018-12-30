@@ -130,7 +130,7 @@ class SaleConfirmation extends Component<Props, State> {
   renderTitle = (): Object => {
     const { mode } = this.props;
 
-    const title = (mode === 'edit' ? 'Editar Pagamento' : 'Confirmar Pagamento');
+    const title = (mode === 'edit' ? 'Edit Payment' : 'Confirm Payment');
 
     return (
       <DialogTitle
@@ -217,7 +217,7 @@ class SaleConfirmation extends Component<Props, State> {
           }}
           color="primary"
         >
-          CANCELAR
+          CANCEL
         </Button>
         <Button
           disabled={shouldDisableOkButton}

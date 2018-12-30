@@ -46,7 +46,7 @@ class LoginForm extends Component<Props, State> {
 
     const userSelected = users.filter(user => ((user.username === username) && (user.password === password)))[0];
 
-    return (userSelected ? this.handleLogin(userSelected) : setSnackbarError('Usuário não encontrado'));
+    return (userSelected ? this.handleLogin(userSelected) : setSnackbarError('User not Found'));
   };
 
   handleLogin = (user: Object): void => {
@@ -68,7 +68,7 @@ class LoginForm extends Component<Props, State> {
             onChange={(event: Object): void => this.onTypeInputValue('username', event.target.value)}
             onBlur={() => {}}
             value={username}
-            label="Usuário"
+            label="Username"
             placeholder=""
             id="username"
             type="text"
@@ -81,7 +81,7 @@ class LoginForm extends Component<Props, State> {
           value={password}
           type="password"
           placeholder=""
-          label="Senha"
+          label="Password"
           id="password"
           error=""
         />
@@ -92,7 +92,7 @@ class LoginForm extends Component<Props, State> {
             onClick={this.onClickEnterButton}
             color="primary"
           >
-            ENTRAR
+            SIGN IN
           </Button>
         </ButtonWrapper>
       </Wrapper>

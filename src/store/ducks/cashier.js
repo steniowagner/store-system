@@ -42,10 +42,10 @@ const handlePastCashiers = (allPastCashiers, state) => {
 
   const pastCashiers = cashiersExceptCurrent.map(cashier => ({
     ...cashier,
-    initialMoneyCashierText: `R$ ${cashier.initialMoneyCashier.toFixed(2)}`,
-    totalOutcomeText: `R$ ${cashier.totalOutcome.toFixed(2)}`,
-    totalIncomeText: `R$ ${cashier.totalIncome.toFixed(2)}`,
-    totalProfitText: `R$ ${cashier.totalProfit.toFixed(2)}`,
+    initialMoneyCashierText: `$ ${cashier.initialMoneyCashier.toFixed(2)}`,
+    totalOutcomeText: `$ ${cashier.totalOutcome.toFixed(2)}`,
+    totalIncomeText: `$ ${cashier.totalIncome.toFixed(2)}`,
+    totalProfitText: `$ ${cashier.totalProfit.toFixed(2)}`,
   }));
 
   return pastCashiers;
@@ -79,12 +79,12 @@ export const Creators = {
 
   createCashierSuccess: currentCashier => ({
     type: Types.CREATE_SUCCESS,
-    payload: { message: 'Todas as Operação de Caixa estão liberadas', currentCashier },
+    payload: { message: 'All Cashier Operations are Released', currentCashier },
   }),
 
   createCashierFailure: () => ({
     type: Types.CREATE_FAILURE,
-    payload: { error: 'Houve um erro ao Abrir o Caixa' },
+    payload: { error: 'There was a problem when trying to Open Cashier' },
   }),
 
   getAllCashiers: () => ({
@@ -98,7 +98,7 @@ export const Creators = {
 
   getAllCashiersFailure: () => ({
     type: Types.READ_ALL_FAILURE,
-    payload: { error: 'Houve um erro na leitura dos Caixas ' },
+    payload: { error: 'There was a problem when trying to get Cashiers from Database' },
   }),
 
   editCashier: cashier => ({
@@ -152,7 +152,7 @@ export const Creators = {
 
   onCloseCashier: () => ({
     type: Types.CLOSE_CASHIER,
-    payload: { message: 'Caixa Fechado com Sucesso' },
+    payload: { message: 'Cashier Closed Successfully' },
   }),
 
   setTabIndex: index => ({

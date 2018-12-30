@@ -66,9 +66,9 @@ const PendingIcon = styled(({ ...props }) => (
 `;
 
 export const BUDGET_STATUS = {
-  PENDING: 'PENDENTE',
-  APPROVED: 'APROVADO',
-  OUT_OF_TIME: 'FORA DO PRAZO',
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  OUT_OF_TIME: 'OUT OF TIME',
 };
 
 const STATUS_TYPES = [{

@@ -42,7 +42,7 @@ const renderPrintReceptButton = (startPrint: Function, values: Object, error: Ob
     >
       <ActionButton
         action={() => startPrint(values)}
-        title="Imprimir Comprovante"
+        title="Print Voucher"
         CustomIcon={Print}
         withIcon={false}
         withCustomIcon
@@ -75,7 +75,7 @@ const TopRow = ({
   return (
     <Fragment>
       <span>
-        Cliente
+        Customer
       </span>
       <TopRowWrapper>
         {renderSelectCustomerContent(customerSelected, setFieldValue, error, mode)}

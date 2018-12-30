@@ -17,47 +17,47 @@ import ActionFormButton from '../../components/common/ActionFormButton';
 import Debits from './components/Debits';
 
 const renderNameAndBirthday = (props: Object): Object => {
-  const nameFieldData = getRowItemObject('Nome', 'Informe o Nome do Cliente', 'text', 'name');
-  const birthdayInputFieldData = getRowItemObject('Data de Nascimento', 'Informe a Data de Nascimento do Cliente', 'date', 'birthday');
+  const nameFieldData = getRowItemObject('Name', 'Enter the Name of the Customer', 'text', 'name');
+  const birthdayInputFieldData = getRowItemObject('Birth Date', 'Enter the Birth Date', 'date', 'birthday');
 
   return renderRowWithTwoItems(nameFieldData, birthdayInputFieldData, props);
 };
 
 const renderParentsRow = (props: Object): Object => {
-  const motherFieldData = getRowItemObject('Nome da Mãe', 'Informe o Nome da Mãe Cliente', 'text', 'motherName');
-  const fatherInputFieldData = getRowItemObject('Nome do Pai', 'Informe o Nome do Pai do Cliente', 'text', 'fatherName');
+  const motherFieldData = getRowItemObject('Mother\'s Name', 'Enter the Mothers\'s Name', 'text', 'motherName');
+  const fatherInputFieldData = getRowItemObject('Father\'s Name', 'Enter the Father\'s name', 'text', 'fatherName');
 
   return renderRowWithTwoItems(motherFieldData, fatherInputFieldData, props);
 };
 
 const renderPersonalInfoSection = (props: Object): Object => (
   <Section>
-    {renderSectionTitle('Informações Pessoais')}
+    {renderSectionTitle('Personal Information')}
     {renderNameAndBirthday(props)}
     {renderParentsRow(props)}
   </Section>
 );
 
 const renderIdentificationSection = (props: Object): Object => {
-  const cpfInputFieldData = getRowItemObject('CPF', 'Informe o CPF do Cliente', 'text', 'cpf');
-  const rgFieldData = getRowItemObject('RG', 'Informe o RG do Cliente', 'text', 'rg');
+  const cpfInputFieldData = getRowItemObject('CPF', 'Enter the CPF', 'text', 'cpf');
+  const rgFieldData = getRowItemObject('RG', 'Enter the RG', 'text', 'rg');
 
   return (
     <Section>
-      {renderSectionTitle('Identificação')}
+      {renderSectionTitle('Identification')}
       {renderRowWithTwoItems(cpfInputFieldData, rgFieldData, props)}
     </Section>
   );
 };
 
 const renderContactSection = (props: Object): Object => {
-  const landlineInputFieldData = getRowItemObject('Telefone', 'Informe o Telefone Fixo do Cliente', 'text', 'landline');
-  const cellPhoneFieldData = getRowItemObject('Celular', 'Informe o Número de Celular do Cliente', 'text', 'cellPhone');
-  const emailFieldData = getRowItemObject('E-mail', 'Informe o E-mail do Cliente', 'text', 'email');
+  const landlineInputFieldData = getRowItemObject('Landline', 'Enter the Landline Number', 'text', 'landline');
+  const cellPhoneFieldData = getRowItemObject('Cellphone', 'Enter the Cellphone Number', 'text', 'cellPhone');
+  const emailFieldData = getRowItemObject('E-mail', 'Enter the E-mail', 'text', 'email');
 
   return (
     <Section>
-      {renderSectionTitle('Contato')}
+      {renderSectionTitle('Contact')}
       {renderRowWithTwoItems(landlineInputFieldData, cellPhoneFieldData, props)}
       {rendeRowWithSingleItem(emailFieldData, props)}
     </Section>
@@ -65,14 +65,14 @@ const renderContactSection = (props: Object): Object => {
 };
 
 const renderAddressSection = (props: Object) => {
-  const addressInputFieldData = getRowItemObject('Endereço', 'Informe o Endereço do Cliente', 'text', 'address');
-  const neighborhoodPhoneFieldData = getRowItemObject('Bairro', 'Informe o Bairro do Cliente', 'text', 'neighborhood');
-  const cityFieldData = getRowItemObject('Cidade', 'Informe a Cidade do Cliente', 'text', 'city');
-  const stateFieldData = getRowItemObject('Estado', 'Informe o Estado Cliente', 'text', 'state');
+  const addressInputFieldData = getRowItemObject('Address', 'Enter the Address', 'text', 'address');
+  const neighborhoodPhoneFieldData = getRowItemObject('Neighborhood', 'Enter the Neighborhood', 'text', 'neighborhood');
+  const cityFieldData = getRowItemObject('City', 'Enter the City', 'text', 'city');
+  const stateFieldData = getRowItemObject('State', 'Enter the State', 'text', 'state');
 
   return (
     <Section>
-      {renderSectionTitle('Endereço')}
+      {renderSectionTitle('Address')}
       {renderRowWithTwoItems(addressInputFieldData, neighborhoodPhoneFieldData, props)}
       {renderRowWithTwoItems(cityFieldData, stateFieldData, props)}
     </Section>
@@ -80,11 +80,11 @@ const renderAddressSection = (props: Object) => {
 };
 
 const renderObservationSection = (props: Object) => {
-  const observationFieldData = getRowItemObject('', 'Informe alguma observação sobre o Usuário (caso necessário)', 'textarea', 'obs');
+  const observationFieldData = getRowItemObject('', 'If necessary, enter with some extra information about Customer', 'textarea', 'obs');
 
   return (
     <Section>
-      {renderSectionTitle('Observações')}
+      {renderSectionTitle('Observations')}
       {rendeRowWithSingleItem(observationFieldData, props)}
     </Section>
   );
@@ -95,7 +95,7 @@ const renderCustomerDebits = (values: Object, mode: string): any => {
 
   return isDetailMode && (
     <Section>
-      {renderSectionTitle('Débitos')}
+      {renderSectionTitle('Debits')}
       <Debits
         {...values}
       />
@@ -127,7 +127,7 @@ const CustomerForm = (props: Object): Object => {
           onClick={handleSubmit}
           onRemoveItem={onRemoveItem}
           disabled={isSubmitting}
-          entity="Cliente"
+          entity="Customer"
           canBeRemoved
           mode={mode}
         />
@@ -162,22 +162,22 @@ const CustomForm = withFormik({
     mode,
   }) => Yup.lazy(() => Yup.object().shape({
     name: Yup.string()
-      .required('O Nome é obrigatório.'),
+      .required('The name is required.'),
 
     cpf: Yup.string()
-      .test('cpf-repeated', 'Este CPF já foi cadastrado', (value) => {
+      .test('cpf-repeated', 'This CPF has already been registered', (value) => {
         const { cpf } = item;
         return handleRepeatedFormValues(cpfsRegistered, cpf, value, mode);
       }),
 
     rg: Yup.string()
-      .test('rg-repeated', 'Este RG já foi cadastrado', (value) => {
+      .test('rg-repeated', 'This RG has already been registered', (value) => {
         const { rg } = item;
         return handleRepeatedFormValues(rgsRegistered, rg, value, mode);
       }),
 
     email: Yup.string()
-      .email('E-mail inválido.'),
+      .email('Invalid E-mail.'),
   })),
 
   handleSubmit(values, { setSubmitting, props }) {

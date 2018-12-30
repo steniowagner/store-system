@@ -1,19 +1,19 @@
 import { FILTER_TYPES } from '../../../utils/filter';
 
 const filterConfig = [{
-  placeholder: 'Informe o Código de Barras do Produto Buscado',
+  placeholder: 'Enter the Barcode',
   type: FILTER_TYPES.TEXT,
-  filterTitle: 'Código de Barras',
+  filterTitle: 'Barcode',
   dataField: 'barcode',
 }, {
-  placeholder: 'Informe a Descrição do Produto Buscado',
+  placeholder: 'Enter the Description',
   type: FILTER_TYPES.TEXT,
-  filterTitle: 'Descrição',
+  filterTitle: 'Description',
   dataField: 'description',
 }, {
-  placeholder: 'Informe a Marca do Produto Buscado',
+  placeholder: 'Enter the Brand',
   type: FILTER_TYPES.TEXT,
-  filterTitle: 'Marca',
+  filterTitle: 'Brand',
   dataField: 'brandName',
 }];
 

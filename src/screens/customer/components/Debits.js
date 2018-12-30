@@ -23,22 +23,22 @@ const TotalDebitText = styled.span`
 `;
 
 const tabConfig = [{
-  columnTitle: 'Data',
+  columnTitle: 'Date',
   dataField: 'dateToShow',
 }, {
-  columnTitle: 'Vendedor',
+  columnTitle: 'Salesman',
   dataField: 'salesman',
 }, {
-  columnTitle: 'Código',
+  columnTitle: 'Code',
   dataField: 'code',
 }, {
   columnTitle: 'Total',
   dataField: 'totalText',
 }, {
-  columnTitle: 'Pago',
+  columnTitle: 'Paid',
   dataField: 'paidValueText',
 }, {
-  columnTitle: 'Débito',
+  columnTitle: 'Debit',
   dataField: 'inDebitText',
 }];
 
@@ -125,18 +125,17 @@ class Debits extends Component<Props, State> {
 
   renderDeleteDialog = (): Object => {
     const { isRemoveDialogOpen } = this.state;
-
     return (
       <Dialog
-        description="Se executar esta ação, este Débito será apagado, e não poderá ser recuperado de forma alguma."
-        title="Tem certeza que quer Apagar este Registro de Débito?"
+        description="If you perform this action, this Debit will be removed, and will not be possible to recover it in any way."
+        title="Are you sure that do you want Remove this Debit?"
         negativeAction={this.onToggleRemoveDialog}
         onCloseDialog={this.onToggleRemoveDialog}
         positiveAction={this.onRemoveDebit}
         isOpen={isRemoveDialogOpen}
         disableBackdropClick
-        positiveText="SIM"
-        negativeText="NÃO"
+        positiveText="YES"
+        negativeText="NO"
       />
     );
   };
@@ -166,7 +165,7 @@ class Debits extends Component<Props, State> {
     return (
       <TotalDebitWrapper>
         <TotalDebitText>
-          {`Total: R$ ${totalDebit.toFixed(2)}`}
+          {`Total: $ ${totalDebit.toFixed(2)}`}
         </TotalDebitText>
       </TotalDebitWrapper>
     );

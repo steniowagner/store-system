@@ -1,9 +1,9 @@
 import { FILTER_TYPES } from '../../../utils/filter';
 
 const filterConfig = [{
-  placeholder: 'Informe o Nome do Fornecedor',
+  placeholder: 'Enter the Name of the Provider you are looking for',
   type: FILTER_TYPES.TEXT,
-  filterTitle: 'Nome',
+  filterTitle: 'Name',
   dataField: 'name',
 }];
 
