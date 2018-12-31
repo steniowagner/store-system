@@ -17,14 +17,15 @@ import Stock from './screens/stock';
 import User from './screens/user';
 
 const Wrapper = styled.div`
-  height: 100%;
   width: 100%;
   position: absolute;
   padding: 164px 28px 28px 28px;
 `;
 
 const Container = styled.div`
+  height: 100%;
   position: relative;
+  overflow-y: scroll;
 `;
 
 type Props = {

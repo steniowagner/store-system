@@ -60,7 +60,7 @@
     "win": {
       "target": "nsis"
     },
-    "productName": "Store System"
+    "productName": "My Store"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.6",
