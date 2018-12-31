@@ -45,16 +45,16 @@ class CurrentCashier extends Component<Props, State> {
     const { currentCashier } = cashier;
 
     let stateRef = '';
-    let pastAmount = 0;
+    let pastQuantity = 0;
 
     if (type === CASHIER_OPERATIONS.TAKE_AWAY_MONEY) {
       stateRef = 'totalOutcome';
-      pastAmount = currentCashier.totalOutcome - parseFloat(value);
+      pastQuantity = currentCashier.totalOutcome - parseFloat(value);
     }
 
     if (type === CASHIER_OPERATIONS.ADD_MONEY) {
       stateRef = 'totalIncome';
-      pastAmount = currentCashier.totalIncome - parseFloat(value);
+      pastQuantity = currentCashier.totalIncome - parseFloat(value);
     }
 
     const operationEdited = {
@@ -69,7 +69,7 @@ class CurrentCashier extends Component<Props, State> {
     const cashierUpdated = {
       ...currentCashier,
       operations: operationsEdited,
-      [stateRef]: pastAmount + parseFloat(valueEdited),
+      [stateRef]: pastQuantity + parseFloat(valueEdited),
     };
 
     editCashier(cashierUpdated);

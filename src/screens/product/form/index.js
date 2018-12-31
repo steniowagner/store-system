@@ -130,8 +130,8 @@ class ProductForm extends Component<Props, {}> {
   );
 
   renderStockFields = () => {
-    const stockQuantityInputFieldData = getRowItemObject('Amount in Stock', 'Enter the Amount in Stock', 'number', 'stockQuantity');
-    const minQuantityStockInputFieldData = getRowItemObject('Min Amount in Stock', 'Enter the Amount in Stock', 'number', 'minStockQuantity');
+    const stockQuantityInputFieldData = getRowItemObject('Quantity in Stock', 'Enter the Quantity in Stock', 'number', 'stockQuantity');
+    const minQuantityStockInputFieldData = getRowItemObject('Min Quantity in Stock', 'Enter the Quantity in Stock', 'number', 'minStockQuantity');
 
     return renderRowWithTwoItems(stockQuantityInputFieldData, minQuantityStockInputFieldData, this.props);
   };

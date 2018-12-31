@@ -104,7 +104,7 @@ class InitialMoneyCashDialog extends Component<Props, State> {
 
   renderContentText = (): Object => (
     <DialogContentText>
-      To start operations, report the amount of money in the Cashier.
+      To start operations, report the quantity of money in the Cashier.
     </DialogContentText>
   );
 

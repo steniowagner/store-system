@@ -2,7 +2,7 @@ const tabConfig = [{
   columnTitle: 'Date',
   dataField: 'dateToShow',
 }, {
-  columnTitle: 'Initial Amount in Cashier',
+  columnTitle: 'Initial Money Quantity in Cashier',
   dataField: 'initialMoneyCashierText',
 }, {
   columnTitle: 'Total Inserted',

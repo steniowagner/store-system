@@ -96,8 +96,8 @@ const renderRightValues = (paymentInfo: Object, inDebitText: string): Object => 
     <Wrapper
       direction="right"
     >
-      {renderItem('AMOUNT PAID', paidValueText, false)}
-      {renderItem('AMOUNT IN DEBIT', inDebitText, true)}
+      {renderItem('VALUE PAID', paidValueText, false)}
+      {renderItem('VALUE IN DEBIT', inDebitText, true)}
     </Wrapper>
   );
 };

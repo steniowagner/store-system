@@ -62,7 +62,7 @@ export const getBottomValueItemConfig = (item: string, value: number): Object =>
     },
 
     [CONFIGS_TYPES.INITAL_MONEY]: {
-      message: 'Initial Amount in Cashier:',
+      message: 'Initial Money Quantity in Cashier:',
       value: `$ ${Number(value).toFixed(2)}`,
       Icon: InitialMoneyIcon,
       color: 'warning',
