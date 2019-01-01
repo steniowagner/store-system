@@ -6,8 +6,8 @@ export const Types = {
 };
 
 const INITIAL_STATE = Immutable({
-  isAuthenticated: true,
-  user: { username: 'stenio' },
+  isAuthenticated: false,
+  user: null,
 });
 
 export const Creators = {

@@ -2,8 +2,6 @@
 
 import React from 'react';
 
-import IconButton from '@material-ui/core/IconButton';
-import Store from '@material-ui/icons/Store';
 import Toolbar from '@material-ui/core/Toolbar';
 
 import styled from 'styled-components';
@@ -11,6 +9,7 @@ import styled from 'styled-components';
 import Backup from './components/backup-component';
 import BellAlert from './components/BellAlerts';
 import UserInfo from './components/UserInfo';
+import AboutMe from './components/about-me';
 
 const Container = styled.div`
   width: 100%;
@@ -36,20 +35,11 @@ const RightSideContainer = styled.div`
   align-items: center;
 `;
 
-const StoreIcon = styled(Store)`
-  color: ${({ theme }) => theme.colors.headerText};
-`;
-
 const HeaderBar = (): Object => (
   <Toolbar>
     <Container>
       <LeftSideContainer>
-        <IconButton
-          color="inherit"
-          aria-label="Icon"
-        >
-          <StoreIcon />
-        </IconButton>
+        <AboutMe />
         <Title>
           MY STORE
         </Title>

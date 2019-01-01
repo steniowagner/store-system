@@ -15,6 +15,7 @@ const OPERATIONS = {
   CLOSE_PRINT_WINDOW: 'CLOSE_PRINT_WINDOW',
   OPEN_PRINT_WINDOW: 'OPEN_PRINT_WINDOW',
   OPERATION_REQUEST: 'OPERATION_REQUEST',
+  OPEN_URL: 'OPEN_URL',
 };
 
 const handleEvent = require('./back-end/events-handlers');
@@ -94,3 +95,5 @@ ipcMain.on(OPERATIONS.OPEN_PRINT_WINDOW, (event, fileName) => {
     });
   });
 });
+
+ipcMain.on(OPERATIONS.OPEN_URL, (event, socialURL) => shell.openExternal(socialURL));

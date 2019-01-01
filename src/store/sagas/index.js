@@ -8,6 +8,7 @@ import { Types as CashierTypes } from '../ducks/cashier';
 import { Types as BackupTypes } from '../ducks/backup';
 import { Types as AlertsTypes } from '../ducks/alerts';
 import { Types as BudgetTypes } from '../ducks/budget';
+import { Types as SocialTypes } from '../ducks/social';
 import { Types as PrintTypes } from '../ducks/print';
 import { Types as StockTypes } from '../ducks/stock';
 import { Types as BrandTypes } from '../ducks/brand';
@@ -72,6 +73,8 @@ import { getAllBrands } from './brand';
 
 import { handlePrint } from './print';
 
+import { openURL } from './social';
+
 export default function* rootSaga() {
   return yield all([
     takeLatest(UserTypes.CREATE_REQUEST, createUser),
@@ -127,5 +130,7 @@ export default function* rootSaga() {
     takeLatest(PrintTypes.START_PRINT, handlePrint),
 
     takeLatest(BrandTypes.GET_ALL_REQUEST, getAllBrands),
+
+    takeLatest(SocialTypes.OPEN_URL, openURL),
   ]);
 }

@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 
 import debits from './customerDebits';
+import social from './social';
 import customer from './customer';
 import provider from './provider';
 import cashier from './cashier';
@@ -20,6 +21,7 @@ export default combineReducers({
   provider,
   cashier,
   product,
+  social,
   alerts,
   backup,
   budget,
