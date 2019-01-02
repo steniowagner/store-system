@@ -58,12 +58,17 @@ class RegisterUserForm extends Component<Props, State> {
     const isSamePassword = (password === repeatedPassword);
 
     if (!isSamePassword) {
-      setSnackbarError('The passwords you entered are not the same');
+      setSnackbarError('The passwords are not the same');
       return;
     }
 
     if (isUsernameAlreadyRegistered) {
       setSnackbarError('This Username has already in use');
+      return;
+    }
+
+    if (password.length < 6) {
+      setSnackbarError('The password must have at least 6 characters');
       return;
     }
 
@@ -88,7 +93,7 @@ class RegisterUserForm extends Component<Props, State> {
       name,
     } = this.state;
 
-    const typedPasswords = ((!!repeatedPassword && repeatedPassword.length >= 6) && (!!password && password.length >= 6));
+    const typedPasswords = (!!repeatedPassword && !!password);
     const shouldDisableButton = !(!!name && !!username && typedPasswords);
 
     return (
@@ -135,7 +140,7 @@ class RegisterUserForm extends Component<Props, State> {
             onChange={(event: Object): void => this.onTypeInputValue('repeatedPassword', event.target.value)}
             value={repeatedPassword}
             onBlur={() => {}}
-            label="Repeat the Password"
+            label="Confirm the Password"
             id="repeatedPassword"
             placeholder=""
             type="password"
