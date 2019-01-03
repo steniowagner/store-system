@@ -41,6 +41,7 @@
     "yup": "^0.26.6"
   },
   "scripts": {
+    "dev": "concurrently \"npm run start\" \"wait-on http://localhost:3000 && npm run electron-dev .\"",
     "start": "BROWSER=none react-scripts start",
     "build": "react-scripts build",
     "dist": "electron-builder",
@@ -65,6 +66,7 @@
   "devDependencies": {
     "babel-eslint": "^8.2.6",
     "babel-plugin-module-resolver": "^3.1.1",
+    "concurrently": "^4.1.0",
     "electron": "^2.0.5",
     "electron-builder": "^20.38.4",
     "eslint": "^4.19.1",
@@ -79,6 +81,7 @@
     "reactotron-react-js": "^2.1.1",
     "reactotron-redux": "^2.1.0",
     "reactotron-redux-saga": "^2.1.0",
-    "sequelize-cli": "^5.3.0"
+    "sequelize-cli": "^5.3.0",
+    "wait-on": "^3.2.0"
   }
 }
