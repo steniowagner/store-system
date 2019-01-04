@@ -1,13 +1,28 @@
-
-
-
 # Store System
-
-
 
 A Store System built with Electron, React, Material-UI, Redux, Redux-Saga, MySQL and Sequelize.
 
 
+## Some Screens
+
+
+![Login](https://github.com/steniowagner/store-system/blob/master/img/login.png)
+
+![Cashier-Closed](https://github.com/steniowagner/store-system/blob/master/img/cashier-closed.png)
+
+![Cashier](https://github.com/steniowagner/store-system/blob/master/img/cashier-open.png)
+
+![Alerts](https://github.com/steniowagner/store-system/blob/master/img/alerts.png)
+
+![Products](https://github.com/steniowagner/store-system/blob/master/img/products.png)
+
+![Sale](https://github.com/steniowagner/store-system/blob/master/img/sale.png)
+
+![Discount](https://github.com/steniowagner/store-system/blob/master/img/discount.png)
+
+![Payment](https://github.com/steniowagner/store-system/blob/master/img/payment.png)
+
+![Backup](https://github.com/steniowagner/store-system/blob/master/img/backup.png)
 
 ## About this Project
 
@@ -282,6 +297,7 @@ This command will produce a folder called dist in the root of the project, that 
 You can send how many PR's do you want, I'll be glad to analyse and accept them! And if you have any question about the project...
 
 Email-me: stenio.wagner1@gmail.com
+
 Connect with me at [LinkedIn](https://www.linkedin.com/in/steniowagner/)
 
 Thank you!
