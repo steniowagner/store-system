@@ -32,6 +32,7 @@ This project is part of my personal portfolio, so, I'll be happy if you could pr
 
 
 Email-me: stenio.wagner1@gmail.com
+
 Connect with me at [LinkedIn](https://www.linkedin.com/in/steniowagner/)
 
 
