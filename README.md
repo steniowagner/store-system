@@ -285,6 +285,8 @@ This command will produce a folder called dist in the root of the project, that 
 
 * [Redux-Saga](https://redux-saga.js.org/) - Side-Effect model for Redux
 
+* [Flow](https://redux-saga.js.org/) - Static Type Checker
+
 * [Material-UI](https://material-ui.com/) - CSS Framework
 
 * [MySQL](https://www.mysql.com/) - Database
