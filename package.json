@@ -61,7 +61,7 @@
     "win": {
       "target": "nsis"
     },
-    "productName": "My Store"
+    "productName": "Eunice Livros"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.6",

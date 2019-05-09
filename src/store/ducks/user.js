@@ -32,12 +32,12 @@ export const Creators = {
 
   createUserSuccess: user => ({
     type: Types.CREATE_SUCCESS,
-    payload: { message: 'User Created Successfully', user },
+    payload: { message: 'Usuário Criado com Sucesso.', user },
   }),
 
   createUserFailure: () => ({
     type: Types.CREATE_FAILURE,
-    payload: { error: 'There was a problem when trying to Create User' },
+    payload: { error: 'Houve um problema ao tentar Criar o Usuário.' },
   }),
 
   getAllUsers: () => ({
@@ -51,7 +51,10 @@ export const Creators = {
 
   getAllUsersFailure: () => ({
     type: Types.GET_ALL_FAILURE,
-    payload: { error: 'There was a problem when trying to get Users from Database' },
+    payload: {
+      error:
+        'Houve um problema ao ler os Registros do Usuário do Banco de Dados.',
+    },
   }),
 
   editUser: user => ({
@@ -61,12 +64,12 @@ export const Creators = {
 
   editUserSuccess: userEdited => ({
     type: Types.EDIT_REQUEST_SUCCESS,
-    payload: { message: 'User Edited Successfully', userEdited },
+    payload: { message: 'Usuário Editado com Sucesso.', userEdited },
   }),
 
   editUserFailure: () => ({
     type: Types.EDIT_REQUEST_FAILURE,
-    payload: { error: 'There was a problem when trying to Edit User' },
+    payload: { error: 'Houve um problema ao tentar Editar o Usuário.' },
   }),
 
   removeUser: id => ({
@@ -76,12 +79,12 @@ export const Creators = {
 
   removeUserSuccess: id => ({
     type: Types.REMOVE_REQUEST_SUCCESS,
-    payload: { message: 'User Removed Successfully', id },
+    payload: { message: 'Usuário Removido com Sucesso.', id },
   }),
 
   removeUserFailure: () => ({
     type: Types.REMOVE_REQUEST_FAILURE,
-    payload: { error: 'There was a problem when trying to Remove User' },
+    payload: { error: 'Houve um problema ao tentar Remover o Usuário.' },
   }),
 };
 
@@ -137,7 +140,9 @@ const user = (state = INITIAL_STATE, { payload, type }) => {
       return {
         ...state,
         message: payload.message,
-        data: state.data.map(item => (item.id === payload.userEdited.id ? payload.userEdited : item)),
+        data: state.data.map(
+          item => (item.id === payload.userEdited.id ? payload.userEdited : item),
+        ),
       };
 
     case Types.EDIT_REQUEST_FAILURE:

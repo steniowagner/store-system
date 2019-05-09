@@ -28,12 +28,12 @@ export const Creators = {
 
   createSaleSuccess: sale => ({
     type: Types.CREATE_SUCCESS,
-    payload: { message: 'Sale Registered Successfully', sale },
+    payload: { message: 'Venda Registrada com Sucesso.', sale },
   }),
 
   createSaleFailure: () => ({
     type: Types.CREATE_FAILURE,
-    payload: { error: 'There as a problem when trying to Register the Sale' },
+    payload: { error: 'Houve um problema ao tentar Registrar a Venda.' },
   }),
 
   getAllSales: () => ({
@@ -47,7 +47,10 @@ export const Creators = {
 
   getAllSalesFailure: () => ({
     type: Types.GET_ALL_FAILURE,
-    payload: { error: 'There was a problem when trying to get Sales from Database' },
+    payload: {
+      error:
+        'Houve um problema ao tentar ler os Registros das Vendas do Banco de Dados.',
+    },
   }),
 
   editSale: sale => ({
@@ -57,12 +60,12 @@ export const Creators = {
 
   editSaleSuccess: salesUpdated => ({
     type: Types.EDIT_REQUEST_SUCCESS,
-    payload: { message: 'Sale Edited Successfully', salesUpdated },
+    payload: { message: 'Venda Editada com Sucesso.', salesUpdated },
   }),
 
   editSaleFailure: () => ({
     type: Types.EDIT_REQUEST_FAILURE,
-    payload: { error: 'There was a problem when trying to Edit Sale' },
+    payload: { error: 'Houve um problema ao Editar a Venda.' },
   }),
 
   removeSale: id => ({
@@ -72,12 +75,12 @@ export const Creators = {
 
   removeSaleSuccess: id => ({
     type: Types.REMOVE_REQUEST_SUCCESS,
-    payload: { message: 'Sale Removed Successfully', id },
+    payload: { message: 'Venda Removida com Sucesso.', id },
   }),
 
   removeSaleFailure: () => ({
     type: Types.REMOVE_REQUEST_FAILURE,
-    payload: { error: 'There was a problem when trying to Remove Sale' },
+    payload: { error: 'Houve um problema ao Remover a Venda.' },
   }),
 };
 
@@ -133,7 +136,9 @@ const sale = (state = INITIAL_STATE, { payload, type }) => {
       return {
         ...state,
         message: payload.message,
-        data: state.data.map(item => (item.id === payload.salesUpdated.id ? payload.salesUpdated : item)),
+        data: state.data.map(
+          item => (item.id === payload.salesUpdated.id ? payload.salesUpdated : item),
+        ),
       };
 
     case Types.EDIT_REQUEST_FAILURE:

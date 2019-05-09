@@ -32,12 +32,12 @@ export const Creators = {
 
   createProviderSuccess: provider => ({
     type: Types.CREATE_SUCCESS,
-    payload: { message: 'Provider Created Sucessfully', provider },
+    payload: { message: 'Fornecedor Criado com Sucesso.', provider },
   }),
 
   createProviderFailure: () => ({
     type: Types.CREATE_FAILURE,
-    payload: { error: 'There was a problem when trying to Create Provider' },
+    payload: { error: 'Houve um problema ao tentar Criar o Cliente.' },
   }),
 
   getAllProviders: () => ({
@@ -51,7 +51,10 @@ export const Creators = {
 
   getAllProvidersFailure: () => ({
     type: Types.GET_ALL_FAILURE,
-    payload: { error: 'There was a problem when trying to get the Providers from Database' },
+    payload: {
+      error:
+        'Houve um problema ao tentar ler os Registros dos Fornecedores do Banco de Dados.',
+    },
   }),
 
   editProvider: provider => ({
@@ -61,12 +64,12 @@ export const Creators = {
 
   editProviderSuccess: providerEdited => ({
     type: Types.EDIT_REQUEST_SUCCESS,
-    payload: { message: 'Provider Edited Successfully', providerEdited },
+    payload: { message: 'Fornecedor Editado com Sucesso.', providerEdited },
   }),
 
   editProviderFailure: () => ({
     type: Types.EDIT_REQUEST_FAILURE,
-    payload: { error: 'There was a problem when trying to Edit Provider' },
+    payload: { error: 'Houve um problema ao tentar Editar o Fornecedor.' },
   }),
 
   removeProvider: id => ({
@@ -76,16 +79,19 @@ export const Creators = {
 
   removeProviderSuccess: id => ({
     type: Types.REMOVE_REQUEST_SUCCESS,
-    payload: { message: 'Provider Removed Successfully', id },
+    payload: { message: 'Fornecedor Removido com Sucesso.', id },
   }),
 
   removeProviderFailure: () => ({
     type: Types.REMOVE_REQUEST_FAILURE,
-    payload: { error: 'There was a problem when trying to Remove Provider' },
+    payload: { error: 'Houve um problema ao tentar Remover o Fornecedor.' },
   }),
 };
 
-const parseProvider = provider => ({ ...provider, addressText: provider.address || '-' });
+const parseProvider = provider => ({
+  ...provider,
+  addressText: provider.address || '-',
+});
 const parseProvidersToTableView = providers => providers.map(provider => parseProvider(provider));
 
 const provider = (state = INITIAL_STATE, { payload, type }) => {
@@ -141,7 +147,11 @@ const provider = (state = INITIAL_STATE, { payload, type }) => {
       return {
         ...state,
         message: payload.message,
-        data: state.data.map(providerItem => (providerItem.id === payload.providerEdited.id ? parseProvider(payload.providerEdited) : providerItem)),
+        data: state.data.map(
+          providerItem => (providerItem.id === payload.providerEdited.id
+            ? parseProvider(payload.providerEdited)
+            : providerItem),
+        ),
       };
 
     case Types.EDIT_REQUEST_FAILURE:

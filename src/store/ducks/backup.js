@@ -27,37 +27,37 @@ export const Creators = {
 
   exportBackupFileStart: () => ({
     type: Types.BACKUP_START,
-    payload: { message: 'Backup is running...' },
+    payload: { message: 'Back em andamento...' },
   }),
 
   exportBackupSuccess: () => ({
     type: Types.BACKUP_SUCCESS,
-    payload: { message: 'Backup Performed Successfully.' },
+    payload: { message: 'Backup executado com Sucesso.' },
   }),
 
   exportBackupFailure: () => ({
     type: Types.BACKUP_FAILURE,
-    payload: { error: 'There was a problem when trying to Perform Backup.' },
+    payload: { error: 'Houve um problema ao tentar fazer o Backup.' },
   }),
 
   importBackupFile: () => ({
     type: Types.IMPORT_BACKUP_FILE_REQUEST,
-    payload: { message: 'Importing Data...' },
+    payload: { message: 'Importar Dados...' },
   }),
 
   importBackupFileStart: () => ({
     type: Types.IMPORT_BACKUP_FILE_START,
-    payload: { message: 'Importing Data...' },
+    payload: { message: 'Importar Dados...' },
   }),
 
   importBackupFileSuccess: () => ({
     type: Types.IMPORT_BACKUP_FILE_SUCCESS,
-    payload: { message: 'Data Imported Successfully.' },
+    payload: { message: 'Dados Importados com Sucesso.' },
   }),
 
   importBackupFileFailure: () => ({
     type: Types.IMPORT_BACKUP_FILE_FAILURE,
-    payload: { error: 'There was an problem when trying to Import Data.' },
+    payload: { error: 'Houve um problema ao tentar importar os Dados.' },
   }),
 
   resetState: () => ({

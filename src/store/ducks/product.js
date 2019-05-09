@@ -32,12 +32,12 @@ export const Creators = {
 
   createProductSuccess: product => ({
     type: Types.CREATE_SUCCESS,
-    payload: { message: 'Product Created Successfully', product },
+    payload: { message: 'Produto Criado com Sucesso.', product },
   }),
 
   createProductFailure: () => ({
     type: Types.CREATE_FAILURE,
-    payload: { error: 'There was a problem when trying to Create Product' },
+    payload: { error: 'Houve um problema ao tentar criar o Produto.' },
   }),
 
   getAllProducts: () => ({
@@ -51,7 +51,10 @@ export const Creators = {
 
   getAllProductsFailure: () => ({
     type: Types.GET_ALL_FAILURE,
-    payload: { error: 'There was a problem when trying to get Products from Database' },
+    payload: {
+      error:
+        'Houve um problema ao tentar ler os Registros dos Produtos do Banco de Dados.',
+    },
   }),
 
   editProduct: product => ({
@@ -61,12 +64,12 @@ export const Creators = {
 
   editProductSuccess: productEdited => ({
     type: Types.EDIT_REQUEST_SUCCESS,
-    payload: { message: 'Product Edited Successfully', productEdited },
+    payload: { message: 'Produto Editado com Sucesso.', productEdited },
   }),
 
   editProductFailure: () => ({
     type: Types.EDIT_REQUEST_FAILURE,
-    payload: { error: 'There was a problem when trying to Edit Product' },
+    payload: { error: 'Houve um problema ao tentar Editar o Produto.' },
   }),
 
   removeProduct: id => ({
@@ -76,12 +79,12 @@ export const Creators = {
 
   removeProductSuccess: id => ({
     type: Types.REMOVE_REQUEST_SUCCESS,
-    payload: { message: 'Product Removed Successfully', id },
+    payload: { message: 'Produto Removido com Sucesso.', id },
   }),
 
   removeProductFailure: () => ({
     type: Types.REMOVE_REQUEST_FAILURE,
-    payload: { error: 'There was a problem when trying to Remove Product' },
+    payload: { error: 'Houve um problema ao tentar Remover o Produto.' },
   }),
 };
 
@@ -137,7 +140,11 @@ const product = (state = INITIAL_STATE, { payload, type }) => {
       return {
         ...state,
         message: payload.message,
-        data: state.data.map(productItem => (productItem.id === payload.productEdited.id ? payload.productEdited : productItem)),
+        data: state.data.map(
+          productItem => (productItem.id === payload.productEdited.id
+            ? payload.productEdited
+            : productItem),
+        ),
       };
 
     case Types.EDIT_REQUEST_FAILURE:

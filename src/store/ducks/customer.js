@@ -33,12 +33,12 @@ export const Creators = {
 
   createCustomerSuccess: customer => ({
     type: Types.CREATE_SUCCESS,
-    payload: { message: 'Customer Created Successfully', customer },
+    payload: { message: 'Cliente Criado com Sucesso.', customer },
   }),
 
   createCustomerFailure: () => ({
     type: Types.CREATE_FAILURE,
-    payload: { error: 'There was a problem when trying to Create Customer' },
+    payload: { error: 'Houve um problema ao tentar Criar o Cliente.' },
   }),
 
   getAllCustomers: () => ({
@@ -52,7 +52,10 @@ export const Creators = {
 
   getAllCustomersFailure: () => ({
     type: Types.GET_ALL_FAILURE,
-    payload: { error: 'There was a problem when trying to get Customers from Databse' },
+    payload: {
+      error:
+        'Houve um problema ao tentar ler os Registros dos Clientes do Banco de Dados.',
+    },
   }),
 
   editCustomer: customer => ({
@@ -62,12 +65,12 @@ export const Creators = {
 
   editCustomerSuccess: customerEdited => ({
     type: Types.EDIT_REQUEST_SUCCESS,
-    payload: { message: 'Customer Edited Successfully', customerEdited },
+    payload: { message: 'Cliente Editado com Sucesso.', customerEdited },
   }),
 
   editCustomerFailure: () => ({
     type: Types.EDIT_REQUEST_FAILURE,
-    payload: { error: 'There was a problem when trying to Edit Customer' },
+    payload: { error: 'Houve um problema ao tentar Editar o Cliente.' },
   }),
 
   removeCustomer: id => ({
@@ -77,12 +80,12 @@ export const Creators = {
 
   removeCustomerSuccess: id => ({
     type: Types.REMOVE_REQUEST_SUCCESS,
-    payload: { message: 'Customer Removed Successfully', id },
+    payload: { message: 'Cliente Removido com Sucesso.', id },
   }),
 
   removeCustomerFailure: () => ({
     type: Types.REMOVE_REQUEST_FAILURE,
-    payload: { error: 'There was a problem when trying to Remove Customer' },
+    payload: { error: 'Houve um problema ao tentar Remover o Cliente.' },
   }),
 };
 
@@ -148,7 +151,11 @@ const customer = (state = INITIAL_STATE, { payload, type }) => {
       return {
         ...state,
         message: payload.message,
-        data: state.data.map(customerItem => (customerItem.id === payload.customerEdited.id ? parseCustomer(payload.customerEdited) : customerItem)),
+        data: state.data.map(
+          customerItem => (customerItem.id === payload.customerEdited.id
+            ? parseCustomer(payload.customerEdited)
+            : customerItem),
+        ),
       };
 
     case Types.EDIT_REQUEST_FAILURE:

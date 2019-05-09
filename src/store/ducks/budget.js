@@ -41,12 +41,12 @@ export const Creators = {
 
   createBudgetSuccess: budget => ({
     type: Types.CREATE_SUCCESS,
-    payload: { message: 'Budget Created Successfully', budget },
+    payload: { message: 'Orçamento criado com Sucesso.', budget },
   }),
 
   createBudgetFailure: () => ({
     type: Types.CREATE_FAILURE,
-    payload: { error: 'There was a problem when trying to Create Budget' },
+    payload: { error: 'Houve um problema ao criar o Orçamento.' },
   }),
 
   readAllBudgets: () => ({
@@ -60,7 +60,7 @@ export const Creators = {
 
   readAllBudgetsFailure: () => ({
     type: Types.READ_ALL_FAILURE,
-    payload: { error: 'There was a problem when trying to get Budgets from Database' },
+    payload: { error: 'Houve um problema ao tentar ler os Orçamentos do Banco de Dados.' },
   }),
 
   editBudget: budget => ({
@@ -70,12 +70,12 @@ export const Creators = {
 
   editBudgetSuccess: budgetUpdated => ({
     type: Types.EDIT_REQUEST_SUCCESS,
-    payload: { message: 'Budget Edited Successfully', budgetUpdated },
+    payload: { message: 'Orçamento Editado com Sucesso.', budgetUpdated },
   }),
 
   editBudgetFailure: () => ({
     type: Types.EDIT_REQUEST_FAILURE,
-    payload: { error: 'There was a problem when trying to Edit Budget' },
+    payload: { error: 'Houve um problema ao tentar Editar o Orçamento.' },
   }),
 
   deleteBudget: id => ({
@@ -85,12 +85,12 @@ export const Creators = {
 
   deleteBudgetSuccess: id => ({
     type: Types.DELETE_REQUEST_SUCCESS,
-    payload: { message: 'Budget Removed Successfully', id },
+    payload: { message: 'Orçamento Removido com Sucesso.', id },
   }),
 
   deleteBudgetFailure: () => ({
     type: Types.DELETE_REQUEST_FAILURE,
-    payload: { error: 'There was a problem  when trying to Remove Budget' },
+    payload: { error: 'Houve um problema ao tentar Remover o Orçamento.' },
   }),
 
   confirmBudgetPayment: budget => ({
@@ -100,12 +100,12 @@ export const Creators = {
 
   confirmBudgetPaymentSuccess: id => ({
     type: Types.CONFIRM_BUDGET_SALE_SUCCESS,
-    payload: { message: 'Budget\'s payment was Consolidated Successfully', id },
+    payload: { message: 'Pagamento de Orçamento consolidado com Sucesso.', id },
   }),
 
   confirmBudgetPaymentFailure: () => ({
     type: Types.CONFIRM_BUDGET_SALE_FAILURE,
-    payload: { error: 'There was a problem when trying to Consolidate Budget\'s Payment' },
+    payload: { error: 'Houve um problema ao tentar Consolidar o pagamento do Orçamento' },
   }),
 
   setOutdatedBudgets: () => ({
@@ -114,7 +114,7 @@ export const Creators = {
 
   setOutdatedBudgetsFailure: () => ({
     type: Types.SET_OUTDATED_ITEMS_FAILURE,
-    payload: { error: 'There was a problem when trying to Update Budgets Out of Time' },
+    payload: { error: 'Houve um problema ao tentar Atualizar os Orçamentos fora do Prazo.' },
   }),
 };
 

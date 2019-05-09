@@ -13,11 +13,14 @@ export const Types = {
   EDIT_REQUEST_SUCCESS: 'cashier/EDIT_REQUEST_SUCCESS',
   EDIT_REQUEST_FAILURE: 'cashier/EDIT_REQUEST_FAILURE',
 
-  SET_PAST_CASHIER_TABLE_ITEMS_PER_PAGE: 'cashier/SET_PAST_CASHIER_TABLE_ITEMS_PER_PAGE',
-  SET_PAST_CASHIER_DATE_FILTER_VALUE: 'cashier/SET_PAST_CASHIER_DATE_FILTER_VALUE',
+  SET_PAST_CASHIER_TABLE_ITEMS_PER_PAGE:
+    'cashier/SET_PAST_CASHIER_TABLE_ITEMS_PER_PAGE',
+  SET_PAST_CASHIER_DATE_FILTER_VALUE:
+    'cashier/SET_PAST_CASHIER_DATE_FILTER_VALUE',
   SET_PAST_CASHIER_TABLE_PAGE: 'cashier/SET_PAST_CASHIER_TABLE_PAGE',
 
-  SET_CURRENT_CASHIER_TABLE_ITEMS_PER_PAGE: 'cashier/SET_CURRENT_CASHIER_TABLE_ITEMS_PER_PAGE',
+  SET_CURRENT_CASHIER_TABLE_ITEMS_PER_PAGE:
+    'cashier/SET_CURRENT_CASHIER_TABLE_ITEMS_PER_PAGE',
   SET_CURRENT_CASHIER_TABLE_PAGE: 'cashier/SET_CURRENT_CASHIER_TABLE_PAGE',
 
   CREATE_SALE: 'cashier/CREATE_SALE',
@@ -34,10 +37,10 @@ const handlePastCashiers = (allPastCashiers, state) => {
   const { currentCashier, isCashierOpen } = state;
 
   const cashiersExceptCurrent = allPastCashiers.filter((pastCashier) => {
-    const isCheckingCurrentCashier = (pastCashier.id === currentCashier.id);
-    const isCurrentCashierAlreadyClosed = (isCheckingCurrentCashier && !isCashierOpen);
+    const isCheckingCurrentCashier = pastCashier.id === currentCashier.id;
+    const isCurrentCashierAlreadyClosed = isCheckingCurrentCashier && !isCashierOpen;
 
-    return (!isCheckingCurrentCashier || isCurrentCashierAlreadyClosed);
+    return !isCheckingCurrentCashier || isCurrentCashierAlreadyClosed;
   });
 
   const pastCashiers = cashiersExceptCurrent.map(cashier => ({
@@ -79,12 +82,15 @@ export const Creators = {
 
   createCashierSuccess: currentCashier => ({
     type: Types.CREATE_SUCCESS,
-    payload: { message: 'All Cashier Operations are Released', currentCashier },
+    payload: {
+      message: 'Todas as Operações de Caixa estão liberadas.',
+      currentCashier,
+    },
   }),
 
   createCashierFailure: () => ({
     type: Types.CREATE_FAILURE,
-    payload: { error: 'There was a problem when trying to Open Cashier' },
+    payload: { error: 'Houve um problema ao tentar abrir o Caixa.' },
   }),
 
   getAllCashiers: () => ({
@@ -98,7 +104,10 @@ export const Creators = {
 
   getAllCashiersFailure: () => ({
     type: Types.READ_ALL_FAILURE,
-    payload: { error: 'There was a problem when trying to get Cashiers from Database' },
+    payload: {
+      error:
+        'Houve um problema ao tentar ler os Registros de Caixa do Banco de Dados.',
+    },
   }),
 
   editCashier: cashier => ({
@@ -152,7 +161,7 @@ export const Creators = {
 
   onCloseCashier: () => ({
     type: Types.CLOSE_CASHIER,
-    payload: { message: 'Cashier Closed Successfully' },
+    payload: { message: 'Caixa Fechado com Sucesso.' },
   }),
 
   setTabIndex: index => ({
@@ -218,13 +227,12 @@ const cashier = (state = INITIAL_STATE, { payload, type }) => {
       return {
         ...state,
         currentCashier:
-          (payload.cashierUpdated.id === state.currentCashier.id
-            ? ({
+          payload.cashierUpdated.id === state.currentCashier.id
+            ? {
               ...payload.cashierUpdated,
               operations: payload.cashierUpdated.operations,
-            })
-            : state.currentCashier
-          ),
+            }
+            : state.currentCashier,
       };
 
     case Types.EDIT_REQUEST_FAILURE:
